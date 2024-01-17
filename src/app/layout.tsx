@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'CriKCC Fantasy',
-  description: 'Cricket Fantasy Auction',
+  description: "Cricket Fantasy Auction",
   icons: {
     icon: '/favicon.ico'
   }
