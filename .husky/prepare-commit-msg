@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-# . "$(dirname -- "$0")/_/husky.sh"
-
 #
 # Inspects branch name and checks if it contains a Jira ticket number (i.e. ABC-123).
 # If yes, commit message will be automatically prepended with [ABC-123].
