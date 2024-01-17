@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "husky": "^8.0.3",
@@ -28,6 +29,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "prettier --write . && git add -A .",
       "prepare-commit-msg": "echo \"[Husky] prepare-commit-msg\""
     }
   }
