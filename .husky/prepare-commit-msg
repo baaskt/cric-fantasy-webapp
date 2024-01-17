@@ -26,7 +26,7 @@ if [ ! -z "$BRANCH_NAME" ] && [ "$BRANCH_NAME" != "HEAD" ] && [ "$SKIP_PREPARE_C
 
   # Ensure PREFIX exists in BRANCH_NAME and is not already present in the commit message
   if [[ -n "$PREFIX" ]] && ! [[ $PREFIX_IN_COMMIT -ge 1 ]]; then
-    sed -i.bak -e "1s~^~[$PREFIX] ~" $1
+    sed -i.bak -e "1s~^~$PREFIX ~" $1
   fi
 
 fi
