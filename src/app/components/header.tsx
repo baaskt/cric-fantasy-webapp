@@ -1,5 +1,3 @@
 export default function Header() {
-    return (
-        <div>Login</div>
-    )
+  return <div>Header</div>
 }
