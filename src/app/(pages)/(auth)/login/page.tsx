@@ -7,7 +7,7 @@ export default function Login() {
     <div className='flex justify-center flex-col items-center'>
       <div className='font-bold text-2xl mb-10'>{TITLE_SIGNIN}</div>
       <LoginForm />
-      <div className='text-sm'>
+      <div className='text-sm mt-10'>
         {NO_ACCOUNT}{' '}
         <Link className='underline primary-color' href='signup'>
           {TXT_SIGNUP}
