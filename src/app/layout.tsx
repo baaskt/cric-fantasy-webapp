@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Lexend } from 'next/font/google'
 import '@/styles/globals.scss'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -19,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={lexend.className}>{children}</body>
+      <body className={lexend.className}>
+        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+      </body>
     </html>
   )
 }
