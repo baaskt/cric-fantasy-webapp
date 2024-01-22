@@ -8,7 +8,7 @@ export default function Login() {
       <div className='font-bold text-2xl mb-10'>{TITLES.SIGNIN}</div>
       <LoginForm />
       <div className='text-base mt-10'>
-        {AUTH.SIGN_IN.NO_ACCOUNT}{' '}
+        {AUTH.SIGN_IN.NO_ACCOUNT}
         <Link className='underline primary-color' href='signup'>
           {AUTH.SIGN_UP.TXT_SIGNUP}
         </Link>
