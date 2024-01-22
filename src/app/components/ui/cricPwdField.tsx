@@ -19,6 +19,7 @@ export default function CricPwdField(props: ComponentProps<typeof TextField>) {
 
   return (
     <CricTextField
+      {...props}
       type={showPassword ? 'text' : 'password'}
       InputProps={{
         endAdornment: (
@@ -34,7 +35,6 @@ export default function CricPwdField(props: ComponentProps<typeof TextField>) {
           </InputAdornment>
         ),
       }}
-      {...props}
     />
   )
 }

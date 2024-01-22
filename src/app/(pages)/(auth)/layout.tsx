@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className='h-4/5 flex justify-center'> {children}</div>
       </div>
-      <div className='hidden md:flex w-1/2 primary-bg justify-center flex-col'>
+      <div className='hidden sm:flex w-1/2 primary-bg justify-center flex-col'>
         <Image
           src='/banner_logo.png'
           width={0}

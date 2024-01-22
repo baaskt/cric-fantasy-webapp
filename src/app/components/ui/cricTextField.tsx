@@ -14,7 +14,6 @@ const theme = createTheme({
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          width: 384,
           backgroundColor: COLORS.inputBg,
           borderRadius: 4,
         },

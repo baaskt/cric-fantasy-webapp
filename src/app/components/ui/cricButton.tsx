@@ -20,7 +20,12 @@ export default function CricButton(props: ComponentProps<typeof Button>) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Button color='primary' {...props} sx={{ p: 1.5 }}>
+      <Button
+        color='primary'
+        {...props}
+        sx={{ p: 1.5, fontSize: 16 }}
+        fullWidth
+      >
         {props.children}
       </Button>
     </ThemeProvider>

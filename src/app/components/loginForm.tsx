@@ -22,6 +22,7 @@ export default function LoginForm() {
       className='flex flex-col'
       sx={{
         '& .MuiTextField-root': { mb: 3 },
+        width: '100%',
       }}
       noValidate
       autoComplete='off'
@@ -42,9 +43,9 @@ export default function LoginForm() {
         placeholder={AUTH.PASSWORD.PLACEHOLDER}
         onChange={onPwdChange}
       />
-      <CricButton className='mt-50' variant='contained'>
-        {AUTH.SIGN_IN.TXT_SIGNIN}
-      </CricButton>
+      <div className='mt-3'>
+        <CricButton variant='contained'>{AUTH.SIGN_IN.TXT_SIGNIN}</CricButton>
+      </div>
     </Box>
   )
 }
