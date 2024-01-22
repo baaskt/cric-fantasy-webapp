@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FocusEvent } from 'react'
+import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
@@ -8,12 +8,25 @@ import CricButton from './ui/cricButton'
 import { AUTH } from '@/util/constants'
 
 export default function LoginForm() {
+  const [email, setEmail] = useState<string>('')
+  const [pwd, setPwd] = useState<string>('')
+
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
-    console.log(event)
+    const value: string = event.target.value
+    setEmail(value)
   }
 
   const onPwdChange = (event: FocusEvent<HTMLInputElement>) => {
-    console.log(event)
+    const value: string = event.target.value
+    setPwd(value)
+  }
+
+  const handleSubmit = () => {
+    const payload = {
+      username: email,
+      password: pwd,
+    }
+    console.log(payload)
   }
 
   return (
@@ -44,7 +57,9 @@ export default function LoginForm() {
         onChange={onPwdChange}
       />
       <div className='mt-3'>
-        <CricButton variant='contained'>{AUTH.SIGN_IN.TXT_SIGNIN}</CricButton>
+        <CricButton variant='contained' onClick={handleSubmit}>
+          {AUTH.SIGN_IN.TXT_SIGNIN}
+        </CricButton>
       </div>
     </Box>
   )

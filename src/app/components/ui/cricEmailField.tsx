@@ -6,7 +6,7 @@ import { validateEmail } from '@/util/helper'
 export default function CricEmailField(
   props: ComponentProps<typeof TextField>,
 ) {
-  const [isEmailValid, setEmailValidity] = useState(true)
+  const [isEmailValid, setEmailValidity] = useState<boolean>(true)
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     setEmailValidity(true)
