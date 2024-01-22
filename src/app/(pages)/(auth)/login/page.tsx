@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function Login() {
   return (
-    <div className='flex justify-center flex-col'>
-      <div className='font-bold text-2xl'>{TITLE_SIGNIN}</div>
+    <div className='flex justify-center flex-col items-center'>
+      <div className='font-bold text-2xl mb-10'>{TITLE_SIGNIN}</div>
       <LoginForm />
       <div className='text-sm'>
         {NO_ACCOUNT}{' '}

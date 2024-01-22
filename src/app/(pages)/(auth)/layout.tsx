@@ -3,17 +3,16 @@ import { BANNER_DESC } from '@/util/constants'
 import Image from 'next/image'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  console.log('Abi', children)
   return (
     <div className='flex h-dvh'>
-      <div className='w-1/2'>
+      <div className='w-full sm:w-1/2'>
         <div className='m-6'>
           {' '}
           <Brand />{' '}
         </div>
-        <div> {children}</div>
+        <div className='h-4/5 flex justify-center'> {children}</div>
       </div>
-      <div className='w-1/2 primary-bg flex justify-center flex-col'>
+      <div className='hidden md:flex w-1/2 primary-bg justify-center flex-col'>
         <Image
           src='/banner_logo.png'
           width={0}
