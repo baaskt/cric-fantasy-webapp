@@ -7,8 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className='flex h-dvh'>
       <div className='w-full sm:w-1/2'>
         <div className='m-6'>
-          {' '}
-          <Brand />{' '}
+          <Brand />
         </div>
         <div className='h-4/5 flex justify-center'> {children}</div>
       </div>
