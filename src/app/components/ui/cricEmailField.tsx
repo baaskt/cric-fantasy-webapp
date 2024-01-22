@@ -20,6 +20,7 @@ export default function CricEmailField(
     <CricTextField
       {...props}
       type='text'
+      onChange={() => setEmailValidity(true)}
       onBlur={validateUserEmail}
       error={!isEmailValid}
       helperText={!isEmailValid ? props.helperText : ''}
