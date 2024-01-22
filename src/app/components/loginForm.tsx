@@ -4,8 +4,14 @@ import React, { FocusEvent } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
+import CricButton from './ui/cricButton'
+import { AUTH } from '@/util/constants'
 
 export default function LoginForm() {
+  const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
+    console.log(event)
+  }
+
   const onPwdChange = (event: FocusEvent<HTMLInputElement>) => {
     console.log(event)
   }
@@ -22,19 +28,23 @@ export default function LoginForm() {
     >
       <CricEmailField
         id='login-email'
-        label='Email'
+        label={AUTH.EMAIL.LABEL}
         variant='filled'
-        placeholder='Enter your email address'
-        helperText='Please enter valid email address'
+        placeholder={AUTH.EMAIL.PLACEHOLDER}
+        helperText={AUTH.EMAIL.ERROR}
+        onChange={onEmailChange}
       />
       <CricPwdField
         id='login-password'
-        label='Password'
+        label={AUTH.PASSWORD.LABEL}
         variant='filled'
         autoComplete='current-password'
-        placeholder='Enter at least 8 characters'
+        placeholder={AUTH.PASSWORD.PLACEHOLDER}
         onChange={onPwdChange}
       />
+      <CricButton className='mt-50' variant='contained'>
+        {AUTH.SIGN_IN.TXT_SIGNIN}
+      </CricButton>
     </Box>
   )
 }

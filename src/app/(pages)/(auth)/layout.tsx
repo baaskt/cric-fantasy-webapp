@@ -1,5 +1,5 @@
 import Brand from '@/components/brand'
-import { BANNER_DESC } from '@/util/constants'
+import { AUTH } from '@/util/constants'
 import Image from 'next/image'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           className='self-center'
           style={{ width: '60%', height: 'auto' }}
         />
-        <div className='font-bold text-2xl self-center mt-6'>{BANNER_DESC}</div>
+        <div className='font-bold text-2xl self-center mt-6'>
+          {AUTH.BANNER_DESC}
+        </div>
       </div>
     </div>
   )

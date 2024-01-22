@@ -8,6 +8,11 @@ export default function CricEmailField(
 ) {
   const [isEmailValid, setEmailValidity] = useState(true)
 
+  const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
+    setEmailValidity(true)
+    props.onChange && props.onChange(event)
+  }
+
   const validateUserEmail = (event: FocusEvent<HTMLInputElement>) => {
     const userInput: string = event?.target?.value
     if (userInput) {
@@ -20,7 +25,7 @@ export default function CricEmailField(
     <CricTextField
       {...props}
       type='text'
-      onChange={() => setEmailValidity(true)}
+      onChange={onEmailChange}
       onBlur={validateUserEmail}
       error={!isEmailValid}
       helperText={!isEmailValid ? props.helperText : ''}
