@@ -6,6 +6,7 @@ import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
 import { AUTH } from '@/util/constants'
+import { validateEmail } from '@/util/helper'
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>('')
@@ -22,11 +23,13 @@ export default function LoginForm() {
   }
 
   const handleSubmit = () => {
-    const payload = {
-      username: email,
-      password: pwd,
+    if (validateEmail(email) && pwd) {
+      const payload = {
+        username: email,
+        password: pwd,
+      }
+      console.log(payload)
     }
-    console.log(payload)
   }
 
   return (
