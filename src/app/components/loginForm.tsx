@@ -7,10 +7,12 @@ import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
 import { AUTH } from '@/util/constants'
 import { validateEmail } from '@/util/helper'
+import { useAuth } from '@/providers/AuthProvider'
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
+  const { login } = useAuth()
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -29,6 +31,7 @@ export default function LoginForm() {
         password: pwd,
       }
       console.log(payload)
+      login({ email: email })
     }
   }
 
