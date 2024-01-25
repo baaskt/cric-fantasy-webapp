@@ -27,7 +27,9 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Running backend development server
 
-* Install Python 3.9 in your system
+### Setting up the environment (one time activity)
+
+* Install [Python 3.11](https://www.python.org/downloads/release/python-3117/) in your system
 * Make sure `poetry` is available in your system
 
 ```bash {"id":"01HN0GZ908F54V08PMEV26A5HC"}
@@ -49,12 +51,14 @@ pre-commit install -f
 
 ```
 
-* Run the backend server
+### Run the backend server
 
 ```bash {"id":"01HN0KT9WBQYQSH622MX0WMXX1"}
 poetry shell
 python api/index.py
 ```
+
+* Open `http://localhost:5000/api/docs` in your browser to access the swagger document
 
 ## Learn More
 
