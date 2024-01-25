@@ -1,10 +1,16 @@
+---
+runme:
+  id: 01HN0KM31GRPC9T0Y1NN5JFA67
+  version: v2.2
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
 First, run the development server:
 
-```bash
+```bash {"id":"01HN0KM31GRPC9T0Y1NKGKJPVT"}
 npm run dev
 # or
 yarn dev
@@ -12,11 +18,43 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Running backend development server
+
+* Install Python 3.9 in your system
+* Make sure `poetry` is available in your system
+
+```bash {"id":"01HN0GZ908F54V08PMEV26A5HC"}
+pip install poetry
+
+```
+
+* Move to the root of this codebase and do poetry install, this will create the virtual environment and install all the packages necessary
+
+```bash {"id":"01HN0GZ908F54V08PMEW4H7TD3"}
+poetry install --no-root
+
+```
+
+* Install the pre-commit hooks in the project by issuing the below command.
+
+```bash {"id":"01HG1F4HJ2E7YHVDTVJWMDQ9J3"}
+pre-commit install -f
+
+```
+
+* Run the backend server
+
+```bash {"id":"01HN0KT9WBQYQSH622MX0WMXX1"}
+poetry shell
+python api/index.py
+```
 
 ## Learn More
 
