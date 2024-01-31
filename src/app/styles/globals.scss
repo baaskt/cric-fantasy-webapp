@@ -1,0 +1,18 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './variables.scss';
+
+body {
+  color: $black;
+  background: $white;
+}
+
+.primary-bg {
+  background-color: $cric-primary;
+  color: $white;
+}
+
+.primary-color {
+  color: $cric-primary;
+}

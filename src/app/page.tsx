@@ -1,7 +1,5 @@
-import Login from "./(pages)/login/page";
+import Login from './(pages)/(auth)/login/page'
 
 export default function Page() {
-    return (
-        <Login></Login>
-    )
+  return <Login></Login>
 }
