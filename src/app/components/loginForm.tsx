@@ -42,11 +42,11 @@ export default function LoginForm() {
 
   const loginUser = async () => {
     if (validateEmail(email) && pwd) {
-      const payload = {
-        username: email,
-        password: pwd,
-      }
-      await trigger(payload)
+      // const payload = {
+      //   username: email,
+      //   password: pwd,
+      // }
+      await trigger()
       login({ email: email })
     }
   }
