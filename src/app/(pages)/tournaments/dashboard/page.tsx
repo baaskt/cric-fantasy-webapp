@@ -1,5 +1,5 @@
 export default function Dashboard() {
-  return (
-      <div>Dashboard</div>
-  )
+  // const { data, error, isLoading } = useRequest(DASHBOARD_URL);
+
+  return <div>Dashboard</div>
 }
