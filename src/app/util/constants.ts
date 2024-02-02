@@ -5,7 +5,7 @@ export const AUTH = {
   BANNER_DESC: 'Welcome to 1st Edition of KCC Fantasy League',
   SIGN_IN: {
     TXT_SIGNIN: 'Sign in',
-    NO_ACCOUNT: "Don't have an account ? ",
+    NO_ACCOUNT: "Don't have an account1 ? ",
   },
   SIGN_UP: {
     TXT_SIGNUP: 'Sign up',

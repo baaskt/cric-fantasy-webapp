@@ -1,7 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
 @import './variables.scss';
+@import 'tailwindcss/utilities';
 
 body {
   color: $black;
