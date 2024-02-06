@@ -2,7 +2,6 @@ import { HttpMethod } from '@/model/enum/http-method.enum'
 
 export const fetcher = () => {
   const BASE_URL = 'https://cat-fact.herokuapp.com'
-  console.log('why cal me')
   const GET = (endpoint: string) => {
     const API_URL: string = `${BASE_URL}${endpoint}`
     return fetch(API_URL).then(res => res.json())
