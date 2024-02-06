@@ -2,7 +2,11 @@ import Brand from '@/components/brand'
 import { AUTH } from '@/util/constants'
 import Image from 'next/image'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function LoginLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <div className='flex h-dvh'>
       <div className='w-full sm:w-1/2'>
