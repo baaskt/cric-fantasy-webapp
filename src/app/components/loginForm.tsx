@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FocusEvent, useEffect, useState } from 'react'
+import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
@@ -9,22 +9,16 @@ import { AUTH } from '@/util/constants'
 import { validateEmail } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { LOGIN_URL } from '@/util/endpoints'
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/fetcher'
 import CricAlert from './ui/cricAlert'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { HttpMethod } from '@/model/enum/http-method.enum'
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
   const { login } = useAuth()
-  const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
-    LOGIN_URL,
-    fetcher().POST,
-  )
 
-  useEffect(() => {
-    redirectLogin()
-  }, [data])
+  const loginRequest = useMutateRequest(LOGIN_URL, HttpMethod.POST)
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -42,17 +36,18 @@ export default function LoginForm() {
 
   const loginUser = async () => {
     if (validateEmail(email) && pwd) {
-      // const payload = {
-      //   username: email,
-      //   password: pwd,
-      // }
-      await trigger()
-      login({ email: email })
+      const payload = {
+        username: email,
+        password: pwd,
+      }
+      try {
+        const response = await loginRequest.trigger(payload)
+        console.log(response)
+        login({ email: email })
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }
-
-  const redirectLogin = () => {
-    //reidrect
   }
 
   return (
@@ -83,12 +78,12 @@ export default function LoginForm() {
         onChange={onPwdChange}
       />
       <CricAlert
-        error={error}
+        error={loginRequest.error}
         message='Incorrect username / password'
       ></CricAlert>
       <div className='mt-3'>
         <CricButton variant='contained' onClick={() => handleSubmit()}>
-          {isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
+          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
         </CricButton>
       </div>
     </Box>
