@@ -1,34 +1,38 @@
 'use client'
 
-import React, { FocusEvent, useEffect, useState } from 'react'
+import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
 import { AUTH } from '@/util/constants'
-import { validateEmail, validateName, validatePassword } from '@/util/helper'
+import {
+  getNameErrorHelperTxt,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { SIGNUP_URL } from '@/util/endpoints'
 import useSWRMutation from 'swr/mutation'
 import { apiHelper } from '@/lib/apiHelper'
 import CricAlert from './ui/cricAlert'
 import CricTextField from './ui/cricTextField'
+import { NameValidationEntity } from '@/model/entities/name-validation.interface'
 
 export default function SignupForm() {
   const [fullName, setFullName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
-  const [isNameValid, setNameValidity] = useState<boolean>(true)
+  const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
+    valid: true,
+  })
 
   const { signup } = useAuth()
-  const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
+  const signupRequest = useSWRMutation<unknown, Error>(
     SIGNUP_URL,
     apiHelper().POST,
   )
-
-  useEffect(() => {
-    redirectSignup()
-  }, [data])
 
   const onNameChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -61,20 +65,21 @@ export default function SignupForm() {
         password: pwd,
       }
       console.log(payload)
-      await trigger()
-      signup({ email: email })
+      try {
+        const response = await signupRequest.trigger(payload)
+        console.log(response)
+        signup({ name: fullName, email: email })
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }
-
-  const redirectSignup = () => {
-    //reidrect
   }
 
   const validateFullName = (event: FocusEvent<HTMLInputElement>) => {
     const userInput: string = event?.target?.value
     if (userInput) {
-      const isValidName: boolean = validateName(userInput)
-      setNameValidity(isValidName)
+      const validityEntity: NameValidationEntity = validateName(userInput)
+      setNameValidity(validityEntity)
     }
   }
 
@@ -96,10 +101,10 @@ export default function SignupForm() {
         variant='filled'
         onChange={onNameChange}
         onBlur={validateFullName}
-        error={!isNameValid}
+        error={!nameValidity?.valid}
         placeholder={AUTH.NAME.PLACEHOLDER}
-        helperText={!isNameValid ? AUTH.NAME.ERROR : ''}
-        inputProps={{ maxLength: 35 }}
+        helperText={getNameErrorHelperTxt(nameValidity)}
+        inputProps={{ minLength: 5, maxLength: 35 }}
       />
       <CricEmailField
         id='signup-email'
@@ -119,12 +124,14 @@ export default function SignupForm() {
         onChange={onPwdChange}
       />
       <CricAlert
-        error={error}
-        message='Incorrect username / password'
+        error={signupRequest.error}
+        message={AUTH.SIGN_UP.ERROR}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton variant='contained' onClick={() => handleSubmit()}>
-          {isMutating ? 'creating account...' : AUTH.SIGN_UP.TXT_SIGNUP}
+          {signupRequest.isMutating
+            ? 'creating account...'
+            : AUTH.SIGN_UP.TXT_SIGNUP}
         </CricButton>
       </div>
     </Box>

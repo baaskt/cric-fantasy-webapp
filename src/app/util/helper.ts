@@ -1,3 +1,6 @@
+import { NameValidationEntity } from '@/model/entities/name-validation.interface'
+import { AUTH } from './constants'
+
 export const validateEmail = (email: string): boolean => {
   const emailRegex: RegExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -31,15 +34,35 @@ export const validatePwdLength = (pwd: string): boolean => {
   return pwd?.length >= 8 ? true : false
 }
 
-export const validateName = (name: string): boolean => {
-  return validateAlphaNumeric(name) && validateMinNameLength(name)
+export const validateName = (name: string): NameValidationEntity => {
+  const isErrorAlpha = validateAlphaNumeric(name)
+  const isErrorLength = validateMinNameLength(name)
+  return {
+    valid: !isErrorAlpha && !isErrorLength,
+    alpha: isErrorAlpha,
+    length: isErrorLength,
+  }
+}
+
+export const getNameErrorHelperTxt = (
+  validityEntity: NameValidationEntity,
+): string => {
+  const { valid, alpha, length } = validityEntity
+  console.log(validityEntity)
+  return valid
+    ? ''
+    : alpha
+      ? AUTH.NAME.ERROR_SPL_CHAR
+      : length
+        ? AUTH.NAME.ERROR_LENGTH
+        : ''
 }
 
 export const validateAlphaNumeric = (name: string): boolean => {
   const nameRegex: RegExp = /^[A-Za-z\s]+$/
-  return nameRegex.test(name) ? true : false
+  return nameRegex.test(name) ? false : true
 }
 
 export const validateMinNameLength = (name: string): boolean => {
-  return name?.length >= 5 ? true : false
+  return name?.length < 5 ? true : false
 }

@@ -79,7 +79,7 @@ export default function LoginForm() {
       />
       <CricAlert
         error={loginRequest.error}
-        message='Incorrect username / password'
+        message={AUTH.SIGN_IN.ERROR}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton variant='contained' onClick={() => handleSubmit()}>
