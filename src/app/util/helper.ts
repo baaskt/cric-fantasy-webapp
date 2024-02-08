@@ -48,7 +48,6 @@ export const getNameErrorHelperTxt = (
   validityEntity: NameValidationEntity,
 ): string => {
   const { valid, alpha, length } = validityEntity
-  console.log(validityEntity)
   return valid
     ? ''
     : alpha

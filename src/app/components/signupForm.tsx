@@ -24,6 +24,7 @@ export default function SignupForm() {
   const [fullName, setFullName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
+  const [formValidity, setFormValidity] = useState<boolean>(true)
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
   })
@@ -53,12 +54,24 @@ export default function SignupForm() {
     void signupUser()
   }
 
+  const isValidForm = () => {
+    const isFormValid =
+      validateName(fullName) && validateEmail(email) && validatePassword(pwd)
+    if (!isFormValid) {
+      shakeButton()
+    }
+    return isFormValid
+  }
+
+  const shakeButton = () => {
+    setFormValidity(false)
+    setTimeout(function () {
+      setFormValidity(true)
+    }, 500)
+  }
+
   const signupUser = async () => {
-    if (
-      validateName(fullName) &&
-      validateEmail(email) &&
-      validatePassword(pwd)
-    ) {
+    if (isValidForm()) {
       const payload = {
         fullName: fullName,
         username: email,
@@ -128,7 +141,11 @@ export default function SignupForm() {
         message={AUTH.SIGN_UP.ERROR}
       ></CricAlert>
       <div className='mt-3'>
-        <CricButton variant='contained' onClick={() => handleSubmit()}>
+        <CricButton
+          variant='contained'
+          className={!formValidity ? 'btn_shake' : ''}
+          onClick={() => handleSubmit()}
+        >
           {signupRequest.isMutating
             ? 'creating account...'
             : AUTH.SIGN_UP.TXT_SIGNUP}
