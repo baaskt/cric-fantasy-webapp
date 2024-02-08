@@ -1,4 +1,4 @@
-import { fetcher } from '@/lib/fetcher'
+import { apiHelper } from '@/lib/apiHelper'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import useSWRMutation from 'swr/mutation'
 
@@ -6,10 +6,10 @@ export function useMutateRequest(url: string, httpMethod: string) {
   const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
     url,
     httpMethod === (HttpMethod.POST as string)
-      ? fetcher().POST
+      ? apiHelper().POST
       : httpMethod === (HttpMethod.PUT as string)
-        ? fetcher().PUT
-        : fetcher().DELETE,
+        ? apiHelper().PUT
+        : apiHelper().DELETE,
   )
 
   return {

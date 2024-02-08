@@ -1,4 +1,4 @@
-import { getFetcher } from '@/lib/fetcher'
+import { getFetcher } from '@/lib/apiHelper'
 import useSWR from 'swr'
 
 export function useRequest(url: string) {

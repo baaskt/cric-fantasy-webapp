@@ -10,7 +10,7 @@ import { validateEmail, validateName, validatePassword } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { SIGNUP_URL } from '@/util/endpoints'
 import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/fetcher'
+import { apiHelper } from '@/lib/apiHelper'
 import CricAlert from './ui/cricAlert'
 import CricTextField from './ui/cricTextField'
 
@@ -23,7 +23,7 @@ export default function SignupForm() {
   const { signup } = useAuth()
   const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
     SIGNUP_URL,
-    fetcher().POST,
+    apiHelper().POST,
   )
 
   useEffect(() => {
