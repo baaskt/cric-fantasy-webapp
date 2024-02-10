@@ -13,6 +13,9 @@ export const listItemTheme = createTheme({
           '.MuiListItemButton-root.Mui-selected': {
             backgroundColor: COLORS.cricPrimary,
             color: COLORS.white,
+            '&:hover': {
+              backgroundColor: COLORS.cricPrimary,
+            },
             '.MuiListItemIcon-root': {
               color: COLORS.white,
             },

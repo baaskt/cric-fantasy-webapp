@@ -8,8 +8,8 @@ import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
-import { usePathname } from 'next/navigation'
 import { SideBarMenuEntity } from '@/model/entities/sidedbar-menu.type'
+import Brand from './brand'
 
 const sidebarConfig: SideBarMenuEntity[] = [
   {
@@ -43,19 +43,18 @@ const sidebarConfig: SideBarMenuEntity[] = [
     fullPath: '/tournaments',
   },
 ]
-function Sidebar() {
-  const pathname = usePathname()
-  const pathIndex = sidebarConfig.findIndex(sc => pathname.includes(sc.path))
-  const matchingPath = pathIndex !== -1 ? sidebarConfig[pathIndex].path : ''
-
+function Sidebar({ activePath }: { activePath: SideBarMenuEntity | null }) {
   return (
-    <div className='w-1/5 md:w-1/6 shadow-md'>
+    <div className='w-1/5 md:w-1/5 shadow-md'>
+      <div className='flex justify-center p-2'>
+        <Brand />
+      </div>
       <List>
         {sidebarConfig?.map((menuEntity, menuIndex) => (
           <CricListItem
             key={menuIndex}
             menuEntity={menuEntity}
-            isActive={matchingPath === menuEntity.path}
+            isActive={activePath?.path === menuEntity.path}
           ></CricListItem>
         ))}
       </List>
