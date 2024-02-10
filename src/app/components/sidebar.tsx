@@ -49,7 +49,7 @@ function Sidebar() {
   const matchingPath = pathIndex !== -1 ? sidebarConfig[pathIndex].path : ''
 
   return (
-    <div className='w-1/6 shadow-md'>
+    <div className='w-1/5 md:w-1/6 shadow-md'>
       <List>
         {sidebarConfig?.map((menuEntity, menuIndex) => (
           <CricListItem
