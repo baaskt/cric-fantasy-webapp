@@ -41,7 +41,8 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response = await loginRequest.trigger(payload)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const response = await loginRequest.trigger(payload as never)
         console.log(response)
         login({ email: email })
       } catch (e) {

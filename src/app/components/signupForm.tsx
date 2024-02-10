@@ -14,11 +14,11 @@ import {
 } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { SIGNUP_URL } from '@/util/endpoints'
-import useSWRMutation from 'swr/mutation'
-import { apiHelper } from '@/lib/apiHelper'
 import CricAlert from './ui/cricAlert'
 import CricTextField from './ui/cricTextField'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
+import { HttpMethod } from '@/model/enum/http-method.enum'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
 
 export default function SignupForm() {
   const [fullName, setFullName] = useState<string>('')
@@ -30,10 +30,7 @@ export default function SignupForm() {
   })
 
   const { signup } = useAuth()
-  const signupRequest = useSWRMutation<unknown, Error>(
-    SIGNUP_URL,
-    apiHelper().POST,
-  )
+  const signupRequest = useMutateRequest(SIGNUP_URL, HttpMethod.POST)
 
   const onNameChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -79,7 +76,8 @@ export default function SignupForm() {
       }
       console.log(payload)
       try {
-        const response = await signupRequest.trigger(payload)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const response = await signupRequest.trigger(payload as never)
         console.log(response)
         signup({ name: fullName, email: email })
       } catch (e) {
