@@ -83,7 +83,11 @@ export default function LoginForm() {
         message={AUTH.SIGN_IN.ERROR}
       ></CricAlert>
       <div className='mt-3'>
-        <CricButton variant='contained' onClick={() => handleSubmit()}>
+        <CricButton
+          variant='contained'
+          fullWidth
+          onClick={() => handleSubmit()}
+        >
           {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
         </CricButton>
       </div>

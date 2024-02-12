@@ -141,6 +141,7 @@ export default function SignupForm() {
       <div className='mt-3'>
         <CricButton
           variant='contained'
+          fullWidth
           className={!formValidity ? 'btn_shake' : ''}
           onClick={() => handleSubmit()}
         >

@@ -20,6 +20,9 @@ export const listItemTheme = createTheme({
               color: COLORS.white,
             },
           },
+          // '.MuiListItemText-primary': {
+          //   fontFamily: 'Manrope',
+          // },
         },
       },
     },

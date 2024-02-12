@@ -11,12 +11,12 @@ export default function Header({
   activePath: SideBarMenuEntity | null
 }) {
   const { user } = useAuth()
-
+  console.log(user)
   return (
     <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md'>
       <div className='flex items-center gap-2'>
         {activePath?.icon}
-        <span className='text-xl'>{activePath?.title}</span>
+        <span className='text-xl uppercase'>{activePath?.title}</span>
       </div>
       <Avatar
         sx={{

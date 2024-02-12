@@ -3,6 +3,8 @@
 import React from 'react'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { AuthProvider } from './AuthProvider'
+import { ThemeProvider } from '@mui/material'
+import { globalTheme } from '@/styles/themes/global'
 
 export default function AppProvider({
   children,
@@ -11,7 +13,9 @@ export default function AppProvider({
 }) {
   return (
     <AppRouterCacheProvider>
-      <AuthProvider>{children}</AuthProvider>
+      <ThemeProvider theme={globalTheme}>
+        <AuthProvider>{children}</AuthProvider>
+      </ThemeProvider>
     </AppRouterCacheProvider>
   )
 }

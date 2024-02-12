@@ -10,35 +10,36 @@ import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
 import { SideBarMenuEntity } from '@/model/entities/sidedbar-menu.type'
 import Brand from './brand'
+import { TITLES } from '@/util/constants'
 
 const sidebarConfig: SideBarMenuEntity[] = [
   {
     icon: <DashboardRoundedIcon></DashboardRoundedIcon>,
-    title: 'Dashboard',
+    title: TITLES.DASHBOARD,
     path: '/dashboard',
     fullPath: '/tournaments/dashboard',
   },
   {
     icon: <FormatListBulletedRoundedIcon></FormatListBulletedRoundedIcon>,
-    title: 'Matches',
+    title: TITLES.MATCHES,
     path: '/matches',
     fullPath: '/tournaments/matches',
   },
   {
     icon: <PersonSearchRoundedIcon></PersonSearchRoundedIcon>,
-    title: 'Players',
+    title: TITLES.PLAYERS,
     path: '/players',
     fullPath: '/tournaments/players',
   },
   {
     icon: <WorkspacesRoundedIcon></WorkspacesRoundedIcon>,
-    title: 'Teams',
+    title: TITLES.TEAMS,
     path: '/teams',
     fullPath: '/tournaments/teams',
   },
   {
     icon: <FlagRoundedIcon></FlagRoundedIcon>,
-    title: 'Tournaments',
+    title: TITLES.TOURNAMENTS,
     path: '/tournaments',
     fullPath: '/tournaments',
   },

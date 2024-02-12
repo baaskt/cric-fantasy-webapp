@@ -39,4 +39,9 @@ export const AUTH = {
 export const TITLES = {
   SIGNIN: 'Sign In',
   SIGNUP: 'Create an account',
+  DASHBOARD: 'Dashboard',
+  MATCHES: 'Matches',
+  PLAYERS: 'Players',
+  TEAMS: 'Teams',
+  TOURNAMENTS: 'Tournaments',
 }
