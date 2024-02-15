@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 export const apiHelper = () => {
-  const BASE_URL = 'https://cat-fact.herokuapp.com'
+  const BASE_URL = 'https://crickccservice.onrender.com/api/'
 
   function GET(endpoint: string) {
     const url: string = `${BASE_URL}${endpoint}`
