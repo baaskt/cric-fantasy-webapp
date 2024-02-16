@@ -11,6 +11,7 @@ const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },
   { id: 2, label: 'All Tournaments' },
 ]
+
 export default function Tournaments() {
   const [isCreating, setCreating] = useState<boolean>(false)
   // const [tournamentData, setTournamentData] = useState([])

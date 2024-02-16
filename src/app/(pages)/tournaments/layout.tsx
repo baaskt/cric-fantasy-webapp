@@ -1,8 +1,5 @@
-'use client'
-
 import Header from '@/components/header'
 import Sidebar from '@/components/sidebar'
-import { usePathname } from 'next/navigation'
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
@@ -10,7 +7,7 @@ import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import { SideBarMenuEntity } from '@/model/entities/sidedbar-menu.type'
 
-const sidebarConfig: SideBarMenuEntity[] = [
+export const sidebarConfig: SideBarMenuEntity[] = [
   {
     icon: <DashboardRoundedIcon></DashboardRoundedIcon>,
     title: 'Dashboard',
@@ -44,15 +41,11 @@ const sidebarConfig: SideBarMenuEntity[] = [
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const pathIndex = sidebarConfig.findIndex(sc => pathname.includes(sc.path))
-  const matchingPath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
-
   return (
     <div className='flex flex-row h-dvh'>
-      <Sidebar activePath={matchingPath}></Sidebar>
+      <Sidebar></Sidebar>
       <div className='flex flex-col w-full'>
-        <Header activePath={matchingPath}></Header>
+        <Header></Header>
         <>{children}</>
       </div>
     </div>

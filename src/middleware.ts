@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 const authRoutes = ['/login', '/signup']
 const protectedRoutes = ['/tournaments', '/dashboard']
@@ -8,9 +9,14 @@ export function middleware(request: NextRequest) {
   const totalRoutes = [...authRoutes, ...protectedRoutes].find(route =>
     pathName.includes(route),
   )
-  if (!totalRoutes) {
+  const accessToken = cookies().get('accessToken')?.value
+  if (!totalRoutes || (!accessToken && !isLoginRoute(pathName))) {
     return redirectRoute(request, authRoutes[0])
   }
+}
+
+const isLoginRoute = (pathName: string): boolean => {
+  return pathName === authRoutes[0] ? true : false
 }
 
 const redirectRoute = (request: NextRequest, pathName: string) => {

@@ -11,6 +11,7 @@ export const cookieHelper = () => {
   }
 
   function getCookieItem(key: string): string | null {
+    // console.log(cookies().getAll())
     const value = getCookie(key)
     return value ? value : null
   }

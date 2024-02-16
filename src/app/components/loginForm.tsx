@@ -53,7 +53,7 @@ export default function LoginForm() {
         )) as LoginResult
         login({ email: email }, response?.result)
       } catch (e) {
-        console.log(loginRequest)
+        console.log(e)
       } finally {
         router.push('/tournaments')
       }

@@ -1,6 +1,12 @@
 import Brand from '@/components/brand'
 import { AUTH } from '@/util/constants'
+import { Metadata } from 'next'
 import Image from 'next/image'
+
+export const metadata: Metadata = {
+  title: 'CriKCC Fantasy Authentication',
+  description: 'Login or Signup for CriKCC Fantasy',
+}
 
 export default function LoginLayout({
   children,
