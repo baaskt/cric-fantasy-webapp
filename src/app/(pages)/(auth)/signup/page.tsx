@@ -1,5 +1,3 @@
-'use client'
-
 import SignupForm from '@/components/signupForm'
 import { AUTH, TITLES } from '@/util/constants'
 import Link from 'next/link'

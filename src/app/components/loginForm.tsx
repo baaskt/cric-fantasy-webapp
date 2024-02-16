@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FocusEvent, useEffect, useState } from 'react'
+import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
@@ -9,22 +9,23 @@ import { AUTH } from '@/util/constants'
 import { validateEmail } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { LOGIN_URL } from '@/util/endpoints'
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/fetcher'
 import CricAlert from './ui/cricAlert'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { HttpMethod } from '@/model/enum/http-method.enum'
+import { LoginRequest } from '@/model/request/login-request.type'
+import { useRouter } from 'next/navigation'
+
+type LoginResult = {
+  result: string
+}
 
 export default function LoginForm() {
+  const router = useRouter()
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
   const { login } = useAuth()
-  const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
-    LOGIN_URL,
-    fetcher().POST,
-  )
 
-  useEffect(() => {
-    redirectLogin()
-  }, [data])
+  const loginRequest = useMutateRequest(LOGIN_URL, HttpMethod.POST)
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -42,17 +43,21 @@ export default function LoginForm() {
 
   const loginUser = async () => {
     if (validateEmail(email) && pwd) {
-      // const payload = {
-      //   username: email,
-      //   password: pwd,
-      // }
-      await trigger()
-      login({ email: email })
+      const payload: LoginRequest = {
+        email: email,
+        password: pwd,
+      }
+      try {
+        const response: LoginResult = (await loginRequest.trigger(
+          payload as never,
+        )) as LoginResult
+        login({ email: email }, response?.result)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        router.push('/tournaments')
+      }
     }
-  }
-
-  const redirectLogin = () => {
-    //reidrect
   }
 
   return (
@@ -83,12 +88,16 @@ export default function LoginForm() {
         onChange={onPwdChange}
       />
       <CricAlert
-        error={error}
-        message='Incorrect username / password'
+        error={loginRequest.error}
+        message={AUTH.SIGN_IN.ERROR}
       ></CricAlert>
       <div className='mt-3'>
-        <CricButton variant='contained' onClick={() => handleSubmit()}>
-          {isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
+        <CricButton
+          variant='contained'
+          fullWidth
+          onClick={() => handleSubmit()}
+        >
+          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
         </CricButton>
       </div>
     </Box>

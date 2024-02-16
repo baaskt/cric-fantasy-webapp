@@ -6,10 +6,12 @@ export const AUTH = {
   SIGN_IN: {
     TXT_SIGNIN: 'Sign in',
     NO_ACCOUNT: "Don't have an account ? ",
+    ERROR: 'Incorrect username / password',
   },
   SIGN_UP: {
     TXT_SIGNUP: 'Sign up',
     HAS_ACCOUNT: 'Already have an account ? ',
+    ERROR: "Couldn't create account, please try again",
   },
   EMAIL: {
     LABEL: 'Email',
@@ -28,12 +30,24 @@ export const AUTH = {
   NAME: {
     LABEL: 'Full Name',
     PLACEHOLDER: 'Enter your full name',
-    ERROR: 'Please enter a valid name',
+    ERROR_SPL_CHAR: 'Please enter a valid name',
+    ERROR_LENGTH: 'Enter at least 5 characters',
   },
+}
+
+/* TOURNAMENT SCREENS */
+export const TOURNAMENT = {
+  CREATE: 'Create Tournament',
+  CREATING: 'Creating...',
 }
 
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: 'Sign In',
   SIGNUP: 'Create an account',
+  DASHBOARD: 'Dashboard',
+  MATCHES: 'Matches',
+  PLAYERS: 'Players',
+  TEAMS: 'Teams',
+  TOURNAMENTS: 'Tournaments',
 }

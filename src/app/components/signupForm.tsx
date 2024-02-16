@@ -1,34 +1,39 @@
 'use client'
 
-import React, { FocusEvent, useEffect, useState } from 'react'
+import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
 import { AUTH } from '@/util/constants'
-import { validateEmail, validateName, validatePassword } from '@/util/helper'
+import {
+  getNameErrorHelperTxt,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { SIGNUP_URL } from '@/util/endpoints'
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/fetcher'
 import CricAlert from './ui/cricAlert'
 import CricTextField from './ui/cricTextField'
+import { NameValidationEntity } from '@/model/entities/name-validation.interface'
+import { HttpMethod } from '@/model/enum/http-method.enum'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { SignupRequest } from '@/model/request/signup-request.type'
+import { useRouter } from 'next/navigation'
 
 export default function SignupForm() {
+  const router = useRouter()
   const [fullName, setFullName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
-  const [isNameValid, setNameValidity] = useState<boolean>(true)
+  const [formValidity, setFormValidity] = useState<boolean>(true)
+  const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
+    valid: true,
+  })
 
   const { signup } = useAuth()
-  const { data, error, isMutating, trigger } = useSWRMutation<unknown, Error>(
-    SIGNUP_URL,
-    fetcher().POST,
-  )
-
-  useEffect(() => {
-    redirectSignup()
-  }, [data])
+  const signupRequest = useMutateRequest(SIGNUP_URL, HttpMethod.POST)
 
   const onNameChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -49,32 +54,45 @@ export default function SignupForm() {
     void signupUser()
   }
 
-  const signupUser = async () => {
-    if (
-      validateName(fullName) &&
-      validateEmail(email) &&
-      validatePassword(pwd)
-    ) {
-      const payload = {
-        fullName: fullName,
-        username: email,
-        password: pwd,
-      }
-      console.log(payload)
-      await trigger()
-      signup({ email: email })
+  const isValidForm = () => {
+    const isFormValid =
+      validateName(fullName) && validateEmail(email) && validatePassword(pwd)
+    if (!isFormValid) {
+      shakeButton()
     }
+    return isFormValid
   }
 
-  const redirectSignup = () => {
-    //reidrect
+  const shakeButton = () => {
+    setFormValidity(false)
+    setTimeout(function () {
+      setFormValidity(true)
+    }, 500)
+  }
+
+  const signupUser = async () => {
+    if (isValidForm()) {
+      const payload: SignupRequest = {
+        fullName: fullName,
+        email: email,
+        password: pwd,
+      }
+      try {
+        await signupRequest.trigger(payload as never)
+        signup({ name: fullName, email: email })
+      } catch (e) {
+        console.log(e)
+      } finally {
+        router.push('/login')
+      }
+    }
   }
 
   const validateFullName = (event: FocusEvent<HTMLInputElement>) => {
     const userInput: string = event?.target?.value
     if (userInput) {
-      const isValidName: boolean = validateName(userInput)
-      setNameValidity(isValidName)
+      const validityEntity: NameValidationEntity = validateName(userInput)
+      setNameValidity(validityEntity)
     }
   }
 
@@ -96,10 +114,10 @@ export default function SignupForm() {
         variant='filled'
         onChange={onNameChange}
         onBlur={validateFullName}
-        error={!isNameValid}
+        error={!nameValidity?.valid}
         placeholder={AUTH.NAME.PLACEHOLDER}
-        helperText={!isNameValid ? AUTH.NAME.ERROR : ''}
-        inputProps={{ maxLength: 35 }}
+        helperText={getNameErrorHelperTxt(nameValidity)}
+        inputProps={{ minLength: 5, maxLength: 35 }}
       />
       <CricEmailField
         id='signup-email'
@@ -119,12 +137,19 @@ export default function SignupForm() {
         onChange={onPwdChange}
       />
       <CricAlert
-        error={error}
-        message='Incorrect username / password'
+        error={signupRequest.error}
+        message={AUTH.SIGN_UP.ERROR}
       ></CricAlert>
       <div className='mt-3'>
-        <CricButton variant='contained' onClick={() => handleSubmit()}>
-          {isMutating ? 'creating account...' : AUTH.SIGN_UP.TXT_SIGNUP}
+        <CricButton
+          variant='contained'
+          fullWidth
+          className={!formValidity ? 'btn_shake' : ''}
+          onClick={() => handleSubmit()}
+        >
+          {signupRequest.isMutating
+            ? 'creating account...'
+            : AUTH.SIGN_UP.TXT_SIGNUP}
         </CricButton>
       </div>
     </Box>

@@ -37,7 +37,6 @@ export default function CricPwdField({ validatePwd, ...props }: CricPwdProps) {
       const userInput: string = event?.target?.value
       if (userInput) {
         const isValidPwd: boolean = validatePassword(userInput)
-        console.log(isValidPwd)
         setPwdValidity(isValidPwd)
       }
     }
@@ -49,6 +48,7 @@ export default function CricPwdField({ validatePwd, ...props }: CricPwdProps) {
         {...props}
         type={showPassword ? 'text' : 'password'}
         onChange={onPwdChange}
+        error={!isPwdValid}
         onBlur={validateUserPassword}
         InputProps={{
           endAdornment: (

@@ -1,0 +1,33 @@
+'use client'
+
+import React from 'react'
+import List from '@mui/material/List'
+import CricListItem from './ui/CricListItem'
+import Brand from './brand'
+import { usePathname } from 'next/navigation'
+import { sidebarConfig } from '@/(pages)/tournaments/layout'
+
+function Sidebar() {
+  const pathname = usePathname()
+  const pathIndex = sidebarConfig.findIndex(sc => pathname.includes(sc.path))
+  const activePath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
+
+  return (
+    <div className='w-1/5 md:w-1/5 shadow-md'>
+      <div className='flex justify-center p-2'>
+        <Brand />
+      </div>
+      <List>
+        {sidebarConfig?.map((menuEntity, menuIndex) => (
+          <CricListItem
+            key={menuIndex}
+            menuEntity={menuEntity}
+            isActive={activePath?.path === menuEntity.path}
+          ></CricListItem>
+        ))}
+      </List>
+    </div>
+  )
+}
+
+export default Sidebar
