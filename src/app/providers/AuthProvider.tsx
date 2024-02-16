@@ -1,5 +1,6 @@
 'use client'
 
+import { cookieHelper } from '@/lib/cookieHelper'
 import { useSessionStorage } from '@/hooks/useSessionStorage'
 import { AuthContextType } from '@/model/context/authContext.type'
 import { User } from '@/model/entities/user.interface'
@@ -24,19 +25,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const login = (user: User): void => {
+  const login = (user: User, accessToken: string): void => {
     setUser(user)
     setItem('user', user)
+    cookieHelper().setCookieItem('accessToken', accessToken)
   }
 
   const signup = (user: User): void => {
     setUser(user)
     setItem('user', user)
+    cookieHelper().removeCookieItem('accessToken')
   }
 
   const logout = (): void => {
     setUser(null)
     setItem('user', '')
+    cookieHelper().removeCookieItem('accessToken')
   }
 
   const value: AuthContextType = {

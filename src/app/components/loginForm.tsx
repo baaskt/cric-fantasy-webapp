@@ -12,6 +12,11 @@ import { LOGIN_URL } from '@/util/endpoints'
 import CricAlert from './ui/cricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
+import { LoginRequest } from '@/model/request/login-request.type'
+
+type LoginResult = {
+  result: string
+}
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>('')
@@ -36,17 +41,17 @@ export default function LoginForm() {
 
   const loginUser = async () => {
     if (validateEmail(email) && pwd) {
-      const payload = {
-        username: email,
+      const payload: LoginRequest = {
+        email: email,
         password: pwd,
       }
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const response = await loginRequest.trigger(payload as never)
-        console.log(response)
-        login({ email: email })
+        const response: LoginResult = (await loginRequest.trigger(
+          payload as never,
+        )) as LoginResult
+        login({ email: email }, response?.result)
       } catch (e) {
-        console.log(e)
+        console.log(loginRequest)
       }
     }
   }

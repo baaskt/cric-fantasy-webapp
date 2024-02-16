@@ -35,6 +35,12 @@ export const AUTH = {
   },
 }
 
+/* TOURNAMENT SCREENS */
+export const TOURNAMENT = {
+  CREATE: 'Create Tournament',
+  CREATING: 'Creating...',
+}
+
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: 'Sign In',

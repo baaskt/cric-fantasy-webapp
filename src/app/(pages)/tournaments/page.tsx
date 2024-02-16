@@ -1,17 +1,20 @@
 'use client'
 
+// import EmptyData from '@/components/EmptyData'
 import CricButton from '@/components/ui/cricButton'
 import CricTab from '@/components/ui/cricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
+import { TOURNAMENT } from '@/util/constants'
 import React, { useState } from 'react'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Fantasy' },
-  { id: 2, label: 'In Progress' },
+  { id: 2, label: 'Ongoing' },
   { id: 3, label: 'Upcoming' },
 ]
 export default function Tournaments() {
   const [isCreating, setCreating] = useState<boolean>(false)
+  // const [tournamentData, setTournamentData] = useState([])
   const handleChange = (selectedEntity: OptionsEntity) => {
     console.log(selectedEntity)
   }
@@ -25,9 +28,10 @@ export default function Tournaments() {
       <div className='flex flex-row justify-between'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
         <CricButton variant='contained' onClick={() => createTournament()}>
-          {isCreating ? 'logging in...' : 'logging in...'}
+          {isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
         </CricButton>
       </div>
+      {/* {!tournamentData?.length && <EmptyData></EmptyData>} */}
     </div>
   )
 }

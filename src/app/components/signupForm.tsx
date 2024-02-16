@@ -19,8 +19,11 @@ import CricTextField from './ui/cricTextField'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { SignupRequest } from '@/model/request/signup-request.type'
+import { useRouter } from 'next/navigation'
 
 export default function SignupForm() {
+  const router = useRouter()
   const [fullName, setFullName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
@@ -69,19 +72,18 @@ export default function SignupForm() {
 
   const signupUser = async () => {
     if (isValidForm()) {
-      const payload = {
+      const payload: SignupRequest = {
         fullName: fullName,
-        username: email,
+        email: email,
         password: pwd,
       }
-      console.log(payload)
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const response = await signupRequest.trigger(payload as never)
-        console.log(response)
+        await signupRequest.trigger(payload as never)
         signup({ name: fullName, email: email })
       } catch (e) {
         console.log(e)
+      } finally {
+        router.push('/login')
       }
     }
   }
