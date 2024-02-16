@@ -13,12 +13,14 @@ import CricAlert from './ui/cricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { LoginRequest } from '@/model/request/login-request.type'
+import { useRouter } from 'next/navigation'
 
 type LoginResult = {
   result: string
 }
 
 export default function LoginForm() {
+  const router = useRouter()
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
   const { login } = useAuth()
@@ -52,6 +54,8 @@ export default function LoginForm() {
         login({ email: email }, response?.result)
       } catch (e) {
         console.log(loginRequest)
+      } finally {
+        router.push('/tournaments')
       }
     }
   }

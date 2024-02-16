@@ -8,9 +8,8 @@ import { TOURNAMENT } from '@/util/constants'
 import React, { useState } from 'react'
 
 const tabOptions: OptionsEntity[] = [
-  { id: 1, label: 'My Fantasy' },
-  { id: 2, label: 'Ongoing' },
-  { id: 3, label: 'Upcoming' },
+  { id: 1, label: 'My Tournaments' },
+  { id: 2, label: 'All Tournaments' },
 ]
 export default function Tournaments() {
   const [isCreating, setCreating] = useState<boolean>(false)
