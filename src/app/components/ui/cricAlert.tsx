@@ -1,27 +1,29 @@
-import { Alert } from '@mui/material'
+import { Alert, AlertColor } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 interface CricAlertProps {
-  error: Error | undefined
+  error?: Error | undefined
   message: string
+  severity?: AlertColor
 }
 
 function CricAlert(props: CricAlertProps) {
-  const [error, setError] = useState<Error>()
+  const { error, severity = 'error' } = props
+  const [errorData, setError] = useState<Error>()
   const timeOutInterval = 3000
 
   useEffect(() => {
-    setError(props.error)
+    setError(error)
     let errorTimer: string | number | NodeJS.Timeout | undefined
-    if (props.error) {
+    if (error) {
       errorTimer = setTimeout(() => {
         setError(undefined)
       }, timeOutInterval)
     }
     return () => clearTimeout(errorTimer)
-  }, [props.error])
+  }, [error])
 
-  return error && <Alert severity='error'>{props.message}</Alert>
+  return errorData && <Alert severity={severity}>{props.message}</Alert>
 }
 
 export default CricAlert

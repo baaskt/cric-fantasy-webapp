@@ -10,13 +10,13 @@ export function middleware(request: NextRequest) {
     pathName.includes(route),
   )
   const accessToken = cookies().get('accessToken')?.value
-  if (!totalRoutes || (!accessToken && !isLoginRoute(pathName))) {
+  if (!totalRoutes || (!accessToken && !isAuthRoute(pathName))) {
     return redirectRoute(request, authRoutes[0])
   }
 }
 
-const isLoginRoute = (pathName: string): boolean => {
-  return pathName === authRoutes[0] ? true : false
+const isAuthRoute = (pathName: string): boolean => {
+  return authRoutes.includes(pathName)
 }
 
 const redirectRoute = (request: NextRequest, pathName: string) => {
