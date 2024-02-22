@@ -1,3 +1,5 @@
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { Lexend } from 'next/font/google'
 import '@/styles/globals.scss'
@@ -22,6 +24,8 @@ export default function RootLayout({
     <html lang='en'>
       <body className={lexend.className}>
         <AppProvider>{children}</AppProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
