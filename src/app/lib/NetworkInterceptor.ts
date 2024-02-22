@@ -3,7 +3,7 @@ import { cookieHelper } from '@/lib/cookieHelper'
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.API_URL,
   timeout: 30000, // Timeout of 3 seconds
 })
 
