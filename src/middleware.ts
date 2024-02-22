@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { TITLES } from '@/util/constants'
 
-const authRoutes = ['/login', '/signup']
-const protectedRoutes = ['/tournaments', '/dashboard']
+const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path]
+const protectedRoutes = [
+  TITLES.DASHBOARD.path,
+  TITLES.TOURNAMENTS.path,
+  TITLES.PLAYERS.path,
+  TITLES.TEAMS.path,
+]
+const totalRoutes = [...authRoutes, ...protectedRoutes]
 
 export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
-  const totalRoutes = [...authRoutes, ...protectedRoutes].find(route =>
-    pathName.includes(route),
-  )
+  const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
-  if (!totalRoutes || (!accessToken && !isAuthRoute(pathName))) {
-    return redirectRoute(request, authRoutes[0])
+  if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
+    return redirectRoute(request, TITLES.SIGNIN.path)
+  } else if (accessToken && isAuthRoute(pathName)) {
+    return redirectRoute(request, TITLES.DASHBOARD.fullPath)
   }
 }
 

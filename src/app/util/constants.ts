@@ -43,11 +43,27 @@ export const TOURNAMENT = {
 
 /* SCREEN TITLES */
 export const TITLES = {
-  SIGNIN: 'Sign In',
-  SIGNUP: 'Create an account',
-  DASHBOARD: 'Dashboard',
-  MATCHES: 'Matches',
-  PLAYERS: 'Players',
-  TEAMS: 'Teams',
-  TOURNAMENTS: 'Tournaments',
+  SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },
+  SIGNUP: { label: 'Create an account', path: '/signup', fullPath: '/signup' },
+  DASHBOARD: {
+    label: 'Dashboard',
+    path: '/dashboard',
+    fullPath: '/tournaments/dashboard',
+  },
+  MATCHES: {
+    label: 'Matches',
+    path: '/matches',
+    fullPath: '/tournaments/matches',
+  },
+  PLAYERS: {
+    label: 'Players',
+    path: '/players',
+    fullPath: '/tournaments/players',
+  },
+  TEAMS: { label: 'Teams', path: '/teams', fullPath: '/tournaments/teams' },
+  TOURNAMENTS: {
+    label: 'Tournaments',
+    path: '/tournaments',
+    fullPath: '/tournaments',
+  },
 }
