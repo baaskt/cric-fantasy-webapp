@@ -1,4 +1,4 @@
-import { APP_NAME } from '@/util/constants'
+import { APP_NAME } from '@/util/constants/constants'
 import Image from 'next/image'
 
 export default function Brand() {

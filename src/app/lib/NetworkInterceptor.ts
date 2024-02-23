@@ -1,6 +1,6 @@
 // Create an Axios instance with default configuration
 import { cookieHelper } from '@/lib/cookieHelper'
-import { API_URL } from '@/util/endpoints'
+import { API_URL } from '@/util/constants/endpoints'
 import axios from 'axios'
 
 const axiosInstance = axios.create({

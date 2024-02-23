@@ -5,15 +5,15 @@ import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
-import { AUTH } from '@/util/constants'
+import { AUTH } from '@/util/constants/constants'
 import {
-  getNameErrorHelperTxt,
+  getErrorHelperTxt,
   validateEmail,
   validateName,
   validatePassword,
 } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
-import { SIGNUP_URL } from '@/util/endpoints'
+import { SIGNUP_URL } from '@/util/constants/endpoints'
 import CricAlert from './ui/cricAlert'
 import CricTextField from './ui/cricTextField'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
@@ -110,29 +110,29 @@ export default function SignupForm() {
       <CricTextField
         type='text'
         id='signup-name'
-        label={AUTH.NAME.LABEL}
+        label={AUTH.NAME.label}
         variant='filled'
         onChange={onNameChange}
         onBlur={validateFullName}
         error={!nameValidity?.valid}
-        placeholder={AUTH.NAME.PLACEHOLDER}
-        helperText={getNameErrorHelperTxt(nameValidity)}
+        placeholder={AUTH.NAME.placeholder}
+        helperText={getErrorHelperTxt(nameValidity, AUTH.NAME)}
         inputProps={{ minLength: 5, maxLength: 35 }}
       />
       <CricEmailField
         id='signup-email'
-        label={AUTH.EMAIL.LABEL}
+        label={AUTH.EMAIL.label}
         variant='filled'
-        placeholder={AUTH.EMAIL.PLACEHOLDER}
+        placeholder={AUTH.EMAIL.placeholder}
         helperText={AUTH.EMAIL.ERROR}
         onChange={onEmailChange}
       />
       <CricPwdField
         id='signup-password'
-        label={AUTH.PASSWORD.LABEL}
+        label={AUTH.PASSWORD.label}
         variant='filled'
         autoComplete='current-password'
-        placeholder={AUTH.PASSWORD.PLACEHOLDER}
+        placeholder={AUTH.PASSWORD.placeholder}
         validatePwd={true}
         onChange={onPwdChange}
       />

@@ -6,7 +6,7 @@ import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import { SideBarMenuEntity } from '@/model/entities/sidedbar-menu.type'
-import { TITLES } from '@/util/constants'
+import { TITLES } from '@/util/constants/constants'
 
 export const sidebarConfig: SideBarMenuEntity[] = [
   {

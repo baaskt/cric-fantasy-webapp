@@ -1,5 +1,7 @@
-import { NameValidationEntity } from '@/model/entities/name-validation.interface'
-import { AUTH } from './constants'
+import {
+  FieldTxtEntity,
+  NameValidationEntity,
+} from '@/model/entities/name-validation.interface'
 
 export const validateEmail = (email: string): boolean => {
   const emailRegex: RegExp =
@@ -44,16 +46,17 @@ export const validateName = (name: string): NameValidationEntity => {
   }
 }
 
-export const getNameErrorHelperTxt = (
+export const getErrorHelperTxt = (
   validityEntity: NameValidationEntity,
+  fieldEntity: FieldTxtEntity,
 ): string => {
   const { valid, alpha, length } = validityEntity
   return valid
     ? ''
     : alpha
-      ? AUTH.NAME.ERROR_SPL_CHAR
+      ? fieldEntity.errorSplChar
       : length
-        ? AUTH.NAME.ERROR_LENGTH
+        ? fieldEntity.errorLength
         : ''
 }
 

@@ -1,5 +1,5 @@
 import Brand from '@/components/brand'
-import { AUTH } from '@/util/constants'
+import { AUTH } from '@/util/constants/constants'
 import { Metadata } from 'next'
 import Image from 'next/image'
 

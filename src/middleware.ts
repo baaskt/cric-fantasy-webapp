@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { TITLES } from '@/util/constants'
+import { TITLES } from '@/util/constants/constants'
 
 const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path]
 const protectedRoutes = [

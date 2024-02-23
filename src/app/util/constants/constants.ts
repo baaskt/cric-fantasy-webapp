@@ -14,24 +14,24 @@ export const AUTH = {
     ERROR: "Couldn't create account, please try again",
   },
   EMAIL: {
-    LABEL: 'Email',
-    PLACEHOLDER: 'Enter your email address',
+    label: 'Email',
+    placeholder: 'Enter your email address',
     ERROR: 'Please enter valid email address',
   },
   PASSWORD: {
-    LABEL: 'Password',
-    PLACEHOLDER: 'Enter at least 8 characters',
-    ERROR_LENGTH: 'Password must be at least 8 characters',
+    label: 'Password',
+    placeholder: 'Enter at least 8 characters',
+    errorLength: 'Password must be at least 8 characters',
     ERROR_LOWER: 'Password must contain at least one lower case letter',
     ERROR_UPPER: 'Password must contain at least one upper case letter',
     ERROR_DIGIT: 'Password must contain at least one digit',
-    ERROR_SPL_CHAR: 'Password must contain at least one symbol',
+    errorSplChar: 'Password must contain at least one symbol',
   },
   NAME: {
-    LABEL: 'Full Name',
-    PLACEHOLDER: 'Enter your full name',
-    ERROR_SPL_CHAR: 'Please enter a valid name',
-    ERROR_LENGTH: 'Enter at least 5 characters',
+    label: 'Full Name',
+    placeholder: 'Enter your full name',
+    errorSplChar: 'Please enter a valid name',
+    errorLength: 'Enter at least 5 characters',
   },
 }
 
@@ -39,6 +39,38 @@ export const AUTH = {
 export const TOURNAMENT = {
   CREATE: 'Create Tournament',
   CREATING: 'Creating...',
+  CREATE_FORM: {
+    NAME: {
+      label: 'Tournament Name',
+      placeholder: 'Enter tournament name',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    START_DATE: {
+      label: 'Start Date',
+      placeholder: 'Enter start date',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    END_DATE: {
+      label: 'End Date',
+      placeholder: 'Enter end date',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    LOCATION: {
+      label: 'Location',
+      placeholder: 'Enter location',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    SERIES_ID: {
+      label: 'Series ID',
+      placeholder: 'Enter Series ID ( optional )',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+  },
 }
 
 /* SCREEN TITLES */

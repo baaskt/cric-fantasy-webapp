@@ -1,5 +1,5 @@
 import LoginForm from '@/components/loginForm'
-import { AUTH, TITLES } from '@/util/constants'
+import { AUTH, TITLES } from '@/util/constants/constants'
 import Link from 'next/link'
 
 export default function Login() {

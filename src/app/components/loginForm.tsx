@@ -5,10 +5,10 @@ import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
-import { AUTH } from '@/util/constants'
+import { AUTH } from '@/util/constants/constants'
 import { validateEmail } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
-import { LOGIN_URL } from '@/util/endpoints'
+import { LOGIN_URL } from '@/util/constants/endpoints'
 import CricAlert from './ui/cricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
@@ -73,18 +73,18 @@ export default function LoginForm() {
     >
       <CricEmailField
         id='login-email'
-        label={AUTH.EMAIL.LABEL}
+        label={AUTH.EMAIL.label}
         variant='filled'
-        placeholder={AUTH.EMAIL.PLACEHOLDER}
+        placeholder={AUTH.EMAIL.placeholder}
         helperText={AUTH.EMAIL.ERROR}
         onChange={onEmailChange}
       />
       <CricPwdField
         id='login-password'
-        label={AUTH.PASSWORD.LABEL}
+        label={AUTH.PASSWORD.label}
         variant='filled'
         autoComplete='current-password'
-        placeholder={AUTH.PASSWORD.PLACEHOLDER}
+        placeholder={AUTH.PASSWORD.placeholder}
         onChange={onPwdChange}
       />
       <CricAlert
