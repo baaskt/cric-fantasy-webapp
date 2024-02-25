@@ -8,9 +8,9 @@ export default function SignUp() {
       <div className='font-bold text-2xl mb-10'>{TITLES.SIGNUP.label}</div>
       <SignupForm />
       <div className='text-base mt-10'>
-        {AUTH.SIGN_UP.HAS_ACCOUNT}
+        {AUTH.SIGN_UP.hasAccount}
         <Link className='underline primary-color' href='login'>
-          {AUTH.SIGN_IN.TXT_SIGNIN}
+          {AUTH.SIGN_IN.txtSignin}
         </Link>
       </div>
     </div>

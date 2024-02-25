@@ -15,9 +15,12 @@ export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
   const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
+  console.log(isValidRoute, '-', accessToken, '-')
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
+    console.log(1)
     return redirectRoute(request, TITLES.SIGNIN.path)
   } else if (accessToken && isAuthRoute(pathName)) {
+    console.log(2)
     return redirectRoute(request, TITLES.DASHBOARD.fullPath)
   }
 }

@@ -69,14 +69,15 @@ export default function LoginForm() {
         width: '100%',
       }}
       noValidate
-      autoComplete='off'
+      autoComplete='on'
     >
       <CricEmailField
         id='login-email'
         label={AUTH.EMAIL.label}
         variant='filled'
+        autoComplete='username'
         placeholder={AUTH.EMAIL.placeholder}
-        helperText={AUTH.EMAIL.ERROR}
+        helperText={AUTH.EMAIL.error}
         onChange={onEmailChange}
       />
       <CricPwdField
@@ -89,7 +90,7 @@ export default function LoginForm() {
       />
       <CricAlert
         error={loginRequest.error}
-        message={AUTH.SIGN_IN.ERROR}
+        message={AUTH.SIGN_IN.error}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton
@@ -97,7 +98,7 @@ export default function LoginForm() {
           fullWidth
           onClick={() => handleSubmit()}
         >
-          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
+          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
         </CricButton>
       </div>
     </Box>

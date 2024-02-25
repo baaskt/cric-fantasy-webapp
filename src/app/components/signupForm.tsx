@@ -124,21 +124,20 @@ export default function SignupForm() {
         label={AUTH.EMAIL.label}
         variant='filled'
         placeholder={AUTH.EMAIL.placeholder}
-        helperText={AUTH.EMAIL.ERROR}
+        helperText={AUTH.EMAIL.error}
         onChange={onEmailChange}
       />
       <CricPwdField
         id='signup-password'
         label={AUTH.PASSWORD.label}
         variant='filled'
-        autoComplete='current-password'
         placeholder={AUTH.PASSWORD.placeholder}
         validatePwd={true}
         onChange={onPwdChange}
       />
       <CricAlert
         error={signupRequest.error}
-        message={AUTH.SIGN_UP.ERROR}
+        message={AUTH.SIGN_UP.error}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton
@@ -149,7 +148,7 @@ export default function SignupForm() {
         >
           {signupRequest.isMutating
             ? 'creating account...'
-            : AUTH.SIGN_UP.TXT_SIGNUP}
+            : AUTH.SIGN_UP.txtSignup}
         </CricButton>
       </div>
     </Box>

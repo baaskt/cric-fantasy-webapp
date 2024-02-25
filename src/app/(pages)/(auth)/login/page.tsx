@@ -8,9 +8,9 @@ export default function Login() {
       <div className='font-bold text-2xl mb-10'>{TITLES.SIGNIN.label}</div>
       <LoginForm />
       <div className='text-base mt-10'>
-        {AUTH.SIGN_IN.NO_ACCOUNT}
+        {AUTH.SIGN_IN.noAccount}
         <Link className='underline primary-color' href='signup'>
-          {AUTH.SIGN_UP.TXT_SIGNUP}
+          {AUTH.SIGN_UP.txtSignup}
         </Link>
       </div>
     </div>
