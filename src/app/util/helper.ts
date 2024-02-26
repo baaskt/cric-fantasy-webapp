@@ -36,8 +36,11 @@ export const validatePwdLength = (pwd: string): boolean => {
   return pwd?.length >= 8 ? true : false
 }
 
-export const validateName = (name: string): NameValidationEntity => {
-  const isErrorAlpha = validateAlphaNumeric(name)
+export const validateName = (
+  name: string,
+  skipAlpha?: boolean,
+): NameValidationEntity => {
+  const isErrorAlpha = skipAlpha ? false : validateAlphaNumeric(name)
   const isErrorLength = validateMinNameLength(name)
   return {
     valid: !isErrorAlpha && !isErrorLength,

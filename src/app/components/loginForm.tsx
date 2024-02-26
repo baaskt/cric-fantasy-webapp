@@ -94,12 +94,12 @@ export default function LoginForm() {
       ></CricAlert>
       <div className='mt-3'>
         <CricButton
-          variant='contained'
-          fullWidth
+          isFullWidth={true}
           onClick={() => handleSubmit()}
-        >
-          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
-        </CricButton>
+          btnTxt={
+            loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin
+          }
+        ></CricButton>
       </div>
     </Box>
   )

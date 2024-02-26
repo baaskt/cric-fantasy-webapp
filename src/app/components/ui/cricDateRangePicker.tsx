@@ -12,8 +12,8 @@ type CricDateRangePickerProps = {
 
 export default function CricDateRangePicker(props: CricDateRangePickerProps) {
   const [selectedDate, setSelectedDate] = useState<DateRangeType | null>({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: '',
+    endDate: '',
   })
 
   const handleValueChange = (dateRange: DateValueType | null) => {
@@ -31,7 +31,7 @@ export default function CricDateRangePicker(props: CricDateRangePickerProps) {
       placeholder={TOURNAMENT.CREATE_FORM.START_DATE.label}
       primaryColor={'indigo'}
       inputClassName={
-        'relative transition-all duration-300 py-2.5 pl-4 pr-14 w-full border-gray-300 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-400 bg-white focus:ring disabled:opacity-40 disabled:cursor-not-allowed focus:border-indigo-500 focus:ring-indigo-500/20 input-bg pt-4 pb-4'
+        'relative transition-all duration-300 py-2.5 pl-4 pr-14 w-full border-gray-300 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-500 bg-white focus:ring disabled:opacity-40 disabled:cursor-not-allowed focus:border-indigo-500 focus:ring-indigo-500/20 input-bg pt-4 pb-4'
       }
       toggleClassName={
         'absolute right-0 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed primary-bg'

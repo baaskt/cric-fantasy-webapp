@@ -65,11 +65,13 @@ export const TOURNAMENT = {
       errorLength: 'Enter at least 5 characters',
     },
     SERIES_ID: {
-      label: 'Series ID',
-      placeholder: 'Enter Series ID ( optional )',
+      label: 'Series Id',
+      placeholder: 'Enter Series Id',
       errorSplChar: 'Please enter a valid series id',
       errorLength: '',
     },
+    mandatory: 'Mandatory fields are required',
+    error: 'Something when wrong while creating tournament. Please try again',
   },
 }
 

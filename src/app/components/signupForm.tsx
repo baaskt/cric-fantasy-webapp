@@ -58,16 +58,9 @@ export default function SignupForm() {
     const isFormValid =
       validateName(fullName) && validateEmail(email) && validatePassword(pwd)
     if (!isFormValid) {
-      shakeButton()
+      setFormValidity(false)
     }
     return isFormValid
-  }
-
-  const shakeButton = () => {
-    setFormValidity(false)
-    setTimeout(function () {
-      setFormValidity(true)
-    }, 500)
   }
 
   const signupUser = async () => {
@@ -141,15 +134,15 @@ export default function SignupForm() {
       ></CricAlert>
       <div className='mt-3'>
         <CricButton
-          variant='contained'
-          fullWidth
-          className={!formValidity ? 'btn_shake' : ''}
+          isFullWidth={true}
+          isValid={formValidity}
           onClick={() => handleSubmit()}
-        >
-          {signupRequest.isMutating
-            ? 'creating account...'
-            : AUTH.SIGN_UP.txtSignup}
-        </CricButton>
+          btnTxt={
+            signupRequest.isMutating
+              ? 'creating account...'
+              : AUTH.SIGN_UP.txtSignup
+          }
+        ></CricButton>
       </div>
     </Box>
   )

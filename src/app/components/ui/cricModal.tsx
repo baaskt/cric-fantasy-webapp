@@ -11,12 +11,13 @@ interface CricModalProps {
 const styles = {
   modalStyle: {
     position: 'absolute',
-    top: '20%',
+    top: '30%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
+    minWidth: 400,
   },
   closeIconWrapper: {
     position: 'absolute',

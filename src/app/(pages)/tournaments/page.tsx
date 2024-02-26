@@ -31,16 +31,21 @@ export default function Tournaments() {
     setOpen(false)
   }
 
+  const onCreate = () => {
+    // setOpen(false)
+  }
+
   return (
     <div className='m-5'>
       <div className='flex flex-row justify-between'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
-        <CricButton variant='contained' onClick={() => createTournament()}>
-          {isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
-        </CricButton>
+        <CricButton
+          onClick={() => createTournament()}
+          btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
+        ></CricButton>
       </div>
       <CricModal open={open} onClose={handleClose}>
-        <CreateTournamentForm></CreateTournamentForm>
+        <CreateTournamentForm onCreate={onCreate}></CreateTournamentForm>
       </CricModal>
       {/* {!tournamentData?.length && <EmptyData></EmptyData>} */}
     </div>
