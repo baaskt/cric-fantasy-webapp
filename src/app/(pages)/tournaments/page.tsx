@@ -7,7 +7,9 @@ import CricModal from '@/components/ui/cricModal'
 import CricTab from '@/components/ui/cricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { TOURNAMENT } from '@/util/constants/constants'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
+import Loading from './loading'
+import TournamentList from '@/components/tournamentList'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },
@@ -44,6 +46,9 @@ export default function Tournaments() {
           btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
         ></CricButton>
       </div>
+      <Suspense fallback={<Loading />}>
+        <TournamentList />
+      </Suspense>
       <CricModal open={open} onClose={handleClose}>
         <CreateTournamentForm onCreate={onCreate}></CreateTournamentForm>
       </CricModal>

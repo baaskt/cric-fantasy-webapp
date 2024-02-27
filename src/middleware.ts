@@ -15,7 +15,6 @@ export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
   const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
-  console.log(isValidRoute, '-', accessToken, '-')
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
     console.log(1)
     return redirectRoute(request, TITLES.SIGNIN.path)
@@ -45,7 +44,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!_next/static|_next/image|assets/images|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
