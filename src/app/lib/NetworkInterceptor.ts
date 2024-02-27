@@ -1,10 +1,12 @@
 // Create an Axios instance with default configuration
 import { cookieHelper } from '@/lib/cookieHelper'
+import { API_URL } from '@/util/constants/endpoints'
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.API_URL,
-  timeout: 30000, // Timeout of 3 seconds
+  baseURL: API_URL,
+  timeout: 30000, // Timeout of 30 seconds
+  timeoutErrorMessage: "It's taking long than expected, try again",
 })
 
 // Add a request interceptor to add access token to headers
@@ -16,7 +18,6 @@ axiosInstance.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`
     }
-
     return config
   },
   error => {

@@ -26,7 +26,7 @@ export const textFieldTheme = createTheme({
         },
         input: {
           '&::placeholder': {
-            color: COLORS.cricDark,
+            color: COLORS.placeholder,
           },
         },
       },
@@ -34,11 +34,14 @@ export const textFieldTheme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         filled: {
-          color: COLORS.cricDark,
+          color: COLORS.placeholder,
           '&.Mui-focused': {
             color: COLORS.cricPrimary,
             fontWeight: 700,
           },
+        },
+        asterisk: {
+          color: COLORS.asterisk,
         },
       },
     },

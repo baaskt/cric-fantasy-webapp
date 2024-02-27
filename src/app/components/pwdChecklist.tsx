@@ -5,7 +5,7 @@ import {
   UPPERCASE_REGEX,
   LOWERCASE_REGEX,
 } from '@/util/helper'
-import { AUTH } from '@/util/constants'
+import { AUTH } from '@/util/constants/constants'
 
 interface Props {
   value: string | undefined
@@ -13,11 +13,11 @@ interface Props {
 }
 
 const rules = [
-  { label: AUTH.PASSWORD.ERROR_LENGTH, pattern: LENGTH_REGEX },
-  { label: AUTH.PASSWORD.ERROR_UPPER, pattern: UPPERCASE_REGEX },
-  { label: AUTH.PASSWORD.ERROR_LOWER, pattern: LOWERCASE_REGEX },
-  { label: AUTH.PASSWORD.ERROR_DIGIT, pattern: NUMBER_REGEX },
-  { label: AUTH.PASSWORD.ERROR_SPL_CHAR, pattern: SPECIAL_CHARS_REGEX },
+  { label: AUTH.PASSWORD.errorLength, pattern: LENGTH_REGEX },
+  { label: AUTH.PASSWORD.errorUpper, pattern: UPPERCASE_REGEX },
+  { label: AUTH.PASSWORD.errorLower, pattern: LOWERCASE_REGEX },
+  { label: AUTH.PASSWORD.errorDigit, pattern: NUMBER_REGEX },
+  { label: AUTH.PASSWORD.errorSplChar, pattern: SPECIAL_CHARS_REGEX },
 ]
 
 const PwdChecklist = (props: Props) => {

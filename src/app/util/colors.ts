@@ -7,4 +7,6 @@ export const COLORS = {
   cricError: '#d32f2f',
   cricLabel: '#CACDD4F',
   inputBg: '#f3f4f6',
+  placeholder: '#949495',
+  asterisk: '#f00',
 }

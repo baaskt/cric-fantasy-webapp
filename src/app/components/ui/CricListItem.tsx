@@ -7,7 +7,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import Link from 'next/link'
-import { SideBarMenuEntity } from '@/model/entities/sidedbar-menu.type'
+import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
 import { ThemeProvider } from '@emotion/react'
 import { listItemTheme } from '@/styles/themes/listItem'
 

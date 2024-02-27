@@ -1,17 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { TITLES } from '@/util/constants/constants'
 
-const authRoutes = ['/login', '/signup']
-const protectedRoutes = ['/tournaments', '/dashboard']
+const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path]
+const protectedRoutes = [
+  TITLES.DASHBOARD.path,
+  TITLES.TOURNAMENTS.path,
+  TITLES.PLAYERS.path,
+  TITLES.TEAMS.path,
+]
+const totalRoutes = [...authRoutes, ...protectedRoutes]
 
 export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
-  const totalRoutes = [...authRoutes, ...protectedRoutes].find(route =>
-    pathName.includes(route),
-  )
+  const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
-  if (!totalRoutes || (!accessToken && !isAuthRoute(pathName))) {
-    return redirectRoute(request, authRoutes[0])
+  if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
+    console.log(1)
+    return redirectRoute(request, TITLES.SIGNIN.path)
+  } else if (accessToken && isAuthRoute(pathName)) {
+    console.log(2)
+    return redirectRoute(request, TITLES.DASHBOARD.fullPath)
   }
 }
 
@@ -35,7 +44,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!_next/static|_next/image|assets/images|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

@@ -5,10 +5,10 @@ import Box from '@mui/material/Box'
 import CricPwdField from './ui/cricPwdField'
 import CricEmailField from './ui/cricEmailField'
 import CricButton from './ui/cricButton'
-import { AUTH } from '@/util/constants'
+import { AUTH } from '@/util/constants/constants'
 import { validateEmail } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
-import { LOGIN_URL } from '@/util/endpoints'
+import { LOGIN_URL } from '@/util/constants/endpoints'
 import CricAlert from './ui/cricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
@@ -69,36 +69,37 @@ export default function LoginForm() {
         width: '100%',
       }}
       noValidate
-      autoComplete='off'
+      autoComplete='on'
     >
       <CricEmailField
         id='login-email'
-        label={AUTH.EMAIL.LABEL}
+        label={AUTH.EMAIL.label}
         variant='filled'
-        placeholder={AUTH.EMAIL.PLACEHOLDER}
-        helperText={AUTH.EMAIL.ERROR}
+        autoComplete='username'
+        placeholder={AUTH.EMAIL.placeholder}
+        helperText={AUTH.EMAIL.error}
         onChange={onEmailChange}
       />
       <CricPwdField
         id='login-password'
-        label={AUTH.PASSWORD.LABEL}
+        label={AUTH.PASSWORD.label}
         variant='filled'
         autoComplete='current-password'
-        placeholder={AUTH.PASSWORD.PLACEHOLDER}
+        placeholder={AUTH.PASSWORD.placeholder}
         onChange={onPwdChange}
       />
       <CricAlert
         error={loginRequest.error}
-        message={AUTH.SIGN_IN.ERROR}
+        message={AUTH.SIGN_IN.error}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton
-          variant='contained'
-          fullWidth
+          isFullWidth={true}
           onClick={() => handleSubmit()}
-        >
-          {loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.TXT_SIGNIN}
-        </CricButton>
+          btnTxt={
+            loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin
+          }
+        ></CricButton>
       </div>
     </Box>
   )
