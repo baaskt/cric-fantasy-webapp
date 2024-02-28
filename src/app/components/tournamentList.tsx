@@ -6,24 +6,36 @@ import TournamentCard from './tournamentCard'
 const cardsData = [
   {
     tournamentId: 1,
-    tournamentName: 'Card 1',
+    tournamentName: 'Indian Premiere League 2024',
     tournamentStartDate: '2024-03-24T08:48:34.685496',
     tournamentLocation: 'India',
     imgUrl: 'assets/images/tournament.png',
   },
   {
     tournamentId: 2,
-    tournamentName: 'Card 2',
-    tournamentStartDate: '2024-03-24T08:48:34.685496',
+    tournamentName: 'Indian Premiere League 2024',
     tournamentLocation: 'India',
-    imgUrl: '/logo.png',
+    imgUrl: 'assets/images/tournament.png',
   },
   {
     tournamentId: 3,
-    tournamentName: 'Card 3',
+    tournamentName: 'Indian Premiere League 2024',
+    tournamentStartDate: '2024-03-24T08:48:34.685496',
+    imgUrl: 'assets/images/tournament.png',
+  },
+  {
+    tournamentId: 4,
+    tournamentName: 'Indian Premiere League 2024',
     tournamentStartDate: '2024-03-24T08:48:34.685496',
     tournamentLocation: 'India',
-    imgUrl: '/banner_logo.png',
+    imgUrl: 'assets/images/tournament.png',
+  },
+  {
+    tournamentId: 5,
+    tournamentName: 'Indian Premiere League 2024',
+    tournamentStartDate: '2024-03-24T08:48:34.685496',
+    tournamentLocation: 'India',
+    imgUrl: 'assets/images/tournament.png',
   },
 ]
 

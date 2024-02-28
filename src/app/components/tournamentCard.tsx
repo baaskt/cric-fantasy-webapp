@@ -1,6 +1,10 @@
 import { TournamentEntity } from '@/model/entities/tournament.interface'
-import { Card, CardActionArea, CardContent, Typography } from '@mui/material'
+import { COLORS } from '@/util/colors'
+import { Typography } from '@mui/material'
 import Image from 'next/image'
+import EventIcon from '@mui/icons-material/Event'
+import IconMenu from './iconMenu'
+import PlaceIcon from '@mui/icons-material/Place'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
@@ -8,31 +12,42 @@ type TournamentCardProps = {
 
 const TournamentCard = (props: TournamentCardProps) => {
   const tournamentData: TournamentEntity = props.tournamentData
+  const {
+    imgUrl,
+    tournamentName,
+    tournamentStartDate,
+    tournamentEndDate,
+    tournamentLocation,
+  } = tournamentData
   return (
-    <Card className='flex'>
-      <CardActionArea className='flex flex-row justify-start'>
-        <Image
-          src={tournamentData.imgUrl}
-          width={0}
-          height={0}
-          sizes='100vw'
-          alt='Brand Logo'
-          style={{ width: 'auto', height: 220 }}
-          unoptimized
+    <div className='card flex flex-row justify-start max-w-[80%]'>
+      <Image
+        src={imgUrl}
+        width={0}
+        height={0}
+        alt='Brand Logo'
+        style={{ width: 440, height: 220 }}
+        unoptimized
+      />
+      <div className='p-5'>
+        <Typography variant='h6' component='div'>
+          {tournamentName}
+        </Typography>
+        <IconMenu
+          icon={<EventIcon />}
+          label1={tournamentStartDate}
+          label2={tournamentEndDate}
+          separator='to'
+          color={COLORS.cricPrimary}
+          type={'date'}
         />
-        <CardContent>
-          <Typography gutterBottom variant='h6' component='div'>
-            {tournamentData.tournamentName}
-          </Typography>
-          <Typography variant='body1' color='text.secondary'>
-            {tournamentData.tournamentStartDate}
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
-            {tournamentData.tournamentLocation}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+        <IconMenu
+          icon={<PlaceIcon />}
+          label1={tournamentLocation}
+          color={COLORS.cricLabel}
+        />
+      </div>
+    </div>
   )
 }
 

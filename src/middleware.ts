@@ -41,6 +41,7 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
+     * - assets/image (public image optimization files)
      * - favicon.ico (favicon file)
      */
     {
