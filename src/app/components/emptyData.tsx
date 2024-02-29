@@ -5,7 +5,7 @@ function EmptyData() {
   return (
     <div>
       <Image
-        src={'/img_no_data.png'}
+        src={'/assets/images/img_no_data.png'}
         width={80}
         height={40}
         alt='Data not found'

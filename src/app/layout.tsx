@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={lexend.className}>
+      <body className={`${lexend.className}`}>
         <AppProvider>{children}</AppProvider>
         <SpeedInsights />
         <Analytics />

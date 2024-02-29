@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 30000, // Timeout of 30 seconds
+  timeout: 1200000, // Timeout of 30 seconds
   timeoutErrorMessage: "It's taking long than expected, try again",
 })
 

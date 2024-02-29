@@ -10,7 +10,7 @@ export default function Header() {
   const activePath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
 
   return (
-    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md'>
+    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 left-[20%] right-0 z-50'>
       <div className='flex items-center gap-2'>
         {activePath?.icon}
         <span className='text-xl uppercase font-semibold'>
