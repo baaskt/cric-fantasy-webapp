@@ -45,7 +45,8 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!_next/static|_next/image|assets/images|favicon.ico).*)',
+      source:
+        '/((?!_next/static|_next/image|assets/logo|assets/images|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

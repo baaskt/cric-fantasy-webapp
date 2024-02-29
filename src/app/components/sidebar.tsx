@@ -13,8 +13,8 @@ function Sidebar() {
   const activePath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
 
   return (
-    <div className='w-1/5 md:w-1/5 shadow-md'>
-      <div className='flex justify-center p-2'>
+    <div className='w-1/5 md:w-1/5 shadow-md fixed top-0 left-0 bottom-0'>
+      <div className='flex justify-center p-2 h-16 items-center'>
         <Brand />
       </div>
       <List>

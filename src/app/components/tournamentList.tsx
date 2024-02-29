@@ -1,5 +1,6 @@
 import React from 'react'
 import TournamentCard from './tournamentCard'
+import EmptyData from './emptyData'
 // import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 // import { useRequest } from '@/hooks/useRequest'
 
@@ -41,10 +42,12 @@ const cardsData = [
 
 function TournamentList() {
   //   const { data, error } = useRequest(TOURNAMENT_URL)
+  if (!cardsData?.length) return <EmptyData />
+
   return (
     <div className='mt-5'>
-      {cardsData?.length} results
-      <div className='flex flex-col gap-2 mt-5'>
+      <div>{cardsData?.length} results</div>
+      <div className='flex flex-col gap-4 mt-5 mb-5'>
         {cardsData.map(ttEntity => (
           <TournamentCard
             key={ttEntity.tournamentId}

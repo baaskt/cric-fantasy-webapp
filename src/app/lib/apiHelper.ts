@@ -3,7 +3,7 @@ import axios from './NetworkInterceptor'
 
 export const apiHelper = () => {
   function GET(endpoint: string) {
-    return axios.post<AxiosResponse>(endpoint).then(res => res.data)
+    return axios.get<AxiosResponse>(endpoint).then(res => res.data)
   }
 
   function POST<T>(endpoint: string, { arg }: { arg: T }) {

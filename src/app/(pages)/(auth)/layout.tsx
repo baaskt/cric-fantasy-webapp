@@ -23,7 +23,7 @@ export default function LoginLayout({
       </div>
       <div className='hidden sm:flex w-1/2 primary-bg justify-center flex-col'>
         <Image
-          src='/banner_logo.png'
+          src='/assets/images/banner_logo.png'
           width={0}
           height={0}
           alt='Banner Logo'

@@ -11,6 +11,13 @@
   }
 }
 
+@layer utilities {
+  .scroll-container {
+    height: 100dvh;
+    overflow: scroll;
+  }
+}
+
 body {
   color: $black;
   background: $white;
