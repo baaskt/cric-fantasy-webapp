@@ -39,6 +39,9 @@ export const AUTH = {
 export const TOURNAMENT = {
   CREATE: 'Create Tournament',
   CREATING: 'Creating...',
+  LOADING_TXT: 'Fetching Tournament Details ...',
+  NO_DATA_TITLE: 'No tournaments found',
+  NO_DATA_SUB: 'Create a tournament by using the Create Tournament',
   CREATE_FORM: {
     NAME: {
       label: 'Tournament Name',
@@ -69,6 +72,10 @@ export const TOURNAMENT = {
       placeholder: 'Enter Series Id',
       errorSplChar: 'Please enter a valid series id',
       errorLength: '',
+    },
+    IMAGE: {
+      label: 'Image Url',
+      placeholder: 'Enter Image URL',
     },
     mandatory: 'Mandatory fields are required',
     error: 'Something when wrong while creating tournament. Please try again',

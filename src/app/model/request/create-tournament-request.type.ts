@@ -3,7 +3,5 @@ export type CreateTournamentRequest = {
   tournamentLocation?: string
   tournamentStartDate?: string
   tournamenEndDate?: string
-  tournamentStatus: string
-  userId: string
-  seriesId?: number
+  seriesId: number
 }

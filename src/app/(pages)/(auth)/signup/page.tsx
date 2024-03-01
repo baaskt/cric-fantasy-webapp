@@ -1,4 +1,4 @@
-import SignupForm from '@/components/signupForm'
+import SignupForm from '@/components/SignupForm'
 import { AUTH, TITLES } from '@/util/constants/constants'
 import Link from 'next/link'
 
