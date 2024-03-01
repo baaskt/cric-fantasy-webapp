@@ -43,7 +43,7 @@ export const sidebarConfig: SideBarMenuEntity[] = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex flex-row h-dvh mt-16 ml-[20%]'>
+    <div className='flex flex-row mt-16 ml-[20%]'>
       <Sidebar></Sidebar>
       <div className='flex flex-col w-full'>
         <Header></Header>

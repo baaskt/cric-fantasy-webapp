@@ -32,7 +32,7 @@ export default function Tournaments() {
   }
 
   const onCreate = () => {
-    // setOpen(false)
+    setOpen(false)
   }
 
   return (
@@ -48,7 +48,6 @@ export default function Tournaments() {
       <CricModal open={open} onClose={handleClose}>
         <CreateTournamentForm onCreate={onCreate}></CreateTournamentForm>
       </CricModal>
-      {/* {!tournamentData?.length && <EmptyData></EmptyData>} */}
     </div>
   )
 }

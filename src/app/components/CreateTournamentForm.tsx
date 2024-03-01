@@ -6,8 +6,7 @@ import { NameValidationEntity } from '@/model/entities/name-validation.interface
 import { getErrorHelperTxt, validateName } from '@/util/helper'
 import CricDateRangePicker from './ui/CricDateRangePicker'
 import { CricDateRangeType } from '@/model/types/date-range.type'
-import { TournamentStatus } from '@/model/enum/tournament-status.enum'
-import CricFileInput from './ui/CricFileInput'
+// import CricFileInput from './ui/CricFileInput'
 import CricButton from './ui/CricButton'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { TOURNAMENT_URL } from '@/util/constants/endpoints'
@@ -30,7 +29,6 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     tournamentEndDate: '',
     tournamentLocation: '',
     imgUrl: '',
-    tournamentStatus: TournamentStatus.Upcoming,
     seriesId: 0,
   })
 
@@ -69,7 +67,6 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     if (formData.tournamentName && nameValidity?.valid) {
       const payload: CreateTournamentRequest = {
         ...formData,
-        userId: '',
         seriesId: Number(formData.seriesId),
       }
       try {
@@ -150,7 +147,17 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
           inputProps={{ minLength: 5, maxLength: 35 }}
         />
         <CricDateRangePicker onDateChange={onDateRangeChange} />
-        <CricFileInput btnName={'Upload Image'} />
+        <CricTextField
+          type='text'
+          id='img-url'
+          label={TOURNAMENT.CREATE_FORM.IMAGE.label}
+          variant='filled'
+          name='imgUrl'
+          onChange={handleChange}
+          placeholder={TOURNAMENT.CREATE_FORM.IMAGE.placeholder}
+          inputProps={{ minLength: 5, maxLength: 35 }}
+        />
+        {/* <CricFileInput btnName={'Upload Image'} /> */}
         <CricAlert
           error={createTournamentRequest.error || mandatoryError}
           message={

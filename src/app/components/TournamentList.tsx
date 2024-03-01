@@ -6,6 +6,7 @@ import { useRequest } from '@/hooks/useRequest'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import Loading from './Loading'
+import { TOURNAMENT } from '@/util/constants/constants'
 
 function TournamentList() {
   const tournamentRequest = useRequest(TOURNAMENT_URL)
@@ -14,14 +15,20 @@ function TournamentList() {
   const cardsData = tournamentResponse?.result
 
   if (tournamentRequest.isLoading) {
-    return <Loading txt={'Fetching Tournament Details ...'}></Loading>
+    return <Loading txt={TOURNAMENT.LOADING_TXT}></Loading>
   }
 
   if (tournamentRequest.error) {
     return <p>Error: {tournamentRequest.error.message}</p>
   }
 
-  if (!cardsData?.length) return <EmptyData />
+  if (!cardsData?.length)
+    return (
+      <EmptyData
+        title={TOURNAMENT.NO_DATA_TITLE}
+        subTitle={TOURNAMENT.NO_DATA_SUB}
+      />
+    )
 
   return (
     <div className='mt-5'>

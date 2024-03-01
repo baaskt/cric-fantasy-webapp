@@ -27,6 +27,8 @@ const TournamentCard = (props: TournamentCardProps) => {
         height={0}
         alt='Brand Logo'
         style={{ width: 440, height: 220 }}
+        placeholder='blur'
+        blurDataURL={'/assets/images/tournament.png'}
         unoptimized
       />
       <div className='p-5'>
