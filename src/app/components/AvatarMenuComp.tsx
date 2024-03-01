@@ -2,7 +2,7 @@ import React, { MouseEvent, useState } from 'react'
 import { Avatar, IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import { useAuth } from '@/providers/AuthProvider'
-import CricMenu from './ui/CricMenuCompComp'
+import CricMenu from './ui/CricMenuComp'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { useRouter } from 'next/navigation'
 

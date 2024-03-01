@@ -2,8 +2,8 @@
 
 import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
-import CricPwdField from '../ui/CricPwdField'
-import CricEmailField from '../ui/CricEmailFieldComp'
+import CricPwdField from '../ui/CricPwdFieldComp'
+import CricEmailField from '../ui/CricEmailField'
 import CricButton from '../ui/CricButton'
 import { AUTH } from '@/util/constants/constants'
 import {
