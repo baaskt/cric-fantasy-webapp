@@ -1,6 +1,6 @@
 import React from 'react'
 import TournamentCard from './TournamentCard'
-import EmptyData from './EmptyDataComp'
+import EmptyData from './EmptyData'
 import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 import { useRequest } from '@/hooks/useRequest'
 import { CricResponse } from '@/model/types/cric-response.type'

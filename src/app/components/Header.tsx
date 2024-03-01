@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { sidebarConfig } from '@/(pages)/tournaments/layout'
-import AvatarMenu from './AvatarMenuComp'
+import AvatarMenu from './AvatarMenu'
 
 export default function Header() {
   const pathname = usePathname()
