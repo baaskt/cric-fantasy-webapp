@@ -6,9 +6,9 @@ import CricPwdField from '../ui/CricPwdField'
 import CricEmailField from '../ui/CricEmailField'
 import CricButton from '../ui/CricButton'
 import { AUTH } from '@/util/constants/constants'
-import { validateEmail } from '@/util/helper'
+import { validateEmail } from '@/util/validation'
 import { useAuth } from '@/providers/AuthProvider'
-import { LOGIN_URL } from '@/util/constants/endpoints'
+import { USERS } from '@/util/constants/endpoints'
 import CricAlert from '../ui/CricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
@@ -22,7 +22,7 @@ export default function LoginForm() {
   const [pwd, setPwd] = useState<string>('')
   const { login } = useAuth()
 
-  const loginRequest = useMutateRequest(LOGIN_URL, HttpMethod.POST)
+  const loginRequest = useMutateRequest(USERS.LOGIN_URL, HttpMethod.POST)
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -49,7 +49,7 @@ export default function LoginForm() {
           payload as never,
         )) as CricResponse<string>
         const accessToken = response?.result ? response.result : ''
-        login({ email: email }, accessToken)
+        login(email, accessToken)
       } catch (e) {
         console.log(e)
       } finally {

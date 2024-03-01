@@ -1,6 +1,7 @@
-export interface User {
-  id?: string
-  name?: string
-  email: string
-  authToken?: string
+export class User {
+  id: string = ''
+  fullName: string = ''
+  email: string = ''
+  roles: string[] = []
+  isPlayingXISet: boolean = false
 }

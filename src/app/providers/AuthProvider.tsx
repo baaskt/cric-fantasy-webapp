@@ -1,7 +1,6 @@
 'use client'
 
 import { cookieHelper } from '@/lib/cookieHelper'
-import { useSessionStorage } from '@/hooks/useSessionStorage'
 import { AuthContextType } from '@/model/context/authContext.type'
 import { User } from '@/model/entities/user.interface'
 import { createContext, useState, useContext, useEffect } from 'react'
@@ -14,33 +13,31 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>()
-  const { getItem, setItem } = useSessionStorage()
+  const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    const userData: User | null = getItem('user')
-    if (userData) {
-      setUser(userData)
-      setItem('user', userData)
-    }
+    setUser(new User())
   }, [])
 
-  const login = (user: User, accessToken: string): void => {
-    setUser(user)
-    setItem('user', user)
+  const login = (email: string, accessToken: string): void => {
+    const userData = new User()
+    setUserDetails({ ...userData, email: email })
     cookieHelper().setCookieItem('accessToken', accessToken)
   }
 
-  const signup = (user: User): void => {
-    setUser(user)
-    setItem('user', user)
+  const signup = (fullName: string, email: string): void => {
+    const userData = new User()
+    setUserDetails({ ...userData, email: email, fullName: fullName })
     cookieHelper().removeCookieItem('accessToken')
   }
 
   const logout = (): void => {
-    setUser(null)
-    setItem('user', '')
+    setUser(new User())
     cookieHelper().removeCookieItem('accessToken')
+  }
+
+  const setUserDetails = (user: User): void => {
+    setUser(user)
   }
 
   const value: AuthContextType = {
@@ -48,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     login,
     logout,
+    setUserDetails,
   }
 
   return <Provider value={value}>{children}</Provider>

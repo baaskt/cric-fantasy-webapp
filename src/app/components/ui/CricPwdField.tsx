@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { validatePassword } from '@/util/helper'
+import { validatePassword } from '@/util/validation'
 import PwdChecklist from '../PwdChecklist'
 
 type CricPwdProps = ComponentProps<typeof TextField> & {

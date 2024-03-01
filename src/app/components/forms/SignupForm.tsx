@@ -11,9 +11,9 @@ import {
   validateEmail,
   validateName,
   validatePassword,
-} from '@/util/helper'
+} from '@/util/validation'
 import { useAuth } from '@/providers/AuthProvider'
-import { SIGNUP_URL } from '@/util/constants/endpoints'
+import { USERS } from '@/util/constants/endpoints'
 import CricAlert from '../ui/CricAlert'
 import CricTextField from '../ui/CricTextField'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
@@ -36,7 +36,7 @@ export default function SignupForm() {
   })
 
   const { signup } = useAuth()
-  const signupRequest = useMutateRequest(SIGNUP_URL, HttpMethod.POST)
+  const signupRequest = useMutateRequest(USERS.SIGNUP_URL, HttpMethod.POST)
 
   const onNameChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -75,7 +75,7 @@ export default function SignupForm() {
       }
       try {
         await signupRequest.trigger(payload as never)
-        signup({ name: fullName, email: email })
+        signup(fullName, email)
         router.push('/login')
       } catch (error) {
         const axiosError = error as AxiosError

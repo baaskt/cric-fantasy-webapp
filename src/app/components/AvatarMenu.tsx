@@ -36,7 +36,7 @@ function AvatarMenu() {
           textTransform: 'capitalize',
         }}
       >
-        {user?.name && user?.name[0]}
+        {user?.fullName && user?.fullName[0]}
       </Avatar>
       <CricMenu
         anchorEl={anchorEl}

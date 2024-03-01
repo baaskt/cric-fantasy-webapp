@@ -1,5 +1,5 @@
 export interface TournamentEntity {
-  tournamentId: number
+  tournamentId: string
   tournamentName: string
   tournamentLocation?: string
   tournamentStartDate?: string | undefined

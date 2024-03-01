@@ -15,7 +15,6 @@ function CricAlert(props: CricAlertProps) {
   const timeOutInterval = 3000
 
   useEffect(() => {
-    console.log(error)
     setError(error)
     let errorTimer: string | number | NodeJS.Timeout | undefined
     if (error) {

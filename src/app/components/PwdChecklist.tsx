@@ -4,7 +4,7 @@ import {
   NUMBER_REGEX,
   UPPERCASE_REGEX,
   LOWERCASE_REGEX,
-} from '@/util/helper'
+} from '@/util/validation'
 import { AUTH } from '@/util/constants/constants'
 
 interface Props {
