@@ -3,7 +3,7 @@
 import React from 'react'
 import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
-import Brand from './Brand'
+import Brand from './brand'
 import { usePathname } from 'next/navigation'
 import { sidebarConfig } from '@/(pages)/tournaments/layout'
 
