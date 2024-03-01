@@ -3,7 +3,7 @@ import { COLORS } from '@/util/colors'
 import { Typography } from '@mui/material'
 import Image from 'next/image'
 import EventIcon from '@mui/icons-material/Event'
-import IconMenu from './IconMenu'
+import IconMenu from './IconMenuComp'
 import PlaceIcon from '@mui/icons-material/Place'
 
 type TournamentCardProps = {
