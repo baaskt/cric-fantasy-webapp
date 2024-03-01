@@ -3,9 +3,9 @@
 import React from 'react'
 import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
-import Brand from './Brand'
 import { usePathname } from 'next/navigation'
 import { sidebarConfig } from '@/(pages)/tournaments/layout'
+import Brand from './Brand'
 
 function Sidebar() {
   const pathname = usePathname()
