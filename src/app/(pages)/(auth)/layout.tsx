@@ -1,4 +1,4 @@
-import Brand from '@/components/BrandComp'
+import Brand from '@/components/Brand'
 import { AUTH } from '@/util/constants/constants'
 import { Metadata } from 'next'
 import Image from 'next/image'
