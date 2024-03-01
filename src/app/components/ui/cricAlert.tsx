@@ -1,7 +1,7 @@
 import { Alert, AlertColor } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
-type CricError = Error | boolean | undefined
+type CricError = Error | boolean | string | undefined
 
 interface CricAlertProps {
   error?: CricError

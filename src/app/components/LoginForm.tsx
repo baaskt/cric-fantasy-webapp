@@ -14,10 +14,7 @@ import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { LoginRequest } from '@/model/request/login-request.type'
 import { useRouter } from 'next/navigation'
-
-type LoginResult = {
-  result: string
-}
+import { CricResponse } from '@/model/types/cric-response.type'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -48,10 +45,11 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response: LoginResult = (await loginRequest.trigger(
+        const response: CricResponse<string> = (await loginRequest.trigger(
           payload as never,
-        )) as LoginResult
-        login({ email: email }, response?.result)
+        )) as CricResponse<string>
+        const accessToken = response?.result ? response.result : ''
+        login({ email: email }, accessToken)
       } catch (e) {
         console.log(e)
       } finally {

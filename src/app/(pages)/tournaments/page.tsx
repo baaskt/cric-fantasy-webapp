@@ -1,7 +1,7 @@
 'use client'
 
 import CreateTournamentForm from '@/components/CreateTournamentForm'
-import CricButton from '@/components/ui/cricButton'
+import CricButton from '@/components/ui/CricButton'
 import CricModal from '@/components/ui/CricModal'
 import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'

@@ -21,12 +21,15 @@ import { HttpMethod } from '@/model/enum/http-method.enum'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { SignupRequest } from '@/model/request/signup-request.type'
 import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
+import { CricResponse } from '@/model/types/cric-response.type'
 
 export default function SignupForm() {
   const router = useRouter()
   const [fullName, setFullName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
+  const [error, setError] = useState<string>('')
   const [formValidity, setFormValidity] = useState<boolean>(true)
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
@@ -73,10 +76,13 @@ export default function SignupForm() {
       try {
         await signupRequest.trigger(payload as never)
         signup({ name: fullName, email: email })
-      } catch (e) {
-        console.log(e)
-      } finally {
         router.push('/login')
+      } catch (error) {
+        const axiosError = error as AxiosError
+        const errorResult: CricResponse<string> = axiosError.response
+          ?.data as CricResponse<string>
+        console.log(errorResult)
+        setError(errorResult?.error ? errorResult?.error : '')
       }
     }
   }
@@ -129,8 +135,8 @@ export default function SignupForm() {
         onChange={onPwdChange}
       />
       <CricAlert
-        error={signupRequest.error}
-        message={AUTH.SIGN_UP.error}
+        error={error || signupRequest.error}
+        message={error ? error : AUTH.SIGN_UP.error}
       ></CricAlert>
       <div className='mt-3'>
         <CricButton

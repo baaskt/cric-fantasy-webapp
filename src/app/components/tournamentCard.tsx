@@ -1,4 +1,4 @@
-import { TournamentEntity } from '@/model/entities/tournament.interface'
+import { TournamentEntity } from '@/model/response/tournament.interface'
 import { COLORS } from '@/util/colors'
 import { Typography } from '@mui/material'
 import Image from 'next/image'
