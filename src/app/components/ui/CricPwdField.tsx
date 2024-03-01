@@ -6,7 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { validatePassword } from '@/util/helper'
-import PwdChecklist from '../PwdChecklistComp'
+import PwdChecklist from '../PwdChecklist'
 
 type CricPwdProps = ComponentProps<typeof TextField> & {
   validatePwd?: boolean
