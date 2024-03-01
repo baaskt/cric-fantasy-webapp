@@ -1,5 +1,5 @@
 import React from 'react'
-import TournamentCard from './TournamentCard'
+import TournamentCard from './TournamentCardComp'
 import EmptyData from './EmptyData'
 import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 import { useRequest } from '@/hooks/useRequest'

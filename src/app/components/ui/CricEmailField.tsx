@@ -1,6 +1,6 @@
 import React, { FocusEvent, useState, ComponentProps } from 'react'
 import TextField from '@mui/material/TextField'
-import CricTextField from './CricTextField'
+import CricTextField from './CricTextFieldComp'
 import { validateEmail } from '@/util/helper'
 
 export default function CricEmailField(
