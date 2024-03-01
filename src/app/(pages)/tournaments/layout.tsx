@@ -1,4 +1,4 @@
-import Header from '@/components/HeaderComp'
+import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'

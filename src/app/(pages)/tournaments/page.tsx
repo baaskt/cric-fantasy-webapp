@@ -1,6 +1,6 @@
 'use client'
 
-import CreateTournamentForm from '@/components/CreateTournamentForm'
+import CreateTournamentForm from '@/components/CreateTournamentFormComp'
 import CricButton from '@/components/ui/CricButton'
 import CricModal from '@/components/ui/CricModal'
 import CricTab from '@/components/ui/CricTab'
