@@ -1,18 +1,18 @@
 import { Typography } from '@mui/material'
 import React, { ChangeEvent, FocusEvent, useState } from 'react'
-import CricTextField from './ui/CricTextField'
+import CricTextField from '../ui/CricTextField'
 import { TOURNAMENT } from '@/util/constants/constants'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
 import { getErrorHelperTxt, validateName } from '@/util/helper'
-import CricDateRangePicker from './ui/CricDateRangePicker'
+import CricDateRangePicker from '../ui/CricDateRangePicker'
 import { CricDateRangeType } from '@/model/types/date-range.type'
 // import CricFileInput from './ui/CricFileInput'
-import CricButton from './ui/CricButton'
+import CricButton from '../ui/CricButton'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { CreateTournamentRequest } from '@/model/request/create-tournament-request.type'
-import CricAlert from './ui/CricAlert'
+import CricAlert from '../ui/CricAlert'
 
 type CreateTournamentResult = {
   result: string

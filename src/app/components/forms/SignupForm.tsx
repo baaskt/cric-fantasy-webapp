@@ -2,9 +2,9 @@
 
 import React, { FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
-import CricPwdField from './ui/CricPwdField'
-import CricEmailField from './ui/CricEmailField'
-import CricButton from './ui/CricButton'
+import CricPwdField from '../ui/CricPwdField'
+import CricEmailField from '../ui/CricEmailField'
+import CricButton from '../ui/CricButton'
 import { AUTH } from '@/util/constants/constants'
 import {
   getErrorHelperTxt,
@@ -14,8 +14,8 @@ import {
 } from '@/util/helper'
 import { useAuth } from '@/providers/AuthProvider'
 import { SIGNUP_URL } from '@/util/constants/endpoints'
-import CricAlert from './ui/CricAlert'
-import CricTextField from './ui/CricTextField'
+import CricAlert from '../ui/CricAlert'
+import CricTextField from '../ui/CricTextField'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
