@@ -5,7 +5,7 @@ import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
 import { usePathname } from 'next/navigation'
 import { sidebarConfig } from '@/(pages)/tournaments/layout'
-import Brand from './Brand'
+import Brand from './BrandComp'
 
 function Sidebar() {
   const pathname = usePathname()
