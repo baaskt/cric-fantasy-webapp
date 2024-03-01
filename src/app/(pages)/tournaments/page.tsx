@@ -1,13 +1,13 @@
 'use client'
 
 import CreateTournamentForm from '@/components/forms/CreateTournamentForm'
-import CricButton from '@/components/ui/CricButtonComp'
+import CricButton from '@/components/ui/CricButton'
 import CricModal from '@/components/ui/CricModal'
-import CricTab from '@/components/ui/CricTabComp'
+import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { TOURNAMENT } from '@/util/constants/constants'
 import React, { useState } from 'react'
-import TournamentList from '@/components/TournamentListComp'
+import TournamentList from '@/components/TournamentList'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },
