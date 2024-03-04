@@ -6,6 +6,7 @@ import EventIcon from '@mui/icons-material/Event'
 import IconMenu from './IconMenu'
 import PlaceIcon from '@mui/icons-material/Place'
 import TournamentStatus from './TournamentStatus'
+import { useState } from 'react'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
@@ -21,17 +22,19 @@ const TournamentCard = (props: TournamentCardProps) => {
     tournamentLocation,
     tournamentStatus,
   } = tournamentData
+  const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
+  const [imgSrc, setImgSrc] = useState(imgUrl)
+
   return (
     <div className='card flex flex-row justify-between max-w-[80%]'>
       <div className='flex flex-row'>
         <Image
-          src={imgUrl}
+          src={imgSrc}
           width={0}
           height={0}
           alt='Tournament Banner'
-          style={{ width: 440, height: 220 }}
-          placeholder='blur'
-          blurDataURL={'/assets/images/tournament.png'}
+          style={{ width: 400, height: 220 }}
+          onError={() => setImgSrc(ALTERNATE_IMAGE_SRC)}
           unoptimized
         />
         <div className='p-5'>
