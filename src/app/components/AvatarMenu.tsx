@@ -35,8 +35,9 @@ function AvatarMenu() {
           fontSize: 18,
           textTransform: 'capitalize',
         }}
+        alt='User Profile'
       >
-        {user?.fullName && user?.fullName[0]}
+        {user?.fullName ? user?.fullName[0] : ''}
       </Avatar>
       <CricMenu
         anchorEl={anchorEl}

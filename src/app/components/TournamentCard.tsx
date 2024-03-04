@@ -5,6 +5,7 @@ import Image from 'next/image'
 import EventIcon from '@mui/icons-material/Event'
 import IconMenu from './IconMenu'
 import PlaceIcon from '@mui/icons-material/Place'
+import TournamentStatus from './TournamentStatus'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
@@ -18,36 +19,42 @@ const TournamentCard = (props: TournamentCardProps) => {
     tournamentStartDate,
     tournamentEndDate,
     tournamentLocation,
+    tournamentStatus,
   } = tournamentData
   return (
-    <div className='card flex flex-row justify-start max-w-[80%]'>
-      <Image
-        src={imgUrl}
-        width={0}
-        height={0}
-        alt='Tournament Banner'
-        style={{ width: 440, height: 220 }}
-        placeholder='blur'
-        blurDataURL={'/assets/images/tournament.png'}
-        unoptimized
-      />
+    <div className='card flex flex-row justify-between max-w-[80%]'>
+      <div className='flex flex-row'>
+        <Image
+          src={imgUrl}
+          width={0}
+          height={0}
+          alt='Tournament Banner'
+          style={{ width: 440, height: 220 }}
+          placeholder='blur'
+          blurDataURL={'/assets/images/tournament.png'}
+          unoptimized
+        />
+        <div className='p-5'>
+          <Typography variant='h6' component='div'>
+            {tournamentName}
+          </Typography>
+          <IconMenu
+            icon={<EventIcon />}
+            label1={tournamentStartDate}
+            label2={tournamentEndDate}
+            separator='to'
+            color={COLORS.cricPrimary}
+            type={'date'}
+          />
+          <IconMenu
+            icon={<PlaceIcon />}
+            label1={tournamentLocation}
+            color={COLORS.cricLabel}
+          />
+        </div>
+      </div>
       <div className='p-5'>
-        <Typography variant='h6' component='div'>
-          {tournamentName}
-        </Typography>
-        <IconMenu
-          icon={<EventIcon />}
-          label1={tournamentStartDate}
-          label2={tournamentEndDate}
-          separator='to'
-          color={COLORS.cricPrimary}
-          type={'date'}
-        />
-        <IconMenu
-          icon={<PlaceIcon />}
-          label1={tournamentLocation}
-          color={COLORS.cricLabel}
-        />
+        <TournamentStatus status={tournamentStatus}></TournamentStatus>
       </div>
     </div>
   )

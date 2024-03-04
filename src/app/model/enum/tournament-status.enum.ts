@@ -1,3 +1,3 @@
-export enum TournamentStatus {
+export enum TournamentStatusLabel {
   Upcoming = 'Upcoming',
 }

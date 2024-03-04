@@ -9,4 +9,7 @@ export const COLORS = {
   inputBg: '#f3f4f6',
   placeholder: '#949495',
   asterisk: '#f00',
+  statusBg: {
+    upcoming: '#7f91ff',
+  },
 }
