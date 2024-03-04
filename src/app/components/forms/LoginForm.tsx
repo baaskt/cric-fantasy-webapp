@@ -15,6 +15,7 @@ import { HttpMethod } from '@/model/enum/http-method.enum'
 import { LoginRequest } from '@/model/request/login-request.type'
 import { useRouter } from 'next/navigation'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { LoginResponse } from '@/model/response/login.interface'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -45,11 +46,14 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response: CricResponse<string> = (await loginRequest.trigger(
-          payload as never,
-        )) as CricResponse<string>
-        const accessToken = response?.result ? response.result : ''
-        login(email, accessToken)
+        const response: CricResponse<LoginResponse> =
+          (await loginRequest.trigger(
+            payload as never,
+          )) as CricResponse<LoginResponse>
+        const authCred: LoginResponse | null = response?.result
+          ? response.result
+          : null
+        if (authCred) login(email, authCred)
       } catch (e) {
         console.log(e)
       } finally {

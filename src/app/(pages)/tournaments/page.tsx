@@ -17,9 +17,10 @@ const tabOptions: OptionsEntity[] = [
 export default function Tournaments() {
   const [open, setOpen] = useState<boolean>(false)
   const [isCreating, setCreating] = useState<boolean>(false)
-  // const [tournamentData, setTournamentData] = useState([])
+  const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
+
   const handleChange = (selectedEntity: OptionsEntity) => {
-    console.log(selectedEntity)
+    setSelectedTab(selectedEntity)
   }
 
   const createTournament = () => {
@@ -44,7 +45,7 @@ export default function Tournaments() {
           btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
         ></CricButton>
       </div>
-      <TournamentList />
+      <TournamentList selectedTab={selectedTab} />
       <CricModal open={open} onClose={handleClose}>
         <CreateTournamentForm onCreate={onCreate}></CreateTournamentForm>
       </CricModal>

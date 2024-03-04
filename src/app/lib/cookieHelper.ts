@@ -3,7 +3,7 @@ import { setCookie, getCookie, deleteCookie } from 'cookies-next'
 export const cookieHelper = () => {
   function setCookieItem(key: string, value: string): void {
     setCookie(key, value, {
-      maxAge: 3600, // Cookie will expire in 1 hour
+      maxAge: 60 * 60 * 24 * 90, // Cookie will expire in 90 days
       secure: process.env.NODE_ENV === 'production', // Set to true in production
       httpOnly: false, // Ensures cookie is accessible only via HTTP requests
       sameSite: 'strict', // Protects against CSRF attacks

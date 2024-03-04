@@ -9,10 +9,10 @@ import { CricDateRangeType } from '@/model/types/date-range.type'
 // import CricFileInput from './ui/CricFileInput'
 import CricButton from '../ui/CricButton'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
-import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { CreateTournamentRequest } from '@/model/request/create-tournament-request.type'
 import CricAlert from '../ui/CricAlert'
+import { TOURNAMENTS } from '@/util/constants/endpoints'
 
 type CreateTournamentResult = {
   result: string
@@ -39,7 +39,7 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
   const [mandatoryError, setMandatoryError] = useState<boolean>(false)
 
   const createTournamentRequest = useMutateRequest(
-    TOURNAMENT_URL,
+    TOURNAMENTS.CREATE_URL,
     HttpMethod.POST,
   )
 

@@ -1,7 +1,7 @@
 // Create an Axios instance with default configuration
-import { cookieHelper } from '@/lib/cookieHelper'
-import { API_URL } from '@/util/constants/endpoints'
-import axios from 'axios'
+import { API_URL, USERS } from '@/util/constants/endpoints'
+import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import { auth } from './auth'
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -13,10 +13,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   config => {
     // Get access token from cookie or local storage
-    const accessToken = cookieHelper().getCookieItem('accessToken')
+    const accessToken = auth().getAccessToken()
+    const refreshToken = auth().getRefreshToken()
+    const authToken =
+      config.url === USERS.REFRESH_URL ? refreshToken : accessToken
     // Set Authorization header with the access token
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`
     }
     return config
   },
@@ -30,8 +33,17 @@ axiosInstance.interceptors.response.use(
   response => {
     return response
   },
-  error => {
-    // Handle request errors
+  async (error: AxiosError) => {
+    // Handle Authetication error
+    if (error.response?.status === 401) {
+      const failedRequest: AxiosRequestConfig =
+        error.config as AxiosRequestConfig
+      const newToken = await auth().refreshAccessToken()
+      if (newToken && failedRequest?.headers) {
+        failedRequest.headers.Authorization = `Bearer ${newToken}`
+      }
+      return axios(failedRequest)
+    }
     return Promise.reject(error)
   },
 )

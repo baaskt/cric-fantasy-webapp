@@ -1,14 +1,19 @@
 import React from 'react'
 import TournamentCard from './TournamentCard'
 import EmptyData from './EmptyData'
-import { TOURNAMENT_URL } from '@/util/constants/endpoints'
+import { TOURNAMENTS } from '@/util/constants/endpoints'
 import { useRequest } from '@/hooks/useRequest'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import Loading from './Loading'
 import { TOURNAMENT } from '@/util/constants/constants'
+import { OptionsEntity } from '@/model/entities/options.interface'
 
-function TournamentList() {
+type TournamentListProps = {
+  selectedTab: OptionsEntity
+}
+function TournamentList(props: TournamentListProps) {
+  const TOURNAMENT_URL = `${TOURNAMENTS.GET_ALL_URL}/${props.selectedTab?.id === 1 ? 'false' : 'true'}`
   const tournamentRequest = useRequest(TOURNAMENT_URL)
   const tournamentResponse: CricResponse<TournamentEntity[]> =
     tournamentRequest.data as CricResponse<TournamentEntity[]>
