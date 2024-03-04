@@ -37,7 +37,9 @@ function TournamentList(props: TournamentListProps) {
 
   return (
     <div className='mt-5'>
-      <div>{cardsData?.length} results</div>
+      <div>
+        {cardsData?.length} {cardsData?.length > 1 ? 'results' : 'result'}
+      </div>
       <div className='flex flex-col gap-4 mt-5 mb-5'>
         {cardsData?.map(ttEntity => (
           <TournamentCard
