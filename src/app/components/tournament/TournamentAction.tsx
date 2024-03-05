@@ -1,29 +1,24 @@
 import React from 'react'
 import TournamentAdminActionBtn from './TournamentAdminActionBtn'
 import TournamentUserActionBtn from './TournamentUserActionBtn'
+import { TournamentEntity } from '@/model/response/tournament.interface'
 
 type TournamentActionProps = {
-  tournamentId: string
-  status: string
-  isHost: boolean
-  isParticipant: boolean
+  tournamentData: TournamentEntity
 }
 
 function TournamentAction(props: TournamentActionProps) {
-  const { isHost, isParticipant, tournamentId, status } = props
+  const { isHost } = props.tournamentData
   if (isHost)
     return (
       <TournamentAdminActionBtn
-        status={status}
-        tournamentId={tournamentId}
+        tournamentData={props.tournamentData}
       ></TournamentAdminActionBtn>
     )
   else
     return (
       <TournamentUserActionBtn
-        tournamentId={tournamentId}
-        isParticipant={isParticipant}
-        status={status}
+        tournamentData={props.tournamentData}
       ></TournamentUserActionBtn>
     )
 }

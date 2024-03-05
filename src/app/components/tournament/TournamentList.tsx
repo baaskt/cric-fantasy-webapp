@@ -13,6 +13,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 type TournamentListProps = {
   selectedTab: OptionsEntity
 }
+
 function TournamentList(props: TournamentListProps) {
   const { tournamentList, setTournamentList } = useTournament()
   const TOURNAMENT_URL = `${TOURNAMENTS.GET_ALL_URL}/${props.selectedTab?.id === 1 ? 'false' : 'true'}`

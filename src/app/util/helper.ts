@@ -34,46 +34,31 @@ export const getTournamentActionConfig = (status: string) => {
     actionTheme = {
       bg: COLORS.statusBg.preauction,
       color: COLORS.statusTxt.preauction,
-      txt:
-        status === (TournamentStatusLabel.Upcoming as string)
-          ? TOURNAMENT.STATUS.START_TOURNAMENT
-          : '',
+      txt: TOURNAMENT.STATUS.START_TOURNAMENT,
     }
   else if (status === (TournamentStatusLabel.PreAuction as string))
     actionTheme = {
-      bg: COLORS.statusBg.upcoming,
-      color: COLORS.white,
-      txt:
-        status === (TournamentStatusLabel.Upcoming as string)
-          ? TOURNAMENT.STATUS.START_TOURNAMENT
-          : '',
+      bg: COLORS.statusBg.inauction,
+      color: COLORS.statusTxt.inauction,
+      txt: TOURNAMENT.STATUS.START_AUCTION,
     }
   else if (status === (TournamentStatusLabel.InAuction as string))
     actionTheme = {
-      bg: COLORS.statusBg.upcoming,
-      color: COLORS.white,
-      txt:
-        status === (TournamentStatusLabel.Upcoming as string)
-          ? TOURNAMENT.STATUS.START_TOURNAMENT
-          : '',
+      bg: COLORS.statusBg.inprogress,
+      color: COLORS.statusTxt.inprogress,
+      txt: TOURNAMENT.STATUS.END_AUCTION,
     }
   else if (status === (TournamentStatusLabel.InProgress as string))
     actionTheme = {
-      bg: COLORS.statusBg.upcoming,
-      color: COLORS.white,
-      txt:
-        status === (TournamentStatusLabel.Upcoming as string)
-          ? TOURNAMENT.STATUS.START_TOURNAMENT
-          : '',
+      bg: COLORS.statusBg.completed,
+      color: COLORS.statusTxt.completed,
+      txt: TOURNAMENT.STATUS.END_TOURNAMENT,
     }
   else if (status === (TournamentStatusLabel.Completed as string))
     actionTheme = {
-      bg: COLORS.statusBg.upcoming,
-      color: COLORS.white,
-      txt:
-        status === (TournamentStatusLabel.Upcoming as string)
-          ? TOURNAMENT.STATUS.START_TOURNAMENT
-          : '',
+      bg: '',
+      color: '',
+      txt: '',
     }
   return actionTheme
 }

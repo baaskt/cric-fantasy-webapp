@@ -16,15 +16,12 @@ type TournamentCardProps = {
 const TournamentCard = (props: TournamentCardProps) => {
   const tournamentData: TournamentEntity = props.tournamentData
   const {
-    tournamentId,
     imgUrl,
     tournamentName,
     tournamentStartDate,
     tournamentEndDate,
     tournamentLocation,
     tournamentStatus,
-    isHost,
-    isParticipant,
   } = tournamentData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
@@ -62,12 +59,7 @@ const TournamentCard = (props: TournamentCardProps) => {
       </div>
       <div className='flex flex-col justify-between items-center p-5'>
         <TournamentStatus status={tournamentStatus}></TournamentStatus>
-        <TournamentAction
-          tournamentId={tournamentId}
-          status={tournamentStatus}
-          isHost={isHost}
-          isParticipant={isParticipant}
-        ></TournamentAction>
+        <TournamentAction tournamentData={tournamentData}></TournamentAction>
       </div>
     </div>
   )
