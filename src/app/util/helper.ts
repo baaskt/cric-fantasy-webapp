@@ -25,7 +25,7 @@ export const getUserObject = (
 export const getTournamentActionConfig = (status: string) => {
   const defaultTheme = {
     bg: COLORS.statusBg.upcoming,
-    color: COLORS.white,
+    color: COLORS.statusTxt.upcoming,
     txt: '',
   }
   let actionTheme = defaultTheme
