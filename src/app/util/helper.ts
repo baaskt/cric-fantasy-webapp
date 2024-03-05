@@ -62,6 +62,7 @@ export const getTournamentAdminActionConfig = (status: string) => {
 
 export const getTournamentUserActionConfig = (
   isParticipant: boolean,
+  isHost: boolean,
   status: string,
 ) => {
   const defaultTheme = {
@@ -90,7 +91,7 @@ export const getTournamentUserActionConfig = (
       txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
     }
   } else if (
-    isParticipant &&
+    (isHost || isParticipant) &&
     status === (TournamentStatusLabel.InAuction as string)
   ) {
     actionTheme = {
@@ -99,7 +100,6 @@ export const getTournamentUserActionConfig = (
       txt: TOURNAMENT.STATUS.ENTER_AUCTION,
     }
   }
-
   return actionTheme
 }
 

@@ -12,6 +12,7 @@ export const TournamentProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const [activeTournament, setActiveTournament] = useState<TournamentEntity>()
   const [tournamentList, setTournamentList] = useState<TournamentEntity[]>([])
 
   const addTournament = (newData: TournamentEntity) => {
@@ -29,6 +30,8 @@ export const TournamentProvider = ({
   }
 
   const value: TournamentContextType = {
+    activeTournament,
+    setActiveTournament,
     tournamentList,
     setTournamentList,
     addTournament,

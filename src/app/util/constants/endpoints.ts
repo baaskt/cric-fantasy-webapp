@@ -8,9 +8,17 @@ export const USERS = {
 }
 
 export const TOURNAMENTS = {
-  GET_ALL_URL: 'tournament',
+  GET_ALL_URL: 'tournament?all=',
   CREATE_URL: 'tournament',
   UPDATE_STATUS_URL: 'tournament',
-  ADD_HOST: 'tournamentAddHost',
-  JOIN_URL: 'tournamentJoin',
+  ADD_HOST: 'tournament/addHost',
+  JOIN_URL: 'tournament/join?tournamentId=',
+}
+
+export const PLAYERS = {
+  GET_ALL_URL: 'players',
+}
+
+export const ROOSTER = {
+  GET_AUCTION_PLAYERS_URL: 'roosters/oncondition?key=category&value=',
 }

@@ -16,7 +16,7 @@ type TournamentListProps = {
 
 function TournamentList(props: TournamentListProps) {
   const { tournamentList, setTournamentList } = useTournament()
-  const TOURNAMENT_URL = `${TOURNAMENTS.GET_ALL_URL}/${props.selectedTab?.id === 1 ? 'false' : 'true'}`
+  const TOURNAMENT_URL = `${TOURNAMENTS.GET_ALL_URL}${props.selectedTab?.id === 1 ? false : true}`
   const tournamentRequest = useRequest(TOURNAMENT_URL)
   const tournamentResponse: CricResponse<TournamentEntity[]> =
     tournamentRequest.data as CricResponse<TournamentEntity[]>

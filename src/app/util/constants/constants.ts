@@ -91,6 +91,10 @@ export const TOURNAMENT = {
   },
 }
 
+export const PLAYER = {
+  LOADING_TXT: 'Fetching Player Details ...',
+}
+
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },

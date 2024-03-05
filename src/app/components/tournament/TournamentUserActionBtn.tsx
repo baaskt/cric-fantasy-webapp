@@ -16,7 +16,8 @@ type TournamentUserActionBtnProps = {
 function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   const { updateTournament } = useTournament()
   const router = useRouter()
-  const { tournamentId, isParticipant, tournamentStatus } = props.tournamentData
+  const { tournamentId, isParticipant, isHost, tournamentStatus } =
+    props.tournamentData
   const [isLoading, setIsLoading] = useState<boolean>()
   const [actionTheme, setActionTheme] = useState({
     bg: '',
@@ -27,13 +28,14 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   useEffect(() => {
     const config = getTournamentUserActionConfig(
       isParticipant,
+      isHost,
       tournamentStatus,
     )
     setActionTheme(config)
-  }, [isParticipant, tournamentStatus])
+  }, [isParticipant, isHost, tournamentStatus])
 
   const joinTournamentRequest = useMutateRequest(
-    `${TOURNAMENTS.JOIN_URL}/${tournamentId}`,
+    `${TOURNAMENTS.JOIN_URL}${tournamentId}`,
     HttpMethod.PUT,
   )
 
@@ -53,6 +55,7 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
     updateTournament(tournamentId, tournamentEntity)
     const updatedConfig = getTournamentUserActionConfig(
       tournamentEntity.isParticipant,
+      tournamentEntity.isHost,
       tournamentStatus,
     )
     setActionTheme(updatedConfig)
