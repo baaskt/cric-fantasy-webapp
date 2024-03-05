@@ -7,6 +7,7 @@ import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBullete
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
+import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
 import { TITLES } from '@/util/constants/constants'
 import { TournamentProvider } from '@/providers/TournamentProvider'
@@ -35,6 +36,13 @@ export const sidebarConfig: SideBarMenuEntity[] = [
     title: TITLES.TEAMS.label,
     path: TITLES.TEAMS.path,
     fullPath: TITLES.TEAMS.fullPath,
+  },
+  {
+    icon: <LoyaltyIcon></LoyaltyIcon>,
+    title: TITLES.AUCTION.label,
+    path: TITLES.AUCTION.path,
+    fullPath: TITLES.AUCTION.fullPath,
+    hidden: true,
   },
   {
     icon: <FlagRoundedIcon></FlagRoundedIcon>,

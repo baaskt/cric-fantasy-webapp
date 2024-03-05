@@ -18,13 +18,16 @@ function Sidebar() {
         <Brand />
       </div>
       <List>
-        {sidebarConfig?.map((menuEntity, menuIndex) => (
-          <CricListItem
-            key={menuIndex}
-            menuEntity={menuEntity}
-            isActive={activePath?.path === menuEntity.path}
-          ></CricListItem>
-        ))}
+        {sidebarConfig?.map(
+          (menuEntity, menuIndex) =>
+            !menuEntity.hidden && (
+              <CricListItem
+                key={menuIndex}
+                menuEntity={menuEntity}
+                isActive={activePath?.path === menuEntity.path}
+              ></CricListItem>
+            ),
+        )}
       </List>
     </div>
   )

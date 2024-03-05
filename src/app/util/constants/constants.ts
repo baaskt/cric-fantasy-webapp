@@ -83,7 +83,7 @@ export const TOURNAMENT = {
   STATUS: {
     JOIN_TOURNAMENT: 'Join Tournament',
     START_TOURNAMENT: 'Start Tournament',
-    LEAVE_TOURNAMENT: 'Leave Tournament',
+    LEAVE_TOURNAMENT: 'Leave',
     END_TOURNAMENT: 'End Tournament',
     START_AUCTION: 'Start Auction',
     ENTER_AUCTION: 'Enter Auction',
@@ -115,5 +115,10 @@ export const TITLES = {
     label: 'Tournaments',
     path: '/tournaments',
     fullPath: '/tournaments',
+  },
+  AUCTION: {
+    label: 'AUCTION',
+    path: '/auction',
+    fullPath: '/tournaments/tournamentId/auction',
   },
 }

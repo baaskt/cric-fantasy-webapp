@@ -3,4 +3,5 @@ export type SideBarMenuEntity = {
   title: string
   path: string
   fullPath: string
+  hidden?: boolean
 }

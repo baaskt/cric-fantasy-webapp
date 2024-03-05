@@ -1,10 +1,12 @@
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
+import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { useTournament } from '@/providers/TournamentProvider'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import { getTournamentUserActionConfig } from '@/util/helper'
 import { Button, CircularProgress } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 type TournamentUserActionBtnProps = {
@@ -13,6 +15,7 @@ type TournamentUserActionBtnProps = {
 
 function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   const { updateTournament } = useTournament()
+  const router = useRouter()
   const { tournamentId, isParticipant, tournamentStatus } = props.tournamentData
   const [isLoading, setIsLoading] = useState<boolean>()
   const [actionTheme, setActionTheme] = useState({
@@ -35,7 +38,11 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   )
 
   const onUserAction = () => {
-    void updateUserAction()
+    if (tournamentStatus === (TournamentStatusLabel.InAuction as string)) {
+      void router.push(`${'tournaments'}/${tournamentId}/auction`)
+    } else {
+      void updateUserAction()
+    }
   }
 
   const mutateTournament = () => {
