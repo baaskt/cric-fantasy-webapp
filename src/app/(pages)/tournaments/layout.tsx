@@ -1,3 +1,5 @@
+'use client'
+
 import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
@@ -7,6 +9,7 @@ import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
 import { TITLES } from '@/util/constants/constants'
+import { TournamentProvider } from '@/providers/TournamentProvider'
 
 export const sidebarConfig: SideBarMenuEntity[] = [
   {
@@ -43,12 +46,14 @@ export const sidebarConfig: SideBarMenuEntity[] = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex flex-row mt-16 ml-[20%]'>
-      <Sidebar></Sidebar>
-      <div className='flex flex-col w-full'>
-        <Header></Header>
-        {children}
+    <TournamentProvider>
+      <div className='flex flex-row mt-16 ml-[20%]'>
+        <Sidebar></Sidebar>
+        <div className='flex flex-col w-full'>
+          <Header></Header>
+          {children}
+        </div>
       </div>
-    </div>
+    </TournamentProvider>
   )
 }

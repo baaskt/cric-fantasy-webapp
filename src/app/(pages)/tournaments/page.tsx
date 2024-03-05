@@ -7,7 +7,7 @@ import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { TOURNAMENT } from '@/util/constants/constants'
 import React, { useState } from 'react'
-import TournamentList from '@/components/TournamentList'
+import TournamentList from '@/components/tournament/TournamentList'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },

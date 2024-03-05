@@ -11,13 +11,13 @@ export const COLORS = {
   asterisk: '#f00',
   statusBg: {
     upcoming: '#eb006eb3',
-    preauction: '#c9ffce',
+    preauction: '#1de9b6',
     inauction: '#6d32ed3d',
     inprogress: '#ffda76d1',
     completed: '#ffbbbb',
   },
   statusTxt: {
-    preauction: '#48b051',
+    preauction: '#004d40',
     inauction: '#6d32ed',
     inprogress: '#c14611',
     completed: '#ff0303',

@@ -13,10 +13,11 @@ import { HttpMethod } from '@/model/enum/http-method.enum'
 import { CreateTournamentRequest } from '@/model/request/create-tournament-request.type'
 import CricAlert from '../ui/CricAlert'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
-
-type CreateTournamentResult = {
-  result: string
-}
+import { useTournament } from '@/providers/TournamentProvider'
+import { TournamentEntity } from '@/model/response/tournament.interface'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { CreateTournamentResponse } from '@/model/response/create-tournament-response.interface'
+import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 
 type CreateTournamentFormProps = {
   onCreate: () => void
@@ -31,6 +32,8 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     imgUrl: '',
     seriesId: 0,
   })
+
+  const { addTournament } = useTournament()
 
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
@@ -63,6 +66,20 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     void createTournament()
   }
 
+  const mutateTournament = (
+    payload: CreateTournamentRequest,
+    tournamentId: string,
+  ) => {
+    const tournamentEntity: TournamentEntity = {
+      ...payload,
+      tournamentId: tournamentId,
+      tournamentStatus: TournamentStatusLabel.Upcoming,
+      isHost: true,
+      isParticipant: false,
+    }
+    addTournament(tournamentEntity)
+  }
+
   const createTournament = async () => {
     if (formData.tournamentName && nameValidity?.valid) {
       const payload: CreateTournamentRequest = {
@@ -70,15 +87,16 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
         seriesId: Number(formData.seriesId),
       }
       try {
-        const response: CreateTournamentResult =
+        const response: CricResponse<CreateTournamentResponse> =
           (await createTournamentRequest.trigger(
             payload as never,
-          )) as CreateTournamentResult
-        console.log(response)
+          )) as CricResponse<CreateTournamentResponse>
+        if (response.result?.tournamentId) {
+          mutateTournament(payload, response.result?.tournamentId)
+          props.onCreate()
+        }
       } catch (e) {
         console.log(e)
-      } finally {
-        props.onCreate()
       }
     } else {
       setFormError()

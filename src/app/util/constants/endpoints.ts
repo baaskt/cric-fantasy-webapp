@@ -10,6 +10,7 @@ export const USERS = {
 export const TOURNAMENTS = {
   GET_ALL_URL: 'tournament',
   CREATE_URL: 'tournament',
+  UPDATE_STATUS_URL: 'tournament',
   ADD_HOST: 'tournamentAddHost',
   JOIN: 'tournamentJoin',
 }

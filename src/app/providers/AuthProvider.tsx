@@ -9,10 +9,6 @@ import { createContext, useState, useContext, useEffect } from 'react'
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 const { Provider } = AuthContext
 
-export function useAuth() {
-  return useContext(AuthContext)
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>()
 
@@ -52,4 +48,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <Provider value={value}>{children}</Provider>
 }
 
-export default AuthContext
+export const useAuth = () => useContext(AuthContext)

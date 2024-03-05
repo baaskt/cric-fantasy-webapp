@@ -3,10 +3,11 @@ import { COLORS } from '@/util/colors'
 import { Typography } from '@mui/material'
 import Image from 'next/image'
 import EventIcon from '@mui/icons-material/Event'
-import IconMenu from './IconMenu'
+import IconMenu from '../IconMenu'
 import PlaceIcon from '@mui/icons-material/Place'
 import TournamentStatus from './TournamentStatus'
 import { useState } from 'react'
+import TournamentAction from './TournamentAction'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
@@ -15,15 +16,18 @@ type TournamentCardProps = {
 const TournamentCard = (props: TournamentCardProps) => {
   const tournamentData: TournamentEntity = props.tournamentData
   const {
+    tournamentId,
     imgUrl,
     tournamentName,
     tournamentStartDate,
     tournamentEndDate,
     tournamentLocation,
     tournamentStatus,
+    isHost,
+    isParticipant,
   } = tournamentData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
-  const [imgSrc, setImgSrc] = useState(imgUrl)
+  const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
 
   return (
     <div className='card flex flex-row justify-between max-w-[80%]'>
@@ -56,8 +60,14 @@ const TournamentCard = (props: TournamentCardProps) => {
           />
         </div>
       </div>
-      <div className='p-5'>
+      <div className='flex flex-col justify-between items-center p-5'>
         <TournamentStatus status={tournamentStatus}></TournamentStatus>
+        <TournamentAction
+          tournamentId={tournamentId}
+          status={tournamentStatus}
+          isHost={isHost}
+          isParticipant={isParticipant}
+        ></TournamentAction>
       </div>
     </div>
   )

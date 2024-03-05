@@ -80,6 +80,13 @@ export const TOURNAMENT = {
     mandatory: 'Mandatory fields are required',
     error: 'Something when wrong while creating tournament. Please try again',
   },
+  STATUS: {
+    JOIN_TOURNAMENT: 'Join Tournament',
+    START_TOURNAMENT: 'Start Tournament',
+    END_TOURNAMENT: 'End Tournament',
+    START_AUCTION: 'Start Auction',
+    END_AUCTION: 'End Auction',
+  },
 }
 
 /* SCREEN TITLES */
