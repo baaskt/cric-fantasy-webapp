@@ -1,73 +1,134 @@
-import {
-  FieldTxtEntity,
-  NameValidationEntity,
-} from '@/model/entities/name-validation.interface'
+import { User } from '@/model/entities/user.interface'
+import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
+import { UserResponse } from '@/model/response/user-me.interface'
+import { COLORS } from './colors'
+import { TOURNAMENT } from './constants/constants'
 
-export const validateEmail = (email: string): boolean => {
-  const emailRegex: RegExp =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return String(email).toLowerCase().match(emailRegex) ? true : false
-}
-
-// Minimum eight characters, Maxium 32 characters, at least one uppercase letter, one lowercase letter , one symbol and one number
-export const UPPERCASE_REGEX = new RegExp(/.*[A-Z]/)
-export const LOWERCASE_REGEX = new RegExp(/.*[a-z]/)
-export const NUMBER_REGEX = new RegExp(/.*\d/)
-export const LENGTH_REGEX = new RegExp(/.{8,}$/)
-export const SPECIAL_CHARS_REGEX = new RegExp(
-  /.*[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/,
-)
-
-export const PASSWORD_VALID_REGEX = new RegExp(
-  `^(?=${[
-    LENGTH_REGEX.source,
-    UPPERCASE_REGEX.source,
-    LOWERCASE_REGEX.source,
-    NUMBER_REGEX.source,
-    SPECIAL_CHARS_REGEX.source,
-  ].join(')(?=')}).*$`,
-)
-
-export const validatePassword = (pwd: string): boolean => {
-  return String(pwd).match(PASSWORD_VALID_REGEX) ? true : false
-}
-
-export const validatePwdLength = (pwd: string): boolean => {
-  return pwd?.length >= 8 ? true : false
-}
-
-export const validateName = (
-  name: string,
-  skipAlpha?: boolean,
-): NameValidationEntity => {
-  const isErrorAlpha = skipAlpha ? false : validateAlphaNumeric(name)
-  const isErrorLength = validateMinNameLength(name)
-  return {
-    valid: !isErrorAlpha && !isErrorLength,
-    alpha: isErrorAlpha,
-    length: isErrorLength,
+export const getUserObject = (
+  user: User | undefined,
+  userData?: UserResponse,
+): User => {
+  const userEntity = user || new User()
+  const userResponse = userData?.user
+  const fullName = userResponse?.fullName ? userResponse?.fullName : ''
+  const email = userResponse?.email ? userResponse?.email : ''
+  const roles = userResponse?.roles ? userResponse?.roles : []
+  const userObject: User = {
+    ...userEntity,
+    fullName: fullName,
+    email: email,
+    roles: roles,
   }
+  return userObject
 }
 
-export const getErrorHelperTxt = (
-  validityEntity: NameValidationEntity,
-  fieldEntity: FieldTxtEntity,
-): string => {
-  const { valid, alpha, length } = validityEntity
-  return valid
-    ? ''
-    : alpha
-      ? fieldEntity.errorSplChar
-      : length
-        ? fieldEntity.errorLength
-        : ''
+export const getTournamentAdminActionConfig = (status: string) => {
+  const defaultTheme = {
+    bg: '',
+    color: '',
+    txt: '',
+  }
+  let actionTheme = defaultTheme
+
+  if (status === (TournamentStatusLabel.Upcoming as string)) {
+    actionTheme = {
+      bg: COLORS.statusBg.preauction,
+      color: COLORS.statusTxt.preauction,
+      txt: TOURNAMENT.STATUS.START_TOURNAMENT,
+    }
+  } else if (status === (TournamentStatusLabel.PreAuction as string)) {
+    actionTheme = {
+      bg: COLORS.statusBg.inauction,
+      color: COLORS.statusTxt.inauction,
+      txt: TOURNAMENT.STATUS.START_AUCTION,
+    }
+  } else if (status === (TournamentStatusLabel.InAuction as string)) {
+    actionTheme = {
+      bg: COLORS.statusBg.inprogress,
+      color: COLORS.statusTxt.inprogress,
+      txt: TOURNAMENT.STATUS.END_AUCTION,
+    }
+  } else if (status === (TournamentStatusLabel.InProgress as string)) {
+    actionTheme = {
+      bg: COLORS.statusBg.completed,
+      color: COLORS.statusTxt.completed,
+      txt: TOURNAMENT.STATUS.END_TOURNAMENT,
+    }
+  } else if (status === (TournamentStatusLabel.Completed as string))
+    actionTheme = defaultTheme
+
+  return actionTheme
 }
 
-export const validateAlphaNumeric = (name: string): boolean => {
-  const nameRegex: RegExp = /^[A-Za-z\s]+$/
-  return nameRegex.test(name) ? false : true
+export const getTournamentUserActionConfig = (
+  isParticipant: boolean,
+  isHost: boolean,
+  status: string,
+) => {
+  const defaultTheme = {
+    bg: '',
+    color: '',
+    txt: '',
+  }
+  let actionTheme = defaultTheme
+
+  if (
+    !isParticipant &&
+    status === (TournamentStatusLabel.PreAuction as string)
+  ) {
+    actionTheme = {
+      bg: COLORS.statusBg.inauction,
+      color: COLORS.statusTxt.inauction,
+      txt: TOURNAMENT.STATUS.JOIN_TOURNAMENT,
+    }
+  } else if (
+    isParticipant &&
+    status === (TournamentStatusLabel.PreAuction as string)
+  ) {
+    actionTheme = {
+      bg: COLORS.statusBg.completed,
+      color: COLORS.statusTxt.completed,
+      txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
+    }
+  } else if (
+    (isHost || isParticipant) &&
+    status === (TournamentStatusLabel.InAuction as string)
+  ) {
+    actionTheme = {
+      bg: COLORS.statusBg.inprogress,
+      color: COLORS.statusTxt.inprogress,
+      txt: TOURNAMENT.STATUS.ENTER_AUCTION,
+    }
+  }
+  return actionTheme
 }
 
-export const validateMinNameLength = (name: string): boolean => {
-  return name?.length < 5 ? true : false
+export const getTournamentStatusConfig = (status: string) => {
+  const defaultTheme = { bg: COLORS.statusBg.upcoming, color: COLORS.white }
+  let statusTheme = defaultTheme
+
+  if (status === (TournamentStatusLabel.Upcoming as string))
+    statusTheme = { bg: COLORS.statusBg.upcoming, color: COLORS.white }
+  else if (status === (TournamentStatusLabel.PreAuction as string)) {
+    statusTheme = {
+      bg: COLORS.statusBg.preauction,
+      color: COLORS.statusTxt.preauction,
+    }
+  } else if (status === (TournamentStatusLabel.InAuction as string)) {
+    statusTheme = {
+      bg: COLORS.statusBg.inauction,
+      color: COLORS.statusTxt.inauction,
+    }
+  } else if (status === (TournamentStatusLabel.InProgress as string)) {
+    statusTheme = {
+      bg: COLORS.statusBg.inprogress,
+      color: COLORS.statusTxt.inprogress,
+    }
+  } else if (status === (TournamentStatusLabel.Completed as string)) {
+    statusTheme = {
+      bg: COLORS.statusBg.completed,
+      color: COLORS.statusTxt.completed,
+    }
+  }
+  return statusTheme
 }

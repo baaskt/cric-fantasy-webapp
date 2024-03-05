@@ -1,5 +1,24 @@
-export const API_URL = 'https://crickccservice.onrender.com/api/'
+export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
 export const HEALTH_URL = 'health'
-export const LOGIN_URL = 'users/login'
-export const SIGNUP_URL = 'users'
-export const TOURNAMENT_URL = 'tournament'
+export const USERS = {
+  LOGIN_URL: 'users/login',
+  SIGNUP_URL: 'users',
+  MY_USER_URL: 'users/me',
+  REFRESH_URL: 'users/refresh',
+}
+
+export const TOURNAMENTS = {
+  GET_ALL_URL: 'tournament?all=',
+  CREATE_URL: 'tournament',
+  UPDATE_STATUS_URL: 'tournament',
+  ADD_HOST: 'tournament/addHost',
+  JOIN_URL: 'tournament/join?tournamentId=',
+}
+
+export const PLAYERS = {
+  GET_ALL_URL: 'players',
+}
+
+export const ROOSTER = {
+  GET_AUCTION_PLAYERS_URL: 'roosters/oncondition?key=category&value=',
+}

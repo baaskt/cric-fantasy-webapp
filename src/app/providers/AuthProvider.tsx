@@ -1,46 +1,40 @@
 'use client'
 
-import { cookieHelper } from '@/lib/cookieHelper'
-import { useSessionStorage } from '@/hooks/useSessionStorage'
+import { auth } from '@/lib/auth'
 import { AuthContextType } from '@/model/context/authContext.type'
 import { User } from '@/model/entities/user.interface'
+import { LoginResponse } from '@/model/response/login.interface'
 import { createContext, useState, useContext, useEffect } from 'react'
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 const { Provider } = AuthContext
 
-export function useAuth() {
-  return useContext(AuthContext)
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>()
-  const { getItem, setItem } = useSessionStorage()
+  const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    const userData: User | null = getItem('user')
-    if (userData) {
-      setUser(userData)
-      setItem('user', userData)
-    }
+    setUser(new User())
   }, [])
 
-  const login = (user: User, accessToken: string): void => {
-    setUser(user)
-    setItem('user', user)
-    cookieHelper().setCookieItem('accessToken', accessToken)
+  const login = (email: string, authCred: LoginResponse): void => {
+    const userData = new User()
+    setUserDetails({ ...userData, email: email })
+    auth().setAuthCred(authCred)
   }
 
-  const signup = (user: User): void => {
-    setUser(user)
-    setItem('user', user)
-    cookieHelper().removeCookieItem('accessToken')
+  const signup = (fullName: string, email: string): void => {
+    const userData = new User()
+    setUserDetails({ ...userData, email: email, fullName: fullName })
+    auth().clearAuthCred()
   }
 
   const logout = (): void => {
-    setUser(null)
-    setItem('user', '')
-    cookieHelper().removeCookieItem('accessToken')
+    setUser(new User())
+    auth().clearAuthCred()
+  }
+
+  const setUserDetails = (user: User): void => {
+    setUser(user)
   }
 
   const value: AuthContextType = {
@@ -48,9 +42,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     login,
     logout,
+    setUserDetails,
   }
 
   return <Provider value={value}>{children}</Provider>
 }
 
-export default AuthContext
+export const useAuth = () => useContext(AuthContext)

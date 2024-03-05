@@ -6,15 +6,24 @@ export const apiHelper = () => {
     return axios.get<AxiosResponse>(endpoint).then(res => res.data)
   }
 
-  function POST<T>(endpoint: string, { arg }: { arg: T }) {
+  function POST<T>(
+    endpoint: string,
+    { arg }: { arg: T },
+  ): Promise<AxiosResponse> {
     return axios.post<AxiosResponse>(endpoint, arg).then(res => res.data)
   }
 
-  function PUT<T>(endpoint: string, { arg }: { arg: T }) {
+  function PUT<T>(
+    endpoint: string,
+    { arg }: { arg: T },
+  ): Promise<AxiosResponse> {
     return axios.put<AxiosResponse>(endpoint, arg).then(res => res.data)
   }
 
-  function DELETE<T>(endpoint: string, { arg }: { arg: T }) {
+  function DELETE<T>(
+    endpoint: string,
+    { arg }: { arg: T },
+  ): Promise<AxiosResponse> {
     return axios.delete<AxiosResponse>(endpoint, { data: arg }).then(res => res)
   }
 

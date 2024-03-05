@@ -6,15 +6,16 @@ import CricPwdField from '../ui/CricPwdField'
 import CricEmailField from '../ui/CricEmailField'
 import CricButton from '../ui/CricButton'
 import { AUTH } from '@/util/constants/constants'
-import { validateEmail } from '@/util/helper'
+import { validateEmail } from '@/util/validation'
 import { useAuth } from '@/providers/AuthProvider'
-import { LOGIN_URL } from '@/util/constants/endpoints'
+import { USERS } from '@/util/constants/endpoints'
 import CricAlert from '../ui/CricAlert'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { LoginRequest } from '@/model/request/login-request.type'
 import { useRouter } from 'next/navigation'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { LoginResponse } from '@/model/response/login.interface'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function LoginForm() {
   const [pwd, setPwd] = useState<string>('')
   const { login } = useAuth()
 
-  const loginRequest = useMutateRequest(LOGIN_URL, HttpMethod.POST)
+  const loginRequest = useMutateRequest(USERS.LOGIN_URL, HttpMethod.POST)
 
   const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
     const value: string = event.target.value
@@ -45,11 +46,14 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response: CricResponse<string> = (await loginRequest.trigger(
-          payload as never,
-        )) as CricResponse<string>
-        const accessToken = response?.result ? response.result : ''
-        login({ email: email }, accessToken)
+        const response: CricResponse<LoginResponse> =
+          (await loginRequest.trigger(
+            payload as never,
+          )) as CricResponse<LoginResponse>
+        const authCred: LoginResponse | null = response?.result
+          ? response.result
+          : null
+        if (authCred) login(email, authCred)
       } catch (e) {
         console.log(e)
       } finally {

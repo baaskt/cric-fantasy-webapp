@@ -6,9 +6,13 @@ export const tabTheme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
+          '.MuiTab-textColorPrimary': {
+            textTransform: 'capitalize',
+          },
           '.MuiTab-textColorPrimary.Mui-selected': {
             color: COLORS.cricPrimary,
             fontWeight: 600,
+            textTransform: 'capitalize',
           },
         },
         indicator: {

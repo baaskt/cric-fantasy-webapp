@@ -3,20 +3,21 @@ import React, { ChangeEvent, FocusEvent, useState } from 'react'
 import CricTextField from '../ui/CricTextField'
 import { TOURNAMENT } from '@/util/constants/constants'
 import { NameValidationEntity } from '@/model/entities/name-validation.interface'
-import { getErrorHelperTxt, validateName } from '@/util/helper'
+import { getErrorHelperTxt, validateName } from '@/util/validation'
 import CricDateRangePicker from '../ui/CricDateRangePicker'
 import { CricDateRangeType } from '@/model/types/date-range.type'
 // import CricFileInput from './ui/CricFileInput'
 import CricButton from '../ui/CricButton'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
-import { TOURNAMENT_URL } from '@/util/constants/endpoints'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { CreateTournamentRequest } from '@/model/request/create-tournament-request.type'
 import CricAlert from '../ui/CricAlert'
-
-type CreateTournamentResult = {
-  result: string
-}
+import { TOURNAMENTS } from '@/util/constants/endpoints'
+import { useTournament } from '@/providers/TournamentProvider'
+import { TournamentEntity } from '@/model/response/tournament.interface'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { CreateTournamentResponse } from '@/model/response/create-tournament-response.interface'
+import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 
 type CreateTournamentFormProps = {
   onCreate: () => void
@@ -32,6 +33,8 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     seriesId: 0,
   })
 
+  const { addTournament } = useTournament()
+
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
   })
@@ -39,7 +42,7 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
   const [mandatoryError, setMandatoryError] = useState<boolean>(false)
 
   const createTournamentRequest = useMutateRequest(
-    TOURNAMENT_URL,
+    TOURNAMENTS.CREATE_URL,
     HttpMethod.POST,
   )
 
@@ -63,6 +66,20 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     void createTournament()
   }
 
+  const mutateTournament = (
+    payload: CreateTournamentRequest,
+    tournamentId: string,
+  ) => {
+    const tournamentEntity: TournamentEntity = {
+      ...payload,
+      tournamentId: tournamentId,
+      tournamentStatus: TournamentStatusLabel.Upcoming,
+      isHost: true,
+      isParticipant: false,
+    }
+    addTournament(tournamentEntity)
+  }
+
   const createTournament = async () => {
     if (formData.tournamentName && nameValidity?.valid) {
       const payload: CreateTournamentRequest = {
@@ -70,15 +87,16 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
         seriesId: Number(formData.seriesId),
       }
       try {
-        const response: CreateTournamentResult =
+        const response: CricResponse<CreateTournamentResponse> =
           (await createTournamentRequest.trigger(
             payload as never,
-          )) as CreateTournamentResult
-        console.log(response)
+          )) as CricResponse<CreateTournamentResponse>
+        if (response.result?.tournamentId) {
+          mutateTournament(payload, response.result?.tournamentId)
+          props.onCreate()
+        }
       } catch (e) {
         console.log(e)
-      } finally {
-        props.onCreate()
       }
     } else {
       setFormError()

@@ -9,4 +9,18 @@ export const COLORS = {
   inputBg: '#f3f4f6',
   placeholder: '#949495',
   asterisk: '#f00',
+  statusBg: {
+    upcoming: '#eb006eb3',
+    preauction: '#0042ebb5',
+    inauction: '#a92effbf',
+    inprogress: '#6d31ed',
+    completed: '#eb0000b3',
+  },
+  statusTxt: {
+    upcoming: '#ffffff',
+    preauction: '#ffffff',
+    inauction: '#ffffff',
+    inprogress: '#ffffff',
+    completed: '#ffffff',
+  },
 }

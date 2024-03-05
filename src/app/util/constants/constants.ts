@@ -80,6 +80,19 @@ export const TOURNAMENT = {
     mandatory: 'Mandatory fields are required',
     error: 'Something when wrong while creating tournament. Please try again',
   },
+  STATUS: {
+    JOIN_TOURNAMENT: 'Join Tournament',
+    START_TOURNAMENT: 'Start Tournament',
+    LEAVE_TOURNAMENT: 'Leave',
+    END_TOURNAMENT: 'End Tournament',
+    START_AUCTION: 'Start Auction',
+    ENTER_AUCTION: 'Enter Auction',
+    END_AUCTION: 'End Auction',
+  },
+}
+
+export const PLAYER = {
+  LOADING_TXT: 'Fetching Player Details ...',
 }
 
 /* SCREEN TITLES */
@@ -106,5 +119,10 @@ export const TITLES = {
     label: 'Tournaments',
     path: '/tournaments',
     fullPath: '/tournaments',
+  },
+  AUCTION: {
+    label: 'AUCTION',
+    path: '/auction',
+    fullPath: '/tournaments/tournamentId/auction',
   },
 }

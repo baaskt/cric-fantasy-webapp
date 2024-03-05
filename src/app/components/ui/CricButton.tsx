@@ -8,6 +8,7 @@ type CricButtonProps = {
   onClick: () => void
   isValid?: boolean
   isFullWidth?: boolean
+  color?: string
 }
 
 export default function CricButton(props: CricButtonProps) {
@@ -30,7 +31,7 @@ export default function CricButton(props: CricButtonProps) {
   return (
     <ThemeProvider theme={btnTheme}>
       <Button
-        color='primary'
+        color={'primary'}
         variant='contained'
         sx={{
           p: 1.5,

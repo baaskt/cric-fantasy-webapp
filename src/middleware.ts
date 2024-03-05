@@ -13,14 +13,11 @@ const totalRoutes = [...authRoutes, ...protectedRoutes]
 
 export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
-  console.log(pathName)
   const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
-    console.log(1)
     return redirectRoute(request, TITLES.SIGNIN.path)
   } else if (accessToken && isAuthRoute(pathName)) {
-    console.log(2)
     return redirectRoute(request, TITLES.DASHBOARD.fullPath)
   }
 }
