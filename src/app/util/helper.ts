@@ -22,44 +22,84 @@ export const getUserObject = (
   return userObject
 }
 
-export const getTournamentActionConfig = (status: string) => {
+export const getTournamentAdminActionConfig = (status: string) => {
   const defaultTheme = {
-    bg: COLORS.statusBg.upcoming,
-    color: COLORS.statusTxt.upcoming,
+    bg: '',
+    color: '',
     txt: '',
   }
   let actionTheme = defaultTheme
 
-  if (status === (TournamentStatusLabel.Upcoming as string))
+  if (status === (TournamentStatusLabel.Upcoming as string)) {
     actionTheme = {
       bg: COLORS.statusBg.preauction,
       color: COLORS.statusTxt.preauction,
       txt: TOURNAMENT.STATUS.START_TOURNAMENT,
     }
-  else if (status === (TournamentStatusLabel.PreAuction as string))
+  } else if (status === (TournamentStatusLabel.PreAuction as string)) {
     actionTheme = {
       bg: COLORS.statusBg.inauction,
       color: COLORS.statusTxt.inauction,
       txt: TOURNAMENT.STATUS.START_AUCTION,
     }
-  else if (status === (TournamentStatusLabel.InAuction as string))
+  } else if (status === (TournamentStatusLabel.InAuction as string)) {
     actionTheme = {
       bg: COLORS.statusBg.inprogress,
       color: COLORS.statusTxt.inprogress,
       txt: TOURNAMENT.STATUS.END_AUCTION,
     }
-  else if (status === (TournamentStatusLabel.InProgress as string))
+  } else if (status === (TournamentStatusLabel.InProgress as string)) {
     actionTheme = {
       bg: COLORS.statusBg.completed,
       color: COLORS.statusTxt.completed,
       txt: TOURNAMENT.STATUS.END_TOURNAMENT,
     }
-  else if (status === (TournamentStatusLabel.Completed as string))
+  } else if (status === (TournamentStatusLabel.Completed as string))
+    actionTheme = defaultTheme
+
+  return actionTheme
+}
+
+export const getTournamentUserActionConfig = (
+  isParticipant: boolean,
+  status: string,
+) => {
+  const defaultTheme = {
+    bg: '',
+    color: '',
+    txt: '',
+  }
+  let actionTheme = defaultTheme
+
+  if (
+    !isParticipant &&
+    status === (TournamentStatusLabel.PreAuction as string)
+  ) {
     actionTheme = {
-      bg: '',
-      color: '',
-      txt: '',
+      bg: COLORS.statusBg.inauction,
+      color: COLORS.statusTxt.inauction,
+      txt: TOURNAMENT.STATUS.JOIN_TOURNAMENT,
     }
+  } else if (
+    isParticipant &&
+    status === (TournamentStatusLabel.PreAuction as string)
+  ) {
+    actionTheme = {
+      bg: COLORS.statusBg.completed,
+      color: COLORS.statusTxt.completed,
+      txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
+    }
+  } else if (
+    isParticipant &&
+    status === (TournamentStatusLabel.InAuction as string)
+  ) {
+    actionTheme = {
+      bg: COLORS.statusBg.inprogress,
+      color: COLORS.statusTxt.inprogress,
+      txt: TOURNAMENT.STATUS.ENTER_AUCTION,
+    }
+  }
+
   return actionTheme
 }
 
@@ -69,25 +109,26 @@ export const getTournamentStatusConfig = (status: string) => {
 
   if (status === (TournamentStatusLabel.Upcoming as string))
     statusTheme = { bg: COLORS.statusBg.upcoming, color: COLORS.white }
-  else if (status === (TournamentStatusLabel.PreAuction as string))
+  else if (status === (TournamentStatusLabel.PreAuction as string)) {
     statusTheme = {
       bg: COLORS.statusBg.preauction,
       color: COLORS.statusTxt.preauction,
     }
-  else if (status === (TournamentStatusLabel.InAuction as string))
+  } else if (status === (TournamentStatusLabel.InAuction as string)) {
     statusTheme = {
       bg: COLORS.statusBg.inauction,
       color: COLORS.statusTxt.inauction,
     }
-  else if (status === (TournamentStatusLabel.InProgress as string))
+  } else if (status === (TournamentStatusLabel.InProgress as string)) {
     statusTheme = {
       bg: COLORS.statusBg.inprogress,
       color: COLORS.statusTxt.inprogress,
     }
-  else if (status === (TournamentStatusLabel.Completed as string))
+  } else if (status === (TournamentStatusLabel.Completed as string)) {
     statusTheme = {
       bg: COLORS.statusBg.completed,
       color: COLORS.statusTxt.completed,
     }
+  }
   return statusTheme
 }

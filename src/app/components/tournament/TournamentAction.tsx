@@ -9,18 +9,20 @@ type TournamentActionProps = {
 
 function TournamentAction(props: TournamentActionProps) {
   const { isHost } = props.tournamentData
-  if (isHost)
-    return (
-      <TournamentAdminActionBtn
-        tournamentData={props.tournamentData}
-      ></TournamentAdminActionBtn>
-    )
-  else
-    return (
-      <TournamentUserActionBtn
-        tournamentData={props.tournamentData}
-      ></TournamentUserActionBtn>
-    )
+  return (
+    <div className='flex flex-row gap-2 items-center'>
+      {
+        <TournamentUserActionBtn
+          tournamentData={props.tournamentData}
+        ></TournamentUserActionBtn>
+      }
+      {isHost && (
+        <TournamentAdminActionBtn
+          tournamentData={props.tournamentData}
+        ></TournamentAdminActionBtn>
+      )}
+    </div>
+  )
 }
 
 export default TournamentAction

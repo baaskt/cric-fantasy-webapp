@@ -83,8 +83,10 @@ export const TOURNAMENT = {
   STATUS: {
     JOIN_TOURNAMENT: 'Join Tournament',
     START_TOURNAMENT: 'Start Tournament',
+    LEAVE_TOURNAMENT: 'Leave Tournament',
     END_TOURNAMENT: 'End Tournament',
     START_AUCTION: 'Start Auction',
+    ENTER_AUCTION: 'Enter Auction',
     END_AUCTION: 'End Auction',
   },
 }

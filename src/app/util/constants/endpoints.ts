@@ -12,5 +12,5 @@ export const TOURNAMENTS = {
   CREATE_URL: 'tournament',
   UPDATE_STATUS_URL: 'tournament',
   ADD_HOST: 'tournamentAddHost',
-  JOIN: 'tournamentJoin',
+  JOIN_URL: 'tournamentJoin',
 }

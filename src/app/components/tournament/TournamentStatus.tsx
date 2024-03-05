@@ -11,7 +11,7 @@ function TournamentStatus(props: TournamentStatusProps) {
 
   return (
     <div
-      className={`text-sm rounded-xl p-2.5 w-fit`}
+      className={`self-end text-sm rounded-xl p-2.5 w-fit`}
       style={{ backgroundColor: statusTheme?.bg, color: statusTheme.color }}
     >
       {props.status}

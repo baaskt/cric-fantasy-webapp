@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from '@mui/material'
 import React, { useState } from 'react'
-import { getTournamentActionConfig } from '@/util/helper'
+import { getTournamentAdminActionConfig } from '@/util/helper'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import { HttpMethod } from '@/model/enum/http-method.enum'
@@ -8,6 +8,7 @@ import { UpdateTournamentRequest } from '@/model/request/update-tournament-reque
 import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { useTournament } from '@/providers/TournamentProvider'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 
 type TournamentAdminActionBtnProps = {
   tournamentData: TournamentEntity
@@ -17,7 +18,7 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
   const { updateTournament } = useTournament()
   const { tournamentId, tournamentStatus } = props.tournamentData
   const [isLoading, setIsLoading] = useState<boolean>()
-  const config = getTournamentActionConfig(tournamentStatus)
+  const config = getTournamentAdminActionConfig(tournamentStatus)
   const [actionTheme, setActionTheme] = useState(config)
 
   const adminActionRequest = useMutateRequest(
@@ -47,7 +48,7 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
       tournamentStatus: status,
     }
     updateTournament(tournamentId, tournamentEntity)
-    const updatedConfig = getTournamentActionConfig(status)
+    const updatedConfig = getTournamentAdminActionConfig(status)
     setActionTheme(updatedConfig)
   }
 
@@ -74,6 +75,7 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
   return (
     <Button
       variant='contained'
+      startIcon={<AdminPanelSettingsIcon />}
       sx={{
         backgroundColor: actionTheme.bg,
         color: actionTheme.color,
