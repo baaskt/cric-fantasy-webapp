@@ -3,6 +3,13 @@ import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { UserResponse } from '@/model/response/user-me.interface'
 import { COLORS } from './colors'
 import { TOURNAMENT } from './constants/constants'
+import {
+  CricHeaderRow,
+  CricTableData,
+  CricTableRow,
+  KeyValueType,
+} from '@/model/types/cric-table.type'
+import { AuctionPlayersResponse } from '@/model/response/auction-players-response.interface'
 
 export const getUserObject = (
   user: User | undefined,
@@ -131,4 +138,37 @@ export const getTournamentStatusConfig = (status: string) => {
     }
   }
   return statusTheme
+}
+
+export const prepareAuctionPlayersTable = (
+  playersList: AuctionPlayersResponse[],
+  headersList: CricHeaderRow[],
+): CricTableRow[] => {
+  const tempTableData: CricTableRow[] = []
+  playersList.forEach(
+    (playerEntity: AuctionPlayersResponse, playerIndex: number) => {
+      const playerData = playerEntity as unknown as KeyValueType
+      const rowData: CricTableData[] = []
+      headersList.forEach((headerEntity: CricHeaderRow) => {
+        const cellKey = headerEntity.key
+        const cellType = headerEntity.type
+        const cellValue =
+          cellKey === 'sno'
+            ? playerIndex + 1
+            : cellKey === 'isSold' && !playerData[cellKey]
+              ? 'To be auctioned'
+              : playerData[cellKey]
+        const tableCell: CricTableData = {
+          cellType: cellType,
+          value: cellValue,
+        }
+        rowData.push(tableCell)
+      })
+      tempTableData.push({
+        rowId: playerEntity.playerId,
+        dataList: rowData,
+      })
+    },
+  )
+  return tempTableData
 }

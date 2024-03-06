@@ -8,13 +8,9 @@ import CricTable from '../ui/CricTable'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayersResponse } from '@/model/response/auction-players-response.interface'
 import { useAuction } from '@/providers/AuctionProvider'
-import {
-  CricHeaderRow,
-  CricTableData,
-  CricTableRow,
-  KeyValueType,
-} from '@/model/types/cric-table.type'
+import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { COLORS } from '@/util/colors'
+import { prepareAuctionPlayersTable } from '@/util/helper'
 
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
@@ -29,7 +25,7 @@ type AuctionPlayersListProps = {
 }
 
 function AuctionPlayersList(props: AuctionPlayersListProps) {
-  const { setPlayersList } = useAuction()
+  const { playersList, setPlayersList } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
   const PLAYERS_URL = `${ROOSTER.GET_AUCTION_PLAYERS_URL}${playerSetType}`
@@ -45,33 +41,17 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     }
   }, [setPlayersList, auctionPlayersResponse])
 
+  useEffect(() => {
+    if (playersList) {
+      prepareTableData(playersList)
+    }
+  }, [playersList])
+
   const prepareTableData = (playersList: AuctionPlayersResponse[]) => {
     if (playersList.length) {
-      const tempTableData: CricTableRow[] = []
-      playersList.forEach(
-        (playerEntity: AuctionPlayersResponse, playerIndex: number) => {
-          const playerData = playerEntity as unknown as KeyValueType
-          const rowData: CricTableData[] = []
-          headersList.forEach((headerEntity: CricHeaderRow) => {
-            const cellKey = headerEntity.key
-            const cellType = headerEntity.type
-            const cellValue =
-              cellKey === 'sno'
-                ? playerIndex + 1
-                : cellKey === 'isSold' && !playerData[cellKey]
-                  ? 'To be auctioned'
-                  : playerData[cellKey]
-            const tableCell: CricTableData = {
-              cellType: cellType,
-              value: cellValue,
-            }
-            rowData.push(tableCell)
-          })
-          tempTableData.push({
-            rowId: playerEntity.playerId,
-            dataList: rowData,
-          })
-        },
+      const tempTableData: CricTableRow[] = prepareAuctionPlayersTable(
+        playersList,
+        headersList,
       )
       setTableData(tempTableData)
     }
