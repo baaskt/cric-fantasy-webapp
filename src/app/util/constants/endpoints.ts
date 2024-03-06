@@ -20,5 +20,6 @@ export const PLAYERS = {
 }
 
 export const ROOSTER = {
-  GET_AUCTION_PLAYERS_URL: 'roosters/oncondition?key=category&value=',
+  GET_AUCTION_PLAYERS_URL: 'roosters/onCondition?key=category&value=',
+  LAST_AUCTIONED_URL: 'roosters/getLastAuctioned',
 }

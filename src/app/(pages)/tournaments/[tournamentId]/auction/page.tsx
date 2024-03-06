@@ -1,6 +1,7 @@
 'use client'
 
 import AuctionPlayersList from '@/components/auction/AuctionPlayersList'
+import LastAuctionPlayerCard from '@/components/auction/LastAuctionPlayerCard'
 import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionProvider } from '@/providers/AuctionProvider'
@@ -27,7 +28,10 @@ function Auction() {
         <div className='flex flex-row justify-between'>
           <CricTab optionList={tabOptions} onChange={handleChange} />
         </div>
-        <AuctionPlayersList selectedTab={selectedTab} />
+        <div className='flex justify-between'>
+          <AuctionPlayersList selectedTab={selectedTab} />
+          <LastAuctionPlayerCard></LastAuctionPlayerCard>
+        </div>
       </div>
     </AuctionProvider>
   )

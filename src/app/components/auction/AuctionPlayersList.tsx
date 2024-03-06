@@ -20,8 +20,8 @@ const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
   { key: 'name', label: 'Players', type: 'string' },
   { key: 'basePrice', label: 'Base Price', type: 'number' },
-  { key: 'role', label: 'Role', type: 'string' },
-  { key: 'isSold', label: 'Auction Status', type: 'string' },
+  { key: 'role', label: 'Role', type: 'number' },
+  { key: 'isSold', label: 'Auction Status', type: 'number' },
 ]
 
 type AuctionPlayersListProps = {
@@ -56,7 +56,11 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
             const cellKey = headerEntity.key
             const cellType = headerEntity.type
             const cellValue =
-              cellKey === 'sno' ? playerIndex + 1 : playerData[cellKey]
+              cellKey === 'sno'
+                ? playerIndex + 1
+                : cellKey === 'isSold' && !playerData[cellKey]
+                  ? 'To be auctioned'
+                  : playerData[cellKey]
             const tableCell: CricTableData = {
               cellType: cellType,
               value: cellValue,

@@ -11,18 +11,19 @@ import { COLORS } from '@/util/colors'
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 
 const StyledTableCell = styled(TableCell)(() => ({
+  [`&.${tableCellClasses.root}`]: {
+    fontSize: 16,
+    borderLeft: '1px solid rgba(224, 224, 224, 1)',
+    minWidth: 180,
+  },
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: COLORS.cricPrimary,
     color: COLORS.white,
-    fontSize: 16,
     fontWeight: 600,
     zIndex: 999,
-    borderLeft: '1px solid rgba(224, 224, 224, 1)',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
     fontFamily: 'Manrope',
-    borderLeft: '1px solid rgba(224, 224, 224, 1)',
   },
 }))
 
@@ -40,7 +41,7 @@ type CricTableProps = {
 function CricTable(props: CricTableProps) {
   const { headerList, rowList } = props
   return (
-    <Paper sx={{ width: '70%', overflow: 'scroll' }}>
+    <Paper sx={{ overflow: 'scroll' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label='customized table'>
           <TableHead>
