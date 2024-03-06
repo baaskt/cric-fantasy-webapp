@@ -12,24 +12,23 @@ import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: COLORS.cricPrimaryLight,
-    color: COLORS.cricDark,
+    backgroundColor: COLORS.cricPrimary,
+    color: COLORS.white,
     fontSize: 16,
     fontWeight: 600,
+    zIndex: 999,
+    borderLeft: '1px solid rgba(224, 224, 224, 1)',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontFamily: 'Manrope',
+    borderLeft: '1px solid rgba(224, 224, 224, 1)',
   },
 }))
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
   },
 }))
 
@@ -41,28 +40,37 @@ type CricTableProps = {
 function CricTable(props: CricTableProps) {
   const { headerList, rowList } = props
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label='customized table'>
-        <TableHead>
-          <TableRow>
-            {headerList.map(header => (
-              <StyledTableCell key={header.key}>{header.label}</StyledTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rowList.map((row, rowIndex) => (
-            <StyledTableRow key={rowIndex}>
-              {row.dataList.map((data, dataIndex) => (
-                <StyledTableCell key={dataIndex} component='th' scope='row'>
-                  {data.value}
+    <Paper sx={{ width: '70%', overflow: 'scroll' }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label='customized table'>
+          <TableHead>
+            <TableRow>
+              {headerList.map(header => (
+                <StyledTableCell key={header.key} align='center'>
+                  {header.label}
                 </StyledTableCell>
               ))}
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rowList.map((row, rowIndex) => (
+              <StyledTableRow key={rowIndex}>
+                {row.dataList.map((data, dataIndex) => (
+                  <StyledTableCell
+                    key={dataIndex}
+                    component='th'
+                    scope='row'
+                    align={data.cellType === 'number' ? 'center' : 'left'}
+                  >
+                    {data.value}
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   )
 }
 

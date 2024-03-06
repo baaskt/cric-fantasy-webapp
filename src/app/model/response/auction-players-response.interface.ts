@@ -2,7 +2,7 @@ export interface AuctionPlayersResponse {
   playerId: string
   name: string
   role: string
-  BasePrice: number
+  basePrice: number
   isSold: string
   imageUrl: string
 }

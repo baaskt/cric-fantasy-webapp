@@ -5,6 +5,7 @@ export type CricHeaderRow = {
 }
 
 export type CricTableRow = {
+  rowId: string
   dataList: CricTableData[]
 }
 

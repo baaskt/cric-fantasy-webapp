@@ -1,5 +1,5 @@
 import { useRequest } from '@/hooks/useRequest'
-// import { CricResponse } from '@/model/types/cric-response.type'
+import { CricResponse } from '@/model/types/cric-response.type'
 import { ROOSTER } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 import Loading from '../Loading'
@@ -14,10 +14,12 @@ import {
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
+import { COLORS } from '@/util/colors'
 
 const headersList: CricHeaderRow[] = [
+  { key: 'sno', label: 'S.No', type: 'number' },
   { key: 'name', label: 'Players', type: 'string' },
-  { key: 'BasePrice', label: 'Base Price', type: 'number' },
+  { key: 'basePrice', label: 'Base Price', type: 'number' },
   { key: 'role', label: 'Role', type: 'string' },
   { key: 'isSold', label: 'Auction Status', type: 'string' },
 ]
@@ -33,33 +35,40 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const PLAYERS_URL = `${ROOSTER.GET_AUCTION_PLAYERS_URL}${playerSetType}`
 
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
-  const auctionPlayersResponse: AuctionPlayersResponse[] =
-    auctionPlayersRequest.data as AuctionPlayersResponse[]
+  const auctionPlayersResponse: CricResponse<AuctionPlayersResponse[]> =
+    auctionPlayersRequest.data as CricResponse<AuctionPlayersResponse[]>
 
   useEffect(() => {
-    if (auctionPlayersResponse) {
-      setPlayersList(auctionPlayersResponse)
-      prepareTableData(auctionPlayersResponse)
+    if (auctionPlayersResponse?.result) {
+      setPlayersList(auctionPlayersResponse.result)
+      prepareTableData(auctionPlayersResponse.result)
     }
   }, [setPlayersList, auctionPlayersResponse])
 
   const prepareTableData = (playersList: AuctionPlayersResponse[]) => {
     if (playersList.length) {
       const tempTableData: CricTableRow[] = []
-      playersList.forEach((playerEntity: AuctionPlayersResponse) => {
-        const playerData = playerEntity as unknown as KeyValueType
-        const rowData: CricTableData[] = []
-        headersList.forEach((headerEntity: CricHeaderRow) => {
-          const cellKey = headerEntity.key
-          const cellValue = playerData[cellKey]
-          const tableCell: CricTableData = {
-            cellType: headerEntity.type,
-            value: cellValue,
-          }
-          rowData.push(tableCell)
-        })
-        tempTableData.push({ dataList: rowData })
-      })
+      playersList.forEach(
+        (playerEntity: AuctionPlayersResponse, playerIndex: number) => {
+          const playerData = playerEntity as unknown as KeyValueType
+          const rowData: CricTableData[] = []
+          headersList.forEach((headerEntity: CricHeaderRow) => {
+            const cellKey = headerEntity.key
+            const cellType = headerEntity.type
+            const cellValue =
+              cellKey === 'sno' ? playerIndex + 1 : playerData[cellKey]
+            const tableCell: CricTableData = {
+              cellType: cellType,
+              value: cellValue,
+            }
+            rowData.push(tableCell)
+          })
+          tempTableData.push({
+            rowId: playerEntity.playerId,
+            dataList: rowData,
+          })
+        },
+      )
       setTableData(tempTableData)
     }
   }
@@ -72,8 +81,15 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     return <p>Error: {auctionPlayersRequest.error.message}</p>
   }
 
+  if (!auctionPlayersResponse?.result?.length) {
+    return <p className='p-5'>No players found</p>
+  }
+
   return (
     <div className='p-5'>
+      <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
+        {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
+      </div>
       <CricTable headerList={headersList} rowList={tableData} />
     </div>
   )
