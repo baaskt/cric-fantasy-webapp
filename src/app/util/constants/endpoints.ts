@@ -22,4 +22,5 @@ export const PLAYERS = {
 export const ROOSTER = {
   GET_AUCTION_PLAYERS_URL: 'roosters/onCondition?key=category&value=',
   LAST_AUCTIONED_URL: 'roosters/getLastAuctioned',
+  GET_RANDOM_PLAYER_URL: 'roosters/getRandom?key=category&value=',
 }

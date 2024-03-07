@@ -4,4 +4,6 @@ export type AuctionContextType = {
   playersList: AuctionPlayersResponse[]
   setPlayersList: (tournament: AuctionPlayersResponse[]) => void
   updatePlayer: (id: string, newData: AuctionPlayersResponse) => void
+  activeCategory: string
+  setActiveCategory: (activeCategory: string) => void
 }

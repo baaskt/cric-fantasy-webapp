@@ -4,7 +4,6 @@ import AuctionPlayersList from '@/components/auction/AuctionPlayersList'
 import LastAuctionPlayerCard from '@/components/auction/LastAuctionPlayerCard'
 import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
-import { AuctionProvider } from '@/providers/AuctionProvider'
 import React, { useState } from 'react'
 
 const tabOptions: OptionsEntity[] = [
@@ -23,17 +22,15 @@ function Auction() {
   }
 
   return (
-    <AuctionProvider>
-      <div className='m-5'>
-        <div className='flex flex-row justify-between'>
-          <CricTab optionList={tabOptions} onChange={handleChange} />
-        </div>
-        <div className='flex justify-between'>
-          <AuctionPlayersList selectedTab={selectedTab} />
-          <LastAuctionPlayerCard></LastAuctionPlayerCard>
-        </div>
+    <div className='m-5'>
+      <div className='flex flex-row justify-between'>
+        <CricTab optionList={tabOptions} onChange={handleChange} />
       </div>
-    </AuctionProvider>
+      <div className='flex justify-between'>
+        <AuctionPlayersList selectedTab={selectedTab} />
+        <LastAuctionPlayerCard></LastAuctionPlayerCard>
+      </div>
+    </div>
   )
 }
 

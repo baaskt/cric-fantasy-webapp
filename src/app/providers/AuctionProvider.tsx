@@ -7,6 +7,7 @@ const { Provider } = ListContext
 
 export const AuctionProvider = ({ children }: { children: React.ReactNode }) => {
   const [playersList, setPlayersList] = useState<AuctionPlayersResponse[]>([])
+  const [activeCategory, setActiveCategory] = useState<string>('')
 
   const updatePlayer = (id: string, newData: AuctionPlayersResponse) => {
     const updatedList = playersList.map((item: AuctionPlayersResponse) => {
@@ -22,6 +23,8 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     playersList,
     setPlayersList,
     updatePlayer,
+    activeCategory,
+    setActiveCategory,
   }
 
   return <Provider value={value}>{children}</Provider>
