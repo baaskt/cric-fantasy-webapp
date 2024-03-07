@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
     return redirectRoute(request, TITLES.SIGNIN.path)
   } else if (accessToken && isAuthRoute(pathName)) {
-    return redirectRoute(request, TITLES.DASHBOARD.fullPath)
+    return redirectRoute(request, TITLES.HOME.fullPath)
   }
 }
 
@@ -43,8 +43,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source:
-        '/((?!_next/static|_next/image|assets/logo|assets/images|favicon.ico).*)',
+      source: '/((?!_next/static|_next/image|assets/logo|assets/images|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

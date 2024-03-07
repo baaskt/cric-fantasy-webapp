@@ -102,27 +102,36 @@ export const TITLES = {
   DASHBOARD: {
     label: 'Dashboard',
     path: '/dashboard',
-    fullPath: '/tournaments/dashboard',
+    fullPath: '/tournaments/tournamentId/dashboard',
   },
   MATCHES: {
     label: 'Matches',
     path: '/matches',
-    fullPath: '/tournaments/matches',
+    fullPath: '/tournaments/tournamentId/matches',
   },
   PLAYERS: {
     label: 'Players',
     path: '/players',
-    fullPath: '/tournaments/players',
+    fullPath: '/tournaments/tournamentId/players',
   },
-  TEAMS: { label: 'Teams', path: '/teams', fullPath: '/tournaments/teams' },
+  TEAMS: {
+    label: 'Teams',
+    path: '/teams',
+    fullPath: '/tournaments/tournamentId/teams',
+  },
   TOURNAMENTS: {
     label: 'Tournaments',
     path: '/tournaments',
     fullPath: '/tournaments',
   },
   AUCTION: {
-    label: 'AUCTION',
+    label: 'Auction',
     path: '/auction',
     fullPath: '/tournaments/tournamentId/auction',
+  },
+  HOME: {
+    label: 'Home',
+    path: '/tournaments',
+    fullPath: '/tournaments',
   },
 }

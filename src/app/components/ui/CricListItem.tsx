@@ -1,12 +1,5 @@
 import { COLORS } from '@/util/colors'
-import {
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material'
-import React from 'react'
-import Link from 'next/link'
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
 import { ThemeProvider } from '@emotion/react'
 import { listItemTheme } from '@/styles/themes/listItem'
@@ -14,23 +7,23 @@ import { listItemTheme } from '@/styles/themes/listItem'
 type CricListItemProps = {
   menuEntity: SideBarMenuEntity
   isActive: boolean
+  onClick: (menuEntity: SideBarMenuEntity) => void
 }
 
 function CricListItem(props: CricListItemProps) {
   const { menuEntity, isActive } = props
-  const { icon, title, fullPath } = menuEntity
+  const { icon, title } = menuEntity
+  const ListIcon = icon
 
   return (
-    <Link href={fullPath}>
-      <ThemeProvider theme={listItemTheme}>
-        <ListItem>
-          <ListItemButton selected={isActive}>
-            <ListItemIcon sx={{ color: COLORS.cricDark }}>{icon}</ListItemIcon>
-            <ListItemText className='hidden md:flex' primary={title} />
-          </ListItemButton>
-        </ListItem>
-      </ThemeProvider>
-    </Link>
+    <ThemeProvider theme={listItemTheme}>
+      <ListItem onClick={() => props.onClick(menuEntity)}>
+        <ListItemButton selected={isActive}>
+          <ListItemIcon sx={{ color: COLORS.cricDark }}>{<ListIcon></ListIcon>}</ListItemIcon>
+          <ListItemText className='hidden md:flex' primary={title} />
+        </ListItemButton>
+      </ListItem>
+    </ThemeProvider>
   )
 }
 
