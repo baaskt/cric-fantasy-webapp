@@ -78,7 +78,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
       </div>
       <CricTable headerList={headersList} rowList={tableData} />
-      <div className='flex justify-center pt-5'>
+      <div className='flex justify-center pt-15'>
         {activeTournament?.isHost && (
           <CricButton
             startIcon={<FlagIcon />}

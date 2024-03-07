@@ -14,7 +14,7 @@ type TournamentUserActionBtnProps = {
 }
 
 function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
-  const { setActiveTournament, updateTournament } = useTournament()
+  const { markActiveTournament, updateTournament } = useTournament()
   const router = useRouter()
   const { tournamentId, isParticipant, isHost, tournamentStatus } = props.tournamentData
   const [isLoading, setIsLoading] = useState<boolean>()
@@ -36,7 +36,7 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
 
   const onUserAction = () => {
     if (tournamentStatus === (TournamentStatusLabel.InAuction as string)) {
-      setActiveTournament(props.tournamentData)
+      markActiveTournament(props.tournamentData)
       void router.push(`${'tournaments'}/${tournamentId}/auction`)
     } else {
       void updateUserAction()
