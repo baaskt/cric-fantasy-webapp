@@ -83,7 +83,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
           <CricButton
             startIcon={<FlagIcon />}
             onClick={() => beginAuction()}
-            btnTxt={`Begin auction for ${props.selectedTab.label} players`}
+            btnTxt={`Begin auction for ${props.selectedTab.label}`}
           ></CricButton>
         )}
       </div>
