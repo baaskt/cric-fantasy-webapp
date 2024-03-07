@@ -14,6 +14,7 @@ import { prepareAuctionPlayersTable } from '@/util/helper'
 import { useTournament } from '@/providers/TournamentProvider'
 import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
+import { useRouter } from 'next/navigation'
 
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
@@ -28,6 +29,7 @@ type AuctionPlayersListProps = {
 }
 
 function AuctionPlayersList(props: AuctionPlayersListProps) {
+  const router = useRouter()
   const { activeTournament } = useTournament()
   const { playersList, setPlayersList } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
@@ -70,7 +72,10 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     return <p className='p-5'>No players found</p>
   }
 
-  const beginAuction = () => {}
+  const beginAuction = () => {
+    const redirectUrl = 'auction/player'
+    router.push(redirectUrl)
+  }
 
   return (
     <div className='p-5'>
@@ -78,7 +83,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
       </div>
       <CricTable headerList={headersList} rowList={tableData} />
-      <div className='flex justify-center pt-15'>
+      <div className='flex justify-center pt-16'>
         {activeTournament?.isHost && (
           <CricButton
             startIcon={<FlagIcon />}

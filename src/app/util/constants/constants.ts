@@ -129,6 +129,11 @@ export const TITLES = {
     path: '/auction',
     fullPath: '/tournaments/tournamentId/auction',
   },
+  AUCTION_TABLE: {
+    label: 'Auction Board',
+    path: '/player',
+    fullPath: '/tournaments/tournamentId/auction/player',
+  },
   HOME: {
     label: 'Home',
     path: '/tournaments',

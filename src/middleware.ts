@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
     return redirectRoute(request, TITLES.SIGNIN.path)
   } else if (accessToken && isAuthRoute(pathName)) {
-    return redirectRoute(request, TITLES.DASHBOARD.fullPath)
+    return redirectRoute(request, TITLES.HOME.fullPath)
   }
 }
 

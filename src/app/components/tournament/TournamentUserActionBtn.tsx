@@ -37,7 +37,7 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   const onUserAction = () => {
     if (tournamentStatus === (TournamentStatusLabel.InAuction as string)) {
       markActiveTournament(props.tournamentData)
-      void router.push(`${'tournaments'}/${tournamentId}/auction`)
+      router.push(`${'tournaments'}/${tournamentId}/auction`)
     } else {
       void updateUserAction()
     }

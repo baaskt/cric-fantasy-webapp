@@ -14,7 +14,7 @@ function Sidebar() {
 
   const navigateTo = (menuEntity: SideBarMenuEntity) => {
     const redirectPath = menuEntity.fullPath?.replace('tournamentId', tournamentId)
-    void router.push(redirectPath)
+    router.push(redirectPath)
   }
 
   return (

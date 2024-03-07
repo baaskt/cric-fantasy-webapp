@@ -55,6 +55,13 @@ const auctionConfig: SideBarMenuEntity[] = [
     path: TITLES.AUCTION.path,
     fullPath: TITLES.AUCTION.fullPath,
   },
+  {
+    icon: LoyaltyIcon,
+    title: TITLES.AUCTION_TABLE.label,
+    path: TITLES.AUCTION_TABLE.path,
+    fullPath: TITLES.AUCTION_TABLE.fullPath,
+    hidden: true,
+  },
 ]
 
 export function useSidebar() {
