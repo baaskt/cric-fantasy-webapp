@@ -74,7 +74,8 @@ export function useSidebar() {
 const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideBarMenuEntity[] => {
   const isAuctionProgress =
     activeTournament?.isHost &&
-    activeTournament.tournamentStatus !== (TournamentStatusLabel.Upcoming as string)
+    (activeTournament.tournamentStatus === (TournamentStatusLabel.PreAuction as string) ||
+      activeTournament.tournamentStatus === (TournamentStatusLabel.InAuction as string))
 
   const sidebarConfig = activeTournament
     ? isAuctionProgress
