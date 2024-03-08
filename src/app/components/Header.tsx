@@ -1,7 +1,5 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { sidebarConfig } from '@/(pages)/tournaments/layout'
 import AvatarMenu from './AvatarMenu'
 import { useAuth } from '@/providers/AuthProvider'
 import { useRequest } from '@/hooks/useRequest'
@@ -11,11 +9,11 @@ import { UserResponse } from '@/model/response/user-me.interface'
 import { User } from '@/model/entities/user.interface'
 import { getUserObject } from '@/util/helper'
 import { useEffect } from 'react'
+import { useSidebar } from '@/hooks/useSidebar'
 
 export default function Header() {
-  const pathname = usePathname()
-  const pathIndex = sidebarConfig.findIndex(sc => pathname.includes(sc.path))
-  const activePath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
+  const { activePath } = useSidebar()
+  const ActivePathIcon = activePath && activePath?.icon
 
   const { user, setUserDetails } = useAuth()
   const myUserRequest = useRequest(USERS.MY_USER_URL)
@@ -33,10 +31,8 @@ export default function Header() {
   return (
     <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 left-[20%] right-0 z-50'>
       <div className='flex items-center gap-2'>
-        {activePath?.icon}
-        <span className='text-xl uppercase font-semibold'>
-          {activePath?.title}
-        </span>
+        {ActivePathIcon && <ActivePathIcon />}
+        <span className='text-xl uppercase font-semibold'>{activePath?.title}</span>
       </div>
       <AvatarMenu />
     </div>

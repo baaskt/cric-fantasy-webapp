@@ -13,6 +13,11 @@ export const TOURNAMENTS = {
   UPDATE_STATUS_URL: 'tournament',
   ADD_HOST: 'tournament/addHost',
   JOIN_URL: 'tournament/join?tournamentId=',
+  GET_PARTICIPANTS: 'tournament/participants?tournamentId=',
+}
+
+export const TEAMS = {
+  CREATE_TEAM_URL: 'team',
 }
 
 export const PLAYERS = {
@@ -20,5 +25,7 @@ export const PLAYERS = {
 }
 
 export const ROOSTER = {
-  GET_AUCTION_PLAYERS_URL: 'roosters/oncondition?key=category&value=',
+  GET_AUCTION_PLAYERS_URL: 'roosters/onCondition?key=category&value=',
+  LAST_AUCTIONED_URL: 'roosters/getLastAuctioned',
+  GET_RANDOM_PLAYER_URL: 'roosters/getRandom?key=category&value=',
 }

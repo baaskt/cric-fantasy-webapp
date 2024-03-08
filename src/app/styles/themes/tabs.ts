@@ -8,6 +8,7 @@ export const tabTheme = createTheme({
         root: {
           '.MuiTab-textColorPrimary': {
             textTransform: 'capitalize',
+            fontSize: 16,
           },
           '.MuiTab-textColorPrimary.Mui-selected': {
             color: COLORS.cricPrimary,

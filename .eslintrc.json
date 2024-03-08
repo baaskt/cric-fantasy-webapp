@@ -37,6 +37,7 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    // ...add rules which you'd like to disable
+    // ...add rules which you'd like to enable additionally
+    // "max-len": ["error", { "code": 100 }]
   }
 }

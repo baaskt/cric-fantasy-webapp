@@ -27,7 +27,7 @@ const TournamentCard = (props: TournamentCardProps) => {
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
 
   return (
-    <div className='card flex flex-row justify-between max-w-[80%]'>
+    <div className='card flex flex-row justify-between max-w-[90%]'>
       <div className='flex flex-row'>
         <Image
           src={imgSrc}
@@ -50,11 +50,7 @@ const TournamentCard = (props: TournamentCardProps) => {
             color={COLORS.cricPrimary}
             type={'date'}
           />
-          <IconMenu
-            icon={<PlaceIcon />}
-            label1={tournamentLocation}
-            color={COLORS.cricLabel}
-          />
+          <IconMenu icon={<PlaceIcon />} label1={tournamentLocation} color={COLORS.cricLabel} />
         </div>
       </div>
       <div className='flex flex-col justify-between items-center p-5'>

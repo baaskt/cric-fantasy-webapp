@@ -78,7 +78,7 @@ export const TOURNAMENT = {
       placeholder: 'Enter Image URL',
     },
     mandatory: 'Mandatory fields are required',
-    error: 'Something when wrong while creating tournament. Please try again',
+    error: 'Something went wrong while creating tournament. Please try again',
   },
   STATUS: {
     JOIN_TOURNAMENT: 'Join Tournament',
@@ -95,6 +95,26 @@ export const PLAYER = {
   LOADING_TXT: 'Fetching Player Details ...',
 }
 
+export const TEAM = {
+  CREATE: 'Create Team',
+  CREATING: 'Creating...',
+  LOADING_TXT: 'Fetching Team Details ...',
+  CREATE_FORM: {
+    NAME: {
+      label: 'Team Name',
+      placeholder: 'Enter Team name',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    PARTICIPANT: {
+      label: 'Participant Name',
+      placeholder: 'Choose Participant',
+    },
+    mandatory: 'Mandatory fields are required',
+    error: 'Something went wrong while creating team. Please try again',
+  },
+}
+
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },
@@ -102,27 +122,46 @@ export const TITLES = {
   DASHBOARD: {
     label: 'Dashboard',
     path: '/dashboard',
-    fullPath: '/tournaments/dashboard',
+    fullPath: '/tournaments/tournamentId/dashboard',
   },
   MATCHES: {
     label: 'Matches',
     path: '/matches',
-    fullPath: '/tournaments/matches',
+    fullPath: '/tournaments/tournamentId/matches',
   },
   PLAYERS: {
     label: 'Players',
     path: '/players',
-    fullPath: '/tournaments/players',
+    fullPath: '/tournaments/tournamentId/players',
   },
-  TEAMS: { label: 'Teams', path: '/teams', fullPath: '/tournaments/teams' },
+  TEAMS: {
+    label: 'Teams',
+    path: '/teams',
+    fullPath: '/tournaments/tournamentId/teams',
+  },
   TOURNAMENTS: {
     label: 'Tournaments',
     path: '/tournaments',
     fullPath: '/tournaments',
   },
   AUCTION: {
-    label: 'AUCTION',
+    label: 'Auction',
     path: '/auction',
     fullPath: '/tournaments/tournamentId/auction',
   },
+  AUCTION_TABLE: {
+    label: 'Auction Board',
+    path: '/player',
+    fullPath: '/tournaments/tournamentId/auction/player',
+  },
+  HOME: {
+    label: 'Home',
+    path: '/tournaments',
+    fullPath: '/tournaments',
+  },
+}
+
+export const STATS = {
+  t20: 'T20 Career Stats',
+  ipl: 'IPL Career Stats',
 }

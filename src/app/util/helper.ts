@@ -3,11 +3,15 @@ import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { UserResponse } from '@/model/response/user-me.interface'
 import { COLORS } from './colors'
 import { TOURNAMENT } from './constants/constants'
+import {
+  CricHeaderRow,
+  CricTableData,
+  CricTableRow,
+  KeyValueType,
+} from '@/model/types/cric-table.type'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 
-export const getUserObject = (
-  user: User | undefined,
-  userData?: UserResponse,
-): User => {
+export const getUserObject = (user: User | undefined, userData?: UserResponse): User => {
   const userEntity = user || new User()
   const userResponse = userData?.user
   const fullName = userResponse?.fullName ? userResponse?.fullName : ''
@@ -54,8 +58,7 @@ export const getTournamentAdminActionConfig = (status: string) => {
       color: COLORS.statusTxt.completed,
       txt: TOURNAMENT.STATUS.END_TOURNAMENT,
     }
-  } else if (status === (TournamentStatusLabel.Completed as string))
-    actionTheme = defaultTheme
+  } else if (status === (TournamentStatusLabel.Completed as string)) actionTheme = defaultTheme
 
   return actionTheme
 }
@@ -72,28 +75,19 @@ export const getTournamentUserActionConfig = (
   }
   let actionTheme = defaultTheme
 
-  if (
-    !isParticipant &&
-    status === (TournamentStatusLabel.PreAuction as string)
-  ) {
+  if (!isParticipant && status === (TournamentStatusLabel.PreAuction as string)) {
     actionTheme = {
       bg: COLORS.statusBg.inauction,
       color: COLORS.statusTxt.inauction,
       txt: TOURNAMENT.STATUS.JOIN_TOURNAMENT,
     }
-  } else if (
-    isParticipant &&
-    status === (TournamentStatusLabel.PreAuction as string)
-  ) {
+  } else if (isParticipant && status === (TournamentStatusLabel.PreAuction as string)) {
     actionTheme = {
       bg: COLORS.statusBg.completed,
       color: COLORS.statusTxt.completed,
       txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
     }
-  } else if (
-    (isHost || isParticipant) &&
-    status === (TournamentStatusLabel.InAuction as string)
-  ) {
+  } else if ((isHost || isParticipant) && status === (TournamentStatusLabel.InAuction as string)) {
     actionTheme = {
       bg: COLORS.statusBg.inprogress,
       color: COLORS.statusTxt.inprogress,
@@ -131,4 +125,35 @@ export const getTournamentStatusConfig = (status: string) => {
     }
   }
   return statusTheme
+}
+
+export const prepareAuctionPlayersTable = (
+  playersList: AuctionPlayerEntity[],
+  headersList: CricHeaderRow[],
+): CricTableRow[] => {
+  const tempTableData: CricTableRow[] = []
+  playersList.forEach((playerEntity: AuctionPlayerEntity, playerIndex: number) => {
+    const playerData = playerEntity as never as KeyValueType
+    const rowData: CricTableData[] = []
+    headersList.forEach((headerEntity: CricHeaderRow) => {
+      const cellKey = headerEntity.key
+      const cellType = headerEntity.type
+      const cellValue =
+        cellKey === 'sno'
+          ? playerIndex + 1
+          : cellKey === 'isSold' && !playerData[cellKey]
+            ? 'To be auctioned'
+            : playerData[cellKey]
+      const tableCell: CricTableData = {
+        cellType: cellType,
+        value: cellValue,
+      }
+      rowData.push(tableCell)
+    })
+    tempTableData.push({
+      rowId: playerEntity.playerId,
+      dataList: rowData,
+    })
+  })
+  return tempTableData
 }

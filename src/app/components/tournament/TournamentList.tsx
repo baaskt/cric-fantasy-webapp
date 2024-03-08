@@ -9,6 +9,7 @@ import Loading from '../Loading'
 import { TOURNAMENT } from '@/util/constants/constants'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { useTournament } from '@/providers/TournamentProvider'
+import { COLORS } from '@/util/colors'
 
 type TournamentListProps = {
   selectedTab: OptionsEntity
@@ -44,11 +45,11 @@ function TournamentList(props: TournamentListProps) {
 
   return (
     <div className='mt-5'>
-      <div>
+      <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
         {tournamentList?.length}{' '}
         {tournamentList?.length > 1 ? 'results' : 'result'}
       </div>
-      <div className='flex flex-col gap-4 mt-5 mb-5'>
+      <div className='flex flex-col gap-4 mb-5'>
         {tournamentList?.map(ttEntity => (
           <TournamentCard
             key={ttEntity.tournamentId}

@@ -5,13 +5,8 @@ import Box from '@mui/material/Box'
 import CricPwdField from '../ui/CricPwdField'
 import CricEmailField from '../ui/CricEmailField'
 import CricButton from '../ui/CricButton'
-import { AUTH } from '@/util/constants/constants'
-import {
-  getErrorHelperTxt,
-  validateEmail,
-  validateName,
-  validatePassword,
-} from '@/util/validation'
+import { AUTH, TITLES } from '@/util/constants/constants'
+import { getErrorHelperTxt, validateEmail, validateName, validatePassword } from '@/util/validation'
 import { useAuth } from '@/providers/AuthProvider'
 import { USERS } from '@/util/constants/endpoints'
 import CricAlert from '../ui/CricAlert'
@@ -58,8 +53,7 @@ export default function SignupForm() {
   }
 
   const isValidForm = () => {
-    const isFormValid =
-      validateName(fullName) && validateEmail(email) && validatePassword(pwd)
+    const isFormValid = validateName(fullName) && validateEmail(email) && validatePassword(pwd)
     if (!isFormValid) {
       setFormValidity(false)
     }
@@ -76,12 +70,10 @@ export default function SignupForm() {
       try {
         await signupRequest.trigger(payload as never)
         signup(fullName, email)
-        router.push('/login')
+        router.push(TITLES.SIGNIN.path)
       } catch (error) {
         const axiosError = error as AxiosError
-        const errorResult: CricResponse<string> = axiosError.response
-          ?.data as CricResponse<string>
-        console.log(errorResult)
+        const errorResult: CricResponse<string> = axiosError.response?.data as CricResponse<string>
         setError(errorResult?.error ? errorResult?.error : '')
       }
     }
@@ -143,11 +135,7 @@ export default function SignupForm() {
           isFullWidth={true}
           isValid={formValidity}
           onClick={() => handleSubmit()}
-          btnTxt={
-            signupRequest.isMutating
-              ? 'creating account...'
-              : AUTH.SIGN_UP.txtSignup
-          }
+          btnTxt={signupRequest.isMutating ? 'creating account...' : AUTH.SIGN_UP.txtSignup}
         ></CricButton>
       </div>
     </Box>

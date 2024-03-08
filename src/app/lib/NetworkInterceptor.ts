@@ -5,7 +5,7 @@ import { auth } from './auth'
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 1200000, // Timeout of 30 seconds
+  timeout: 120000, // Timeout of 120 seconds
   timeoutErrorMessage: "It's taking long than expected, try again",
 })
 
@@ -15,8 +15,7 @@ axiosInstance.interceptors.request.use(
     // Get access token from cookie or local storage
     const accessToken = auth().getAccessToken()
     const refreshToken = auth().getRefreshToken()
-    const authToken =
-      config.url === USERS.REFRESH_URL ? refreshToken : accessToken
+    const authToken = config.url === USERS.REFRESH_URL ? refreshToken : accessToken
     // Set Authorization header with the access token
     if (authToken) {
       config.headers.Authorization = `Bearer ${authToken}`
@@ -36,8 +35,7 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     // Handle Authetication error
     if (error.response?.status === 401) {
-      const failedRequest: AxiosRequestConfig =
-        error.config as AxiosRequestConfig
+      const failedRequest: AxiosRequestConfig = error.config as AxiosRequestConfig
       const newToken = await auth().refreshAccessToken()
       if (newToken && failedRequest?.headers) {
         failedRequest.headers.Authorization = `Bearer ${newToken}`

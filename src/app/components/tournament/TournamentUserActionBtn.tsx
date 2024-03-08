@@ -14,10 +14,9 @@ type TournamentUserActionBtnProps = {
 }
 
 function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
-  const { updateTournament } = useTournament()
+  const { markActiveTournament, updateTournament } = useTournament()
   const router = useRouter()
-  const { tournamentId, isParticipant, isHost, tournamentStatus } =
-    props.tournamentData
+  const { tournamentId, isParticipant, isHost, tournamentStatus } = props.tournamentData
   const [isLoading, setIsLoading] = useState<boolean>()
   const [actionTheme, setActionTheme] = useState({
     bg: '',
@@ -26,11 +25,7 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   })
 
   useEffect(() => {
-    const config = getTournamentUserActionConfig(
-      isParticipant,
-      isHost,
-      tournamentStatus,
-    )
+    const config = getTournamentUserActionConfig(isParticipant, isHost, tournamentStatus)
     setActionTheme(config)
   }, [isParticipant, isHost, tournamentStatus])
 
@@ -41,7 +36,8 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
 
   const onUserAction = () => {
     if (tournamentStatus === (TournamentStatusLabel.InAuction as string)) {
-      void router.push(`${'tournaments'}/${tournamentId}/auction`)
+      markActiveTournament(props.tournamentData)
+      router.push(`${'tournaments'}/${tournamentId}/auction`)
     } else {
       void updateUserAction()
     }

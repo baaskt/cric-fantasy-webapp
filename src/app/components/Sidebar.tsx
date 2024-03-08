@@ -3,14 +3,19 @@
 import React from 'react'
 import List from '@mui/material/List'
 import CricListItem from './ui/CricListItem'
-import { usePathname } from 'next/navigation'
-import { sidebarConfig } from '@/(pages)/tournaments/layout'
 import Brand from './Brand'
+import { useSidebar } from '@/hooks/useSidebar'
+import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
+import { useRouter } from 'next/navigation'
 
 function Sidebar() {
-  const pathname = usePathname()
-  const pathIndex = sidebarConfig.findIndex(sc => pathname.includes(sc.path))
-  const activePath = pathIndex !== -1 ? sidebarConfig[pathIndex] : null
+  const { activePath, tournamentId, sidebarConfig } = useSidebar()
+  const router = useRouter()
+
+  const navigateTo = (menuEntity: SideBarMenuEntity) => {
+    const redirectPath = menuEntity.fullPath?.replace('tournamentId', tournamentId)
+    router.push(redirectPath)
+  }
 
   return (
     <div className='w-1/5 md:w-1/5 shadow-md fixed top-0 left-0 bottom-0'>
@@ -25,6 +30,7 @@ function Sidebar() {
                 key={menuIndex}
                 menuEntity={menuEntity}
                 isActive={activePath?.path === menuEntity.path}
+                onClick={navigateTo}
               ></CricListItem>
             ),
         )}

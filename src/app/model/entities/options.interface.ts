@@ -1,5 +1,5 @@
 export interface OptionsEntity {
-  id: number
+  id: number | string
   label: string
   value?: string
 }

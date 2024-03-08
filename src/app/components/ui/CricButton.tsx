@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import { btnTheme } from '@/styles/themes/button'
@@ -9,10 +9,11 @@ type CricButtonProps = {
   isValid?: boolean
   isFullWidth?: boolean
   color?: string
+  startIcon?: ReactElement
 }
 
 export default function CricButton(props: CricButtonProps) {
-  const { btnTxt, isValid, isFullWidth, onClick } = props
+  const { btnTxt, isValid, isFullWidth, startIcon, onClick } = props
   const [validBtn, setValidBtn] = useState<boolean>(true)
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function CricButton(props: CricButtonProps) {
   return (
     <ThemeProvider theme={btnTheme}>
       <Button
+        startIcon={startIcon}
         color={'primary'}
         variant='contained'
         sx={{
