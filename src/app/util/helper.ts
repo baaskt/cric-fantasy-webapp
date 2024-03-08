@@ -9,7 +9,7 @@ import {
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
-import { AuctionPlayersResponse } from '@/model/response/auction-players-response.interface'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 
 export const getUserObject = (user: User | undefined, userData?: UserResponse): User => {
   const userEntity = user || new User()
@@ -128,12 +128,12 @@ export const getTournamentStatusConfig = (status: string) => {
 }
 
 export const prepareAuctionPlayersTable = (
-  playersList: AuctionPlayersResponse[],
+  playersList: AuctionPlayerEntity[],
   headersList: CricHeaderRow[],
 ): CricTableRow[] => {
   const tempTableData: CricTableRow[] = []
-  playersList.forEach((playerEntity: AuctionPlayersResponse, playerIndex: number) => {
-    const playerData = playerEntity as unknown as KeyValueType
+  playersList.forEach((playerEntity: AuctionPlayerEntity, playerIndex: number) => {
+    const playerData = playerEntity as never as KeyValueType
     const rowData: CricTableData[] = []
     headersList.forEach((headerEntity: CricHeaderRow) => {
       const cellKey = headerEntity.key

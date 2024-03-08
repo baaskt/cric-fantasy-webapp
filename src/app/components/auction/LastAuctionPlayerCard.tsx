@@ -1,5 +1,5 @@
 import { useRequest } from '@/hooks/useRequest'
-import { AuctionPlayersResponse } from '@/model/response/auction-players-response.interface'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { ROOSTER } from '@/util/constants/endpoints'
 import React from 'react'
@@ -10,9 +10,9 @@ import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
 
 function LastAuctionPlayerCard() {
   const lastauctionPlayerRequest = useRequest(ROOSTER.LAST_AUCTIONED_URL)
-  const lastauctionPlayerResponse: CricResponse<AuctionPlayersResponse[]> =
-    lastauctionPlayerRequest.data as CricResponse<AuctionPlayersResponse[]>
-  const playerData: AuctionPlayersResponse | undefined =
+  const lastauctionPlayerResponse: CricResponse<AuctionPlayerEntity[]> =
+    lastauctionPlayerRequest.data as CricResponse<AuctionPlayerEntity[]>
+  const playerData: AuctionPlayerEntity | undefined =
     lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result[0]
 
   if (!playerData) {
@@ -27,9 +27,7 @@ function LastAuctionPlayerCard() {
           <PlayerCard playerData={playerData} />
           <Image
             src={
-              playerData.isSold === 'Y'
-                ? '/assets/images/sold.png'
-                : '/assets/images/unsold.png'
+              playerData.isSold === 'Y' ? '/assets/images/sold.png' : '/assets/images/unsold.png'
             }
             alt='sold status'
             width={200}

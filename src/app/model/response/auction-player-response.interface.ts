@@ -1,4 +1,4 @@
-export interface AuctionPlayersResponse {
+export interface AuctionPlayerEntity {
   playerId: string
   name: string
   role: string

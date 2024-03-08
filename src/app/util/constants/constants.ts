@@ -140,3 +140,7 @@ export const TITLES = {
     fullPath: '/tournaments',
   },
 }
+
+export const STATS = {
+  t20: 'T20 Career Stats',
+}

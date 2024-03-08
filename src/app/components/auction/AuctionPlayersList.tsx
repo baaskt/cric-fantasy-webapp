@@ -6,7 +6,7 @@ import Loading from '../Loading'
 import { PLAYER } from '@/util/constants/constants'
 import CricTable from '../ui/CricTable'
 import { OptionsEntity } from '@/model/entities/options.interface'
-import { AuctionPlayersResponse } from '@/model/response/auction-players-response.interface'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { useAuction } from '@/providers/AuctionProvider'
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { COLORS } from '@/util/colors'
@@ -37,8 +37,8 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const PLAYERS_URL = `${ROOSTER.GET_AUCTION_PLAYERS_URL}${playerSetType}`
 
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
-  const auctionPlayersResponse: CricResponse<AuctionPlayersResponse[]> =
-    auctionPlayersRequest.data as CricResponse<AuctionPlayersResponse[]>
+  const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =
+    auctionPlayersRequest.data as CricResponse<AuctionPlayerEntity[]>
 
   useEffect(() => {
     if (auctionPlayersResponse?.result) {
@@ -53,7 +53,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     }
   }, [playersList])
 
-  const prepareTableData = (playersList: AuctionPlayersResponse[]) => {
+  const prepareTableData = (playersList: AuctionPlayerEntity[]) => {
     if (playersList.length) {
       const tempTableData: CricTableRow[] = prepareAuctionPlayersTable(playersList, headersList)
       setTableData(tempTableData)

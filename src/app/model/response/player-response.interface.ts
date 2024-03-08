@@ -10,7 +10,7 @@ export interface PlayerEntity {
   t20: StatsEntity
   ipl: StatsEntity
   createdDate: Date
-  DoB: string
+  dob: string
   isSold: string | null
   name: string
   bowlingStyle: string
@@ -38,7 +38,7 @@ export interface BattingEntity {
   innings: number
   fours: number
   sr: number
-  notOut: number
+  notout: number
   '100s': number
   balls: number
   sixes: number

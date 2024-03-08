@@ -1,16 +1,19 @@
+import { COLORS } from '@/util/colors'
 import React, { ReactNode } from 'react'
 
 type IconMenuProps = {
   icon: ReactNode
   label1: string | undefined
+  color: string
   label2?: string | undefined
   separator?: string
-  color: string
+  iconColor?: string
   type?: string
+  value?: string
 }
 
 function IconMenu(props: IconMenuProps) {
-  const { icon, label1, label2, separator, color, type } = props
+  const { icon, label1, label2, separator, color, iconColor, type, value } = props
   const label1Txt =
     type === 'date'
       ? label1
@@ -27,15 +30,18 @@ function IconMenu(props: IconMenuProps) {
       : label2 && label2 !== undefined
         ? label2
         : ''
-  const labelTxt = label2Txt
-    ? `${label1Txt} ${separator} ${label2Txt}`
-    : `${label1Txt}`
+  const labelTxt = label2Txt ? `${label1Txt} ${separator} ${label2Txt}` : `${label1Txt}`
 
   return (
     labelTxt && (
-      <div className='flex flex-row gap-2 mt-3' style={{ color: color }}>
-        <div>{icon}</div>
-        <div>{labelTxt}</div>
+      <div className='flex flex-row gap-10 justify-between mt-3' style={{ color: color }}>
+        <div className='flex flex-row gap-2'>
+          <div style={{ color: iconColor }}>{icon}</div>
+          <div>{labelTxt}</div>
+        </div>
+        <div style={{ color: COLORS.cricDark }} className='text-sm'>
+          {value}
+        </div>
       </div>
     )
   )
