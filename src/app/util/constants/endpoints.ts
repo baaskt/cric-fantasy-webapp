@@ -13,6 +13,11 @@ export const TOURNAMENTS = {
   UPDATE_STATUS_URL: 'tournament',
   ADD_HOST: 'tournament/addHost',
   JOIN_URL: 'tournament/join?tournamentId=',
+  GET_PARTICIPANTS: 'tournament/participants?tournamentId=',
+}
+
+export const TEAMS = {
+  CREATE_TEAM_URL: 'team',
 }
 
 export const PLAYERS = {

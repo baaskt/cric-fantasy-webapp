@@ -1,13 +1,25 @@
 import { useAuction } from '@/providers/AuctionProvider'
-import React from 'react'
+import React, { useState } from 'react'
 import PlayerCard from '../PlayerCard'
 import PlayerStats from '../PlayerStats'
 import { STATS } from '@/util/constants/constants'
+import { OptionsEntity } from '@/model/entities/options.interface'
+import CricTab from '../ui/CricTab'
+
+const tabOptions: OptionsEntity[] = [
+  { id: STATS.ipl, label: 'IPL' },
+  { id: STATS.t20, label: 'T20' },
+]
 
 function PlayerBidding() {
   const { auctionPlayer } = useAuction()
+  const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
   if (!auctionPlayer) return <></>
+
+  const handleChange = (selectedEntity: OptionsEntity) => {
+    setSelectedTab(selectedEntity)
+  }
 
   const playerEntity = auctionPlayer.data
 
@@ -23,7 +35,10 @@ function PlayerBidding() {
           </div>
           <div className='mt-5 text-base'>{playerEntity.intlTeam}</div>
         </div>
-        <PlayerStats title={STATS.t20} playerData={playerEntity}></PlayerStats>
+        <div>
+          <CricTab optionList={tabOptions} onChange={handleChange} />
+          <PlayerStats title={selectedTab.id as string} playerData={playerEntity}></PlayerStats>
+        </div>
       </div>
       <div></div>
     </div>

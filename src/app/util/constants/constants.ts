@@ -78,7 +78,7 @@ export const TOURNAMENT = {
       placeholder: 'Enter Image URL',
     },
     mandatory: 'Mandatory fields are required',
-    error: 'Something when wrong while creating tournament. Please try again',
+    error: 'Something went wrong while creating tournament. Please try again',
   },
   STATUS: {
     JOIN_TOURNAMENT: 'Join Tournament',
@@ -93,6 +93,26 @@ export const TOURNAMENT = {
 
 export const PLAYER = {
   LOADING_TXT: 'Fetching Player Details ...',
+}
+
+export const TEAM = {
+  CREATE: 'Create Team',
+  CREATING: 'Creating...',
+  LOADING_TXT: 'Fetching Team Details ...',
+  CREATE_FORM: {
+    NAME: {
+      label: 'Team Name',
+      placeholder: 'Enter Team name',
+      errorSplChar: 'Please enter a valid name',
+      errorLength: 'Enter at least 5 characters',
+    },
+    PARTICIPANT: {
+      label: 'Participant Name',
+      placeholder: 'Choose Participant',
+    },
+    mandatory: 'Mandatory fields are required',
+    error: 'Something went wrong while creating team. Please try again',
+  },
 }
 
 /* SCREEN TITLES */
@@ -143,4 +163,5 @@ export const TITLES = {
 
 export const STATS = {
   t20: 'T20 Career Stats',
+  ipl: 'IPL Career Stats',
 }

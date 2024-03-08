@@ -10,6 +10,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [playersList, setPlayersList] = useState<AuctionPlayerEntity[]>([])
   const [activeCategory, setActiveCategory] = useState<string>('')
   const [auctionPlayer, setAuctionPlayer] = useState<PlayerRandomEntity>()
+  // const [biddingEntity, setBiddingEntity] = useState<PlayerRandomEntity>()
 
   const updatePlayer = (id: string, newData: AuctionPlayerEntity) => {
     const updatedList = playersList.map((item: AuctionPlayerEntity) => {

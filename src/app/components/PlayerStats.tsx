@@ -9,6 +9,7 @@ import { CricMenuEntity } from '@/model/types/cric-menu.type'
 import SportsCricketOutlinedIcon from '@mui/icons-material/SportsCricketOutlined'
 import SportsBaseballOutlinedIcon from '@mui/icons-material/SportsBaseballOutlined'
 import { KeyValueType } from '@/model/types/cric-table.type'
+import { STATS } from '@/util/constants/constants'
 
 type PlayerStatsProps = {
   title: string
@@ -16,6 +17,7 @@ type PlayerStatsProps = {
 }
 
 const battingStatList: CricMenuEntity[] = [
+  { label: 'Matches', icon: SportsCricketOutlinedIcon, value: 'matches' },
   { label: 'Runs', icon: SportsCricketOutlinedIcon, value: 'runs' },
   { label: 'Strike Rate', icon: SportsCricketOutlinedIcon, value: 'sr' },
   { label: '50s', icon: SportsCricketOutlinedIcon, value: '50s' },
@@ -30,11 +32,11 @@ const bowlingStatList: CricMenuEntity[] = [
 ]
 
 function PlayerStats(props: PlayerStatsProps) {
-  const statCategory = 't20'
+  const isT20: boolean = props.title === STATS.t20 ? true : false
   const [battingList, setBattingList] = useState<CricMenuEntity[]>([])
   const [bowlingList, setBowlingList] = useState<CricMenuEntity[]>([])
-  const playerBatStat = props.playerData[statCategory]?.batting
-  const playerBowlStat = props.playerData[statCategory]?.bowling
+  const playerBatStat = isT20 ? props.playerData.t20?.batting : props.playerData.ipl?.batting
+  const playerBowlStat = isT20 ? props.playerData.t20?.bowling : props.playerData.ipl?.bowling
 
   useEffect(() => {
     if (props.playerData && playerBatStat && playerBowlStat) {
