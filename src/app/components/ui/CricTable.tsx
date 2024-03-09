@@ -8,7 +8,8 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { COLORS } from '@/util/colors'
-import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
+import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-table.type'
+import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.root}`]: {
@@ -40,6 +41,36 @@ type CricTableProps = {
 
 function CricTable(props: CricTableProps) {
   const { headerList, rowList } = props
+
+  const renderIconCell = () => {
+    return (
+      <span style={{ color: COLORS.cricPrimary }}>
+        <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
+      </span>
+    )
+  }
+
+  const renderTableRow = (row: CricTableRow, rowIndex: number) => {
+    return (
+      <StyledTableRow key={rowIndex}>
+        {row.dataList.map((cell, dataIndex) => renderTableCell(cell, dataIndex))}
+      </StyledTableRow>
+    )
+  }
+
+  const renderTableCell = (cell: CricTableCell, cellIndex: number) => {
+    return (
+      <StyledTableCell
+        key={cellIndex}
+        component='th'
+        scope='row'
+        align={cell.cellType === 'number' || cell.cellType === 'icon' ? 'center' : 'left'}
+      >
+        {cell.cellType === 'icon' ? renderIconCell() : cell.value}
+      </StyledTableCell>
+    )
+  }
+
   return (
     <Paper sx={{ overflow: 'scroll' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -53,22 +84,7 @@ function CricTable(props: CricTableProps) {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rowList.map((row, rowIndex) => (
-              <StyledTableRow key={rowIndex}>
-                {row.dataList.map((data, dataIndex) => (
-                  <StyledTableCell
-                    key={dataIndex}
-                    component='th'
-                    scope='row'
-                    align={data.cellType === 'number' ? 'center' : 'left'}
-                  >
-                    {data.value}
-                  </StyledTableCell>
-                ))}
-              </StyledTableRow>
-            ))}
-          </TableBody>
+          <TableBody>{rowList.map((row, rowIndex) => renderTableRow(row, rowIndex))}</TableBody>
         </Table>
       </TableContainer>
     </Paper>

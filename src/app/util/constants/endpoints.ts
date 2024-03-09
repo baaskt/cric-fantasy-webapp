@@ -17,7 +17,8 @@ export const TOURNAMENTS = {
 }
 
 export const TEAMS = {
-  CREATE_TEAM_URL: 'team',
+  GET_ALL_TEAMS: 'teams',
+  CREATE_TEAM_URL: 'teams',
 }
 
 export const PLAYERS = {

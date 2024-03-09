@@ -5,11 +5,12 @@ import { COLORS } from './colors'
 import { TOURNAMENT } from './constants/constants'
 import {
   CricHeaderRow,
-  CricTableData,
+  CricTableCell,
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
+import { TeamEntity } from '@/model/response/team.interface'
 
 export const getUserObject = (user: User | undefined, userData?: UserResponse): User => {
   const userEntity = user || new User()
@@ -134,7 +135,7 @@ export const prepareAuctionPlayersTable = (
   const tempTableData: CricTableRow[] = []
   playersList.forEach((playerEntity: AuctionPlayerEntity, playerIndex: number) => {
     const playerData = playerEntity as never as KeyValueType
-    const rowData: CricTableData[] = []
+    const rowData: CricTableCell[] = []
     headersList.forEach((headerEntity: CricHeaderRow) => {
       const cellKey = headerEntity.key
       const cellType = headerEntity.type
@@ -144,7 +145,7 @@ export const prepareAuctionPlayersTable = (
           : cellKey === 'isSold' && !playerData[cellKey]
             ? 'To be auctioned'
             : playerData[cellKey]
-      const tableCell: CricTableData = {
+      const tableCell: CricTableCell = {
         cellType: cellType,
         value: cellValue,
       }
@@ -156,4 +157,49 @@ export const prepareAuctionPlayersTable = (
     })
   })
   return tempTableData
+}
+
+export const prepareTeamTable = (
+  teamList: TeamEntity[],
+  headersList: CricHeaderRow[],
+): CricTableRow[] => {
+  const tempTableData: CricTableRow[] = []
+  teamList.forEach((teamEntity: TeamEntity, teamIndex: number) => {
+    const rowData: CricTableCell[] = []
+    headersList.forEach((headerEntity: CricHeaderRow) => {
+      const cellType = headerEntity.type
+      const cellKey = headerEntity.key
+      const iconPath = headerEntity.iconPath
+      const cellValue = getTeamCellValue(cellType, cellKey, iconPath, teamIndex, teamEntity)
+      const tableCell: CricTableCell = {
+        cellType: cellType,
+        value: cellValue,
+      }
+      rowData.push(tableCell)
+    })
+    tempTableData.push({
+      rowId: teamEntity.teamId,
+      dataList: rowData,
+    })
+  })
+  return tempTableData
+}
+
+const getTeamCellValue = (
+  cellType: string,
+  cellKey: string,
+  iconPath: string | undefined,
+  teamIndex: number,
+  teamEntity: TeamEntity,
+) => {
+  const teamData = teamEntity as never as KeyValueType
+  const cellValue =
+    cellType === 'icon'
+      ? iconPath
+      : cellKey === 'pos'
+        ? teamIndex + 1
+        : cellKey === 'teamMembers'
+          ? (teamData[cellKey] as string[]).join(',')
+          : teamData[cellKey]
+  return cellValue
 }
