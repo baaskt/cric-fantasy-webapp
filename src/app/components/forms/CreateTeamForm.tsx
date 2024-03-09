@@ -98,7 +98,7 @@ function CreateTeamForm(props: CreateTeamFormProps) {
         const response: CricResponse<CreateTeamResponse> = (await createTeamRequest.trigger(
           payload as never,
         )) as CricResponse<CreateTeamResponse>
-        if (response.result?.teamId) {
+        if (response.result) {
           //   mutateTeam(payload, response.result?.teamId)
           props.onCreate()
         }

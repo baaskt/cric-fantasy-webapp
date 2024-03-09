@@ -43,7 +43,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   useEffect(() => {
     if (auctionPlayersResponse?.result) {
       setPlayersList(auctionPlayersResponse.result)
-      prepareTableData(auctionPlayersResponse.result)
+      // prepareTableData(auctionPlayersResponse.result)
     }
   }, [setPlayersList, auctionPlayersResponse])
 

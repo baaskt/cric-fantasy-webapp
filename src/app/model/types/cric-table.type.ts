@@ -2,18 +2,19 @@ export type CricHeaderRow = {
   key: string
   label: string
   type: string
+  iconPath?: string
 }
 
 export type CricTableRow = {
   rowId: string
-  dataList: CricTableData[]
+  dataList: CricTableCell[]
 }
 
-export type CricTableData = {
+export type CricTableCell = {
   cellType: string
-  value: string | number | null
+  value: string | string[] | number | null | undefined
 }
 
 export interface KeyValueType {
-  [key: string]: string | number | null
+  [key: string]: string | string[] | number | null
 }
