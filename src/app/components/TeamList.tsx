@@ -6,6 +6,8 @@ import { TEAMS } from '@/util/constants/endpoints'
 import { prepareTeamTable } from '@/util/helper'
 import React, { useEffect, useState } from 'react'
 import CricTable from './ui/CricTable'
+import Loading from './Loading'
+import { TEAM } from '@/util/constants/constants'
 
 const headersList: CricHeaderRow[] = [
   { key: 'pos', label: 'Position', type: 'number' },
@@ -33,6 +35,10 @@ function TeamList() {
       const tempTableData: CricTableRow[] = prepareTeamTable(teamList, headersList)
       setTableData(tempTableData)
     }
+  }
+
+  if (teamRequest.isLoading) {
+    return <Loading txt={TEAM.LOADING_TXT}></Loading>
   }
 
   if (!teamResponse?.result?.length) {

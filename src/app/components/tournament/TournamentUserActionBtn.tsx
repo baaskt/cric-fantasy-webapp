@@ -5,9 +5,9 @@ import { TournamentEntity } from '@/model/response/tournament.interface'
 import { useTournament } from '@/providers/TournamentProvider'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import { getTournamentUserActionConfig } from '@/util/helper'
-import { Button, CircularProgress } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import CricButton from '../ui/CricButton'
 
 type TournamentUserActionBtnProps = {
   tournamentData: TournamentEntity
@@ -74,24 +74,13 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
   if (!actionTheme.txt) return <></>
 
   return (
-    <Button
-      variant='contained'
-      sx={{
-        backgroundColor: actionTheme.bg,
-        color: actionTheme.color,
-        textTransform: 'capitalize',
-        fontSize: 18,
-        '&:hover': {
-          backgroundColor: actionTheme.bg,
-        },
-      }}
+    <CricButton
+      bgColor={actionTheme.bg}
+      color={actionTheme.color}
+      btnTxt={actionTheme?.txt}
+      isLoading={isLoading}
       onClick={onUserAction}
-    >
-      <div className='flex flex-row gap-2 items-center'>
-        <div>{actionTheme?.txt}</div>
-        {isLoading && <CircularProgress />}
-      </div>
-    </Button>
+    ></CricButton>
   )
 }
 

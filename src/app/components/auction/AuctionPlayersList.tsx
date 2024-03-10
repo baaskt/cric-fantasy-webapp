@@ -74,7 +74,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
 
   const beginAuction = () => {
     setActiveCategory(props.selectedTab.value || '')
-    const redirectUrl = 'auction/player'
+    const redirectUrl = 'auction/board'
     router.push(redirectUrl)
   }
 

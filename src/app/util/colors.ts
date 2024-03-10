@@ -10,7 +10,8 @@ export const COLORS = {
   placeholder: '#949495',
   asterisk: '#f00',
   darkGray: '#808080',
-  gray: '#808080',
+  gray: '#c8c8c8',
+  lightRed: '#ff7373',
   statusBg: {
     upcoming: '#eb006eb3',
     preauction: '#0042ebb5',

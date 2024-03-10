@@ -151,8 +151,8 @@ export const TITLES = {
   },
   AUCTION_TABLE: {
     label: 'Auction Board',
-    path: '/player',
-    fullPath: '/tournaments/tournamentId/auction/player',
+    path: '/board',
+    fullPath: '/tournaments/tournamentId/auction/board',
   },
   HOME: {
     label: 'Home',
