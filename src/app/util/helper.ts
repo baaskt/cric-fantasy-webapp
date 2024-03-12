@@ -12,17 +12,14 @@ import {
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 
-export const getUserObject = (user: User | undefined, userData?: UserResponse): User => {
+export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
-  const userResponse = userData?.user
-  const fullName = userResponse?.fullName ? userResponse?.fullName : ''
-  const email = userResponse?.email ? userResponse?.email : ''
-  const roles = userResponse?.roles ? userResponse?.roles : []
   const userObject: User = {
     ...userEntity,
-    fullName: fullName,
-    email: email,
-    roles: roles,
+    id: userData.id,
+    fullName: userData.fullName,
+    email: userData.email,
+    roles: userData.roles,
   }
   return userObject
 }
