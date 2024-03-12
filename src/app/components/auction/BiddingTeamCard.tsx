@@ -4,12 +4,16 @@ import React from 'react'
 
 type BiddingTeamCardProps = {
   teamData: TeamEntity
+  onBidding: (teamId: string) => void
 }
 
 function BiddingTeamCard(props: BiddingTeamCardProps) {
-  const { teamName, purseBalance } = props.teamData
+  const { teamName, teamId, purseBalance } = props.teamData
   return (
-    <div className='flex flex-col items-center w-1/6 cursor-pointer'>
+    <div
+      className='flex flex-col items-center w-1/6 cursor-pointer'
+      onClick={() => props.onBidding(teamId)}
+    >
       <div className='flex flex-col items-center'>
         <div
           className='w-24 h-24 rounded-full flex justify-center items-center text-2xl transform transition-transform hover:scale-110'

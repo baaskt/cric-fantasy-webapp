@@ -8,12 +8,12 @@ export const USERS = {
 }
 
 export const TOURNAMENTS = {
-  GET_ALL_URL: 'tournament?all=',
-  CREATE_URL: 'tournament',
-  UPDATE_STATUS_URL: 'tournament',
-  ADD_HOST: 'tournament/addHost',
-  JOIN_URL: 'tournament/join?tournamentId=',
-  GET_PARTICIPANTS: 'tournament/participants?tournamentId=',
+  GET_ALL_URL: 'tournaments?all=',
+  CREATE_URL: 'tournaments',
+  UPDATE_STATUS_URL: 'tournaments',
+  ADD_HOST: 'tournaments/addHost',
+  JOIN_URL: 'tournaments/join?tournamentId=',
+  GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
 }
 
 export const TEAMS = {

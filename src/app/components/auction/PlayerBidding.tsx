@@ -7,6 +7,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import CricTab from '../ui/CricTab'
 import CricButton from '../ui/CricButton'
 import { COLORS } from '@/util/colors'
+import NotInterestedIcon from '@mui/icons-material/NotInterested'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -38,7 +39,8 @@ function PlayerBidding() {
           <div className='mt-5 text-base'>{playerEntity.intlTeam}</div>
           <CricButton
             btnTxt='Mark as unsold'
-            color={COLORS.lightRed}
+            startIcon={<NotInterestedIcon />}
+            bgColor={COLORS.lightRed}
             onClick={() => {}}
           ></CricButton>
         </div>

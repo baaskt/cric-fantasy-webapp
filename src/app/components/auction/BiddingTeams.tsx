@@ -6,8 +6,10 @@ import React from 'react'
 import Loading from '../Loading'
 import { TEAM } from '@/util/constants/constants'
 import BiddingTeamCard from './BiddingTeamCard'
+// import { useAuction } from '@/providers/AuctionProvider'
 
 function BiddingTeams() {
+  // const { setBiddingEntity } = useAuction();
   const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
@@ -19,12 +21,20 @@ function BiddingTeams() {
     return <p className='p-5'>No teams found</p>
   }
 
+  const bidPlayer = (teamId: string) => {
+    const tempBidding = {
+      teamId: teamId,
+    }
+    console.log(tempBidding)
+    // setBiddingEntity();
+  }
+
   const teamList = [...teamResponse.result]
 
   return (
     <div className='flex flex-wrap flex-row gap-5 justify-center basis-1/2'>
       {teamList.map(team => (
-        <BiddingTeamCard key={team.teamId} teamData={team} />
+        <BiddingTeamCard key={team.teamId} teamData={team} onBidding={bidPlayer} />
       ))}
     </div>
   )
