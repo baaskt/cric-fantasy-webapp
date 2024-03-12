@@ -27,7 +27,7 @@ const TournamentCard = (props: TournamentCardProps) => {
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
 
   return (
-    <div className='card flex flex-row justify-between max-w-[90%]'>
+    <div className='card flex flex-row justify-between'>
       <div className='flex flex-row'>
         <Image
           src={imgSrc}
