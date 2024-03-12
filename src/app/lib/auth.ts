@@ -3,6 +3,7 @@ import { cookieHelper } from './cookieHelper'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { USERS } from '@/util/constants/endpoints'
 import { apiHelper } from './apiHelper'
+import { TOURNAMENT_ID } from '@/providers/TournamentProvider'
 
 export const auth = () => {
   const ACCESS_TOKEN = 'accessToken'
@@ -26,13 +27,16 @@ export const auth = () => {
   function clearAuthCred(): void {
     cookieHelper().removeCookieItem(ACCESS_TOKEN)
     cookieHelper().removeCookieItem(REFRESH_TOKEN)
+    cookieHelper().removeCookieItem(TOURNAMENT_ID)
   }
 
   const refreshAccessToken = async () => {
-    const refreshResponse: CricResponse<LoginResponse> =
-      (await apiHelper().POST(USERS.REFRESH_URL, {
+    const refreshResponse: CricResponse<LoginResponse> = (await apiHelper().POST(
+      USERS.REFRESH_URL,
+      {
         arg: null,
-      })) as CricResponse<LoginResponse>
+      },
+    )) as CricResponse<LoginResponse>
     if (refreshResponse?.result) auth().setAuthCred(refreshResponse.result)
     return refreshResponse?.result?.accessToken
   }
