@@ -11,5 +11,7 @@ export type AuctionContextType = {
   auctionPlayer: PlayerRandomEntity | undefined
   setAuctionPlayer: (auctionPlayer: PlayerRandomEntity) => void
   biddingList: BiddingEntity[]
-  setBiddingList: (tournament: BiddingEntity[]) => void
+  updateBiddingList: (biddingEntity: BiddingEntity) => void
+  highestBidder: BiddingEntity | undefined
+  secondHighestBidder: BiddingEntity | undefined
 }

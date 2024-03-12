@@ -1,18 +1,19 @@
 import { TeamEntity } from '@/model/response/team.interface'
+import { biddingString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
 import React from 'react'
 
 type BiddingTeamCardProps = {
   teamData: TeamEntity
-  onBidding: (teamId: string) => void
+  onBidding: (teamData: TeamEntity) => void
 }
 
 function BiddingTeamCard(props: BiddingTeamCardProps) {
-  const { teamName, teamId, purseBalance } = props.teamData
+  const { teamName, purseBalance } = props.teamData
   return (
     <div
       className='flex flex-col items-center w-1/6 cursor-pointer'
-      onClick={() => props.onBidding(teamId)}
+      onClick={() => props.onBidding(props.teamData)}
     >
       <div className='flex flex-col items-center'>
         <div
@@ -24,6 +25,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         <div className='flex flex-col items-center p-2'>
           <div>{teamName}</div>
           <div>Balance: {purseBalance}</div>
+          <div>( {biddingString(purseBalance)} )</div>
         </div>
       </div>
     </div>
