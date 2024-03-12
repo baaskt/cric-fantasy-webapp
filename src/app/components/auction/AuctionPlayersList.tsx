@@ -1,6 +1,6 @@
 import { useRequest } from '@/hooks/useRequest'
 import { CricResponse } from '@/model/types/cric-response.type'
-import { ROOSTER } from '@/util/constants/endpoints'
+import { PLAYERS } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 import Loading from '../Loading'
 import { PLAYER } from '@/util/constants/constants'
@@ -34,7 +34,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const { playersList, setPlayersList, setActiveCategory } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
-  const PLAYERS_URL = `${ROOSTER.GET_AUCTION_PLAYERS_URL}${playerSetType}`
+  const PLAYERS_URL = `${PLAYERS.PLAYERS}/${activeTournament?.tournamentId}/${PLAYERS.GET_AUCTION_PLAYERS_URL}${playerSetType}`
 
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
   const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =

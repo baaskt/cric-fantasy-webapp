@@ -47,7 +47,12 @@ function TeamList() {
 
   return (
     <div className='p-5'>
-      <CricTable headerList={headersList} rowList={tableData} />
+      <CricTable
+        headerList={headersList}
+        rowList={tableData}
+        defOrder={'desc'}
+        defOrderBy={'tournamentPoints'}
+      />
     </div>
   )
 }

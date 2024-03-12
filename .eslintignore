@@ -11,4 +11,4 @@ coverage
 *.scss
 **/out/*
 next-env.d.ts
-# next.config.js
+next.config.js

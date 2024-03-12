@@ -11,6 +11,7 @@ export type CricTableRow = {
 }
 
 export type CricTableCell = {
+  cellKey: string
   cellType: string
   value: string | string[] | number | null | undefined
 }

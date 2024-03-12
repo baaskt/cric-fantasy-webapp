@@ -143,6 +143,7 @@ export const prepareAuctionPlayersTable = (
             ? 'To be auctioned'
             : playerData[cellKey]
       const tableCell: CricTableCell = {
+        cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
       }
@@ -169,6 +170,7 @@ export const prepareTeamTable = (
       const iconPath = headerEntity.iconPath
       const cellValue = getTeamCellValue(cellType, cellKey, iconPath, teamIndex, teamEntity)
       const tableCell: CricTableCell = {
+        cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
       }
@@ -179,6 +181,7 @@ export const prepareTeamTable = (
       dataList: rowData,
     })
   })
+  console.log(tempTableData)
   return tempTableData
 }
 
