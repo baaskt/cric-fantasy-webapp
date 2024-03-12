@@ -58,15 +58,33 @@ function CricTable(props: CricTableProps) {
     )
   }
 
+  const renderListCell = (listData: string[]) => {
+    return (
+      <div>
+        {listData.map((data: string) => (
+          <div key={data}>{data}</div>
+        ))}
+      </div>
+    )
+  }
+
   const renderTableCell = (cell: CricTableCell, cellIndex: number) => {
     return (
       <StyledTableCell
         key={cellIndex}
         component='th'
         scope='row'
-        align={cell.cellType === 'number' || cell.cellType === 'icon' ? 'center' : 'left'}
+        align={
+          cell.cellType === 'number' || cell.cellType === 'icon' || cell.cellType === 'list'
+            ? 'center'
+            : 'left'
+        }
       >
-        {cell.cellType === 'icon' ? renderIconCell() : cell.value}
+        {cell.cellType === 'icon'
+          ? renderIconCell()
+          : cell.cellType === 'list'
+            ? renderListCell(cell.value as string[])
+            : cell.value}
       </StyledTableCell>
     )
   }

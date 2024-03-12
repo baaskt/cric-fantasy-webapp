@@ -191,12 +191,6 @@ const getTeamCellValue = (
 ) => {
   const teamData = teamEntity as never as KeyValueType
   const cellValue =
-    cellType === 'icon'
-      ? iconPath
-      : cellKey === 'pos'
-        ? teamIndex + 1
-        : cellKey === 'teamMembers'
-          ? (teamData[cellKey] as string[]).join(',')
-          : teamData[cellKey]
+    cellType === 'icon' ? iconPath : cellKey === 'pos' ? teamIndex + 1 : teamData[cellKey]
   return cellValue
 }
