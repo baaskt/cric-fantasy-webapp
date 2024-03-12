@@ -23,8 +23,10 @@ export default function Header() {
       const myUserResponse: CricResponse<UserResponse> =
         myUserRequest.data as CricResponse<UserResponse>
       const userResult: UserResponse | undefined = myUserResponse?.result
-      const userDetails: User = getUserObject(user, userResult)
-      setUserDetails(userDetails)
+      if (userResult) {
+        const userDetails: User = getUserObject(user, userResult)
+        setUserDetails(userDetails)
+      }
     }
   }, [myUserRequest?.data])
 

@@ -12,6 +12,8 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [activeCategory, setActiveCategory] = useState<string>('')
   const [auctionPlayer, setAuctionPlayer] = useState<PlayerRandomEntity>()
   const [biddingList, setBiddingList] = useState<BiddingEntity[]>([])
+  const [highestBidder, setHighestBidder] = useState<BiddingEntity>()
+  const [secondHighestBidder, setSecondHighestBidder] = useState<BiddingEntity>()
 
   const updatePlayer = (id: string, newData: AuctionPlayerEntity) => {
     const updatedList = playersList.map((item: AuctionPlayerEntity) => {
@@ -23,6 +25,41 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     setPlayersList(updatedList)
   }
 
+  const updateBiddingList = (newData: BiddingEntity) => {
+    const isMatchingTeam = biddingList.find((item: BiddingEntity) => item.teamId === newData.teamId)
+    let updatedList = []
+    if (isMatchingTeam) {
+      updatedList = biddingList.map((item: BiddingEntity) => {
+        if (item.teamId === newData.teamId) {
+          return { ...item, ...newData }
+        }
+        return item
+      })
+    } else {
+      updatedList = [...biddingList, newData]
+    }
+    updateHighestBidder(updatedList)
+    updateSecondHighestBidder(updatedList)
+    setBiddingList(updatedList)
+  }
+
+  const updateHighestBidder = (newBiddingList: BiddingEntity[]) => {
+    let highestEntity
+    if (newBiddingList.length === 0) highestEntity = null
+    highestEntity = newBiddingList.reduce((prev, current) => {
+      return prev.amount > current.amount ? prev : current
+    })
+    setHighestBidder(highestEntity)
+  }
+
+  const updateSecondHighestBidder = (newBiddingList: BiddingEntity[]) => {
+    let highestEntity
+    if (newBiddingList.length < 2) highestEntity = null
+    const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
+    highestEntity = sortedBidding[1]
+    setSecondHighestBidder(highestEntity)
+  }
+
   const value: AuctionContextType = {
     playersList,
     setPlayersList,
@@ -32,7 +69,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     auctionPlayer,
     setAuctionPlayer,
     biddingList,
-    setBiddingList,
+    updateBiddingList,
+    highestBidder,
+    secondHighestBidder,
   }
 
   return <Provider value={value}>{children}</Provider>
