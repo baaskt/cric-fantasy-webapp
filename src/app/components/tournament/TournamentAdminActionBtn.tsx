@@ -1,4 +1,3 @@
-import { Button, CircularProgress } from '@mui/material'
 import React, { useState } from 'react'
 import { getTournamentAdminActionConfig } from '@/util/helper'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
@@ -9,6 +8,7 @@ import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { useTournament } from '@/providers/TournamentProvider'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import CricButton from '../ui/CricButton'
 
 type TournamentAdminActionBtnProps = {
   tournamentData: TournamentEntity
@@ -21,10 +21,7 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
   const config = getTournamentAdminActionConfig(tournamentStatus)
   const [actionTheme, setActionTheme] = useState(config)
 
-  const adminActionRequest = useMutateRequest(
-    TOURNAMENTS.UPDATE_STATUS_URL,
-    HttpMethod.PUT,
-  )
+  const adminActionRequest = useMutateRequest(TOURNAMENTS.UPDATE_STATUS_URL, HttpMethod.PUT)
 
   const onAdminAction = () => {
     void updateAdminAction()
@@ -73,25 +70,14 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
   if (!actionTheme.txt) return <></>
 
   return (
-    <Button
-      variant='contained'
+    <CricButton
       startIcon={<AdminPanelSettingsIcon />}
-      sx={{
-        backgroundColor: actionTheme.bg,
-        color: actionTheme.color,
-        textTransform: 'capitalize',
-        fontSize: 18,
-        '&:hover': {
-          backgroundColor: actionTheme.bg,
-        },
-      }}
+      bgColor={actionTheme.bg}
+      color={actionTheme.color}
+      btnTxt={actionTheme?.txt}
       onClick={onAdminAction}
-    >
-      <div className='flex flex-row gap-2 items-center'>
-        <div>{actionTheme?.txt}</div>
-        {isLoading && <CircularProgress />}
-      </div>
-    </Button>
+      isLoading={isLoading}
+    ></CricButton>
   )
 }
 

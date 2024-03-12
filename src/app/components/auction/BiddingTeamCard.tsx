@@ -1,0 +1,33 @@
+import { TeamEntity } from '@/model/response/team.interface'
+import { COLORS } from '@/util/colors'
+import React from 'react'
+
+type BiddingTeamCardProps = {
+  teamData: TeamEntity
+  onBidding: (teamId: string) => void
+}
+
+function BiddingTeamCard(props: BiddingTeamCardProps) {
+  const { teamName, teamId, purseBalance } = props.teamData
+  return (
+    <div
+      className='flex flex-col items-center w-1/6 cursor-pointer'
+      onClick={() => props.onBidding(teamId)}
+    >
+      <div className='flex flex-col items-center'>
+        <div
+          className='w-24 h-24 rounded-full flex justify-center items-center text-2xl transform transition-transform hover:scale-110'
+          style={{ backgroundColor: COLORS.gray }}
+        >
+          {teamName[0]}
+        </div>
+        <div className='flex flex-col items-center p-2'>
+          <div>{teamName}</div>
+          <div>Balance: {purseBalance}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default BiddingTeamCard

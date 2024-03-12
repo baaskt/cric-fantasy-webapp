@@ -8,6 +8,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { TOURNAMENT } from '@/util/constants/constants'
 import React, { useState } from 'react'
 import TournamentList from '@/components/tournament/TournamentList'
+import AddIcon from '@mui/icons-material/Add'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },
@@ -41,6 +42,7 @@ export default function Tournaments() {
       <div className='flex flex-row justify-between'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
         <CricButton
+          startIcon={<AddIcon />}
           onClick={() => createTournament()}
           btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
         ></CricButton>

@@ -7,6 +7,7 @@ import CricModal from '@/components/ui/CricModal'
 import { COLORS } from '@/util/colors'
 import { TEAM } from '@/util/constants/constants'
 import { useState } from 'react'
+import AddIcon from '@mui/icons-material/Add'
 
 export default function Teams() {
   const [open, setOpen] = useState<boolean>(false)
@@ -32,6 +33,7 @@ export default function Teams() {
           Teams are sorted based on the total points in descending order
         </div>
         <CricButton
+          startIcon={<AddIcon />}
           onClick={() => createTeam()}
           btnTxt={isCreating ? TEAM.CREATING : TEAM.CREATE}
         ></CricButton>

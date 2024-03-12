@@ -1,7 +1,7 @@
 'use client'
 
 import Loading from '@/components/Loading'
-import AuctionTeams from '@/components/auction/AuctionTeams'
+import AuctionTeams from '@/components/auction/BiddingTeams'
 import PlayerBidding from '@/components/auction/PlayerBidding'
 import { useRequest } from '@/hooks/useRequest'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
