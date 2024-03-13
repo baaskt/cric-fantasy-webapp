@@ -1,33 +1,49 @@
 import { useRequest } from '@/hooks/useRequest'
-import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
-import { ROOSTER } from '@/util/constants/endpoints'
-import React from 'react'
+import { PLAYERS } from '@/util/constants/endpoints'
+import React, { useEffect } from 'react'
 import PlayerCard from '../PlayerCard'
 import Image from 'next/image'
 import CricButton from '../ui/CricButton'
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
+import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
+import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { useAuction } from '@/providers/AuctionProvider'
+import { biddingString } from '@/util/bidding'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import { COLORS } from '@/util/colors'
 
 function LastAuctionPlayerCard() {
-  const lastauctionPlayerRequest = useRequest(ROOSTER.LAST_AUCTIONED_URL)
-  const lastauctionPlayerResponse: CricResponse<AuctionPlayerEntity[]> =
-    lastauctionPlayerRequest.data as CricResponse<AuctionPlayerEntity[]>
-  const playerData: AuctionPlayerEntity | undefined =
-    lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result[0]
+  const { setLastAuctionplayer } = useAuction()
+  const lastauctionPlayerRequest = useRequest(
+    PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496'),
+  )
+  const lastauctionPlayerResponse: CricResponse<LastAuctionPlayerEntity> =
+    lastauctionPlayerRequest.data as CricResponse<LastAuctionPlayerEntity>
+  const playerData: LastAuctionPlayerEntity | undefined =
+    lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result
+
+  useEffect(() => {
+    if (lastauctionPlayerResponse?.result) {
+      setLastAuctionplayer(lastauctionPlayerResponse.result)
+    }
+  }, [setLastAuctionplayer, lastauctionPlayerResponse])
 
   if (!playerData) {
     return <></>
   }
 
   return (
-    <div className='rounded-lg shadow-lg flex flex-col items-center p-5'>
+    <div className='rounded-lg shadow-lg flex flex-col items-center p-5 w-[30%]'>
       <div className='p-5 text-lg font-bold'>Last Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
           <PlayerCard playerData={playerData} />
           <Image
             src={
-              playerData.isSold === 'Y' ? '/assets/images/sold.png' : '/assets/images/unsold.png'
+              playerData.soldStatus === SoldStatus.SOLD.toString()
+                ? '/assets/images/sold.png'
+                : '/assets/images/unsold.png'
             }
             alt='sold status'
             width={200}
@@ -35,6 +51,17 @@ function LastAuctionPlayerCard() {
             className='-rotate-11'
           />
         </div>
+        <div className='flex items-center gap-2'>
+          <AutoAwesomeIcon
+            style={{ color: COLORS.cricPrimary, display: 'flex', alignItems: 'flex-start' }}
+          />
+          <div className='flex flex-col items-center'>
+            <div>{playerData.teamName}</div>
+            <div>{biddingString(playerData.soldAmount)}</div>
+          </div>
+          <AutoAwesomeIcon style={{ color: COLORS.cricPrimary }} />
+        </div>
+
         <CricButton
           startIcon={<PlayArrowOutlinedIcon />}
           isFullWidth={true}

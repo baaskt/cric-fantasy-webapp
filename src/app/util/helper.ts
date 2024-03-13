@@ -11,6 +11,7 @@ import {
 } from '@/model/types/cric-table.type'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
+import { SoldStatus } from '@/model/enum/sold-status.enum'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -139,10 +140,11 @@ export const prepareAuctionPlayersTable = (
       const cellValue =
         cellKey === 'sno'
           ? playerIndex + 1
-          : cellKey === 'isSold' && !playerData[cellKey]
+          : cellKey === 'soldStatus' && playerData[cellKey] === SoldStatus.NOT_AUCTIONED
             ? 'To be auctioned'
             : playerData[cellKey]
       const tableCell: CricTableCell = {
+        cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
       }
@@ -169,6 +171,7 @@ export const prepareTeamTable = (
       const iconPath = headerEntity.iconPath
       const cellValue = getTeamCellValue(cellType, cellKey, iconPath, teamIndex, teamEntity)
       const tableCell: CricTableCell = {
+        cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
       }
@@ -179,6 +182,7 @@ export const prepareTeamTable = (
       dataList: rowData,
     })
   })
+  console.log(tempTableData)
   return tempTableData
 }
 
@@ -191,12 +195,6 @@ const getTeamCellValue = (
 ) => {
   const teamData = teamEntity as never as KeyValueType
   const cellValue =
-    cellType === 'icon'
-      ? iconPath
-      : cellKey === 'pos'
-        ? teamIndex + 1
-        : cellKey === 'teamMembers'
-          ? (teamData[cellKey] as string[]).join(',')
-          : teamData[cellKey]
+    cellType === 'icon' ? iconPath : cellKey === 'pos' ? teamIndex + 1 : teamData[cellKey]
   return cellValue
 }

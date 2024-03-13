@@ -1,8 +1,9 @@
 export interface AuctionPlayerEntity {
-  playerId: string
+  playerId: number
   name: string
   role: string
   basePrice: number
-  isSold: string
-  imageUrl: string
+  clubName: string
+  soldStatus: string
+  category: string
 }

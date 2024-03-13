@@ -12,7 +12,7 @@ import { TEAM } from '@/util/constants/constants'
 const headersList: CricHeaderRow[] = [
   { key: 'pos', label: 'Position', type: 'number' },
   { key: 'teamName', label: 'Team', type: 'string' },
-  { key: 'teamMembers', label: 'Participants', type: 'number' },
+  { key: 'teamMembers', label: 'Participants', type: 'list' },
   { key: 'purseBalance', label: 'Purse Balance', type: 'number' },
   { key: 'tournamentPoints', label: 'Total Points', type: 'number' },
   { key: '', label: '', type: 'icon', iconPath: '/detail' },
@@ -47,7 +47,13 @@ function TeamList() {
 
   return (
     <div className='p-5'>
-      <CricTable headerList={headersList} rowList={tableData} />
+      <CricTable
+        headerList={headersList}
+        rowList={tableData}
+        defOrder={'desc'}
+        defOrderBy={'tournamentPoints'}
+        fullWidth={false}
+      />
     </div>
   )
 }

@@ -2,20 +2,25 @@ import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import TableCell, { SortDirection, tableCellClasses } from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { COLORS } from '@/util/colors'
 import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-table.type'
 import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
+import CricTableHead from '../table/CricTableHeader'
+import { sortTable } from '@/util/table'
 
-const StyledTableCell = styled(TableCell)(() => ({
+interface CustomTableCellProps {
+  fullwidth?: string
+}
+
+export const StyledTableCell = styled(TableCell)(({ fullwidth }: CustomTableCellProps) => ({
   [`&.${tableCellClasses.root}`]: {
     fontSize: 16,
     borderLeft: '1px solid rgba(224, 224, 224, 1)',
-    minWidth: 180,
+    minWidth: fullwidth ? 180 : 0,
   },
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: COLORS.cricPrimary,
@@ -37,54 +42,89 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 type CricTableProps = {
   headerList: CricHeaderRow[]
   rowList: CricTableRow[]
+  defOrder?: string
+  defOrderBy?: string
+  fullWidth: boolean
+}
+
+const renderIconCell = () => {
+  return (
+    <span style={{ color: COLORS.cricPrimary }}>
+      <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
+    </span>
+  )
+}
+
+const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean) => {
+  return (
+    <StyledTableRow key={rowIndex}>
+      {row.dataList.map((cell, dataIndex) => renderTableCell(cell, dataIndex, fullWidth))}
+    </StyledTableRow>
+  )
+}
+
+const renderListCell = (listData: string[]) => {
+  return (
+    <div>
+      {listData.map((data: string) => (
+        <div key={data}>{data}</div>
+      ))}
+    </div>
+  )
+}
+
+const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: boolean) => {
+  return (
+    <StyledTableCell
+      key={cellIndex}
+      fullwidth={fullWidth ? fullWidth.toString() : ''}
+      component='th'
+      scope='row'
+      align={
+        cell.cellType === 'number' || cell.cellType === 'icon' || cell.cellType === 'list'
+          ? 'center'
+          : 'left'
+      }
+    >
+      {cell.cellType === 'icon'
+        ? renderIconCell()
+        : cell.cellType === 'list'
+          ? renderListCell(cell.value as string[])
+          : cell.value}
+    </StyledTableCell>
+  )
 }
 
 function CricTable(props: CricTableProps) {
-  const { headerList, rowList } = props
+  const { headerList, rowList, defOrder, defOrderBy, fullWidth } = props
+  const [order, setOrder] = React.useState(defOrder || 'asc')
+  const [orderBy, setOrderBy] = React.useState(defOrderBy || '')
 
-  const renderIconCell = () => {
-    return (
-      <span style={{ color: COLORS.cricPrimary }}>
-        <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
-      </span>
-    )
+  const handleRequestSort = (property: string) => {
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
   }
 
-  const renderTableRow = (row: CricTableRow, rowIndex: number) => {
-    return (
-      <StyledTableRow key={rowIndex}>
-        {row.dataList.map((cell, dataIndex) => renderTableCell(cell, dataIndex))}
-      </StyledTableRow>
-    )
-  }
-
-  const renderTableCell = (cell: CricTableCell, cellIndex: number) => {
-    return (
-      <StyledTableCell
-        key={cellIndex}
-        component='th'
-        scope='row'
-        align={cell.cellType === 'number' || cell.cellType === 'icon' ? 'center' : 'left'}
-      >
-        {cell.cellType === 'icon' ? renderIconCell() : cell.value}
-      </StyledTableCell>
-    )
-  }
+  const tableRows = React.useMemo(
+    () => sortTable(rowList, orderBy, order),
+    [order, orderBy, rowList],
+  )
 
   return (
     <Paper sx={{ overflow: 'scroll' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label='customized table'>
-          <TableHead>
-            <TableRow>
-              {headerList.map(header => (
-                <StyledTableCell key={header.key} align='center'>
-                  {header.label}
-                </StyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>{rowList.map((row, rowIndex) => renderTableRow(row, rowIndex))}</TableBody>
+          <CricTableHead
+            headerList={headerList}
+            order={order as SortDirection}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            onSelectAllClick={() => {}}
+          />
+          <TableBody>
+            {tableRows.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}
+          </TableBody>
         </Table>
       </TableContainer>
     </Paper>

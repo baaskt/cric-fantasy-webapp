@@ -6,11 +6,12 @@ export type CricHeaderRow = {
 }
 
 export type CricTableRow = {
-  rowId: string
+  rowId: string | number
   dataList: CricTableCell[]
 }
 
 export type CricTableCell = {
+  cellKey: string
   cellType: string
   value: string | string[] | number | null | undefined
 }
