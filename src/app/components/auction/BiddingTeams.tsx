@@ -24,7 +24,7 @@ function BiddingTeams() {
 
   const bidPlayer = (teamData: TeamEntity) => {
     const { teamId, teamName } = teamData
-    const basePrice = auctionPlayer?.data.basePrice || 0
+    const basePrice = auctionPlayer?.player.basePrice || 0
     const highestBid = highestBidder?.amount || 0
     const tempBidding = {
       teamId: teamId,

@@ -27,6 +27,7 @@ const headersList: CricHeaderRow[] = [
 
 type AuctionPlayersListProps = {
   selectedTab: OptionsEntity
+  categories: OptionsEntity[]
 }
 
 function AuctionPlayersList(props: AuctionPlayersListProps) {
@@ -44,7 +45,6 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   useEffect(() => {
     if (auctionPlayersResponse?.result) {
       setPlayersList(auctionPlayersResponse.result)
-      // prepareTableData(auctionPlayersResponse.result)
     }
   }, [setPlayersList, auctionPlayersResponse])
 

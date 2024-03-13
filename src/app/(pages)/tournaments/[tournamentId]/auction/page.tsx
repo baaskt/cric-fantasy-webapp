@@ -27,7 +27,7 @@ function Auction() {
         <CricTab optionList={tabOptions} onChange={handleChange} />
       </div>
       <div className='flex justify-between'>
-        <AuctionPlayersList selectedTab={selectedTab} />
+        <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
         <LastAuctionPlayerCard></LastAuctionPlayerCard>
       </div>
     </div>

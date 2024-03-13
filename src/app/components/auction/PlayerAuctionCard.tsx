@@ -19,7 +19,7 @@ function PlayerAuctionCard() {
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
   if (!auctionPlayer) return <></>
-  const playerEntity = auctionPlayer.data
+  const playerEntity = auctionPlayer.player
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
