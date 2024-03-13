@@ -19,9 +19,10 @@ import { useRouter } from 'next/navigation'
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
   { key: 'name', label: 'Players', type: 'string' },
+  { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'basePrice', label: 'Base Price', type: 'number' },
   { key: 'role', label: 'Role', type: 'number' },
-  { key: 'isSold', label: 'Auction Status', type: 'number' },
+  { key: 'soldStatus', label: 'Auction Status', type: 'number' },
 ]
 
 type AuctionPlayersListProps = {
@@ -31,10 +32,10 @@ type AuctionPlayersListProps = {
 function AuctionPlayersList(props: AuctionPlayersListProps) {
   const router = useRouter()
   const { activeTournament } = useTournament()
-  const { playersList, setPlayersList, setActiveCategory } = useAuction()
+  const { playersList, setPlayersList, setActiveCategory, lastAuctionPlayer } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
-  const PLAYERS_URL = `${PLAYERS.PLAYERS}/${activeTournament?.tournamentId}/${PLAYERS.GET_AUCTION_PLAYERS_URL}${playerSetType}`
+  const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${playerSetType}`
 
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
   const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =
@@ -79,13 +80,13 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   }
 
   return (
-    <div className='p-5'>
+    <div className='p-5 w-[70%]'>
       <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
         {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
       </div>
-      <CricTable headerList={headersList} rowList={tableData} />
+      <CricTable headerList={headersList} rowList={tableData} fullWidth={false} />
       <div className='flex justify-center pt-16'>
-        {activeTournament?.isHost && (
+        {activeTournament?.isHost && !lastAuctionPlayer && (
           <CricButton
             startIcon={<FlagIcon />}
             onClick={() => beginAuction()}

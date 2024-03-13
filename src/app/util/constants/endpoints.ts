@@ -24,10 +24,10 @@ export const TEAMS = {
 export const PLAYERS = {
   PLAYERS: 'players',
   GET_ALL_URL: 'players',
-  GET_AUCTION_PLAYERS_URL: 'auction?category=',
+  GET_AUCTION_PLAYERS_URL: 'players/tournamentId/auction?category=',
+  LAST_AUCTIONED_URL: 'players/tournaments/tournamentId/last-auctioned-player',
 }
 
 export const ROOSTER = {
-  LAST_AUCTIONED_URL: 'roosters/getLastAuctioned',
   GET_RANDOM_PLAYER_URL: 'roosters/getRandom?key=category&value=',
 }

@@ -52,6 +52,7 @@ function TeamList() {
         rowList={tableData}
         defOrder={'desc'}
         defOrderBy={'tournamentPoints'}
+        fullWidth={false}
       />
     </div>
   )
