@@ -12,6 +12,8 @@ export const COLORS = {
   darkGray: '#808080',
   gray: '#c8c8c8',
   lightRed: '#ff7373',
+  sold: '#10b981',
+  unsold: '#e11d48',
   statusBg: {
     upcoming: '#eb006eb3',
     preauction: '#0042ebb5',

@@ -34,7 +34,7 @@ function LastAuctionPlayerCard() {
   }
 
   return (
-    <div className='rounded-lg shadow-lg flex flex-col items-center p-5 w-[30%]'>
+    <div className='rounded-lg shadow-lg flex flex-col items-center p-5 w-[30%] h-fit'>
       <div className='p-5 text-lg font-bold'>Last Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
@@ -51,15 +51,17 @@ function LastAuctionPlayerCard() {
             className='-rotate-11'
           />
         </div>
-        <div className='flex items-center gap-2'>
-          <AutoAwesomeIcon
-            style={{ color: COLORS.cricPrimary, display: 'flex', alignItems: 'flex-start' }}
-          />
+        <div className='flex items-center gap-4'>
+          <div className='flex self-start'>
+            <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
+          </div>
           <div className='flex flex-col items-center'>
-            <div>{playerData.teamName}</div>
+            <div className='text-lg'>{playerData.teamName}</div>
             <div>{biddingString(playerData.soldAmount)}</div>
           </div>
-          <AutoAwesomeIcon style={{ color: COLORS.cricPrimary }} />
+          <div className='flex self-end'>
+            <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
+          </div>
         </div>
 
         <CricButton

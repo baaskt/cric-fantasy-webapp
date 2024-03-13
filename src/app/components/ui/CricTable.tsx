@@ -80,6 +80,7 @@ const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: bool
       fullwidth={fullWidth ? fullWidth.toString() : ''}
       component='th'
       scope='row'
+      style={{ color: cell.color }}
       align={
         cell.cellType === 'number' || cell.cellType === 'icon' || cell.cellType === 'list'
           ? 'center'
@@ -113,7 +114,8 @@ function CricTable(props: CricTableProps) {
 
   return (
     <Paper sx={{ overflow: 'scroll' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      {/* <TableContainer sx={{ maxHeight: 440 }}> */}
+      <TableContainer>
         <Table stickyHeader aria-label='customized table'>
           <CricTableHead
             headerList={headerList}
