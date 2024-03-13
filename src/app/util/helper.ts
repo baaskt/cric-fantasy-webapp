@@ -147,6 +147,12 @@ export const prepareAuctionPlayersTable = (
         cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
+        color:
+          playerData[cellKey] === SoldStatus.SOLD
+            ? COLORS.sold
+            : playerData[cellKey] === SoldStatus.UNSOLD
+              ? COLORS.unsold
+              : '',
       }
       rowData.push(tableCell)
     })

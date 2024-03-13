@@ -14,6 +14,7 @@ export type CricTableCell = {
   cellKey: string
   cellType: string
   value: string | string[] | number | null | undefined
+  color?: string
 }
 
 export interface KeyValueType {
