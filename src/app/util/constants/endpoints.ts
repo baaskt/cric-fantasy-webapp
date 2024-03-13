@@ -27,6 +27,7 @@ export const PLAYERS = {
   GET_AUCTION_PLAYERS_URL: 'players/tournamentId/auction?category=',
   LAST_AUCTIONED_URL: 'players/tournaments/tournamentId/last-auctioned-player',
   GET_RANDOM_PLAYER_URL: 'players/tournamentId/random?key=category&value=',
+  SELL_PLAYER: 'players/playerId/tournaments/tournamentId/sell',
 }
 
 export const ROOSTER = {}

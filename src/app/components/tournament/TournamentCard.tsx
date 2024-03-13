@@ -6,14 +6,18 @@ import EventIcon from '@mui/icons-material/Event'
 import IconMenu from '../IconMenu'
 import PlaceIcon from '@mui/icons-material/Place'
 import TournamentStatus from './TournamentStatus'
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import TournamentAction from './TournamentAction'
+import { useTournament } from '@/providers/TournamentProvider'
+import { useRouter } from 'next/navigation'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
 }
 
 const TournamentCard = (props: TournamentCardProps) => {
+  const { markActiveTournament } = useTournament()
+  const router = useRouter()
   const tournamentData: TournamentEntity = props.tournamentData
   const {
     imgUrl,
@@ -22,12 +26,23 @@ const TournamentCard = (props: TournamentCardProps) => {
     tournamentEndDate,
     tournamentLocation,
     tournamentStatus,
+    tournamentId,
   } = tournamentData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
 
+  const viewTournament = (event: MouseEvent<HTMLDivElement>) => {
+    // event.stopPropagation()
+    console.log(event)
+    markActiveTournament(tournamentData)
+    router.push(`${'tournaments'}/${tournamentId}/dashboard`)
+  }
+
   return (
-    <div className='card flex flex-row justify-between'>
+    <div
+      className='card flex flex-row justify-between cursor-pointer'
+      onClick={e => viewTournament(e)}
+    >
       <div className='flex flex-row'>
         <Image
           src={imgSrc}

@@ -7,11 +7,14 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import React, { useState } from 'react'
 
 const tabOptions: OptionsEntity[] = [
-  { id: 1, label: 'Marquee Players', value: 'marquee' },
-  { id: 2, label: 'Batsman', value: 'batter' },
-  { id: 3, label: 'Bowler', value: 'bowler' },
-  { id: 4, label: 'All Rounder', value: 'all-rounder' },
-  { id: 5, label: 'Wicket Keeper', value: 'wicket-keeper' },
+  { id: 1, label: 'Marquee', value: 'MARQUEE' },
+  { id: 2, label: 'Star A', value: 'STAR-A' },
+  { id: 3, label: 'Star B', value: 'STAR-B' },
+  { id: 4, label: 'Capped A', value: 'CAPPED-A' },
+  { id: 5, label: 'Capped B', value: 'CAPPED-B' },
+  { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
+  { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
+  { id: 7, label: 'Youngsters', value: 'YOUNGSTERS' },
 ]
 
 function Auction() {
