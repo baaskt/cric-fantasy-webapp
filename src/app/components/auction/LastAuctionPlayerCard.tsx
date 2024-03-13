@@ -12,9 +12,17 @@ import { useAuction } from '@/providers/AuctionProvider'
 import { biddingString } from '@/util/bidding'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { COLORS } from '@/util/colors'
+import { useRouter } from 'next/navigation'
+import { OptionsEntity } from '@/model/entities/options.interface'
 
-function LastAuctionPlayerCard() {
-  const { setLastAuctionplayer } = useAuction()
+type LastAuctionPlayerCardProps = {
+  categories: OptionsEntity[]
+}
+
+function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
+  const { categories } = props
+  const { setActiveCategory, setLastAuctionplayer } = useAuction()
+  const router = useRouter()
   const lastauctionPlayerRequest = useRequest(
     PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496'),
   )
@@ -26,11 +34,25 @@ function LastAuctionPlayerCard() {
   useEffect(() => {
     if (lastauctionPlayerResponse?.result) {
       setLastAuctionplayer(lastauctionPlayerResponse.result)
+      findActiveCategory(lastauctionPlayerResponse.result)
     }
   }, [setLastAuctionplayer, lastauctionPlayerResponse])
 
   if (!playerData) {
     return <></>
+  }
+
+  const findActiveCategory = (lastAuctionPlayer: LastAuctionPlayerEntity) => {
+    if (lastAuctionPlayer.completedAuctionCategories?.length) {
+      console.log('')
+    } else {
+      setActiveCategory(categories[0].value || '')
+    }
+  }
+
+  const continueAuction = () => {
+    const redirectUrl = 'auction/board'
+    router.push(redirectUrl)
   }
 
   return (
@@ -67,7 +89,7 @@ function LastAuctionPlayerCard() {
         <CricButton
           startIcon={<PlayArrowOutlinedIcon />}
           isFullWidth={true}
-          onClick={() => {}}
+          onClick={() => continueAuction()}
           btnTxt={`Continue auction for ${'marquee'} players`}
         ></CricButton>
       </div>

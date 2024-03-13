@@ -14,7 +14,7 @@ const tabOptions: OptionsEntity[] = [
   { id: 5, label: 'Capped B', value: 'CAPPED-B' },
   { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
   { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
-  { id: 7, label: 'Youngsters', value: 'YOUNGSTERS' },
+  { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
 ]
 
 function Auction() {
@@ -31,7 +31,7 @@ function Auction() {
       </div>
       <div className='flex justify-between'>
         <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
-        <LastAuctionPlayerCard></LastAuctionPlayerCard>
+        <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
       </div>
     </div>
   )

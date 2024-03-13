@@ -33,7 +33,7 @@ type AuctionPlayersListProps = {
 function AuctionPlayersList(props: AuctionPlayersListProps) {
   const router = useRouter()
   const { activeTournament } = useTournament()
-  const { playersList, setPlayersList, setActiveCategory, lastAuctionPlayer } = useAuction()
+  const { playersList, setPlayersList, lastAuctionPlayer } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
   const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${playerSetType}`
@@ -74,7 +74,6 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   }
 
   const beginAuction = () => {
-    setActiveCategory(props.selectedTab.value || '')
     const redirectUrl = 'auction/board'
     router.push(redirectUrl)
   }

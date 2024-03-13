@@ -9,4 +9,5 @@ export interface LastAuctionPlayerEntity {
   soldStatus: string
   teamId: string
   teamName: string
+  completedAuctionCategories: string[]
 }

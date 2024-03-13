@@ -14,6 +14,8 @@ import { PLAYERS } from '@/util/constants/endpoints'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { useRouter } from 'next/navigation'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -21,13 +23,22 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 function PlayerAuctionCard() {
+  const { activeTournament } = useTournament()
   const { auctionPlayer, highestBidder } = useAuction()
+  const router = useRouter()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
-  const unsoldPlayerRequest = useMutateRequest(PLAYERS.SELL_PLAYER, HttpMethod.PUT)
-
+  const unsoldPlayerRequest = useMutateRequest(
+    auctionPlayer?.player && auctionPlayer.player.playerId
+      ? PLAYERS.SELL_PLAYER.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496').replace(
+          'playerId',
+          auctionPlayer?.player.playerId.toString(),
+        )
+      : '',
+    HttpMethod.PUT,
+  )
   if (!auctionPlayer) return <></>
-  const playerEntity = auctionPlayer.player
+  const playerEntity = auctionPlayer?.player
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
@@ -39,9 +50,9 @@ function PlayerAuctionCard() {
 
   const setPlayerUnsold = async () => {
     const payload: SellPlayerRequest = {
+      soldStatus: SoldStatus.UNSOLD,
       teamId: '',
       soldAmount: 0,
-      soldStatus: SoldStatus.UNSOLD,
       teamMaxBid: [],
     }
     try {
@@ -52,7 +63,7 @@ function PlayerAuctionCard() {
     } catch (e) {
       console.log(e)
     } finally {
-      // router.push('/tournaments')
+      router.push(`${'/tournaments/'}${activeTournament?.tournamentId}${'/auction'}`)
     }
   }
 
