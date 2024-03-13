@@ -35,6 +35,7 @@ export default function CricButton(props: CricButtonProps) {
   return (
     <ThemeProvider theme={btnTheme}>
       <Button
+        id='cric-btn'
         startIcon={startIcon}
         color={'primary'}
         variant='contained'

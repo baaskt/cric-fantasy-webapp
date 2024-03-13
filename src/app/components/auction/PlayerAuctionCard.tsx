@@ -8,6 +8,14 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { STATS } from '@/util/constants/constants'
 import { useAuction } from '@/providers/AuctionProvider'
+import { SellPlayerRequest } from '@/model/request/sell-player-request.type'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { PLAYERS } from '@/util/constants/endpoints'
+import { HttpMethod } from '@/model/enum/http-method.enum'
+import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { useRouter } from 'next/navigation'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -15,14 +23,48 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 function PlayerAuctionCard() {
+  const { activeTournament } = useTournament()
   const { auctionPlayer, highestBidder } = useAuction()
+  const router = useRouter()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
+  const unsoldPlayerRequest = useMutateRequest(
+    auctionPlayer?.player && auctionPlayer.player.playerId
+      ? PLAYERS.SELL_PLAYER.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496').replace(
+          'playerId',
+          auctionPlayer?.player.playerId.toString(),
+        )
+      : '',
+    HttpMethod.PUT,
+  )
   if (!auctionPlayer) return <></>
-  const playerEntity = auctionPlayer.data
+  const playerEntity = auctionPlayer?.player
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
+  }
+
+  const handleUnSoldPlayer = () => {
+    void setPlayerUnsold()
+  }
+
+  const setPlayerUnsold = async () => {
+    const payload: SellPlayerRequest = {
+      soldStatus: SoldStatus.UNSOLD,
+      teamId: '',
+      soldAmount: 0,
+      teamMaxBid: [],
+    }
+    try {
+      const response: CricResponse<string> = (await unsoldPlayerRequest.trigger(
+        payload as never,
+      )) as CricResponse<string>
+      console.log(response)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      router.push(`${'/tournaments/'}${activeTournament?.tournamentId}${'/auction'}`)
+    }
   }
 
   return (
@@ -39,7 +81,7 @@ function PlayerAuctionCard() {
             btnTxt='Mark as unsold'
             startIcon={<NotInterestedIcon />}
             bgColor={COLORS.lightRed}
-            onClick={() => {}}
+            onClick={() => handleUnSoldPlayer()}
           ></CricButton>
         )}
       </div>

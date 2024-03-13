@@ -1,5 +1,5 @@
 export interface PlayerRandomEntity {
-  data: PlayerEntity
+  player: PlayerEntity
   isLastItem: boolean
 }
 

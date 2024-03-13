@@ -13,6 +13,7 @@ const totalRoutes = [...authRoutes, ...protectedRoutes]
 
 export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
+  console.log(pathName)
   const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
   // const tournamentId = cookies().get('tournamentId')?.value

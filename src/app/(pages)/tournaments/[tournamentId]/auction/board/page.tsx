@@ -8,12 +8,12 @@ import { PlayerRandomEntity } from '@/model/response/player-response.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useAuction } from '@/providers/AuctionProvider'
 import { PLAYER } from '@/util/constants/constants'
-import { ROOSTER } from '@/util/constants/endpoints'
+import { PLAYERS } from '@/util/constants/endpoints'
 import React, { useEffect } from 'react'
 
 function AuctionTable() {
   const { activeCategory, setAuctionPlayer } = useAuction()
-  const RANDOM_PLAYER_URL = `${ROOSTER.GET_RANDOM_PLAYER_URL}${activeCategory}`
+  const RANDOM_PLAYER_URL = `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${activeCategory}`
 
   const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL)
   const randomPlayerResponse: CricResponse<PlayerRandomEntity> =
@@ -31,7 +31,7 @@ function AuctionTable() {
     return <p>Error: {randomPlayerResponse?.error}</p>
   }
 
-  if (!randomPlayerResponse?.result?.data) {
+  if (!randomPlayerResponse?.result?.player) {
     return <p className='p-5'>Auction ended</p>
   }
 
