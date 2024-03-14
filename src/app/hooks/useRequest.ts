@@ -1,13 +1,14 @@
 import { getFetcher } from '@/lib/apiHelper'
 import useSWR from 'swr'
 
-export function useRequest(url: string) {
-  const { data, error, isLoading } = useSWR<unknown, Error | undefined>(
+export function useRequest(url: string, noCache?: boolean) {
+  const { data, error, isLoading, isValidating, mutate } = useSWR<unknown, Error | undefined>(
     url,
     () => getFetcher(url),
     {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
+      revalidateOnMount: noCache ? true : undefined,
+      revalidateOnFocus: noCache ? false : false,
+      revalidateIfStale: noCache ? false : false,
     },
   )
 
@@ -15,5 +16,7 @@ export function useRequest(url: string) {
     data: data,
     isLoading,
     error,
+    mutate,
+    isValidating,
   }
 }

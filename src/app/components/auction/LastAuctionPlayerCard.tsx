@@ -14,6 +14,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { COLORS } from '@/util/colors'
 import { useRouter } from 'next/navigation'
 import { OptionsEntity } from '@/model/entities/options.interface'
+import { NO_CACHE } from '@/util/constants/constants'
+import { useTournament } from '@/providers/TournamentProvider'
 
 type LastAuctionPlayerCardProps = {
   categories: OptionsEntity[]
@@ -21,10 +23,12 @@ type LastAuctionPlayerCardProps = {
 
 function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   const { categories } = props
-  const { setActiveCategory, setLastAuctionplayer } = useAuction()
+  const { activeCategory, setActiveCategory, setLastAuctionplayer } = useAuction()
+  const { setSubTitle } = useTournament()
   const router = useRouter()
   const lastauctionPlayerRequest = useRequest(
     PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496'),
+    NO_CACHE,
   )
   const lastauctionPlayerResponse: CricResponse<LastAuctionPlayerEntity> =
     lastauctionPlayerRequest.data as CricResponse<LastAuctionPlayerEntity>
@@ -46,7 +50,9 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
     if (lastAuctionPlayer.completedAuctionCategories?.length) {
       console.log('')
     } else {
-      setActiveCategory(categories[0].value || '')
+      const activeCategory = categories[0]
+      setSubTitle(activeCategory.label)
+      setActiveCategory(activeCategory)
     }
   }
 
@@ -73,24 +79,25 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             className='-rotate-11'
           />
         </div>
-        <div className='flex items-center gap-4'>
-          <div className='flex self-start'>
-            <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
+        {playerData.soldAmount > 0 && playerData.teamName && (
+          <div className='flex items-center gap-4'>
+            <div className='flex self-start'>
+              <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
+            </div>
+            <div className='flex flex-col items-center'>
+              <div className='text-lg'>{playerData.teamName}</div>
+              <div>{biddingString(playerData.soldAmount)}</div>
+            </div>
+            <div className='flex self-end'>
+              <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
+            </div>
           </div>
-          <div className='flex flex-col items-center'>
-            <div className='text-lg'>{playerData.teamName}</div>
-            <div>{biddingString(playerData.soldAmount)}</div>
-          </div>
-          <div className='flex self-end'>
-            <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
-          </div>
-        </div>
-
+        )}
         <CricButton
           startIcon={<PlayArrowOutlinedIcon />}
           isFullWidth={true}
           onClick={() => continueAuction()}
-          btnTxt={`Continue auction for ${'marquee'} players`}
+          btnTxt={`Continue auction for ${activeCategory?.label} players`}
         ></CricButton>
       </div>
     </div>

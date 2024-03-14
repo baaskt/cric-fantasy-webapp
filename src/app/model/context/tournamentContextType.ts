@@ -7,4 +7,6 @@ export type TournamentContextType = {
   setTournamentList: (tournamentList: TournamentEntity[]) => void
   addTournament: (newData: TournamentEntity) => void
   updateTournament: (id: string, newData: TournamentEntity) => void
+  subTitle: string
+  setSubTitle: (tournamentList: string) => void
 }

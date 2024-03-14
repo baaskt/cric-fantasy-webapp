@@ -7,15 +7,15 @@ import { useRequest } from '@/hooks/useRequest'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useAuction } from '@/providers/AuctionProvider'
-import { PLAYER } from '@/util/constants/constants'
+import { NO_CACHE, PLAYER } from '@/util/constants/constants'
 import { PLAYERS } from '@/util/constants/endpoints'
 import React, { useEffect } from 'react'
 
 function AuctionTable() {
   const { activeCategory, setAuctionPlayer } = useAuction()
-  const RANDOM_PLAYER_URL = `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${activeCategory}`
+  const RANDOM_PLAYER_URL = `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${activeCategory?.value}`
 
-  const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL)
+  const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL, NO_CACHE)
   const randomPlayerResponse: CricResponse<PlayerRandomEntity> =
     randomPlayerRequest.data as CricResponse<PlayerRandomEntity>
 
@@ -23,7 +23,7 @@ function AuctionTable() {
     if (randomPlayerResponse?.result) setAuctionPlayer(randomPlayerResponse?.result)
   }, [setAuctionPlayer, randomPlayerResponse?.result])
 
-  if (randomPlayerRequest.isLoading) {
+  if (randomPlayerRequest.isValidating) {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 

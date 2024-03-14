@@ -11,6 +11,7 @@ export const TOURNAMENT_ID = 'tournamentId'
 export const TournamentProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeTournament, setActiveTournament] = useState<TournamentEntity>()
   const [tournamentList, setTournamentList] = useState<TournamentEntity[]>([])
+  const [subTitle, setSubTitle] = useState<string>('')
 
   const addTournament = (newData: TournamentEntity) => {
     setTournamentList([...tournamentList, newData])
@@ -38,6 +39,8 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     setTournamentList,
     addTournament,
     updateTournament,
+    subTitle,
+    setSubTitle,
   }
 
   return <Provider value={value}>{children}</Provider>

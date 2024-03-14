@@ -1,20 +1,28 @@
 const oneLakh = 100000
+const fiveLakhs = 500000
 const tenLakhs = 1000000
-const twentyFiveLakhs = 2500000
+const twentyLakhs = 2000000
 const fiftyLakhs = 5000000
 const oneCrore = 10000000
-const tenCrore = 10000000
+const twoCrores = 20000000
+const fiveCrores = 50000000
+const twentyFiveCrores = 250000000
 
-// Upto 1 Cr : 10 Lakhs
-// 1Cr - 10Cr : 25 Lakhs
-// 10Cr+ : 50Lakhs
+// upto 50L - 5L
+// 50L TO 2CR-  10L
+// 2CR to 5CR - 20L
+// 5CR to 25CR - 50L
 export function getBiddingValue(basePrice: number, maxBidPrice: number): number {
+  // if (!maxBidPrice) return basePrice
+  if (maxBidPrice === twentyFiveCrores) return maxBidPrice
   const currentPrice = maxBidPrice ? maxBidPrice : basePrice
-  if (currentPrice < oneCrore) {
+  if (currentPrice < fiftyLakhs) {
+    return currentPrice + fiveLakhs
+  } else if (currentPrice >= fiftyLakhs && currentPrice < twoCrores) {
     return currentPrice + tenLakhs
-  } else if (currentPrice >= oneCrore && currentPrice < tenCrore) {
-    return currentPrice + twentyFiveLakhs
-  } else if (currentPrice >= tenCrore) {
+  } else if (currentPrice >= twoCrores && currentPrice < fiveCrores) {
+    return currentPrice + twentyLakhs
+  } else if (currentPrice >= fiveCrores) {
     return currentPrice + fiftyLakhs
   }
   return 0

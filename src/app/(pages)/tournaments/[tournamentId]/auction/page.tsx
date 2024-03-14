@@ -4,7 +4,8 @@ import AuctionPlayersList from '@/components/auction/AuctionPlayersList'
 import LastAuctionPlayerCard from '@/components/auction/LastAuctionPlayerCard'
 import CricTab from '@/components/ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
-import React, { useState } from 'react'
+import { useAuction } from '@/providers/AuctionProvider'
+import React, { useEffect, useState } from 'react'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Marquee', value: 'MARQUEE' },
@@ -19,6 +20,11 @@ const tabOptions: OptionsEntity[] = [
 
 function Auction() {
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
+  const { updateBiddingList } = useAuction()
+
+  useEffect(() => {
+    updateBiddingList()
+  }, [])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)

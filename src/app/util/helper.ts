@@ -86,12 +86,6 @@ export const getTournamentUserActionConfig = (
       color: COLORS.statusTxt.completed,
       txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
     }
-  } else if ((isHost || isParticipant) && status === (TournamentStatusLabel.InAuction as string)) {
-    actionTheme = {
-      bg: COLORS.statusBg.inprogress,
-      color: COLORS.statusTxt.inprogress,
-      txt: TOURNAMENT.STATUS.ENTER_AUCTION,
-    }
   }
   return actionTheme
 }
