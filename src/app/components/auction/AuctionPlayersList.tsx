@@ -15,6 +15,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
 import { useRouter } from 'next/navigation'
+import { useSWRConfig } from 'swr'
 
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
@@ -38,6 +39,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const playerSetType = props.selectedTab.value
   const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${playerSetType}`
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
+  const { cache } = useSWRConfig()
 
   useEffect(() => {
     if (auctionPlayersRequest?.data) {
@@ -51,9 +53,12 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
 
   useEffect(() => {
     if (playersList) {
+      console.log(cache)
+      console.log(playersList)
+      console.log(props.selectedTab.value)
       prepareTableData(playersList)
     }
-  }, [playersList])
+  }, [playersList, playerSetType])
 
   const prepareTableData = (playersList: AuctionPlayerEntity[]) => {
     if (playersList.length) {

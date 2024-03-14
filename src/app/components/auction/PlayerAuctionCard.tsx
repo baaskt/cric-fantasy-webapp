@@ -42,6 +42,7 @@ function PlayerAuctionCard() {
       : '',
     HttpMethod.PUT,
   )
+
   if (!auctionPlayer) return <></>
   const playerEntity = auctionPlayer?.player
 

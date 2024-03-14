@@ -47,6 +47,9 @@ export default function CricButton(props: CricButtonProps) {
           backgroundColor: bgColor,
           whiteSpace: 'nowrap',
           textAlign: 'center',
+          '&:hover': {
+            backgroundColor: bgColor,
+          },
         }}
         className={!validBtn ? 'btn_shake' : ''}
         disabled={validBtn ? false : true}

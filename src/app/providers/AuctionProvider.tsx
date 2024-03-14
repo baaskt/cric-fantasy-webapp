@@ -64,8 +64,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
       if (
-        sortedBidding[0].amount <= twentyFiveCrores ||
-        (sortedBidding[0].amount > sortedBidding[1].amount &&
+        sortedBidding[0].amount < twentyFiveCrores ||
+        (sortedBidding[0].amount === twentyFiveCrores &&
+          sortedBidding[0].amount >= sortedBidding[1].amount &&
           sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
       ) {
         highestEntity = sortedBidding[0]
@@ -83,8 +84,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
       if (
-        sortedBidding[1]?.amount <= twentyFiveCrores ||
-        (sortedBidding[0].amount > sortedBidding[1].amount &&
+        sortedBidding[1].amount < twentyFiveCrores ||
+        (sortedBidding[1].amount === twentyFiveCrores &&
+          sortedBidding[1].amount >= sortedBidding[0].amount &&
           sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
       ) {
         highestEntity = sortedBidding[1]
