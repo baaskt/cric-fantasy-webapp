@@ -12,7 +12,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
   const { teamName, purseBalance } = props.teamData
   return (
     <div
-      className='flex flex-col items-center w-1/6 cursor-pointer'
+      className='flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0'
       onClick={() => props.onBidding(props.teamData)}
     >
       <div className='flex flex-col items-center'>
@@ -22,7 +22,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         >
           {teamName[0]}
         </div>
-        <div className='flex flex-col items-center p-2'>
+        <div className='flex flex-col items-center p-1'>
           <div>{teamName}</div>
           <div>Balance: {purseBalance}</div>
           <div>( {currencyToString(purseBalance)} )</div>

@@ -33,7 +33,7 @@ type AuctionPlayersListProps = {
 function AuctionPlayersList(props: AuctionPlayersListProps) {
   const router = useRouter()
   const { activeTournament } = useTournament()
-  const { playersList, setPlayersList, lastAuctionPlayer } = useAuction()
+  const { activeCategory, playersList, setPlayersList, lastAuctionPlayer } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
   const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${playerSetType}`
@@ -79,7 +79,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   }
 
   return (
-    <div className='p-5 w-[70%]'>
+    <div className='p-5'>
       <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
         {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
       </div>
@@ -89,7 +89,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
           <CricButton
             startIcon={<FlagIcon />}
             onClick={() => beginAuction()}
-            btnTxt={`Begin auction for ${props.selectedTab.label}`}
+            btnTxt={`Begin auction for ${activeCategory?.label}`}
           ></CricButton>
         )}
       </div>

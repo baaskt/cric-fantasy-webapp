@@ -16,7 +16,7 @@ function PlayerCard(props: PlayerCardProps) {
       <Image src={playerUrl} alt='player profile' width={200} height={220} />
       <div className='p-2 flex flex-col items-center shadow-lg'>
         <div className='text-md font-medium'>{name}</div>
-        <div className='text-sm font-normal'>{role}</div>
+        <div className='text-sm font-normal text-slate-500'>{role}</div>
       </div>
     </div>
   )

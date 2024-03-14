@@ -79,7 +79,9 @@ function PlayerAuctionCard() {
             Base Price
           </div>
         </div>
-        <div className='mt-5 text-base whitespace-nowrap'>{playerEntity.clubName}</div>
+        <div className='mt-5 text-base whitespace-nowrap italic text-slate-500'>
+          {playerEntity.clubName}
+        </div>
       </div>
       <div className='pl-5 pr-5 flex flex-col items-center'>
         <CricTab optionList={tabOptions} onChange={handleChange} />

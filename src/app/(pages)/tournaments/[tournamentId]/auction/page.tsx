@@ -20,7 +20,7 @@ const tabOptions: OptionsEntity[] = [
 
 function Auction() {
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
-  const { updateBiddingList } = useAuction()
+  const { lastAuctionPlayer, updateBiddingList } = useAuction()
 
   useEffect(() => {
     updateBiddingList()
@@ -36,8 +36,12 @@ function Auction() {
         <CricTab optionList={tabOptions} onChange={handleChange} />
       </div>
       <div className='flex justify-between'>
-        <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
-        <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
+        <div className={`${lastAuctionPlayer ? 'w-[70%]' : 'w-full'}`}>
+          <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+        </div>
+        <div className={`${lastAuctionPlayer ? 'w-[30%]' : 'w-0'}`}>
+          <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
+        </div>
       </div>
     </div>
   )

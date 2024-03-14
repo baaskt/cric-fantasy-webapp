@@ -35,6 +35,16 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   const playerData: LastAuctionPlayerEntity | undefined =
     lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result
 
+  const setDefaultCategory = () => {
+    const activeCategory = categories[0]
+    setSubTitle(activeCategory.label)
+    setActiveCategory(activeCategory)
+  }
+
+  useEffect(() => {
+    setDefaultCategory()
+  }, [])
+
   useEffect(() => {
     if (lastauctionPlayerResponse?.result) {
       setLastAuctionplayer(lastauctionPlayerResponse.result)
@@ -50,9 +60,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
     if (lastAuctionPlayer.completedAuctionCategories?.length) {
       console.log('')
     } else {
-      const activeCategory = categories[0]
-      setSubTitle(activeCategory.label)
-      setActiveCategory(activeCategory)
+      setDefaultCategory()
     }
   }
 
@@ -62,7 +70,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   }
 
   return (
-    <div className='rounded-lg shadow-lg flex flex-col items-center p-5 w-[30%] h-fit'>
+    <div className='rounded-lg shadow-lg flex flex-col items-center p-5 h-fit'>
       <div className='p-5 text-lg font-bold'>Last Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
