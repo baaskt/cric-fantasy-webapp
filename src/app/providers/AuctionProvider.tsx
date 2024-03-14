@@ -4,6 +4,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
+import { twentyFiveCrores } from '@/util/bidding'
 import React, { createContext, useContext, useState } from 'react'
 
 const ListContext = createContext<AuctionContextType>({} as AuctionContextType)
@@ -54,18 +55,41 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
 
   const updateHighestBidder = (newBiddingList: BiddingEntity[]) => {
     let highestEntity
-    if (newBiddingList.length === 0) highestEntity = null
-    highestEntity = newBiddingList.reduce((prev, current) => {
-      return prev.amount > current.amount ? prev : current
-    })
+    if (newBiddingList.length === 0) {
+      highestEntity = null
+    } else if (newBiddingList.length === 1) {
+      highestEntity = newBiddingList[0]
+    } else {
+      const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
+      if (
+        sortedBidding[0].amount <= twentyFiveCrores ||
+        (sortedBidding[0].amount > sortedBidding[1].amount &&
+          sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
+      ) {
+        highestEntity = sortedBidding[0]
+      } else {
+        highestEntity = sortedBidding[1]
+      }
+    }
     setHighestBidder(highestEntity)
   }
 
   const updateSecondHighestBidder = (newBiddingList: BiddingEntity[]) => {
     let highestEntity
-    if (newBiddingList.length < 2) highestEntity = null
-    const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
-    highestEntity = sortedBidding[1]
+    if (newBiddingList.length < 2) {
+      highestEntity = null
+    } else {
+      const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
+      if (
+        sortedBidding[1]?.amount <= twentyFiveCrores ||
+        (sortedBidding[0].amount > sortedBidding[1].amount &&
+          sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
+      ) {
+        highestEntity = sortedBidding[1]
+      } else {
+        highestEntity = sortedBidding[0]
+      }
+    }
     setSecondHighestBidder(highestEntity)
   }
 

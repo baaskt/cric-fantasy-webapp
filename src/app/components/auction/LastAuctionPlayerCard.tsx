@@ -9,7 +9,7 @@ import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
 import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
 import { useAuction } from '@/providers/AuctionProvider'
-import { biddingString } from '@/util/bidding'
+import { currencyToString } from '@/util/bidding'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { COLORS } from '@/util/colors'
 import { useRouter } from 'next/navigation'
@@ -86,7 +86,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             </div>
             <div className='flex flex-col items-center'>
               <div className='text-lg'>{playerData.teamName}</div>
-              <div>{biddingString(playerData.soldAmount)}</div>
+              <div>{currencyToString(playerData.soldAmount)}</div>
             </div>
             <div className='flex self-end'>
               <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />

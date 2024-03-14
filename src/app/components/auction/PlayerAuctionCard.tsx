@@ -16,6 +16,7 @@ import { SoldStatus } from '@/model/enum/sold-status.enum'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useRouter } from 'next/navigation'
 import { useTournament } from '@/providers/TournamentProvider'
+import { currencyToString } from '@/util/bidding'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -73,21 +74,28 @@ function PlayerAuctionCard() {
         <PlayerCard playerData={playerEntity}></PlayerCard>
         <div className='mt-5 flex flex-col items-center'>
           <div className='text-2xl'>{playerEntity.basePrice}</div>
-          <div className='text-sm'>Base Price</div>
+          <div>( {currencyToString(playerEntity.basePrice)} )</div>
+          <div style={{ color: COLORS.cricPrimary }} className='text-md mt-2'>
+            Base Price
+          </div>
         </div>
-        <div className='mt-5 text-base'>{playerEntity.intlTeam}</div>
-        {!highestBidder?.amount && (
-          <CricButton
-            btnTxt='Mark as unsold'
-            startIcon={<NotInterestedIcon />}
-            bgColor={COLORS.lightRed}
-            onClick={() => handleUnSoldPlayer()}
-          ></CricButton>
-        )}
+        <div className='mt-5 text-base whitespace-nowrap'>{playerEntity.clubName}</div>
       </div>
-      <div className='pl-5 pr-5'>
+      <div className='pl-5 pr-5 flex flex-col items-center'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
         <PlayerStats title={selectedTab.id as string} playerData={playerEntity}></PlayerStats>
+        {!highestBidder?.amount && (
+          <div className='mt-5'>
+            <CricButton
+              btnTxt='Mark as unsold'
+              startIcon={<NotInterestedIcon />}
+              bgColor={COLORS.lightRed}
+              onClick={() => handleUnSoldPlayer()}
+              isLoading={unsoldPlayerRequest.isMutating}
+              isFullWidth={true}
+            ></CricButton>
+          </div>
+        )}
       </div>
     </>
   )

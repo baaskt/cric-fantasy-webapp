@@ -4,13 +4,12 @@ import { CricMenuEntity } from '@/model/types/cric-menu.type'
 import { COLORS } from '@/util/colors'
 
 type StatCardProps = {
-  title?: string
-  subTitle?: string
+  title: string
   menuList: CricMenuEntity[]
 }
 
 function StatCard(props: StatCardProps) {
-  const { title, subTitle, menuList } = props
+  const { title, menuList } = props
 
   const renderMenuItem = (menu: CricMenuEntity, menuIndex: number) => {
     const MenuIcon = menu.icon
@@ -28,8 +27,7 @@ function StatCard(props: StatCardProps) {
 
   return (
     <div>
-      <div className='text-lg text-center'>{title}</div>
-      <div className='text-sm'>{subTitle}</div>
+      <div className='text-sm text-center'>{title}</div>
       {menuList?.map((menu, menuIndex) => renderMenuItem(menu, menuIndex))}
     </div>
   )

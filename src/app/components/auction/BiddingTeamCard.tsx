@@ -1,5 +1,5 @@
 import { TeamEntity } from '@/model/response/team.interface'
-import { biddingString } from '@/util/bidding'
+import { currencyToString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
 import React from 'react'
 
@@ -25,7 +25,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         <div className='flex flex-col items-center p-2'>
           <div>{teamName}</div>
           <div>Balance: {purseBalance}</div>
-          <div>( {biddingString(purseBalance)} )</div>
+          <div>( {currencyToString(purseBalance)} )</div>
         </div>
       </div>
     </div>

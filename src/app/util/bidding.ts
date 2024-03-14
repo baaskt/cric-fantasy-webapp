@@ -6,14 +6,14 @@ const fiftyLakhs = 5000000
 const oneCrore = 10000000
 const twoCrores = 20000000
 const fiveCrores = 50000000
-const twentyFiveCrores = 250000000
+export const twentyFiveCrores = 250000000
 
 // upto 50L - 5L
 // 50L TO 2CR-  10L
 // 2CR to 5CR - 20L
 // 5CR to 25CR - 50L
 export function getBiddingValue(basePrice: number, maxBidPrice: number): number {
-  // if (!maxBidPrice) return basePrice
+  if (!maxBidPrice) return basePrice
   if (maxBidPrice === twentyFiveCrores) return maxBidPrice
   const currentPrice = maxBidPrice ? maxBidPrice : basePrice
   if (currentPrice < fiftyLakhs) {
@@ -28,14 +28,14 @@ export function getBiddingValue(basePrice: number, maxBidPrice: number): number 
   return 0
 }
 
-export function biddingString(biddingPrice: number): string {
+export function currencyToString(biddingPrice: number): string {
   let budgetString = ''
   if (biddingPrice >= oneCrore) {
     const currencyValue = biddingPrice / oneCrore
-    budgetString = `${currencyValue}${currencyValue > 1 ? ' crores' : ' crore'}`
+    budgetString = `${currencyValue}${currencyValue > 1 ? ' Crores' : ' Crore'}`
   } else if (biddingPrice >= oneLakh) {
     const currencyValue = biddingPrice / oneLakh
-    budgetString = `${currencyValue}${currencyValue > 1 ? ' lakhs' : ' lakh'}`
+    budgetString = `${currencyValue}${currencyValue > 1 ? ' Lakhs' : ' Lakh'}`
   }
   return budgetString
 }

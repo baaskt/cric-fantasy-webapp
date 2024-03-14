@@ -12,6 +12,7 @@ import {
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { currencyToString } from './bidding'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -131,12 +132,7 @@ export const prepareAuctionPlayersTable = (
     headersList.forEach((headerEntity: CricHeaderRow) => {
       const cellKey = headerEntity.key
       const cellType = headerEntity.type
-      const cellValue =
-        cellKey === 'sno'
-          ? playerIndex + 1
-          : cellKey === 'soldStatus' && playerData[cellKey] === SoldStatus.NOT_AUCTIONED
-            ? 'To be auctioned'
-            : playerData[cellKey]
+      const cellValue = getPlayerCellValue(playerData, cellKey, playerIndex)
       const tableCell: CricTableCell = {
         cellKey: cellKey,
         cellType: cellType,
@@ -156,6 +152,20 @@ export const prepareAuctionPlayersTable = (
     })
   })
   return tempTableData
+}
+
+const getPlayerCellValue = (playerData: KeyValueType, cellKey: string, playerIndex: number) => {
+  let cellValue
+  if (cellKey === 'sno') {
+    cellValue = playerIndex + 1
+  } else if (cellKey === 'soldStatus' && playerData[cellKey] === SoldStatus.NOT_AUCTIONED) {
+    cellValue = 'To be auctioned'
+  } else if (cellKey === 'basePrice') {
+    cellValue = currencyToString(Number(playerData[cellKey]))
+  } else {
+    cellValue = playerData[cellKey]
+  }
+  return cellValue
 }
 
 export const prepareTeamTable = (
@@ -182,7 +192,6 @@ export const prepareTeamTable = (
       dataList: rowData,
     })
   })
-  console.log(tempTableData)
   return tempTableData
 }
 
@@ -194,7 +203,15 @@ const getTeamCellValue = (
   teamEntity: TeamEntity,
 ) => {
   const teamData = teamEntity as never as KeyValueType
-  const cellValue =
-    cellType === 'icon' ? iconPath : cellKey === 'pos' ? teamIndex + 1 : teamData[cellKey]
+  let cellValue
+  if (cellType === 'icon') {
+    cellValue = iconPath
+  } else if (cellKey === 'pos') {
+    cellValue = teamIndex + 1
+  } else if (cellKey === 'purseBalance') {
+    cellValue = currencyToString(Number(teamData[cellKey]))
+  } else {
+    cellValue = teamData[cellKey]
+  }
   return cellValue
 }

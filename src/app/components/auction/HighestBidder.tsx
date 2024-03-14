@@ -1,5 +1,5 @@
 import { useAuction } from '@/providers/AuctionProvider'
-import { biddingString } from '@/util/bidding'
+import { currencyToString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
 import React from 'react'
 import CricButton from '../ui/CricButton'
@@ -18,10 +18,10 @@ function HighestBidder() {
           <div className='ml-5 mr-5 p-2 rounded-b-xl text-sm bg-amber-300 text-black'>
             Highest Bidder
           </div>
-          <div>
+          <div className='p-3'>
             <div className='mt-5'>{highestBidder.teamName}</div>
             <div className='mt-3 text-2xl font-bold'>₹ {highestBidder.amount}</div>
-            <div className='text-md'>( {biddingString(highestBidder.amount)} )</div>
+            <div className='text-md'>( {currencyToString(highestBidder.amount)} )</div>
           </div>
         </div>
         <div className='p-2 mt-5 flex justify-center'>
