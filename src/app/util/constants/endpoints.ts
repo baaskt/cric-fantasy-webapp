@@ -9,6 +9,7 @@ export const USERS = {
 
 export const TOURNAMENTS = {
   GET_ALL_URL: 'tournaments?all=',
+  GET_BY_ID_URL: 'tournaments/tournamentId',
   CREATE_URL: 'tournaments',
   UPDATE_STATUS_URL: 'tournaments',
   ADD_HOST: 'tournaments/addHost',

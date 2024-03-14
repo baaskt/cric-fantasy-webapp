@@ -19,6 +19,11 @@ export const auth = () => {
     return refreshToken ? refreshToken : ''
   }
 
+  function getTournamentId(): string {
+    const tournamentId = cookieHelper().getCookieItem(TOURNAMENT_ID)
+    return tournamentId ? tournamentId : ''
+  }
+
   function setAuthCred(authCred: LoginResponse): void {
     cookieHelper().setCookieItem(ACCESS_TOKEN, authCred.accessToken)
     cookieHelper().setCookieItem(REFRESH_TOKEN, authCred.refreshToken)
@@ -44,6 +49,7 @@ export const auth = () => {
   return {
     getAccessToken,
     getRefreshToken,
+    getTournamentId,
     setAuthCred,
     clearAuthCred,
     refreshAccessToken,
