@@ -2,7 +2,7 @@ import { AuctionContextType } from '@/model/context/auctionContextType'
 import { BiddingEntity } from '@/model/entities/bidding.interface'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
-import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
+import { LastAuctionPlayerDetailEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
 import { twentyFiveCrores } from '@/util/bidding'
 import React, { createContext, useContext, useState } from 'react'
@@ -14,12 +14,13 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [playersList, setPlayersList] = useState<AuctionPlayerEntity[]>([])
   const [activeCategory, setActiveCategory] = useState<OptionsEntity>()
   const [auctionPlayer, setAuctionPlayer] = useState<PlayerRandomEntity>()
-  const [lastAuctionPlayer, setLastAuctionplayer] = useState<LastAuctionPlayerEntity>()
+  const [lastAuctionPlayer, setLastAuctionplayer] = useState<LastAuctionPlayerDetailEntity>()
   const [biddingList, setBiddingList] = useState<BiddingEntity[]>([])
   const [highestBidder, setHighestBidder] = useState<BiddingEntity | null>(null)
   const [secondHighestBidder, setSecondHighestBidder] = useState<BiddingEntity | null>(null)
+  const [isAuctionCompleted, setAuctionCompleted] = useState<boolean>(false)
 
-  const updatePlayer = (id: number, newData: AuctionPlayerEntity) => {
+  const updatePlayer = (id: number, newData: AuctionPlayerEntity): AuctionPlayerEntity[] => {
     const updatedList = playersList.map((item: AuctionPlayerEntity) => {
       if (item.playerId === id) {
         return { ...item, ...newData }
@@ -27,6 +28,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
       return item
     })
     setPlayersList(updatedList)
+    return updatedList
   }
 
   const updateBiddingList = (newData?: BiddingEntity) => {
@@ -62,8 +64,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
       if (
-        sortedBidding[0].amount <= twentyFiveCrores ||
-        (sortedBidding[0].amount > sortedBidding[1].amount &&
+        sortedBidding[0].amount < twentyFiveCrores ||
+        (sortedBidding[0].amount === twentyFiveCrores &&
+          sortedBidding[0].amount >= sortedBidding[1].amount &&
           sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
       ) {
         highestEntity = sortedBidding[0]
@@ -81,8 +84,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
       if (
-        sortedBidding[1]?.amount <= twentyFiveCrores ||
-        (sortedBidding[0].amount > sortedBidding[1].amount &&
+        sortedBidding[1].amount < twentyFiveCrores ||
+        (sortedBidding[1].amount === twentyFiveCrores &&
+          sortedBidding[1].amount >= sortedBidding[0].amount &&
           sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
       ) {
         highestEntity = sortedBidding[1]
@@ -107,6 +111,8 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     secondHighestBidder,
     lastAuctionPlayer,
     setLastAuctionplayer,
+    isAuctionCompleted,
+    setAuctionCompleted,
   }
 
   return <Provider value={value}>{children}</Provider>

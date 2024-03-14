@@ -15,6 +15,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
 import { useRouter } from 'next/navigation'
+import { useSWRConfig } from 'swr'
 
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
@@ -37,22 +38,27 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
   const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${playerSetType}`
-
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
-  const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =
-    auctionPlayersRequest.data as CricResponse<AuctionPlayerEntity[]>
+  const { cache } = useSWRConfig()
 
   useEffect(() => {
-    if (auctionPlayersResponse?.result) {
-      setPlayersList(auctionPlayersResponse.result)
+    if (auctionPlayersRequest?.data) {
+      const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =
+        auctionPlayersRequest.data as CricResponse<AuctionPlayerEntity[]>
+      if (auctionPlayersResponse.result) {
+        setPlayersList(auctionPlayersResponse.result)
+      }
     }
-  }, [setPlayersList, auctionPlayersResponse])
+  }, [setPlayersList, auctionPlayersRequest?.data])
 
   useEffect(() => {
     if (playersList) {
+      console.log(cache)
+      console.log(playersList)
+      console.log(props.selectedTab.value)
       prepareTableData(playersList)
     }
-  }, [playersList])
+  }, [playersList, playerSetType])
 
   const prepareTableData = (playersList: AuctionPlayerEntity[]) => {
     if (playersList.length) {
@@ -61,7 +67,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     }
   }
 
-  if (auctionPlayersRequest.isLoading) {
+  if (auctionPlayersRequest.isValidating) {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 
@@ -69,7 +75,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     return <p>Error: {auctionPlayersRequest.error.message}</p>
   }
 
-  if (!auctionPlayersResponse?.result?.length) {
+  if (!playersList?.length && !auctionPlayersRequest.isValidating) {
     return <p className='p-5'>No players found</p>
   }
 

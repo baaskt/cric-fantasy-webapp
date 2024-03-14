@@ -11,7 +11,7 @@ export interface PlayerEntity {
   ipl: StatsEntity
   createdDate: Date
   dob: string
-  isSold: string | null
+  soldStatus: string
   name: string
   bowlingStyle: string
   clubId: number

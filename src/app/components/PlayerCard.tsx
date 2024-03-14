@@ -1,10 +1,10 @@
-import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
+import { LastAuctionPlayerDetailEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerEntity } from '@/model/response/player-response.interface'
 import Image from 'next/image'
 import React from 'react'
 
 type PlayerCardProps = {
-  playerData: Partial<PlayerEntity> | Partial<LastAuctionPlayerEntity>
+  playerData: Partial<PlayerEntity> | Partial<LastAuctionPlayerDetailEntity>
 }
 
 function PlayerCard(props: PlayerCardProps) {

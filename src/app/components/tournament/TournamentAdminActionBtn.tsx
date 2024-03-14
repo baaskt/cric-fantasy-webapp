@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { MouseEvent, useState } from 'react'
 import { getTournamentAdminActionConfig } from '@/util/helper'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
@@ -23,7 +23,8 @@ function TournamentAdminActionBtn(props: TournamentAdminActionBtnProps) {
 
   const adminActionRequest = useMutateRequest(TOURNAMENTS.UPDATE_STATUS_URL, HttpMethod.PUT)
 
-  const onAdminAction = () => {
+  const onAdminAction = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     void updateAdminAction()
   }
 

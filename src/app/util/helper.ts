@@ -81,13 +81,15 @@ export const getTournamentUserActionConfig = (
       color: COLORS.statusTxt.inauction,
       txt: TOURNAMENT.STATUS.JOIN_TOURNAMENT,
     }
-  } else if (isParticipant && status === (TournamentStatusLabel.PreAuction as string)) {
-    actionTheme = {
-      bg: COLORS.statusBg.completed,
-      color: COLORS.statusTxt.completed,
-      txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
-    }
   }
+  //TODO: Disabling leave option for now
+  // else if (isParticipant && status === (TournamentStatusLabel.PreAuction as string)) {
+  //   actionTheme = {
+  //     bg: COLORS.statusBg.completed,
+  //     color: COLORS.statusTxt.completed,
+  //     txt: TOURNAMENT.STATUS.LEAVE_TOURNAMENT,
+  //   }
+  // }
   return actionTheme
 }
 
