@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { MouseEvent, ReactElement, useEffect, useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import { btnTheme } from '@/styles/themes/button'
@@ -6,7 +6,7 @@ import { CircularProgress } from '@mui/material'
 
 type CricButtonProps = {
   btnTxt: string
-  onClick: () => void
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
   isValid?: boolean
   isFullWidth?: boolean
   bgColor?: string

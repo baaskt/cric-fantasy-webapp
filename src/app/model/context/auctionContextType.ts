@@ -7,7 +7,7 @@ import { PlayerRandomEntity } from '../response/player-response.interface'
 export type AuctionContextType = {
   playersList: AuctionPlayerEntity[]
   setPlayersList: (tournament: AuctionPlayerEntity[]) => void
-  updatePlayer: (id: number, newData: AuctionPlayerEntity) => void
+  updatePlayer: (id: number, newData: AuctionPlayerEntity) => AuctionPlayerEntity[]
   activeCategory: OptionsEntity | undefined
   setActiveCategory: (activeCategory: OptionsEntity) => void
   auctionPlayer: PlayerRandomEntity | undefined
@@ -18,4 +18,6 @@ export type AuctionContextType = {
   secondHighestBidder: BiddingEntity | null
   lastAuctionPlayer: LastAuctionPlayerEntity | undefined
   setLastAuctionplayer: (lastAuctionPlayer: LastAuctionPlayerEntity) => void
+  isAuctionCompleted: boolean
+  setAuctionCompleted: (isAuctionCompleted: boolean) => void
 }

@@ -6,7 +6,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import { getTournamentUserActionConfig } from '@/util/helper'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import CricButton from '../ui/CricButton'
 
 type TournamentUserActionBtnProps = {
@@ -34,7 +34,8 @@ function TournamentUserActionBtn(props: TournamentUserActionBtnProps) {
     HttpMethod.PUT,
   )
 
-  const onUserAction = () => {
+  const onUserAction = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     if (tournamentStatus === (TournamentStatusLabel.InAuction as string)) {
       markActiveTournament(props.tournamentData)
       router.push(`${'tournaments'}/${tournamentId}/auction`)

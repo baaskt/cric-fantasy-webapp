@@ -17,6 +17,8 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import { useRouter } from 'next/navigation'
 import { useTournament } from '@/providers/TournamentProvider'
 import { currencyToString } from '@/util/bidding'
+import { useSWRConfig } from 'swr'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -25,7 +27,9 @@ const tabOptions: OptionsEntity[] = [
 
 function PlayerAuctionCard() {
   const { activeTournament } = useTournament()
-  const { auctionPlayer, highestBidder } = useAuction()
+  const { activeCategory, auctionPlayer, highestBidder, updatePlayer } = useAuction()
+  const { mutate } = useSWRConfig()
+
   const router = useRouter()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
@@ -64,8 +68,24 @@ function PlayerAuctionCard() {
     } catch (e) {
       console.log(e)
     } finally {
+      void mutatePlayersList()
       router.push(`${'/tournaments/'}${activeTournament?.tournamentId}${'/auction'}`)
     }
+  }
+
+  const mutatePlayersList = async () => {
+    const updatedPlayer: AuctionPlayerEntity = {
+      playerId: playerEntity.playerId,
+      name: playerEntity.name,
+      role: playerEntity.role,
+      basePrice: playerEntity.basePrice,
+      clubName: playerEntity.clubName,
+      soldStatus: SoldStatus.UNSOLD,
+      category: playerEntity.category,
+    }
+    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${activeCategory?.value}`
+    const updatedList = updatePlayer(playerEntity.playerId, updatedPlayer)
+    await mutate(PLAYERS_URL, updatedList)
   }
 
   return (

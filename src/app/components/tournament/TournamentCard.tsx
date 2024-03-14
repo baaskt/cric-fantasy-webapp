@@ -32,7 +32,6 @@ const TournamentCard = (props: TournamentCardProps) => {
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
 
   const viewTournament = (event: MouseEvent<HTMLDivElement>) => {
-    // event.stopPropagation()
     console.log(event)
     markActiveTournament(tournamentData)
     router.push(`${'tournaments'}/${tournamentId}/dashboard`)

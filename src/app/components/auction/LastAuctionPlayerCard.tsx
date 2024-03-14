@@ -23,7 +23,8 @@ type LastAuctionPlayerCardProps = {
 
 function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   const { categories } = props
-  const { activeCategory, setActiveCategory, setLastAuctionplayer } = useAuction()
+  const { activeCategory, setAuctionCompleted, setActiveCategory, setLastAuctionplayer } =
+    useAuction()
   const { setSubTitle } = useTournament()
   const router = useRouter()
   const lastauctionPlayerRequest = useRequest(
@@ -58,7 +59,20 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
 
   const findActiveCategory = (lastAuctionPlayer: LastAuctionPlayerEntity) => {
     if (lastAuctionPlayer.completedAuctionCategories?.length) {
-      console.log('')
+      if (lastAuctionPlayer.completedAuctionCategories?.length === categories.length) {
+        setAuctionCompleted(true)
+      } else {
+        for (let i = 0; i < categories.length; ++i) {
+          const existingCategory = categories[i]
+          if (
+            !lastAuctionPlayer.completedAuctionCategories.includes(existingCategory.value as string)
+          ) {
+            setSubTitle(existingCategory.label)
+            setActiveCategory(existingCategory)
+            break
+          }
+        }
+      }
     } else {
       setDefaultCategory()
     }

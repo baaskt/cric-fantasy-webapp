@@ -18,8 +18,9 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [biddingList, setBiddingList] = useState<BiddingEntity[]>([])
   const [highestBidder, setHighestBidder] = useState<BiddingEntity | null>(null)
   const [secondHighestBidder, setSecondHighestBidder] = useState<BiddingEntity | null>(null)
+  const [isAuctionCompleted, setAuctionCompleted] = useState<boolean>(false)
 
-  const updatePlayer = (id: number, newData: AuctionPlayerEntity) => {
+  const updatePlayer = (id: number, newData: AuctionPlayerEntity): AuctionPlayerEntity[] => {
     const updatedList = playersList.map((item: AuctionPlayerEntity) => {
       if (item.playerId === id) {
         return { ...item, ...newData }
@@ -27,6 +28,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
       return item
     })
     setPlayersList(updatedList)
+    return updatedList
   }
 
   const updateBiddingList = (newData?: BiddingEntity) => {
@@ -107,6 +109,8 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     secondHighestBidder,
     lastAuctionPlayer,
     setLastAuctionplayer,
+    isAuctionCompleted,
+    setAuctionCompleted,
   }
 
   return <Provider value={value}>{children}</Provider>
