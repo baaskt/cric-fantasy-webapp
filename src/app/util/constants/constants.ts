@@ -86,7 +86,6 @@ export const TOURNAMENT = {
     LEAVE_TOURNAMENT: 'Leave',
     END_TOURNAMENT: 'End Tournament',
     START_AUCTION: 'Start Auction',
-    ENTER_AUCTION: 'Enter Auction',
     END_AUCTION: 'End Auction',
   },
 }
@@ -165,3 +164,5 @@ export const STATS = {
   t20: 'T20 Career Stats',
   ipl: 'IPL Career Stats',
 }
+
+export const NO_CACHE = true

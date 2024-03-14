@@ -15,6 +15,7 @@ export interface PlayerEntity {
   name: string
   bowlingStyle: string
   clubId: number
+  clubName: string
   modifiedDate: Date
   intlTeam: string
   role: string

@@ -4,14 +4,14 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import { TEAMS } from '@/util/constants/endpoints'
 import React from 'react'
 import Loading from '../Loading'
-import { TEAM } from '@/util/constants/constants'
+import { NO_CACHE, TEAM } from '@/util/constants/constants'
 import BiddingTeamCard from './BiddingTeamCard'
 import { useAuction } from '@/providers/AuctionProvider'
 import { getBiddingValue } from '@/util/bidding'
 
 function BiddingTeams() {
   const { auctionPlayer, highestBidder, updateBiddingList } = useAuction()
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
+  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS, NO_CACHE)
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
   if (teamRequest.isLoading) {
@@ -23,11 +23,14 @@ function BiddingTeams() {
   }
 
   const bidPlayer = (teamData: TeamEntity) => {
-    const { teamId, teamName } = teamData
+    const { teamId, teamName, purseBalance } = teamData
+    if (highestBidder?.teamId === teamId) return
+
     const basePrice = auctionPlayer?.player.basePrice || 0
     const highestBid = highestBidder?.amount || 0
     const tempBidding = {
       teamId: teamId,
+      purseBalance: purseBalance,
       teamName: teamName,
       amount: getBiddingValue(basePrice, highestBid),
     }

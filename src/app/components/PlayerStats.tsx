@@ -10,6 +10,8 @@ import SportsCricketOutlinedIcon from '@mui/icons-material/SportsCricketOutlined
 import SportsBaseballOutlinedIcon from '@mui/icons-material/SportsBaseballOutlined'
 import { KeyValueType } from '@/model/types/cric-table.type'
 import { STATS } from '@/util/constants/constants'
+import { Divider } from '@mui/material'
+import { COLORS } from '@/util/colors'
 
 type PlayerStatsProps = {
   title: string
@@ -66,9 +68,15 @@ function PlayerStats(props: PlayerStatsProps) {
 
   return (
     <div className='pt-5'>
-      <StatCard title={props.title} subTitle='Batting' menuList={battingList}></StatCard>
-      <div className='pt-5'>
-        <StatCard subTitle='Bowling' menuList={bowlingList}></StatCard>
+      <div className='text-lg text-center'>{props.title}</div>
+      <div className='flex gap-5 mt-3'>
+        <StatCard title='Batting' menuList={battingList}></StatCard>
+        <Divider
+          orientation='vertical'
+          flexItem
+          sx={{ borderWidth: 2, borderColor: COLORS.cricPrimaryLight }}
+        />
+        <StatCard title='Bowling' menuList={bowlingList}></StatCard>
       </div>
     </div>
   )

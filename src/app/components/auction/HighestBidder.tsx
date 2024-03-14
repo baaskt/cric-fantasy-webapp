@@ -1,5 +1,5 @@
 import { useAuction } from '@/providers/AuctionProvider'
-import { biddingString } from '@/util/bidding'
+import { currencyToString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
 import React from 'react'
 import CricButton from '../ui/CricButton'
@@ -10,17 +10,26 @@ function HighestBidder() {
 
   return (
     highestBidder && (
-      <div>
-        <div className='p-2 rounded-lg border-solid border-4 border-pink-600 text-center'>
-          <div className='text-2xl'>{highestBidder.amount}</div>
-          <div className='text-md'>( {biddingString(highestBidder.amount)} )</div>
-          <div style={{ color: COLORS.cricPrimary }}>{highestBidder.teamName}</div>
+      <div
+        className='rounded-lg shadow-lg'
+        style={{ backgroundColor: COLORS.cricPrimary, color: COLORS.white }}
+      >
+        <div className='text-center'>
+          <div className='ml-5 mr-5 p-2 rounded-b-xl text-sm bg-amber-300 text-black'>
+            Highest Bidder
+          </div>
+          <div className='p-3'>
+            <div className='mt-5'>{highestBidder.teamName}</div>
+            <div className='mt-3 text-2xl font-bold'>₹ {highestBidder.amount}</div>
+            <div className='text-md'>( {currencyToString(highestBidder.amount)} )</div>
+          </div>
         </div>
-        <div className='mt-5 flex justify-center'>
+        <div className='p-2 mt-5 flex justify-center'>
           <CricButton
             btnTxt='Hammer'
             startIcon={<GavelIcon />}
-            bgColor={COLORS.lightRed}
+            color={COLORS.cricPrimary}
+            bgColor={COLORS.white}
             onClick={() => {}}
           ></CricButton>
         </div>
