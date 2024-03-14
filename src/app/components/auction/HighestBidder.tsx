@@ -24,13 +24,14 @@ function HighestBidder() {
             <div className='text-md'>( {currencyToString(highestBidder.amount)} )</div>
           </div>
         </div>
-        <div className='p-2 mt-5 flex justify-center'>
+        <div className='p-4 mt-5 flex justify-center'>
           <CricButton
-            btnTxt='Hammer'
+            btnTxt='Hammer Down'
             startIcon={<GavelIcon />}
             color={COLORS.cricPrimary}
             bgColor={COLORS.white}
             onClick={() => {}}
+            isFullWidth={true}
           ></CricButton>
         </div>
       </div>

@@ -1,4 +1,9 @@
 export interface LastAuctionPlayerEntity {
+  player: LastAuctionPlayerDetailEntity
+  completedAuctionCategories: string[]
+}
+
+export interface LastAuctionPlayerDetailEntity {
   category: string
   clubName: string
   imageUrl: string
@@ -9,5 +14,4 @@ export interface LastAuctionPlayerEntity {
   soldStatus: string
   teamId: string
   teamName: string
-  completedAuctionCategories: string[]
 }

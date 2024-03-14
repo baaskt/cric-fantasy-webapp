@@ -2,7 +2,7 @@ import { AuctionContextType } from '@/model/context/auctionContextType'
 import { BiddingEntity } from '@/model/entities/bidding.interface'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
-import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
+import { LastAuctionPlayerDetailEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
 import { twentyFiveCrores } from '@/util/bidding'
 import React, { createContext, useContext, useState } from 'react'
@@ -14,7 +14,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [playersList, setPlayersList] = useState<AuctionPlayerEntity[]>([])
   const [activeCategory, setActiveCategory] = useState<OptionsEntity>()
   const [auctionPlayer, setAuctionPlayer] = useState<PlayerRandomEntity>()
-  const [lastAuctionPlayer, setLastAuctionplayer] = useState<LastAuctionPlayerEntity>()
+  const [lastAuctionPlayer, setLastAuctionplayer] = useState<LastAuctionPlayerDetailEntity>()
   const [biddingList, setBiddingList] = useState<BiddingEntity[]>([])
   const [highestBidder, setHighestBidder] = useState<BiddingEntity | null>(null)
   const [secondHighestBidder, setSecondHighestBidder] = useState<BiddingEntity | null>(null)

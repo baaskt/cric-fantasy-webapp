@@ -6,7 +6,10 @@ import PlayerCard from '../PlayerCard'
 import Image from 'next/image'
 import CricButton from '../ui/CricButton'
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
-import { LastAuctionPlayerEntity } from '@/model/response/last-aucton-player.response.interface'
+import {
+  LastAuctionPlayerDetailEntity,
+  LastAuctionPlayerEntity,
+} from '@/model/response/last-aucton-player.response.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
 import { useAuction } from '@/providers/AuctionProvider'
 import { currencyToString } from '@/util/bidding'
@@ -33,8 +36,8 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   )
   const lastauctionPlayerResponse: CricResponse<LastAuctionPlayerEntity> =
     lastauctionPlayerRequest.data as CricResponse<LastAuctionPlayerEntity>
-  const playerData: LastAuctionPlayerEntity | undefined =
-    lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result
+  const playerData: LastAuctionPlayerDetailEntity | undefined =
+    lastauctionPlayerResponse?.result && lastauctionPlayerResponse.result.player
 
   const setDefaultCategory = () => {
     const activeCategory = categories[0]
@@ -48,8 +51,8 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
 
   useEffect(() => {
     if (lastauctionPlayerResponse?.result) {
-      setLastAuctionplayer(lastauctionPlayerResponse.result)
-      findActiveCategory(lastauctionPlayerResponse.result)
+      setLastAuctionplayer(lastauctionPlayerResponse.result.player)
+      findActiveCategory(lastauctionPlayerResponse.result.completedAuctionCategories)
     }
   }, [setLastAuctionplayer, lastauctionPlayerResponse])
 
@@ -57,16 +60,14 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
     return <></>
   }
 
-  const findActiveCategory = (lastAuctionPlayer: LastAuctionPlayerEntity) => {
-    if (lastAuctionPlayer.completedAuctionCategories?.length) {
-      if (lastAuctionPlayer.completedAuctionCategories?.length === categories.length) {
+  const findActiveCategory = (completedAuctionCategories: string[]) => {
+    if (completedAuctionCategories?.length) {
+      if (completedAuctionCategories?.length === categories.length) {
         setAuctionCompleted(true)
       } else {
         for (let i = 0; i < categories.length; ++i) {
           const existingCategory = categories[i]
-          if (
-            !lastAuctionPlayer.completedAuctionCategories.includes(existingCategory.value as string)
-          ) {
+          if (!completedAuctionCategories.includes(existingCategory.value as string)) {
             setSubTitle(existingCategory.label)
             setActiveCategory(existingCategory)
             break

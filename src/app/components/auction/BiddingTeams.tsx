@@ -10,7 +10,7 @@ import { useAuction } from '@/providers/AuctionProvider'
 import { getBiddingValue } from '@/util/bidding'
 
 function BiddingTeams() {
-  const { auctionPlayer, highestBidder, updateBiddingList } = useAuction()
+  const { auctionPlayer, highestBidder, secondHighestBidder, updateBiddingList } = useAuction()
   const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS, NO_CACHE)
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
@@ -40,9 +40,15 @@ function BiddingTeams() {
   const teamList = [...teamResponse.result]
 
   return (
-    <div className='flex flex-wrap flex-row gap-5 justify-center basis-1/2'>
+    <div className='flex flex-wrap flex-row gap-5 justify-center basis-1/2 p-2'>
       {teamList.map(team => (
-        <BiddingTeamCard key={team.teamId} teamData={team} onBidding={bidPlayer} />
+        <BiddingTeamCard
+          key={team.teamId}
+          teamData={team}
+          onBidding={bidPlayer}
+          isHighestBidder={highestBidder?.teamId === team.teamId}
+          isSecondHighestBidder={secondHighestBidder?.teamId === team.teamId}
+        />
       ))}
     </div>
   )

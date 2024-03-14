@@ -5,6 +5,8 @@ import React from 'react'
 
 type BiddingTeamCardProps = {
   teamData: TeamEntity
+  isHighestBidder: boolean
+  isSecondHighestBidder: boolean
   onBidding: (teamData: TeamEntity) => void
 }
 
@@ -12,7 +14,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
   const { teamName, purseBalance } = props.teamData
   return (
     <div
-      className='flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0'
+      className={`${'flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0 border-t-4 border-b-4'} ${props.isHighestBidder ? 'border-t-indigo-600' : ''} ${props.isSecondHighestBidder ? 'border-b-indigo-300' : ''}`}
       onClick={() => props.onBidding(props.teamData)}
     >
       <div className='flex flex-col items-center'>
