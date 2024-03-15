@@ -88,7 +88,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
 
   return (
     <div className='rounded-lg shadow-lg flex flex-col items-center p-5 h-fit'>
-      <div className='p-5 text-lg font-bold'>Last Player in Auction</div>
+      <div className='p-5 text-lg font-bold'>Previous Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
           <PlayerCard playerData={playerData} />
@@ -118,12 +118,14 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             </div>
           </div>
         )}
-        <CricButton
-          startIcon={<PlayArrowOutlinedIcon />}
-          isFullWidth={true}
-          onClick={() => continueAuction()}
-          btnTxt={`Continue auction for ${activeCategory?.label} players`}
-        ></CricButton>
+        {activeTournament?.isHost && (
+          <CricButton
+            startIcon={<PlayArrowOutlinedIcon />}
+            isFullWidth={true}
+            onClick={() => continueAuction()}
+            btnTxt={`Continue auction for ${activeCategory?.label} players`}
+          ></CricButton>
+        )}
       </div>
     </div>
   )
