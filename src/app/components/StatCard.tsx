@@ -16,7 +16,7 @@ function StatCard(props: StatCardProps) {
     return (
       <IconMenu
         icon={<MenuIcon />}
-        color={COLORS.gray}
+        color={COLORS.cricDark}
         iconColor={COLORS.cricPrimary}
         label1={menu.label}
         value={menu.value}

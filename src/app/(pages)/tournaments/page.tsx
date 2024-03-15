@@ -9,6 +9,7 @@ import { TOURNAMENT } from '@/util/constants/constants'
 import React, { useState } from 'react'
 import TournamentList from '@/components/tournament/TournamentList'
 import AddIcon from '@mui/icons-material/Add'
+import { useAuth } from '@/providers/AuthProvider'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'My Tournaments' },
@@ -19,6 +20,7 @@ export default function Tournaments() {
   const [open, setOpen] = useState<boolean>(false)
   const [isCreating, setCreating] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
+  const { isAdmin } = useAuth()
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
@@ -39,13 +41,15 @@ export default function Tournaments() {
 
   return (
     <div className='m-5'>
-      <div className='flex flex-row justify-between'>
+      <div className='flex justify-between flex-col gap-5 md:flex-row'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
-        <CricButton
-          startIcon={<AddIcon />}
-          onClick={() => createTournament()}
-          btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
-        ></CricButton>
+        {isAdmin() && (
+          <CricButton
+            startIcon={<AddIcon />}
+            onClick={() => createTournament()}
+            btnTxt={isCreating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
+          ></CricButton>
+        )}
       </div>
       <TournamentList selectedTab={selectedTab} />
       <CricModal open={open} onClose={handleClose}>

@@ -11,6 +11,7 @@ import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-t
 import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
 import CricTableHead from '../table/CricTableHeader'
 import { sortTable } from '@/util/table'
+import { currencyToString } from '@/util/bidding'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -82,7 +83,10 @@ const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: bool
       scope='row'
       style={{ color: cell.color }}
       align={
-        cell.cellType === 'number' || cell.cellType === 'icon' || cell.cellType === 'list'
+        cell.cellType === 'number' ||
+        cell.cellType === 'currency' ||
+        cell.cellType === 'icon' ||
+        cell.cellType === 'list'
           ? 'center'
           : 'left'
       }
@@ -91,7 +95,9 @@ const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: bool
         ? renderIconCell()
         : cell.cellType === 'list'
           ? renderListCell(cell.value as string[])
-          : cell.value}
+          : cell.cellType === 'currency'
+            ? currencyToString(Number(cell.value))
+            : cell.value}
     </StyledTableCell>
   )
 }

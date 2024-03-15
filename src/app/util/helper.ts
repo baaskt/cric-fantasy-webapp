@@ -12,7 +12,6 @@ import {
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
-import { currencyToString } from './bidding'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -162,8 +161,6 @@ const getPlayerCellValue = (playerData: KeyValueType, cellKey: string, playerInd
     cellValue = playerIndex + 1
   } else if (cellKey === 'soldStatus' && playerData[cellKey] === SoldStatus.NOT_AUCTIONED) {
     cellValue = 'To be auctioned'
-  } else if (cellKey === 'basePrice') {
-    cellValue = currencyToString(Number(playerData[cellKey]))
   } else {
     cellValue = playerData[cellKey]
   }
@@ -210,8 +207,6 @@ const getTeamCellValue = (
     cellValue = iconPath
   } else if (cellKey === 'pos') {
     cellValue = teamIndex + 1
-  } else if (cellKey === 'purseBalance') {
-    cellValue = currencyToString(Number(teamData[cellKey]))
   } else {
     cellValue = teamData[cellKey]
   }

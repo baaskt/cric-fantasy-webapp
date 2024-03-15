@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FocusEvent, useState } from 'react'
+import React, { FormEvent, FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from '../ui/CricPwdField'
 import CricEmailField from '../ui/CricEmailField'
@@ -48,7 +48,8 @@ export default function SignupForm() {
     setPwd(value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     void signupUser()
   }
 
@@ -97,6 +98,7 @@ export default function SignupForm() {
       }}
       noValidate
       autoComplete='off'
+      onSubmit={handleSubmit}
     >
       <CricTextField
         type='text'
@@ -134,7 +136,7 @@ export default function SignupForm() {
         <CricButton
           isFullWidth={true}
           isValid={formValidity}
-          onClick={() => handleSubmit()}
+          onClick={() => {}}
           btnTxt={signupRequest.isMutating ? 'creating account...' : AUTH.SIGN_UP.txtSignup}
         ></CricButton>
       </div>

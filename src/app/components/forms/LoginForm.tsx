@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FocusEvent, useState } from 'react'
+import React, { FormEvent, FocusEvent, useState } from 'react'
 import Box from '@mui/material/Box'
 import CricPwdField from '../ui/CricPwdField'
 import CricEmailField from '../ui/CricEmailField'
@@ -35,7 +35,8 @@ export default function LoginForm() {
     setPwd(value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     void loginUser()
   }
 
@@ -46,13 +47,10 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response: CricResponse<LoginResponse> =
-          (await loginRequest.trigger(
-            payload as never,
-          )) as CricResponse<LoginResponse>
-        const authCred: LoginResponse | null = response?.result
-          ? response.result
-          : null
+        const response: CricResponse<LoginResponse> = (await loginRequest.trigger(
+          payload as never,
+        )) as CricResponse<LoginResponse>
+        const authCred: LoginResponse | null = response?.result ? response.result : null
         if (authCred) login(email, authCred)
       } catch (e) {
         console.log(e)
@@ -72,6 +70,7 @@ export default function LoginForm() {
       }}
       noValidate
       autoComplete='on'
+      onSubmit={handleSubmit}
     >
       <CricEmailField
         id='login-email'
@@ -90,17 +89,12 @@ export default function LoginForm() {
         placeholder={AUTH.PASSWORD.placeholder}
         onChange={onPwdChange}
       />
-      <CricAlert
-        error={loginRequest.error}
-        message={AUTH.SIGN_IN.error}
-      ></CricAlert>
+      <CricAlert error={loginRequest.error} message={AUTH.SIGN_IN.error}></CricAlert>
       <div className='mt-3'>
         <CricButton
           isFullWidth={true}
-          onClick={() => handleSubmit()}
-          btnTxt={
-            loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin
-          }
+          onClick={() => {}}
+          btnTxt={loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
         ></CricButton>
       </div>
     </Box>

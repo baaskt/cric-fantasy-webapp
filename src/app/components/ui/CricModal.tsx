@@ -11,7 +11,7 @@ interface CricModalProps {
 const styles = {
   modalStyle: {
     position: 'absolute',
-    top: '30%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',

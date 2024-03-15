@@ -11,9 +11,7 @@ const settingsMenu: OptionsEntity[] = [{ id: 1, label: 'Logout' }]
 function AvatarMenu() {
   const router = useRouter()
   const { user, logout } = useAuth()
-  const [anchorEl, setAnchorEl] = useState<
-    (EventTarget & HTMLButtonElement) | null
-  >(null)
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
 
   const onMenuSelect = (event: MouseEvent<HTMLButtonElement>) => {
     const anchorData = anchorEl ? null : event?.currentTarget
@@ -42,6 +40,8 @@ function AvatarMenu() {
       <CricMenu
         anchorEl={anchorEl}
         menuList={settingsMenu}
+        title={user?.fullName}
+        subTitle={user?.email}
         onSelect={onMenuItemSelect}
       />
     </IconButton>

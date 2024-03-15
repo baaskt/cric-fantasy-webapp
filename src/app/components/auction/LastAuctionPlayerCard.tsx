@@ -30,10 +30,12 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
     useAuction()
   const { activeTournament, setSubTitle } = useTournament()
   const router = useRouter()
-  const lastauctionPlayerRequest = useRequest(
-    PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', activeTournament?.tournamentId || ''),
-    NO_CACHE,
-  )
+  const tournamentId = activeTournament?.tournamentId || ''
+  const LAST_AUCTIONED_PLAYER_URL = tournamentId
+    ? PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', tournamentId)
+    : ''
+  const lastauctionPlayerRequest = useRequest(LAST_AUCTIONED_PLAYER_URL, NO_CACHE)
+
   const lastauctionPlayerResponse: CricResponse<LastAuctionPlayerEntity> =
     lastauctionPlayerRequest.data as CricResponse<LastAuctionPlayerEntity>
   const playerData: LastAuctionPlayerDetailEntity | undefined =
@@ -86,7 +88,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
 
   return (
     <div className='rounded-lg shadow-lg flex flex-col items-center p-5 h-fit'>
-      <div className='p-5 text-lg font-bold'>Last Player in Auction</div>
+      <div className='p-5 text-lg font-bold'>Previous Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
           <PlayerCard playerData={playerData} />
@@ -116,12 +118,14 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             </div>
           </div>
         )}
-        <CricButton
-          startIcon={<PlayArrowOutlinedIcon />}
-          isFullWidth={true}
-          onClick={() => continueAuction()}
-          btnTxt={`Continue auction for ${activeCategory?.label} players`}
-        ></CricButton>
+        {!activeTournament?.isHost && (
+          <CricButton
+            startIcon={<PlayArrowOutlinedIcon />}
+            isFullWidth={true}
+            onClick={() => continueAuction()}
+            btnTxt={`Continue auction for ${activeCategory?.label} players`}
+          ></CricButton>
+        )}
       </div>
     </div>
   )

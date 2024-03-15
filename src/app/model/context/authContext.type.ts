@@ -6,5 +6,6 @@ export type AuthContextType = {
   signup: (fullName: string, email: string) => void
   login: (email: string, authCred: LoginResponse) => void
   logout: () => void
+  isAdmin: () => boolean
   setUserDetails: (user: User) => void
 }

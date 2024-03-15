@@ -67,3 +67,12 @@ body {
     transform: translate3d(4px, 0, 0);
   }
 }
+
+.login-design-bottom {
+  clip-path: circle(51.4% at 97% 120%);
+  height: 55%;
+  width: 100%;
+  background: #6d32ed;
+  position: absolute;
+  bottom: 0;
+}

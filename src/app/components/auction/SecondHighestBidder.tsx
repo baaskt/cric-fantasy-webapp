@@ -17,7 +17,7 @@ function SecondHighestBidder() {
             Active Bidder
           </div>
           <div className='p-3'>
-            <div className='mt-5'>{secondHighestBidder.teamName}</div>
+            <div className='mt-5 text-xl'>{secondHighestBidder.teamName}</div>
             <div className='mt-3 text-2xl font-bold'>₹ {secondHighestBidder.amount}</div>
             <div className='mb-3 text-md'>( {currencyToString(secondHighestBidder.amount)} )</div>
           </div>

@@ -26,6 +26,7 @@ function Sidebar(props: SidebarProps) {
   const navigateTo = (menuEntity: SideBarMenuEntity) => {
     const redirectPath = menuEntity.fullPath?.replace('tournamentId', tournamentId)
     router.push(redirectPath)
+    onClose(false)
   }
 
   const ModalOverlay = () => (
