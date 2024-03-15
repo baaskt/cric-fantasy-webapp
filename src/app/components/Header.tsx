@@ -13,8 +13,17 @@ import { useSidebar } from '@/hooks/useSidebar'
 import { SideBarMenuEntity } from '@/model/types/sidedbar-menu.type'
 import { TITLES } from '@/util/constants/constants'
 import { useTournament } from '@/providers/TournamentProvider'
+import MenuIcon from '@mui/icons-material/Menu'
+import MenuOpenIcon from '@mui/icons-material/MenuOpen'
+import { IconButton } from '@mui/material'
 
-export default function Header() {
+type HeaderProps = {
+  show: boolean
+  toggleMenu: (visibility: boolean) => void
+}
+
+export default function Header(props: HeaderProps) {
+  const { show, toggleMenu } = props
   const { activePath } = useSidebar()
   const { subTitle } = useTournament()
   const { user, setUserDetails } = useAuth()
@@ -53,8 +62,15 @@ export default function Header() {
     setHeaderData(updatedPath)
   }
 
+  const onMenuToggle = () => {
+    toggleMenu(show ? !show : true)
+  }
+
   return (
-    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 left-[20%] right-0 z-50'>
+    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 right-0 z-50 left-0 md:left-[20%]'>
+      <div className='block md:hidden'>
+        <IconButton onClick={onMenuToggle}>{show ? <MenuOpenIcon /> : <MenuIcon />}</IconButton>
+      </div>
       <div className='flex items-center gap-2'>
         {ActivePathIcon && <ActivePathIcon />}
         <span className='text-xl uppercase font-semibold'>

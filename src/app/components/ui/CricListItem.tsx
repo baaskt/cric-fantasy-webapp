@@ -20,7 +20,7 @@ function CricListItem(props: CricListItemProps) {
       <ListItem onClick={() => props.onClick(menuEntity)}>
         <ListItemButton selected={isActive}>
           <ListItemIcon sx={{ color: COLORS.cricDark }}>{<ListIcon></ListIcon>}</ListItemIcon>
-          <ListItemText className='hidden md:flex' primary={title} />
+          <ListItemText primary={title} />
         </ListItemButton>
       </ListItem>
     </ThemeProvider>

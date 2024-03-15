@@ -66,8 +66,8 @@ const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean)
 const renderListCell = (listData: string[]) => {
   return (
     <div>
-      {listData.map((data: string) => (
-        <div key={data}>{data}</div>
+      {listData.map((data: string, dataIndex: number) => (
+        <div key={dataIndex}>{data}</div>
       ))}
     </div>
   )

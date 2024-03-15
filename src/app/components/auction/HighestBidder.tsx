@@ -23,7 +23,7 @@ function HighestBidder() {
 
   const sellPlayerRequest = useMutateRequest(
     auctionPlayer?.player && auctionPlayer.player.playerId
-      ? PLAYERS.SELL_PLAYER.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496').replace(
+      ? PLAYERS.SELL_PLAYER.replace('tournamentId', activeTournament?.tournamentId || '').replace(
           'playerId',
           auctionPlayer?.player.playerId.toString(),
         )
@@ -70,7 +70,7 @@ function HighestBidder() {
       soldStatus: SoldStatus.SOLD,
       category: playerEntity.category,
     }
-    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496')}${activeCategory?.value}`
+    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', activeTournament?.tournamentId || '')}${activeCategory?.value}`
     const updatedList = updatePlayer(playerEntity.playerId, updatedPlayer)
     await mutate(PLAYERS_URL, updatedList)
   }
