@@ -13,7 +13,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'pos', label: 'Position', type: 'number' },
   { key: 'teamName', label: 'Team', type: 'string' },
   { key: 'teamMembers', label: 'Participants', type: 'list' },
-  { key: 'purseBalance', label: 'Purse Balance', type: 'number' },
+  { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
   { key: 'tournamentPoints', label: 'Total Points', type: 'number' },
   { key: '', label: '', type: 'icon', iconPath: '/detail' },
 ]
