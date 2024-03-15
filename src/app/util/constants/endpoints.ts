@@ -1,4 +1,6 @@
 export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-3dfu.onrender.com/api/'
+
 export const HEALTH_URL = 'health'
 export const USERS = {
   LOGIN_URL: 'users/login',

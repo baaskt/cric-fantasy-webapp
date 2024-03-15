@@ -28,10 +28,10 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   const { categories } = props
   const { activeCategory, setAuctionCompleted, setActiveCategory, setLastAuctionplayer } =
     useAuction()
-  const { setSubTitle } = useTournament()
+  const { activeTournament, setSubTitle } = useTournament()
   const router = useRouter()
   const lastauctionPlayerRequest = useRequest(
-    PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', '088e579a-3966-4b49-9555-ea1b3a087496'),
+    PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', activeTournament?.tournamentId || ''),
     NO_CACHE,
   )
   const lastauctionPlayerResponse: CricResponse<LastAuctionPlayerEntity> =
