@@ -16,6 +16,7 @@ const tabOptions: OptionsEntity[] = [
   { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
   { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
   { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
+  { id: 9, label: 'Unsold', value: 'UNSOLD' },
 ]
 
 function Auction() {

@@ -36,6 +36,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const { activeTournament } = useTournament()
   const { activeCategory, playersList, setPlayersList, lastAuctionPlayer } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
+  const [error, setError] = useState<boolean>(false)
   const playerSetType = props.selectedTab.value
   const tournamentId = activeTournament?.tournamentId || ''
   const PLAYERS_URL = tournamentId
@@ -49,7 +50,10 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
       const auctionPlayersResponse: CricResponse<AuctionPlayerEntity[]> =
         auctionPlayersRequest.data as CricResponse<AuctionPlayerEntity[]>
       if (auctionPlayersResponse.result) {
+        setError(false)
         setPlayersList(auctionPlayersResponse.result)
+      } else {
+        setError(true)
       }
     }
   }, [setPlayersList, auctionPlayersRequest?.data])
@@ -78,7 +82,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     return <p>Error: {auctionPlayersRequest.error.message}</p>
   }
 
-  if (!playersList?.length && !auctionPlayersRequest.isValidating) {
+  if ((!playersList?.length && !auctionPlayersRequest.isValidating) || error) {
     return <p className='p-5'>No players found</p>
   }
 

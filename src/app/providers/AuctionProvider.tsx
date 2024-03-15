@@ -51,51 +51,75 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
       updatedList = [...biddingList, newData]
     }
     updateHighestBidder(updatedList)
-    updateSecondHighestBidder(updatedList)
     setBiddingList(updatedList)
   }
 
   const updateHighestBidder = (newBiddingList: BiddingEntity[]) => {
-    let highestEntity
+    let highestEntity, secondHighestEntity
     if (newBiddingList.length === 0) {
       highestEntity = null
+      secondHighestEntity = null
     } else if (newBiddingList.length === 1) {
       highestEntity = newBiddingList[0]
+      secondHighestEntity = null
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
-      if (
-        sortedBidding[0].amount < twentyFiveCrores ||
-        (sortedBidding[0].amount === twentyFiveCrores &&
-          sortedBidding[0].amount >= sortedBidding[1].amount &&
-          sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
-      ) {
+      const maxCapBidders = sortedBidding.filter(bidding => bidding.amount === twentyFiveCrores)
+      const isPurseBalanceSame = hasSamePurseBalance(maxCapBidders)
+      const sortedPurseBidders = maxCapBidders.sort((a, b) => b.purseBalance - a.purseBalance)
+      if (sortedBidding[0].amount < twentyFiveCrores || maxCapBidders.length < 2) {
         highestEntity = sortedBidding[0]
+        secondHighestEntity = sortedBidding[1]
+      } else if (maxCapBidders.length >= 2 && !isPurseBalanceSame) {
+        highestEntity = sortedPurseBidders[0]
+        secondHighestEntity = sortedPurseBidders[1]
       } else {
-        highestEntity = sortedBidding[1]
+        const equalPurseBidders = sortedPurseBidders.filter(
+          bidder => bidder.purseBalance === sortedPurseBidders[0].purseBalance,
+        )
+        const shuffledList = shuffleList(equalPurseBidders)
+        highestEntity = shuffledList[0]
+        secondHighestEntity = shuffledList[1]
       }
     }
     setHighestBidder(highestEntity)
+    setSecondHighestBidder(secondHighestEntity)
   }
 
-  const updateSecondHighestBidder = (newBiddingList: BiddingEntity[]) => {
-    let highestEntity
-    if (newBiddingList.length < 2) {
-      highestEntity = null
-    } else {
-      const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
-      if (
-        sortedBidding[1].amount < twentyFiveCrores ||
-        (sortedBidding[1].amount === twentyFiveCrores &&
-          sortedBidding[1].amount >= sortedBidding[0].amount &&
-          sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
-      ) {
-        highestEntity = sortedBidding[1]
-      } else {
-        highestEntity = sortedBidding[0]
-      }
-    }
-    setSecondHighestBidder(highestEntity)
+  const hasSamePurseBalance = (bidders: BiddingEntity[]) => {
+    const balances = bidders.map(bidder => bidder.purseBalance)
+    const uniqueBalances = new Set(balances)
+    return balances.length !== uniqueBalances.size
   }
+
+  const shuffleList = (bidders: BiddingEntity[]) => {
+    for (let i = bidders.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)) // Generate random index between 0 and i (inclusive)
+      ;[bidders[i], bidders[j]] = [bidders[j], bidders[i]] // Swap elements at positions i and j
+    }
+    return bidders
+  }
+
+  // const updateSecondHighestBidder = (newBiddingList: BiddingEntity[]) => {
+  //   let highestEntity
+  //   if (newBiddingList.length < 2) {
+  //     highestEntity = null
+  //   } else {
+  //     const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
+  //     const maxCapBidders = sortedBidding.filter(bidding => bidding.amount === twentyFiveCrores);
+  //     if (
+  //       sortedBidding[1].amount < twentyFiveCrores ||
+  //       (sortedBidding[1].amount === twentyFiveCrores &&
+  //         sortedBidding[1].amount >= sortedBidding[0].amount &&
+  //         sortedBidding[0].purseBalance > sortedBidding[1].purseBalance)
+  //     ) {
+  //       highestEntity = sortedBidding[1]
+  //     } else {
+  //       highestEntity = sortedBidding[0]
+  //     }
+  //   }
+  //   setSecondHighestBidder(highestEntity)
+  // }
 
   const value: AuctionContextType = {
     playersList,
