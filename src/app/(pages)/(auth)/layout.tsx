@@ -1,4 +1,5 @@
 import Brand from '@/components/Brand'
+import { COLORS } from '@/util/colors'
 import { AUTH } from '@/util/constants/constants'
 import { Metadata } from 'next'
 import Image from 'next/image'
@@ -8,11 +9,7 @@ export const metadata: Metadata = {
   description: 'Login or Signup for CriKCC Fantasy',
 }
 
-export default function LoginLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='flex h-dvh'>
       <div className='w-full sm:w-1/2'>
@@ -31,10 +28,12 @@ export default function LoginLayout({
           className='self-center'
           style={{ width: '60%', height: 'auto' }}
         />
-        <div className='font-bold text-2xl self-center mt-6'>
-          {AUTH.BANNER_DESC}
-        </div>
+        <div className='font-bold text-2xl self-center mt-6'>{AUTH.BANNER_DESC}</div>
       </div>
+      <div
+        className='login-design-bottom w-full h-[55%] md:hidden'
+        style={{ backgroundColor: COLORS.cricPrimary }}
+      ></div>
     </div>
   )
 }

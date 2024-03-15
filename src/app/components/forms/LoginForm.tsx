@@ -46,13 +46,10 @@ export default function LoginForm() {
         password: pwd,
       }
       try {
-        const response: CricResponse<LoginResponse> =
-          (await loginRequest.trigger(
-            payload as never,
-          )) as CricResponse<LoginResponse>
-        const authCred: LoginResponse | null = response?.result
-          ? response.result
-          : null
+        const response: CricResponse<LoginResponse> = (await loginRequest.trigger(
+          payload as never,
+        )) as CricResponse<LoginResponse>
+        const authCred: LoginResponse | null = response?.result ? response.result : null
         if (authCred) login(email, authCred)
       } catch (e) {
         console.log(e)
@@ -90,17 +87,12 @@ export default function LoginForm() {
         placeholder={AUTH.PASSWORD.placeholder}
         onChange={onPwdChange}
       />
-      <CricAlert
-        error={loginRequest.error}
-        message={AUTH.SIGN_IN.error}
-      ></CricAlert>
+      <CricAlert error={loginRequest.error} message={AUTH.SIGN_IN.error}></CricAlert>
       <div className='mt-3'>
         <CricButton
           isFullWidth={true}
           onClick={() => handleSubmit()}
-          btnTxt={
-            loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin
-          }
+          btnTxt={loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
         ></CricButton>
       </div>
     </Box>
