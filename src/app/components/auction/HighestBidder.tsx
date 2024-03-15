@@ -86,7 +86,7 @@ function HighestBidder() {
             Highest Bidder
           </div>
           <div className='p-3'>
-            <div className='mt-5'>{highestBidder.teamName}</div>
+            <div className='mt-5 text-xl'>{highestBidder.teamName}</div>
             <div className='mt-3 text-2xl font-bold'>₹ {highestBidder.amount}</div>
             <div className='text-md'>( {currencyToString(highestBidder.amount)} )</div>
           </div>

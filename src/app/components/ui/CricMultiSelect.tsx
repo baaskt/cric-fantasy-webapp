@@ -1,7 +1,8 @@
 import { OptionsEntity } from '@/model/entities/options.interface'
-import { Checkbox, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Checkbox, FormControl, InputLabel, MenuItem, Select, checkboxClasses } from '@mui/material'
 import React from 'react'
 import { SelectChangeEvent } from '@mui/material'
+import { COLORS } from '@/util/colors'
 
 type CricSelectProps = {
   label: string
@@ -35,8 +36,13 @@ function CricMultiSelect(props: CricSelectProps) {
         onChange={handleChange}
       >
         {menuList.map(menu => (
-          <MenuItem key={menu.value} value={menu.value}>
+          <MenuItem key={menu.id} value={menu.value}>
             <Checkbox
+              sx={{
+                [`&, &.${checkboxClasses.checked}`]: {
+                  color: COLORS.cricPrimary,
+                },
+              }}
               checked={menu.value && selectedValue.indexOf(menu.value) > -1 ? true : false}
             />
             {menu.label}

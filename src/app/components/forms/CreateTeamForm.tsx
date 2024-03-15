@@ -147,7 +147,11 @@ function CreateTeamForm(props: CreateTeamFormProps) {
           inputProps={{ minLength: 5, maxLength: 35 }}
           required
         />
-        <CricMultiSelect label='' menuList={participants} onChange={onParticipantsSelect} />
+        <CricMultiSelect
+          label='Participants'
+          menuList={participants}
+          onChange={onParticipantsSelect}
+        />
         <CricAlert
           error={createTeamRequest.error || mandatoryError}
           message={mandatoryError ? TEAM.CREATE_FORM.mandatory : TEAM.CREATE_FORM.error}
