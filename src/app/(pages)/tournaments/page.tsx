@@ -39,7 +39,7 @@ export default function Tournaments() {
 
   return (
     <div className='m-5'>
-      <div className='flex flex-row justify-between'>
+      <div className='flex justify-between flex-col gap-5 md:flex-row'>
         <CricTab optionList={tabOptions} onChange={handleChange} />
         <CricButton
           startIcon={<AddIcon />}

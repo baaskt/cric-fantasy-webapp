@@ -20,16 +20,16 @@ function HighestBidder() {
   const { auctionPlayer, activeCategory, biddingList, updatePlayer, highestBidder } = useAuction()
   const { mutate } = useSWRConfig()
   const router = useRouter()
+  const tournamentId = activeTournament?.tournamentId || ''
 
-  const sellPlayerRequest = useMutateRequest(
-    auctionPlayer?.player && auctionPlayer.player.playerId
-      ? PLAYERS.SELL_PLAYER.replace('tournamentId', activeTournament?.tournamentId || '').replace(
+  const SELL_PLAYER_URL =
+    tournamentId && auctionPlayer?.player && auctionPlayer.player.playerId
+      ? PLAYERS.SELL_PLAYER.replace('tournamentId', tournamentId).replace(
           'playerId',
           auctionPlayer?.player.playerId.toString(),
         )
-      : '',
-    HttpMethod.PUT,
-  )
+      : ''
+  const sellPlayerRequest = useMutateRequest(SELL_PLAYER_URL, HttpMethod.PUT)
 
   if (!auctionPlayer) return <></>
   const playerEntity = auctionPlayer?.player
@@ -70,7 +70,7 @@ function HighestBidder() {
       soldStatus: SoldStatus.SOLD,
       category: playerEntity.category,
     }
-    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', activeTournament?.tournamentId || '')}${activeCategory?.value}`
+    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', tournamentId)}${activeCategory?.value}`
     const updatedList = updatePlayer(playerEntity.playerId, updatedPlayer)
     await mutate(PLAYERS_URL, updatedList)
   }

@@ -24,10 +24,12 @@ type CreateTeamFormProps = {
 
 function CreateTeamForm(props: CreateTeamFormProps) {
   const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
+
   const [formData, setFormData] = useState<CreateTeamRequest>({
     teamName: '',
     teamMembers: [],
-    tournamentId: activeTournament?.tournamentId || '',
+    tournamentId: tournamentId,
   })
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
@@ -92,7 +94,7 @@ function CreateTeamForm(props: CreateTeamFormProps) {
     if (formData.teamName && nameValidity?.valid) {
       const payload: CreateTeamRequest = {
         ...formData,
-        tournamentId: activeTournament?.tournamentId || '',
+        tournamentId: tournamentId,
       }
       try {
         const response: CricResponse<CreateTeamResponse> = (await createTeamRequest.trigger(

@@ -15,8 +15,10 @@ import React, { useEffect } from 'react'
 function AuctionTable() {
   const { activeCategory, setAuctionPlayer } = useAuction()
   const { activeTournament } = useTournament()
-  const RANDOM_PLAYER_URL = `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', activeTournament?.tournamentId || '')}${activeCategory?.value}`
-
+  const tournamentId = activeTournament?.tournamentId || ''
+  const RANDOM_PLAYER_URL = tournamentId
+    ? `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', tournamentId)}${activeCategory?.value}`
+    : ''
   const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL, NO_CACHE)
   const randomPlayerResponse: CricResponse<PlayerRandomEntity> =
     randomPlayerRequest.data as CricResponse<PlayerRandomEntity>

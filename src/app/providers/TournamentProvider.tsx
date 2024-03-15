@@ -19,7 +19,7 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
 
   const tournamentId = auth().getTournamentId()
   const TOURNAMENT_URL = `${TOURNAMENTS.GET_BY_ID_URL.replace('tournamentId', tournamentId)}`
-  const tournamentRequest = useRequest(TOURNAMENT_URL)
+  const tournamentRequest = useRequest(tournamentId ? TOURNAMENT_URL : '')
 
   useEffect(() => {
     if (tournamentRequest.data) {

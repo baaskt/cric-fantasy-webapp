@@ -39,10 +39,10 @@ const TournamentCard = (props: TournamentCardProps) => {
 
   return (
     <div
-      className='card flex flex-row justify-between cursor-pointer'
+      className='card flex justify-between cursor-pointer flex-col md:flex-row'
       onClick={e => viewTournament(e)}
     >
-      <div className='flex flex-row'>
+      <div className='flex flex-col md:flex-row'>
         <Image
           src={imgSrc}
           width={0}
@@ -53,7 +53,7 @@ const TournamentCard = (props: TournamentCardProps) => {
           unoptimized
         />
         <div className='p-5'>
-          <Typography variant='h6' component='div'>
+          <Typography variant='h6' component='div' className='text-center md:text-left'>
             {tournamentName}
           </Typography>
           <IconMenu

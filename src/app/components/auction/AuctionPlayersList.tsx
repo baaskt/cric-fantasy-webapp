@@ -37,7 +37,10 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const { activeCategory, playersList, setPlayersList, lastAuctionPlayer } = useAuction()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const playerSetType = props.selectedTab.value
-  const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', activeTournament?.tournamentId || '')}${playerSetType}`
+  const tournamentId = activeTournament?.tournamentId || ''
+  const PLAYERS_URL = tournamentId
+    ? `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', tournamentId)}${playerSetType}`
+    : ''
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
   const { cache } = useSWRConfig()
 

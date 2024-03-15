@@ -28,7 +28,7 @@ export default function Teams() {
 
   return (
     <div className='m-5'>
-      <div className='flex flex-row justify-between items-center'>
+      <div className='flex justify-between items-center flex-col gap-5 md:flex-row'>
         <div style={{ color: COLORS.darkGray }} className='text-sm italic'>
           Teams are sorted based on the total points in descending order
         </div>

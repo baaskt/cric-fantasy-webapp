@@ -32,16 +32,15 @@ function PlayerAuctionCard() {
 
   const router = useRouter()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
-
-  const unsoldPlayerRequest = useMutateRequest(
-    auctionPlayer?.player && auctionPlayer.player.playerId
-      ? PLAYERS.SELL_PLAYER.replace('tournamentId', activeTournament?.tournamentId || '').replace(
+  const tournamentId = activeTournament?.tournamentId || ''
+  const SELL_PLAYER_URL =
+    tournamentId && auctionPlayer?.player && auctionPlayer.player.playerId
+      ? PLAYERS.SELL_PLAYER.replace('tournamentId', tournamentId).replace(
           'playerId',
           auctionPlayer?.player.playerId.toString(),
         )
-      : '',
-    HttpMethod.PUT,
-  )
+      : ''
+  const unsoldPlayerRequest = useMutateRequest(SELL_PLAYER_URL, HttpMethod.PUT)
 
   if (!auctionPlayer) return <></>
   const playerEntity = auctionPlayer?.player
@@ -84,7 +83,7 @@ function PlayerAuctionCard() {
       soldStatus: SoldStatus.UNSOLD,
       category: playerEntity.category,
     }
-    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', activeTournament?.tournamentId || '')}${activeCategory?.value}`
+    const PLAYERS_URL = `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', tournamentId)}${activeCategory?.value}`
     const updatedList = updatePlayer(playerEntity.playerId, updatedPlayer)
     await mutate(PLAYERS_URL, updatedList)
   }
