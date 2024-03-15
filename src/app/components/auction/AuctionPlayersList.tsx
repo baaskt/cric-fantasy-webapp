@@ -39,8 +39,12 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const [error, setError] = useState<boolean>(false)
   const playerSetType = props.selectedTab.value
   const tournamentId = activeTournament?.tournamentId || ''
+  const SOLD_CATEGORY_URL =
+    props.selectedTab.id === 9
+      ? PLAYERS.GET_AUCTION_UNSOLD_PLAYERS_URL
+      : PLAYERS.GET_AUCTION_PLAYERS_URL
   const PLAYERS_URL = tournamentId
-    ? `${PLAYERS.GET_AUCTION_PLAYERS_URL.replace('tournamentId', tournamentId)}${playerSetType}`
+    ? `${SOLD_CATEGORY_URL.replace('tournamentId', tournamentId)}${playerSetType}`
     : ''
   const auctionPlayersRequest = useRequest(PLAYERS_URL)
   const { cache } = useSWRConfig()

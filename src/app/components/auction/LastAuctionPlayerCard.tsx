@@ -118,7 +118,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             </div>
           </div>
         )}
-        {!activeTournament?.isHost && (
+        {activeTournament?.isHost && (
           <CricButton
             startIcon={<PlayArrowOutlinedIcon />}
             isFullWidth={true}
