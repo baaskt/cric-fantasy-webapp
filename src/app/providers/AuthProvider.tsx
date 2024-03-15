@@ -36,6 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     clearSwrCache()
   }
 
+  const isAdmin = (): boolean => {
+    return user && user.roles.includes('admin') ? true : false
+  }
+
   const clearSwrCache = () => {
     let cacheKeys = cache.keys().next()
     while (!cacheKeys.done) {
@@ -53,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     login,
     logout,
+    isAdmin,
     setUserDetails,
   }
 

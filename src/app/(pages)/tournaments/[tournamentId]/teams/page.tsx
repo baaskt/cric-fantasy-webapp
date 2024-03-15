@@ -8,10 +8,12 @@ import { COLORS } from '@/util/colors'
 import { TEAM } from '@/util/constants/constants'
 import { useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
+import { useTournament } from '@/providers/TournamentProvider'
 
 export default function Teams() {
   const [open, setOpen] = useState<boolean>(false)
   const [isCreating, setCreating] = useState<boolean>(false)
+  const { activeTournament } = useTournament()
 
   const createTeam = () => {
     setOpen(true)
@@ -32,11 +34,13 @@ export default function Teams() {
         <div style={{ color: COLORS.darkGray }} className='text-sm italic'>
           Teams are sorted based on the total points in descending order
         </div>
-        <CricButton
-          startIcon={<AddIcon />}
-          onClick={() => createTeam()}
-          btnTxt={isCreating ? TEAM.CREATING : TEAM.CREATE}
-        ></CricButton>
+        {activeTournament?.isHost && (
+          <CricButton
+            startIcon={<AddIcon />}
+            onClick={() => createTeam()}
+            btnTxt={isCreating ? TEAM.CREATING : TEAM.CREATE}
+          ></CricButton>
+        )}
       </div>
       <TeamList />
       <CricModal open={open} onClose={handleClose}>
