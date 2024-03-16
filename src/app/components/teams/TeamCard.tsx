@@ -8,8 +8,9 @@ import { KeyValueType } from '@/model/types/cric-table.type'
 import StatCard from '../StatCard'
 
 const participantStatList: CricMenuEntity[] = [
-  { label: 'Participant 1', icon: PersonIcon, value: 'teamMembers' },
-  { label: 'Participant 1', icon: PersonIcon, value: 'teamMembers' },
+  { label: 'Owner 1', icon: PersonIcon, value: 'teamMembers' },
+  { label: 'Owner 2', icon: PersonIcon, value: 'teamMembers' },
+  { label: 'Owner 3', icon: PersonIcon, value: 'teamMembers' },
 ]
 
 const fantasyStatList: CricMenuEntity[] = [
@@ -55,7 +56,7 @@ function TeamCard(props: TeamCardProps) {
         label: statEntity.label,
         value:
           statEntity.value === 'playingXI'
-            ? teamDetail.playingXI?.length.toString()
+            ? `${teamDetail.playingXI?.length.toString()}${'/15'}`
             : (statData[statEntity.value] as never),
       }
       tempMenuList.push(menuEntity)
@@ -81,7 +82,7 @@ function TeamCard(props: TeamCardProps) {
         </div>
       </div>
       <div className='shadow-lg p-5'>
-        <StatCard title='Overview' menuList={participantsList}></StatCard>
+        <StatCard title='Team Owners' menuList={participantsList}></StatCard>
       </div>
       <div className='shadow-lg p-5'>
         <StatCard title='Fantasy Stats' menuList={fantasyList}></StatCard>
