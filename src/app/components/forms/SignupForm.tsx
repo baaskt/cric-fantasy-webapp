@@ -18,6 +18,7 @@ import { SignupRequest } from '@/model/request/signup-request.type'
 import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
 import { CricResponse } from '@/model/types/cric-response.type'
+import CricToast from '../ui/CricToast'
 
 export default function SignupForm() {
   const router = useRouter()
@@ -25,6 +26,7 @@ export default function SignupForm() {
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
   const [error, setError] = useState<string>('')
+  const [isSignupSuccess, setSignupSuccess] = useState<boolean>(false)
   const [formValidity, setFormValidity] = useState<boolean>(true)
   const [nameValidity, setNameValidity] = useState<NameValidationEntity>({
     valid: true,
@@ -62,6 +64,7 @@ export default function SignupForm() {
   }
 
   const signupUser = async () => {
+    setSignupSuccess(false)
     if (isValidForm()) {
       const payload: SignupRequest = {
         fullName: fullName,
@@ -71,11 +74,15 @@ export default function SignupForm() {
       try {
         await signupRequest.trigger(payload as never)
         signup(fullName, email)
-        router.push(TITLES.SIGNIN.path)
+        setSignupSuccess(true)
+        setTimeout(() => {
+          router.push(TITLES.SIGNIN.path)
+        }, 2000)
       } catch (error) {
         const axiosError = error as AxiosError
         const errorResult: CricResponse<string> = axiosError.response?.data as CricResponse<string>
         setError(errorResult?.error ? errorResult?.error : '')
+        setSignupSuccess(false)
       }
     }
   }
@@ -140,6 +147,7 @@ export default function SignupForm() {
           btnTxt={signupRequest.isMutating ? 'creating account...' : AUTH.SIGN_UP.txtSignup}
         ></CricButton>
       </div>
+      <CricToast open={isSignupSuccess} message='Account Created, please login to continue...' />
     </Box>
   )
 }
