@@ -22,16 +22,18 @@ export const TOURNAMENTS = {
 export const TEAMS = {
   GET_ALL_TEAMS: 'teams',
   CREATE_TEAM_URL: 'teams',
+  TEAM_DETAIL_URL: 'teams/teamId',
 }
 
 export const PLAYERS = {
   PLAYERS: 'players',
   GET_ALL_URL: 'players',
   GET_AUCTION_PLAYERS_URL: 'players/tournamentId/auction?category=',
-  GET_AUCTION_UNSOLD_PLAYERS_URL: 'players/tournamentId/auction?category=',
+  GET_AUCTION_UNSOLD_PLAYERS_URL: 'players/tournamentId/auction?soldStatus=',
   LAST_AUCTIONED_URL: 'players/tournaments/tournamentId/last-auctioned-player',
   GET_RANDOM_PLAYER_URL: 'players/tournamentId/random?key=category&value=',
   SELL_PLAYER: 'players/playerId/tournaments/tournamentId/sell',
+  RESET_UNSOLD_PLAYER: 'players/tournamentId',
 }
 
 export const ROOSTER = {}

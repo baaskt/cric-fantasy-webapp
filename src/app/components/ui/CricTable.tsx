@@ -12,6 +12,7 @@ import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined
 import CricTableHead from '../table/CricTableHeader'
 import { sortTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
+import { Checkbox, IconButton, checkboxClasses } from '@mui/material'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -46,66 +47,33 @@ type CricTableProps = {
   defOrder?: string
   defOrderBy?: string
   fullWidth: boolean
-}
-
-const renderIconCell = () => {
-  return (
-    <span style={{ color: COLORS.cricPrimary }}>
-      <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
-    </span>
-  )
-}
-
-const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean) => {
-  return (
-    <StyledTableRow key={rowIndex}>
-      {row.dataList.map((cell, dataIndex) => renderTableCell(cell, dataIndex, fullWidth))}
-    </StyledTableRow>
-  )
-}
-
-const renderListCell = (listData: string[]) => {
-  return (
-    <div>
-      {listData.map((data: string, dataIndex: number) => (
-        <div key={dataIndex}>{data}</div>
-      ))}
-    </div>
-  )
-}
-
-const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: boolean) => {
-  return (
-    <StyledTableCell
-      key={cellIndex}
-      fullwidth={fullWidth ? fullWidth.toString() : ''}
-      component='th'
-      scope='row'
-      style={{ color: cell.color }}
-      align={
-        cell.cellType === 'number' ||
-        cell.cellType === 'currency' ||
-        cell.cellType === 'icon' ||
-        cell.cellType === 'list'
-          ? 'center'
-          : 'left'
-      }
-    >
-      {cell.cellType === 'icon'
-        ? renderIconCell()
-        : cell.cellType === 'list'
-          ? renderListCell(cell.value as string[])
-          : cell.cellType === 'currency'
-            ? currencyToString(Number(cell.value))
-            : cell.value}
-    </StyledTableCell>
-  )
+  isSelectable?: boolean
+  isResetCheck?: boolean
+  onRowSelect?: (rowId: string | number) => void
+  onRowChecked?: (rowId: (string | number)[]) => void
 }
 
 function CricTable(props: CricTableProps) {
-  const { headerList, rowList, defOrder, defOrderBy, fullWidth } = props
+  const {
+    headerList,
+    rowList,
+    defOrder,
+    defOrderBy,
+    fullWidth,
+    isSelectable,
+    isResetCheck,
+    onRowChecked,
+  } = props
   const [order, setOrder] = React.useState(defOrder || 'asc')
   const [orderBy, setOrderBy] = React.useState(defOrderBy || '')
+  const [selectedIds, setSelectedIds] = React.useState<(string | number)[]>([])
+
+  React.useEffect(() => {
+    console.log(isResetCheck)
+    if (isResetCheck) {
+      setSelectedIds([])
+    }
+  }, [isResetCheck])
 
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -118,6 +86,107 @@ function CricTable(props: CricTableProps) {
     [order, orderBy, rowList],
   )
 
+  const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean) => {
+    const checkRow = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+        const tempSelectedIds = [...selectedIds, row.rowId]
+        setSelectedIds(tempSelectedIds)
+        onRowChecked && onRowChecked(tempSelectedIds)
+      } else {
+        const tempSelectedIds = [...selectedIds].filter(data => data !== row.rowId)
+        setSelectedIds(tempSelectedIds)
+        onRowChecked && onRowChecked(tempSelectedIds)
+      }
+    }
+
+    return (
+      <StyledTableRow key={rowIndex}>
+        {props.isSelectable && (
+          <StyledTableCell padding='checkbox'>
+            <Checkbox
+              color='primary'
+              checked={selectedIds.includes(row.rowId)}
+              onChange={event => checkRow(event)}
+              inputProps={{
+                'aria-label': 'select all desserts',
+              }}
+              sx={{
+                [`&, &.${checkboxClasses.checked}`]: {
+                  color: COLORS.cricPrimary,
+                },
+              }}
+            />
+          </StyledTableCell>
+        )}
+        {row.dataList.map((cell, dataIndex) => renderTableCell(row, cell, dataIndex, fullWidth))}
+      </StyledTableRow>
+    )
+  }
+
+  const renderTableCell = (
+    row: CricTableRow,
+    cell: CricTableCell,
+    cellIndex: number,
+    fullWidth: boolean,
+  ) => {
+    return (
+      <StyledTableCell
+        key={cellIndex}
+        fullwidth={fullWidth ? fullWidth.toString() : ''}
+        component='th'
+        scope='row'
+        style={{ color: cell.color }}
+        align={
+          cell.cellType === 'number' ||
+          cell.cellType === 'currency' ||
+          cell.cellType === 'icon' ||
+          cell.cellType === 'list'
+            ? 'center'
+            : 'left'
+        }
+      >
+        {cell.cellType === 'icon'
+          ? renderIconCell(row)
+          : cell.cellType === 'list'
+            ? renderListCell(cell.value as string[])
+            : cell.cellType === 'currency'
+              ? currencyToString(Number(cell.value))
+              : cell.value}
+      </StyledTableCell>
+    )
+  }
+
+  const renderIconCell = (row: CricTableRow) => {
+    return (
+      <IconButton onClick={() => props.onRowSelect && props.onRowSelect(row.rowId)}>
+        <span style={{ color: COLORS.cricPrimary }}>
+          <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
+        </span>
+      </IconButton>
+    )
+  }
+
+  const renderListCell = (listData: string[]) => {
+    return (
+      <div>
+        {listData.map((data: string, dataIndex: number) => (
+          <div key={dataIndex}>{data}</div>
+        ))}
+      </div>
+    )
+  }
+
+  const selectAllRows = () => {
+    if (selectedIds?.length === rowList.length) {
+      setSelectedIds([])
+      onRowChecked && onRowChecked([])
+    } else {
+      const tempSelectedIds = rowList.map(data => data.rowId)
+      setSelectedIds(tempSelectedIds)
+      onRowChecked && onRowChecked(tempSelectedIds)
+    }
+  }
+
   return (
     <Paper sx={{ overflow: 'scroll' }}>
       {/* <TableContainer sx={{ maxHeight: 440 }}> */}
@@ -128,7 +197,8 @@ function CricTable(props: CricTableProps) {
             order={order as SortDirection}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
-            onSelectAllClick={() => {}}
+            onSelectAllClick={selectAllRows}
+            isMultiSelect={isSelectable}
           />
           <TableBody>
             {tableRows.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}

@@ -38,7 +38,7 @@ function IconMenu(props: IconMenuProps) {
         className='flex flex-row gap-10 justify-between items-center mt-3'
         style={{ color: color }}
       >
-        <div className='flex flex-row gap-2'>
+        <div className='flex flex-row gap-2 items-center'>
           <div style={{ color: iconColor }}>{icon}</div>
           <div className='font-light'>{labelTxt}</div>
         </div>

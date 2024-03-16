@@ -2,7 +2,6 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
-// import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import HomeIcon from '@mui/icons-material/Home'
 import { useTournament } from '@/providers/TournamentProvider'
@@ -48,6 +47,16 @@ const homeConfig: SideBarMenuEntity[] = [
   },
 ]
 
+const detailConfig: SideBarMenuEntity[] = [
+  {
+    icon: WorkspacesRoundedIcon,
+    title: TITLES.TEAM_DETAIL.label,
+    path: TITLES.TEAM_DETAIL.path,
+    fullPath: TITLES.TEAM_DETAIL.fullPath,
+    hidden: true,
+  },
+]
+
 const auctionConfig: SideBarMenuEntity[] = [
   {
     icon: LoyaltyIcon,
@@ -86,8 +95,8 @@ const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideB
 
   const sidebarConfig = activeTournament
     ? isAuctionProgress
-      ? [...homeConfig, ...tournamentConfig, ...auctionConfig]
-      : [...homeConfig, ...tournamentConfig]
+      ? [...homeConfig, ...tournamentConfig, ...detailConfig, ...auctionConfig]
+      : [...homeConfig, ...tournamentConfig, ...detailConfig]
     : homeConfig
   return sidebarConfig
 }
