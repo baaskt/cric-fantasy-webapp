@@ -64,7 +64,7 @@ function TeamCard(props: TeamCardProps) {
   }
 
   return (
-    <div className='flex flex-col h-dvh gap-10 shadow-lg p-5'>
+    <div className='flex flex-col gap-10 shadow-lg p-5 md:h-dvh'>
       <div className='flex flex-row justify-start items-center gap-5 p-5'>
         <Avatar
           sx={{

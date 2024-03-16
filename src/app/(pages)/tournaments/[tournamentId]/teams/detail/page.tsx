@@ -28,11 +28,11 @@ function TeamDetail() {
   if (!teamDetailEntity) return <></>
 
   return (
-    <div className='flex flex-row'>
-      <div className='w-[25%]'>
+    <div className='flex flex-col md:flex-row'>
+      <div className='w-full md:w-[25%]'>
         <TeamCard teamDetail={teamDetailEntity}></TeamCard>
       </div>
-      <div className='w-[75%] p-5'>
+      <div className='w-full p-5 md:w-[75%]'>
         <TeamPlayers></TeamPlayers>
       </div>
     </div>
