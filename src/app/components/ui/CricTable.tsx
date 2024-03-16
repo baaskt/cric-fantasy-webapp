@@ -12,6 +12,7 @@ import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined
 import CricTableHead from '../table/CricTableHeader'
 import { sortTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
+import { IconButton } from '@mui/material'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -46,20 +47,30 @@ type CricTableProps = {
   defOrder?: string
   defOrderBy?: string
   fullWidth: boolean
+  onRowSelect?: (rowId: string | number) => void
 }
 
-const renderIconCell = () => {
+const renderIconCell = (row: CricTableRow, props: CricTableProps) => {
   return (
-    <span style={{ color: COLORS.cricPrimary }}>
-      <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
-    </span>
+    <IconButton onClick={() => props.onRowSelect && props.onRowSelect(row.rowId)}>
+      <span style={{ color: COLORS.cricPrimary }}>
+        <OpenInBrowserOutlinedIcon></OpenInBrowserOutlinedIcon>
+      </span>
+    </IconButton>
   )
 }
 
-const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean) => {
+const renderTableRow = (
+  row: CricTableRow,
+  rowIndex: number,
+  fullWidth: boolean,
+  props: CricTableProps,
+) => {
   return (
     <StyledTableRow key={rowIndex}>
-      {row.dataList.map((cell, dataIndex) => renderTableCell(cell, dataIndex, fullWidth))}
+      {row.dataList.map((cell, dataIndex) =>
+        renderTableCell(row, cell, dataIndex, fullWidth, props),
+      )}
     </StyledTableRow>
   )
 }
@@ -74,7 +85,13 @@ const renderListCell = (listData: string[]) => {
   )
 }
 
-const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: boolean) => {
+const renderTableCell = (
+  row: CricTableRow,
+  cell: CricTableCell,
+  cellIndex: number,
+  fullWidth: boolean,
+  props: CricTableProps,
+) => {
   return (
     <StyledTableCell
       key={cellIndex}
@@ -92,7 +109,7 @@ const renderTableCell = (cell: CricTableCell, cellIndex: number, fullWidth: bool
       }
     >
       {cell.cellType === 'icon'
-        ? renderIconCell()
+        ? renderIconCell(row, props)
         : cell.cellType === 'list'
           ? renderListCell(cell.value as string[])
           : cell.cellType === 'currency'
@@ -131,7 +148,7 @@ function CricTable(props: CricTableProps) {
             onSelectAllClick={() => {}}
           />
           <TableBody>
-            {tableRows.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}
+            {tableRows.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth, props))}
           </TableBody>
         </Table>
       </TableContainer>

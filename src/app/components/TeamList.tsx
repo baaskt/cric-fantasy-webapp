@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react'
 import CricTable from './ui/CricTable'
 import Loading from './Loading'
 import { TEAM } from '@/util/constants/constants'
+import { useTournament } from '@/providers/TournamentProvider'
+import { useRouter } from 'next/navigation'
 
 const headersList: CricHeaderRow[] = [
   { key: 'pos', label: 'Position', type: 'number' },
@@ -20,6 +22,9 @@ const headersList: CricHeaderRow[] = [
 
 function TeamList() {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
+  const [teamList, setTeamList] = useState<TeamEntity[]>([])
+  const { markActiveTeam } = useTournament()
+  const router = useRouter()
 
   const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
@@ -30,10 +35,11 @@ function TeamList() {
     }
   }, [teamResponse])
 
-  const prepareTableData = (teamList: TeamEntity[]) => {
-    if (teamList.length) {
-      const tempTableData: CricTableRow[] = prepareTeamTable(teamList, headersList)
+  const prepareTableData = (teamsResponse: TeamEntity[]) => {
+    if (teamsResponse.length) {
+      const tempTableData: CricTableRow[] = prepareTeamTable(teamsResponse, headersList)
       setTableData(tempTableData)
+      setTeamList(teamsResponse)
     }
   }
 
@@ -45,6 +51,12 @@ function TeamList() {
     return <p className='p-5'>No teams found</p>
   }
 
+  const navigateToTeamDetail = (rowId: string | number) => {
+    const selectedTeam = teamList.find(team => team.teamId === rowId)
+    if (selectedTeam) markActiveTeam(selectedTeam)
+    router.push('teams/detail')
+  }
+
   return (
     <div className='p-5'>
       <CricTable
@@ -53,6 +65,7 @@ function TeamList() {
         defOrder={'desc'}
         defOrderBy={'tournamentPoints'}
         fullWidth={false}
+        onRowSelect={navigateToTeamDetail}
       />
     </div>
   )
