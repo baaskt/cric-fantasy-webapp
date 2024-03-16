@@ -20,7 +20,7 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 function Auction() {
-  const { activeCategory, lastAuctionPlayer, updateBiddingList } = useAuction()
+  const { activeCategory, updateBiddingList } = useAuction()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(
     activeCategory ? activeCategory : tabOptions[0],
   )
@@ -41,14 +41,14 @@ function Auction() {
 
   return (
     <div className='m-5'>
-      <div className='flex flex-row justify-between'>
-        <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
-      </div>
-      <div className='flex justify-between'>
-        <div className={`${lastAuctionPlayer ? 'w-[70%]' : 'w-full'}`}>
-          <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+      <div className='flex justify-between flex-col-reverse md:flex-row gap-5 md:gap-0'>
+        <div>
+          <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
+          <div>
+            <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+          </div>
         </div>
-        <div className={`${lastAuctionPlayer ? 'w-[30%]' : 'w-0'}`}>
+        <div className='flex'>
           <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
         </div>
       </div>

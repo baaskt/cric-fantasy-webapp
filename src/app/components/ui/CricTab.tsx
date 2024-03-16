@@ -32,7 +32,7 @@ function CricTab(props: CricTabProps) {
 
   return (
     <ThemeProvider theme={tabTheme}>
-      <Tabs value={value} onChange={handleChange} aria-label='tabs'>
+      <Tabs variant='scrollable' value={value} onChange={handleChange} aria-label='tabs'>
         {optionList.map((optionEntity, index) => (
           <Tab key={optionEntity.id} label={optionEntity.label} {...a11yProps(index)} />
         ))}
