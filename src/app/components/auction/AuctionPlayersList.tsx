@@ -25,6 +25,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'basePrice', label: 'Base Price', type: 'currency' },
   { key: 'role', label: 'Role', type: 'number' },
+  { key: 'category', label: 'Category', type: 'string' },
   { key: 'soldStatus', label: 'Auction Status', type: 'number' },
 ]
 
@@ -139,7 +140,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         headerList={headersList}
         rowList={tableData}
         fullWidth={false}
-        isSelectable={props.selectedTab.id === 9}
+        isSelectable={props.selectedTab.id === 9 && activeTournament?.isHost}
         isResetCheck={!selectedIds?.length}
         onRowChecked={setSelectedIds}
       />

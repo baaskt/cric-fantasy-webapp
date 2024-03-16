@@ -3,13 +3,19 @@ import CricTab from '../ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import PlayingXI from './PlayingXI'
 import SquadPortfolio from './SquadPortfolio'
+import { SquadEntity } from '@/model/entities/squad.interface'
 
 const tabOptions: OptionsEntity[] = [
   //   { id: 1, label: 'Playing XI', value: 'PlayingXI' },
   { id: 2, label: 'Squad', value: 'Squad' },
 ]
 
-function TeamPlayers() {
+type TeamPlayersProps = {
+  squad: SquadEntity[]
+}
+
+function TeamPlayers(props: TeamPlayersProps) {
+  const { squad } = props
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
@@ -21,7 +27,11 @@ function TeamPlayers() {
         <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
       </div>
       <div className='flex justify-between'>
-        {selectedTab.id === 1 ? <PlayingXI></PlayingXI> : <SquadPortfolio></SquadPortfolio>}
+        {selectedTab.id === 1 ? (
+          <PlayingXI></PlayingXI>
+        ) : (
+          <SquadPortfolio squad={squad}></SquadPortfolio>
+        )}
       </div>
     </div>
   )

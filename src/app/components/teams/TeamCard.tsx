@@ -16,7 +16,7 @@ const participantStatList: CricMenuEntity[] = [
 const fantasyStatList: CricMenuEntity[] = [
   { label: 'Position', icon: PersonIcon, value: 'position' },
   { label: 'Purse Balance', icon: PersonIcon, value: 'purseBalance' },
-  { label: 'Squad', icon: PersonIcon, value: 'playingXI' },
+  { label: 'Squad', icon: PersonIcon, value: 'squad' },
 ]
 
 type TeamCardProps = {
@@ -55,8 +55,8 @@ function TeamCard(props: TeamCardProps) {
         icon: statEntity.icon,
         label: statEntity.label,
         value:
-          statEntity.value === 'playingXI'
-            ? `${teamDetail.playingXI?.length.toString()}${'/15'}`
+          statEntity.value === 'squad'
+            ? `${teamDetail.squad?.length.toString()}${'/15'}`
             : (statData[statEntity.value] as never),
       }
       tempMenuList.push(menuEntity)
