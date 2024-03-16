@@ -46,7 +46,7 @@ export default function LoginForm() {
     setLoginSuccess(false)
     if (validateEmail(email) && pwd) {
       const payload: LoginRequest = {
-        email: email,
+        email: email.toLowerCase(),
         password: pwd,
       }
       try {
