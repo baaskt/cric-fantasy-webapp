@@ -1,11 +1,13 @@
 'use client'
 
+import Loading from '@/components/Loading'
 import TeamCard from '@/components/teams/TeamCard'
 import TeamPlayers from '@/components/teams/TeamPlayers'
 import { useRequest } from '@/hooks/useRequest'
 import { auth } from '@/lib/auth'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { TEAM } from '@/util/constants/constants'
 import { TEAMS } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 
@@ -24,6 +26,10 @@ function TeamDetail() {
       }
     }
   }, [teamDetailRequest.data])
+
+  if (teamDetailRequest.isLoading) {
+    return <Loading txt={TEAM.LOADING_TXT}></Loading>
+  }
 
   if (!teamDetailEntity) return <></>
 
