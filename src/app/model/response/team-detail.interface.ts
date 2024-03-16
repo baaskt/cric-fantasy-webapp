@@ -1,3 +1,5 @@
+import { SquadEntity } from '../entities/squad.interface'
+
 export interface TeamDetailEntity {
   playingXI: string[]
   points: number
@@ -8,4 +10,5 @@ export interface TeamDetailEntity {
   teamId: string
   teamMembers: string[]
   tournamentId: string
+  squad: SquadEntity[]
 }

@@ -39,7 +39,7 @@ function TeamDetail() {
         <TeamCard teamDetail={teamDetailEntity}></TeamCard>
       </div>
       <div className='w-full p-5 md:w-[75%]'>
-        <TeamPlayers></TeamPlayers>
+        <TeamPlayers squad={teamDetailEntity.squad}></TeamPlayers>
       </div>
     </div>
   )

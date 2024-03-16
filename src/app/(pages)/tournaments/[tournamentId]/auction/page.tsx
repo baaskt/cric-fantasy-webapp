@@ -54,7 +54,7 @@ function Auction() {
             />
           </div>
         </div>
-        <div className='flex'>
+        <div className='flex items-start'>
           <LastAuctionPlayerCard
             categories={tabOptions}
             playerReset={playerReset}

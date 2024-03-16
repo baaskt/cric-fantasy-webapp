@@ -25,6 +25,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'basePrice', label: 'Base Price', type: 'currency' },
   { key: 'role', label: 'Role', type: 'number' },
+  { key: 'category', label: 'Category', type: 'string' },
   { key: 'soldStatus', label: 'Auction Status', type: 'number' },
 ]
 
