@@ -24,6 +24,7 @@ function Auction() {
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(
     activeCategory ? activeCategory : tabOptions[0],
   )
+  const [playerReset, setPlayerReset] = useState<boolean>(false)
 
   useEffect(() => {
     updateBiddingList()
@@ -31,6 +32,7 @@ function Auction() {
 
   useEffect(() => {
     if (activeCategory) {
+      setPlayerReset(false)
       setSelectedTab(activeCategory)
     }
   }, [activeCategory])
@@ -45,11 +47,18 @@ function Auction() {
         <div>
           <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
           <div>
-            <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+            <AuctionPlayersList
+              selectedTab={selectedTab}
+              categories={tabOptions}
+              onPlayerReset={() => setPlayerReset(true)}
+            />
           </div>
         </div>
         <div className='flex'>
-          <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
+          <LastAuctionPlayerCard
+            categories={tabOptions}
+            playerReset={playerReset}
+          ></LastAuctionPlayerCard>
         </div>
       </div>
     </div>

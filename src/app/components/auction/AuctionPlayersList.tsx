@@ -3,7 +3,7 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import { PLAYERS } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 import Loading from '../Loading'
-import { PLAYER } from '@/util/constants/constants'
+import { NO_CACHE, PLAYER } from '@/util/constants/constants'
 import CricTable from '../ui/CricTable'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
@@ -16,6 +16,8 @@ import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
 import { useRouter } from 'next/navigation'
 import { useSWRConfig } from 'swr'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { HttpMethod } from '@/model/enum/http-method.enum'
 
 const headersList: CricHeaderRow[] = [
   { key: 'sno', label: 'S.No', type: 'number' },
@@ -29,6 +31,7 @@ const headersList: CricHeaderRow[] = [
 type AuctionPlayersListProps = {
   selectedTab: OptionsEntity
   categories: OptionsEntity[]
+  onPlayerReset: () => void
 }
 
 function AuctionPlayersList(props: AuctionPlayersListProps) {
@@ -46,7 +49,14 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const PLAYERS_URL = tournamentId
     ? `${SOLD_CATEGORY_URL.replace('tournamentId', tournamentId)}${playerSetType}`
     : ''
-  const auctionPlayersRequest = useRequest(PLAYERS_URL)
+  const [selectedIds, setSelectedIds] = React.useState<(string | number)[]>([])
+
+  const auctionPlayersRequest = useRequest(PLAYERS_URL, NO_CACHE)
+
+  const RESET_PLAYER_URL = tournamentId
+    ? PLAYERS.RESET_UNSOLD_PLAYER.replace('tournamentId', tournamentId)
+    : ''
+  const resetPlayerStatusRequest = useMutateRequest(RESET_PLAYER_URL, HttpMethod.PUT)
   const { cache } = useSWRConfig()
 
   useEffect(() => {
@@ -95,18 +105,58 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     router.push(redirectUrl)
   }
 
+  const handlePlayerStatus = () => {
+    void resetPlayerStatus()
+  }
+
+  const resetPlayerStatus = async () => {
+    const payload = {
+      playerId: selectedIds,
+      key: 'soldStatus',
+      value: 'NOT_AUCTIONED',
+    }
+    try {
+      const response: CricResponse<string> = (await resetPlayerStatusRequest.trigger(
+        payload as never,
+      )) as CricResponse<string>
+      const responseData: string | null = response?.result ? response.result : null
+      console.log(responseData)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await auctionPlayersRequest.mutate()
+      props.onPlayerReset()
+      setSelectedIds([])
+    }
+  }
+
   return (
     <div className='p-5'>
       <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
         {tableData?.length} {tableData?.length > 1 ? 'players' : 'player'}
       </div>
-      <CricTable headerList={headersList} rowList={tableData} fullWidth={false} />
+      <CricTable
+        headerList={headersList}
+        rowList={tableData}
+        fullWidth={false}
+        isSelectable={props.selectedTab.id === 9}
+        isResetCheck={!selectedIds?.length}
+        onRowChecked={setSelectedIds}
+      />
       <div className='flex justify-center pt-16'>
         {activeTournament?.isHost && !lastAuctionPlayer && (
           <CricButton
             startIcon={<FlagIcon />}
             onClick={() => beginAuction()}
             btnTxt={`Begin auction for ${activeCategory?.label}`}
+          ></CricButton>
+        )}
+        {activeTournament?.isHost && props.selectedTab.id === 9 && (
+          <CricButton
+            startIcon={<FlagIcon />}
+            onClick={() => handlePlayerStatus()}
+            btnTxt={`Reset player Status`}
+            isLoading={resetPlayerStatusRequest?.isMutating}
           ></CricButton>
         )}
       </div>

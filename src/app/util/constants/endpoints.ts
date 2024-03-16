@@ -1,5 +1,5 @@
-// export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
-export const API_URL = 'https://cric-fantasy-backend-3dfu.onrender.com/api/'
+export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-3dfu.onrender.com/api/'
 
 export const HEALTH_URL = 'health'
 export const USERS = {
@@ -33,6 +33,7 @@ export const PLAYERS = {
   LAST_AUCTIONED_URL: 'players/tournaments/tournamentId/last-auctioned-player',
   GET_RANDOM_PLAYER_URL: 'players/tournamentId/random?key=category&value=',
   SELL_PLAYER: 'players/playerId/tournaments/tournamentId/sell',
+  RESET_UNSOLD_PLAYER: 'players/tournamentId',
 }
 
 export const ROOSTER = {}
