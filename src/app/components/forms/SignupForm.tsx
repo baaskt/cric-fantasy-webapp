@@ -68,7 +68,7 @@ export default function SignupForm() {
     if (isValidForm()) {
       const payload: SignupRequest = {
         fullName: fullName,
-        email: email,
+        email: email.toLowerCase(),
         password: pwd,
       }
       try {
