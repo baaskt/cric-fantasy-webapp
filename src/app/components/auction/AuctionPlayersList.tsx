@@ -139,7 +139,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         headerList={headersList}
         rowList={tableData}
         fullWidth={false}
-        isSelectable={props.selectedTab.id === 9}
+        isSelectable={props.selectedTab.id === 9 && activeTournament?.isHost}
         isResetCheck={!selectedIds?.length}
         onRowChecked={setSelectedIds}
       />
