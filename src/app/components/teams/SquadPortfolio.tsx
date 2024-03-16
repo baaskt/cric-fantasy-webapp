@@ -9,7 +9,7 @@ type SquadPortfolioProps = {
 function SquadPortfolio(props: SquadPortfolioProps) {
   const { squad } = props
   return (
-    <div className='mt-5 flex gap-5'>
+    <div className='mt-5 flex gap-5 flex-wrap'>
       {squad.map(player => (
         <PlayerCard key={player.playerId} playerData={player} showPrice={true} />
       ))}
