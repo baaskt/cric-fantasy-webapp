@@ -4,8 +4,8 @@ import { COLORS } from '@/util/colors'
 import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person'
-import { KeyValueType } from '@/model/types/cric-table.type'
 import StatCard from '../StatCard'
+import { prepareFantasyStats, prepareParticipantStats } from '@/util/player'
 
 const participantStatList: CricMenuEntity[] = [
   { label: 'Owner 1', icon: PersonIcon, value: 'teamMembers' },
@@ -23,49 +23,20 @@ type TeamCardProps = {
   teamDetail: TeamDetailEntity
 }
 function TeamCard(props: TeamCardProps) {
-  const { teamName, points, teamMembers } = props.teamDetail
+  const { teamDetail } = props
+  const { teamName, points, teamMembers } = teamDetail
   const [participantsList, setParticipantsList] = useState<CricMenuEntity[]>([])
   const [fantasyList, setFantasyList] = useState<CricMenuEntity[]>([])
 
   useEffect(() => {
     const participantStats = prepareParticipantStats(participantStatList, teamMembers)
     setParticipantsList(participantStats)
-    const fantasyStats = prepareFantasyStats(fantasyStatList, props.teamDetail)
+    const fantasyStats = prepareFantasyStats(fantasyStatList, teamDetail)
     setFantasyList(fantasyStats)
-  }, [props.teamDetail])
-
-  const prepareParticipantStats = (statsList: CricMenuEntity[], participants: string[]) => {
-    const tempMenuList: CricMenuEntity[] = []
-    participants.forEach((participant, index) => {
-      const menuEntity = {
-        icon: statsList[index].icon,
-        label: statsList[index].label,
-        value: participant,
-      }
-      tempMenuList.push(menuEntity)
-    })
-    return tempMenuList
-  }
-
-  const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: TeamDetailEntity) => {
-    const tempMenuList: CricMenuEntity[] = []
-    statsList.forEach(statEntity => {
-      const statData = teamDetail as never as KeyValueType
-      const menuEntity = {
-        icon: statEntity.icon,
-        label: statEntity.label,
-        value:
-          statEntity.value === 'squad'
-            ? `${teamDetail.squad?.length.toString()}${'/15'}`
-            : (statData[statEntity.value] as never),
-      }
-      tempMenuList.push(menuEntity)
-    })
-    return tempMenuList
-  }
+  }, [teamDetail])
 
   return (
-    <div className='flex flex-col gap-10 shadow-lg p-5 md:h-dvh'>
+    <div className='flex flex-col gap-10 shadow-lg p-5 h-full'>
       <div className='flex flex-row justify-start items-center gap-5 p-5'>
         <Avatar
           sx={{

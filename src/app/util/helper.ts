@@ -212,3 +212,15 @@ const getTeamCellValue = (
   }
   return cellValue
 }
+
+export const groupListByProp = <T>(prop: string, list: T[]) => {
+  const grouped = new Map<string, T[]>()
+  for (const item of list) {
+    const itemData = item as never as KeyValueType
+    const key = itemData[prop] as never
+    const existingArray = grouped.get(key) || []
+    existingArray.push(item)
+    grouped.set(key, existingArray)
+  }
+  return grouped
+}
