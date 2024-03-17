@@ -1,6 +1,7 @@
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { LastAuctionPlayerDetailEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerEntity } from '@/model/response/player-response.interface'
+import { currencyToString } from '@/util/bidding'
 import Image from 'next/image'
 import React from 'react'
 
@@ -21,7 +22,7 @@ function PlayerCard(props: PlayerCardProps) {
         <div className='text-sm text-center font-normal text-slate-500'>{role}</div>
         {props.showPrice && (
           <div className='mt-2 italic text-sm text-center font-normal text-slate-600'>
-            Bid Price: {soldAmount}
+            Bid Price: {currencyToString(soldAmount ? soldAmount : 0)}
           </div>
         )}
       </div>

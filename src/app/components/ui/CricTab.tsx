@@ -13,11 +13,12 @@ function a11yProps(index: number) {
 type CricTabProps = {
   selectedTab?: OptionsEntity
   optionList: OptionsEntity[]
+  subText?: string
   onChange: (event: OptionsEntity) => void
 }
 
 function CricTab(props: CricTabProps) {
-  const { selectedTab, optionList, onChange } = props
+  const { subText, selectedTab, optionList, onChange } = props
   const [value, setValue] = React.useState(0)
 
   useEffect(() => {
@@ -34,7 +35,11 @@ function CricTab(props: CricTabProps) {
     <ThemeProvider theme={tabTheme}>
       <Tabs variant='scrollable' value={value} onChange={handleChange} aria-label='tabs'>
         {optionList.map((optionEntity, index) => (
-          <Tab key={optionEntity.id} label={optionEntity.label} {...a11yProps(index)} />
+          <Tab
+            key={optionEntity.id}
+            label={`${optionEntity.label} ${subText ? subText : ''}`}
+            {...a11yProps(index)}
+          />
         ))}
       </Tabs>
     </ThemeProvider>
