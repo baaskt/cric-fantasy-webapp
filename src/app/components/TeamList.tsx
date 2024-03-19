@@ -7,7 +7,7 @@ import { prepareTeamTable } from '@/util/helper'
 import React, { useEffect, useState } from 'react'
 import CricTable from './ui/CricTable'
 import Loading from './Loading'
-import { NO_CACHE, TEAM } from '@/util/constants/constants'
+import { TEAM } from '@/util/constants/constants'
 import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
 
@@ -26,7 +26,7 @@ function TeamList() {
   const { markActiveTeam } = useTournament()
   const router = useRouter()
 
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS, NO_CACHE)
+  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { auth } from '@/lib/auth'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
-import { NO_CACHE, TEAM } from '@/util/constants/constants'
+import { TEAM } from '@/util/constants/constants'
 import { TEAMS } from '@/util/constants/endpoints'
 import { groupPlayersByRole } from '@/util/player'
 import React, { useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ function TeamDetail() {
   const [teamDetailEntity, setTeamDetailEntity] = useState<TeamDetailEntity>()
   const [groupedSquad, setGroupedSquad] = useState<Map<string, SquadEntity[]>>(new Map())
   const TEAM_DETAIL_URL = teamId ? TEAMS.TEAM_DETAIL_URL.replace('teamId', teamId) : ''
-  const teamDetailRequest = useRequest(TEAM_DETAIL_URL, NO_CACHE)
+  const teamDetailRequest = useRequest(TEAM_DETAIL_URL)
 
   useEffect(() => {
     if (teamDetailRequest.data) {
