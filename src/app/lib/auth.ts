@@ -3,7 +3,7 @@ import { cookieHelper } from './cookieHelper'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { USERS } from '@/util/constants/endpoints'
 import { apiHelper } from './apiHelper'
-import { TOURNAMENT_ID } from '@/providers/TournamentProvider'
+import { TEAM_ID, TOURNAMENT_ID } from '@/providers/TournamentProvider'
 
 export const auth = () => {
   const ACCESS_TOKEN = 'accessToken'
@@ -22,6 +22,11 @@ export const auth = () => {
   function getTournamentId(): string {
     const tournamentId = cookieHelper().getCookieItem(TOURNAMENT_ID)
     return tournamentId ? tournamentId : ''
+  }
+
+  function getTeamId(): string {
+    const teamId = cookieHelper().getCookieItem(TEAM_ID)
+    return teamId ? teamId : ''
   }
 
   function setAuthCred(authCred: LoginResponse): void {
@@ -50,6 +55,7 @@ export const auth = () => {
     getAccessToken,
     getRefreshToken,
     getTournamentId,
+    getTeamId,
     setAuthCred,
     clearAuthCred,
     refreshAccessToken,

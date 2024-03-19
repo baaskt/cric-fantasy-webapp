@@ -20,10 +20,11 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 function Auction() {
-  const { activeCategory, lastAuctionPlayer, updateBiddingList } = useAuction()
+  const { activeCategory, updateBiddingList } = useAuction()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(
     activeCategory ? activeCategory : tabOptions[0],
   )
+  const [playerReset, setPlayerReset] = useState<boolean>(false)
 
   useEffect(() => {
     updateBiddingList()
@@ -31,6 +32,7 @@ function Auction() {
 
   useEffect(() => {
     if (activeCategory) {
+      setPlayerReset(false)
       setSelectedTab(activeCategory)
     }
   }, [activeCategory])
@@ -41,15 +43,22 @@ function Auction() {
 
   return (
     <div className='m-5'>
-      <div className='flex flex-row justify-between'>
-        <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
-      </div>
-      <div className='flex justify-between'>
-        <div className={`${lastAuctionPlayer ? 'w-[70%]' : 'w-full'}`}>
-          <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+      <div className='flex justify-between flex-col-reverse md:flex-row gap-5 md:gap-0'>
+        <div>
+          <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
+          <div>
+            <AuctionPlayersList
+              selectedTab={selectedTab}
+              categories={tabOptions}
+              onPlayerReset={() => setPlayerReset(true)}
+            />
+          </div>
         </div>
-        <div className={`${lastAuctionPlayer ? 'w-[30%]' : 'w-0'}`}>
-          <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
+        <div className='flex items-start'>
+          <LastAuctionPlayerCard
+            categories={tabOptions}
+            playerReset={playerReset}
+          ></LastAuctionPlayerCard>
         </div>
       </div>
     </div>

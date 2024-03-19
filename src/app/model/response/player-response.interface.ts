@@ -23,6 +23,7 @@ export interface PlayerEntity {
   basePrice: number
   category: string
   modifiedBy: number
+  soldAmount: number
 }
 
 export interface StatsEntity {

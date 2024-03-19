@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: 'CriKCC Fantasy Authentication',
+  title: 'CriKCC Fantasy',
   description: 'Login or Signup for CriKCC Fantasy',
 }
 

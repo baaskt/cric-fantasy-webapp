@@ -2,6 +2,7 @@ import { useRequest } from '@/hooks/useRequest'
 import { auth } from '@/lib/auth'
 import { cookieHelper } from '@/lib/cookieHelper'
 import { TournamentContextType } from '@/model/context/tournamentContextType'
+import { TeamEntity } from '@/model/response/team.interface'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
@@ -11,9 +12,11 @@ const ListContext = createContext<TournamentContextType>({} as TournamentContext
 const { Provider } = ListContext
 
 export const TOURNAMENT_ID = 'tournamentId'
+export const TEAM_ID = 'teamId'
 
 export const TournamentProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeTournament, setActiveTournament] = useState<TournamentEntity>()
+  const [activeTeam, setActiveTeam] = useState<TeamEntity>()
   const [tournamentList, setTournamentList] = useState<TournamentEntity[]>([])
   const [subTitle, setSubTitle] = useState<string>('')
 
@@ -50,6 +53,11 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     setActiveTournament(activeTournament)
   }
 
+  const markActiveTeam = (activeTeam: TeamEntity) => {
+    cookieHelper().setCookieItem(TEAM_ID, activeTeam.teamId)
+    setActiveTeam(activeTeam)
+  }
+
   const value: TournamentContextType = {
     activeTournament,
     markActiveTournament,
@@ -59,6 +67,8 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     updateTournament,
     subTitle,
     setSubTitle,
+    activeTeam,
+    markActiveTeam,
   }
 
   return <Provider value={value}>{children}</Provider>

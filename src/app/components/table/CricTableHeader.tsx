@@ -1,4 +1,12 @@
-import { Box, Checkbox, SortDirection, TableHead, TableRow, TableSortLabel } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  SortDirection,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  checkboxClasses,
+} from '@mui/material'
 import { StyledTableCell } from '../ui/CricTable'
 import { CricHeaderRow } from '@/model/types/cric-table.type'
 import { visuallyHidden } from '@mui/utils'
@@ -63,6 +71,11 @@ export default function CricTableHead(props: CricTableHeadProps) {
               onChange={onSelectAllClick}
               inputProps={{
                 'aria-label': 'select all desserts',
+              }}
+              sx={{
+                [`&, &.${checkboxClasses.checked}`]: {
+                  color: COLORS.white,
+                },
               }}
             />
           </StyledTableCell>

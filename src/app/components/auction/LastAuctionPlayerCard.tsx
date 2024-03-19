@@ -22,10 +22,11 @@ import { useTournament } from '@/providers/TournamentProvider'
 
 type LastAuctionPlayerCardProps = {
   categories: OptionsEntity[]
+  playerReset: boolean
 }
 
 function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
-  const { categories } = props
+  const { categories, playerReset } = props
   const { activeCategory, setAuctionCompleted, setActiveCategory, setLastAuctionplayer } =
     useAuction()
   const { activeTournament, setSubTitle } = useTournament()
@@ -50,6 +51,16 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   useEffect(() => {
     setDefaultCategory()
   }, [])
+
+  useEffect(() => {
+    if (playerReset) {
+      void resetLastPlayer()
+    }
+  }, [playerReset])
+
+  const resetLastPlayer = async () => {
+    await lastauctionPlayerRequest.mutate()
+  }
 
   useEffect(() => {
     if (lastauctionPlayerResponse?.result) {
