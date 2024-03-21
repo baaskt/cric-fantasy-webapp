@@ -4,7 +4,6 @@ import CricTable from '../ui/CricTable'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { preparePlayingXITable } from '@/util/table'
 import CricButton from '../ui/CricButton'
-import { COLORS } from '@/util/colors'
 import PlayingXIComposition from './PlayingXIComposition'
 import { WK, groupPlayersByRole } from '@/util/player'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
@@ -12,6 +11,7 @@ import { HttpMethod } from '@/model/enum/http-method.enum'
 import { TEAMS } from '@/util/constants/endpoints'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useTournament } from '@/providers/TournamentProvider'
+import { hasMismatch } from '@/util/helper'
 
 const headersList: CricHeaderRow[] = [
   { key: 'playingXI', label: 'Playing XI', type: 'switch' },
@@ -31,8 +31,10 @@ type PlayingXIProps = {
 function PlayingXI(props: PlayingXIProps) {
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
-  const { squad, isXIChangeAllowed, teamId } = props
+  const { isXIChangeAllowed, teamId } = props
+  const [squad, setSquad] = useState<SquadEntity[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
+  const [isXIDirty, setXIDirty] = useState<boolean>(false)
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([])
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
   const PLAYING_XI_UPDATE_URL = tournamentId
@@ -41,13 +43,29 @@ function PlayingXI(props: PlayingXIProps) {
   const updatedPlayingXIRequest = useMutateRequest(PLAYING_XI_UPDATE_URL, HttpMethod.PUT)
 
   useEffect(() => {
-    const tempTableData = preparePlayingXITable(squad, headersList, isXIChangeAllowed)
-    setTableData(tempTableData)
+    setSquad(props.squad)
+    prepareTableData(props.squad)
+    preparePlayingXIData(props.squad)
+  }, [props.squad])
 
-    const playersInXI = squad.filter(player => player.playingXI)
+  useEffect(() => {
+    const defaultPlayerIds = squad.filter(player => player.playingXI).map(player => player.playerId)
+    const isXIDirty = hasMismatch(selectedPlayerIds, defaultPlayerIds)
+    setXIDirty(isXIDirty)
+  }, [selectedPlayerIds])
+
+  const prepareTableData = (tempSquad: SquadEntity[]) => {
+    const tempTableData = preparePlayingXITable(tempSquad, headersList, isXIChangeAllowed)
+    setTableData(tempTableData)
+  }
+
+  const preparePlayingXIData = (tempSquad: SquadEntity[]) => {
+    const playersInXI = tempSquad.filter(player => player.playingXI)
+    setSelectedPlayerIds(playersInXI.map(player => player.playerId))
+
     const playingXIGroupedSquad = groupPlayersByRole(playersInXI)
     setPlayingXISquad(playingXIGroupedSquad)
-  }, [squad])
+  }
 
   const handlePlayingXIToggle = (playerIds: number[]) => {
     setSelectedPlayerIds(playerIds)
@@ -61,10 +79,21 @@ function PlayingXI(props: PlayingXIProps) {
     void updatePlayingXI()
   }
 
+  const mutateSquadDetails = (playingXI: number[]) => {
+    const updatedSquad = squad.map(prop => ({
+      ...prop,
+      playingXI: playingXI.includes(prop.playerId) ? true : false,
+    }))
+    setSquad(updatedSquad)
+  }
+
   const updatePlayingXI = async () => {
     if (!updatedPlayingXIRequest.isMutating) {
       const payload = {
         playingXI: selectedPlayerIds,
+        nonPlaying: squad
+          .filter(player => !selectedPlayerIds.includes(player.playerId))
+          .map(player => player.playerId),
       }
       try {
         const response: CricResponse<string> = (await updatedPlayingXIRequest.trigger(
@@ -72,11 +101,10 @@ function PlayingXI(props: PlayingXIProps) {
         )) as CricResponse<string>
         const responseData: string | null = response?.result ? response.result : null
         console.log(responseData)
+        setXIDirty(false)
+        mutateSquadDetails(payload.playingXI)
       } catch (e) {
         console.log(e)
-      } finally {
-        setSelectedPlayerIds([])
-        setPlayingXISquad(new Map())
       }
     }
   }
@@ -94,17 +122,18 @@ function PlayingXI(props: PlayingXIProps) {
           playingXISquad={playingXISquad}
           playersCount={selectedPlayerIds.length}
         />
-        {isXIChangeAllowed && playingXISquad.has(WK) && selectedPlayerIds.length === 11 && (
-          <div className='pt-5 flex justify-center'>
-            <CricButton
-              btnTxt='Save Changes'
-              color={COLORS.white}
-              bgColor={COLORS.cricPrimary}
-              onClick={handlePlayingXIUpdate}
-              isLoading={updatedPlayingXIRequest.isMutating}
-            ></CricButton>
-          </div>
-        )}
+        {isXIDirty &&
+          isXIChangeAllowed &&
+          playingXISquad.has(WK) &&
+          selectedPlayerIds.length === 11 && (
+            <div className='pt-5 flex justify-center'>
+              <CricButton
+                btnTxt='Save Changes'
+                onClick={handlePlayingXIUpdate}
+                isLoading={updatedPlayingXIRequest.isMutating}
+              ></CricButton>
+            </div>
+          )}
       </div>
       <CricTable
         headerList={updatedHeaders}
@@ -112,6 +141,7 @@ function PlayingXI(props: PlayingXIProps) {
         fullWidth={false}
         defOrder={'asc'}
         defOrderBy={'role'}
+        checkedIds={selectedPlayerIds}
         onRowToggled={playerIds => handlePlayingXIToggle(playerIds as Array<number>)}
       />
     </div>

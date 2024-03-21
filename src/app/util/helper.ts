@@ -12,6 +12,7 @@ import {
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { PlayingXIStatus } from '@/model/enum/playingxi-status.enum'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -183,6 +184,12 @@ export const prepareTeamTable = (
         cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
+        color:
+          cellValue === PlayingXIStatus.SET
+            ? COLORS.sold
+            : cellValue === PlayingXIStatus.UNSET
+              ? COLORS.unsold
+              : '',
       }
       rowData.push(tableCell)
     })
@@ -191,7 +198,6 @@ export const prepareTeamTable = (
       dataList: rowData,
     })
   })
-  console.log(tempTableData)
   return tempTableData
 }
 
@@ -210,6 +216,8 @@ const getTeamCellValue = (
     cellValue = teamIndex + 1
   } else if (cellKey === 'teamMembers') {
     cellValue = teamEntity.teamMembers.map(data => data.name)
+  } else if (cellKey === 'playingXI') {
+    cellValue = teamEntity.playingXI?.length === 11 ? 'SET' : 'UNSET'
   } else {
     cellValue = teamData[cellKey]
   }
@@ -226,4 +234,23 @@ export const groupListByProp = <T>(prop: string, list: T[]) => {
     grouped.set(key, existingArray)
   }
   return grouped
+}
+
+export function hasMismatch(data1: number[], data2: number[]) {
+  const array1 = data1.sort((a, b) => a - b)
+  const array2 = data2.sort((a, b) => a - b)
+  console.log(array1)
+  console.log(array2)
+
+  if (array1.length !== array2.length) {
+    return true
+  }
+
+  for (let i = 0; i < array1.length; i++) {
+    if (array1[i] !== array2[i]) {
+      return true
+    }
+  }
+
+  return false
 }

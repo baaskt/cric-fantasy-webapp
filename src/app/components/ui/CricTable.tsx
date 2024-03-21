@@ -50,6 +50,7 @@ type CricTableProps = {
   fullWidth: boolean
   isSelectable?: boolean
   isResetCheck?: boolean
+  checkedIds?: (string | number)[]
   onRowSelect?: (rowId: string | number) => void
   onRowChecked?: (rowId: (string | number)[]) => void
   onRowToggled?: (rowId: (string | number)[]) => void
@@ -64,6 +65,7 @@ function CricTable(props: CricTableProps) {
     fullWidth,
     isSelectable,
     isResetCheck,
+    checkedIds,
     onRowChecked,
     onRowToggled,
   } = props
@@ -72,7 +74,6 @@ function CricTable(props: CricTableProps) {
   const [selectedIds, setSelectedIds] = React.useState<(string | number)[]>([])
 
   React.useEffect(() => {
-    console.log(isResetCheck)
     if (isResetCheck) {
       setSelectedIds([])
     }
@@ -174,12 +175,13 @@ function CricTable(props: CricTableProps) {
 
   const renderToggleCell = (row: CricTableRow, isChecked: boolean) => {
     const toggleRow = (isToggled: boolean) => {
+      const preToggledIds = checkedIds || []
       if (isToggled) {
-        const tempSelectedIds = [...selectedIds, row.rowId]
+        const tempSelectedIds = [...preToggledIds, row.rowId]
         setSelectedIds(tempSelectedIds)
         onRowToggled && onRowToggled(tempSelectedIds)
       } else {
-        const tempSelectedIds = [...selectedIds].filter(data => data !== row.rowId)
+        const tempSelectedIds = [...preToggledIds].filter(data => data !== row.rowId)
         setSelectedIds(tempSelectedIds)
         onRowToggled && onRowToggled(tempSelectedIds)
       }
