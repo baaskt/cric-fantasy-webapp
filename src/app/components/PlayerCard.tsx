@@ -11,18 +11,26 @@ type PlayerCardProps = {
 }
 
 function PlayerCard(props: PlayerCardProps) {
-  const { imageUrl, name, role, soldAmount } = props.playerData
+  const { imageUrl, name, role, soldAmount, clubName } = props.playerData
   const playerUrl = imageUrl || ''
 
   return (
     <div>
-      <Image src={playerUrl} alt='player profile' width={200} height={220} />
+      <Image
+        src={playerUrl}
+        alt='player profile'
+        width='0'
+        height='0'
+        sizes='100vw'
+        className='w-[180px] h-auto'
+      />
       <div className='p-2 flex flex-col items-center shadow-lg'>
         <div className='text-md text-center font-medium'>{name}</div>
         <div className='text-sm text-center font-normal text-slate-500'>{role}</div>
+        <div className='text-sm pt-2 text-center font-normal text-slate-700'>{clubName}</div>
         {props.showPrice && (
-          <div className='mt-2 italic text-sm text-center font-normal text-slate-600'>
-            Bid Price: {currencyToString(soldAmount ? soldAmount : 0)}
+          <div className='italic text-sm text-center font-normal text-slate-600'>
+            {currencyToString(soldAmount ? soldAmount : 0)}
           </div>
         )}
       </div>

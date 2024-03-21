@@ -191,6 +191,7 @@ export const prepareTeamTable = (
       dataList: rowData,
     })
   })
+  console.log(tempTableData)
   return tempTableData
 }
 
@@ -207,6 +208,8 @@ const getTeamCellValue = (
     cellValue = iconPath
   } else if (cellKey === 'pos') {
     cellValue = teamIndex + 1
+  } else if (cellKey === 'teamMembers') {
+    cellValue = teamEntity.teamMembers.map(data => data.name)
   } else {
     cellValue = teamData[cellKey]
   }

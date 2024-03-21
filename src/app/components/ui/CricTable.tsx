@@ -13,6 +13,7 @@ import CricTableHead from '../table/CricTableHeader'
 import { sortTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
 import { Checkbox, IconButton, checkboxClasses } from '@mui/material'
+import CricSwitch from './CricSwitch'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -51,6 +52,7 @@ type CricTableProps = {
   isResetCheck?: boolean
   onRowSelect?: (rowId: string | number) => void
   onRowChecked?: (rowId: (string | number)[]) => void
+  onRowToggled?: (rowId: (string | number)[]) => void
 }
 
 function CricTable(props: CricTableProps) {
@@ -63,6 +65,7 @@ function CricTable(props: CricTableProps) {
     isSelectable,
     isResetCheck,
     onRowChecked,
+    onRowToggled,
   } = props
   const [order, setOrder] = React.useState(defOrder || 'asc')
   const [orderBy, setOrderBy] = React.useState(defOrderBy || '')
@@ -140,7 +143,8 @@ function CricTable(props: CricTableProps) {
           cell.cellType === 'number' ||
           cell.cellType === 'currency' ||
           cell.cellType === 'icon' ||
-          cell.cellType === 'list'
+          cell.cellType === 'list' ||
+          cell.cellType === 'switch'
             ? 'center'
             : 'left'
         }
@@ -151,7 +155,9 @@ function CricTable(props: CricTableProps) {
             ? renderListCell(cell.value as string[])
             : cell.cellType === 'currency'
               ? currencyToString(Number(cell.value))
-              : cell.value}
+              : cell.cellType === 'switch'
+                ? renderToggleCell(row, Boolean(cell.value))
+                : cell.value}
       </StyledTableCell>
     )
   }
@@ -164,6 +170,21 @@ function CricTable(props: CricTableProps) {
         </span>
       </IconButton>
     )
+  }
+
+  const renderToggleCell = (row: CricTableRow, isChecked: boolean) => {
+    const toggleRow = (isToggled: boolean) => {
+      if (isToggled) {
+        const tempSelectedIds = [...selectedIds, row.rowId]
+        setSelectedIds(tempSelectedIds)
+        onRowToggled && onRowToggled(tempSelectedIds)
+      } else {
+        const tempSelectedIds = [...selectedIds].filter(data => data !== row.rowId)
+        setSelectedIds(tempSelectedIds)
+        onRowToggled && onRowToggled(tempSelectedIds)
+      }
+    }
+    return <CricSwitch isChecked={isChecked} onChange={toggleRow}></CricSwitch>
   }
 
   const renderListCell = (listData: string[]) => {
