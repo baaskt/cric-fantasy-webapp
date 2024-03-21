@@ -23,6 +23,7 @@ export const TEAMS = {
   GET_ALL_TEAMS: 'teams',
   CREATE_TEAM_URL: 'teams',
   TEAM_DETAIL_URL: 'teams/teamId',
+  UPDATE_TEAM: 'teams/teamId',
 }
 
 export const PLAYERS = {
