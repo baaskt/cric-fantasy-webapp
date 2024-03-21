@@ -83,7 +83,7 @@ function PlayingXI(props: PlayingXIProps) {
   )
 
   return (
-    <div className='flex flex-col gap-5 w-screen pt-5 md:p-5'>
+    <div className='flex flex-col w-full gap-5 pt-5 md:p-5'>
       <div className='shadow-lg rounded-lg p-2 border-2 border-gray-300'>
         <PlayingXIComposition
           playingXISquad={playingXISquad}
