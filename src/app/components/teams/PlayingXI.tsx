@@ -11,6 +11,7 @@ import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { TEAMS } from '@/util/constants/endpoints'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const headersList: CricHeaderRow[] = [
   { key: 'playingXI', label: 'Playing XI', type: 'switch' },
@@ -28,11 +29,15 @@ type PlayingXIProps = {
 }
 
 function PlayingXI(props: PlayingXIProps) {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const { squad, isXIChangeAllowed, teamId } = props
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([])
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
-  const PLAYING_XI_UPDATE_URL = teamId ? TEAMS.UPDATE_TEAM.replace('teamId', teamId) : ''
+  const PLAYING_XI_UPDATE_URL = tournamentId
+    ? TEAMS.UPDATE_PLAYINGXI_URL.replace('teamId', teamId).replace('tournamentId', tournamentId)
+    : ''
   const updatedPlayingXIRequest = useMutateRequest(PLAYING_XI_UPDATE_URL, HttpMethod.PUT)
 
   useEffect(() => {
@@ -83,7 +88,7 @@ function PlayingXI(props: PlayingXIProps) {
   )
 
   return (
-    <div className='flex flex-col gap-5 w-screen pt-5 md:p-5'>
+    <div className='flex flex-col w-full gap-5 pt-5 md:p-5'>
       <div className='shadow-lg rounded-lg p-2 border-2 border-gray-300'>
         <PlayingXIComposition
           playingXISquad={playingXISquad}

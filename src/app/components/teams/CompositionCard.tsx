@@ -14,7 +14,7 @@ function CompositionCard(props: CompositionCardProps) {
         backgroundColor: validComp ? COLORS.cricPrimary : COLORS.cricPrimaryLight,
       }}
       key={role}
-      className='rounded-lg shadow-lg p-2 text-center md:min-w-48'
+      className='rounded-lg shadow-lg p-2 text-center min-w-36 md:min-w-48'
     >
       <div style={{ color: COLORS.white }} className='text-md md:text-xl'>
         {role}
