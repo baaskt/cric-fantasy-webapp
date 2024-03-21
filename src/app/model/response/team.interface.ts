@@ -7,4 +7,5 @@ export interface TeamEntity {
   teamMembers: TeamMember[]
   tournamentId: string
   tournamentPoints: number
+  playingXI: number[]
 }
