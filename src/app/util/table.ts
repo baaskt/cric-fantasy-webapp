@@ -47,24 +47,26 @@ export const preparePlayingXITable = (
   playersList.forEach((playerEntity: SquadEntity, playerIndex: number) => {
     const rowData: CricTableCell[] = []
     headersList.forEach((headerEntity: CricHeaderRow) => {
-      if ((headerEntity.key === 'playingXI' && isTeamOwner) || headerEntity.key !== 'playingXI') {
-        const cellType = headerEntity.type
-        const cellKey = headerEntity.key
-        const iconPath = headerEntity.iconPath
-        const cellValue = getPlayingXICellValue(
-          cellType,
-          cellKey,
-          iconPath,
-          playerIndex,
-          playerEntity,
-        )
-        const tableCell: CricTableCell = {
-          cellKey: cellKey,
-          cellType: cellType,
-          value: cellValue,
-        }
-        rowData.push(tableCell)
+      const cellType = headerEntity.type
+      const cellKey = headerEntity.key
+      const iconPath = headerEntity.iconPath
+      const cellValue = getPlayingXICellValue(
+        cellType,
+        cellKey,
+        iconPath,
+        playerIndex,
+        playerEntity,
+      )
+      const tableCell: CricTableCell = {
+        cellKey: cellKey,
+        cellType: cellType,
+        value: cellValue,
+        isDisabled:
+          (headerEntity.key === 'playingXI' && isTeamOwner) || headerEntity.key !== 'playingXI'
+            ? false
+            : true,
       }
+      rowData.push(tableCell)
     })
     tempTableData.push({
       rowId: playerEntity.playerId,

@@ -1,5 +1,5 @@
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { preparePlayingXITable } from '@/util/table'
@@ -14,7 +14,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { hasMismatch } from '@/util/helper'
 
 const headersList: CricHeaderRow[] = [
-  { key: 'playingXI', label: 'Playing XI', type: 'switch' },
+  { key: 'playingXI', label: 'Playing XI', type: 'switch', isDisabled: false },
   { key: 'name', label: 'Players', type: 'string' },
   { key: 'role', label: 'Role', type: 'string' },
   { key: 'clubName', label: 'Club', type: 'string' },
@@ -119,12 +119,6 @@ function PlayingXI(props: PlayingXIProps) {
     }
   }
 
-  const updatedHeaders = useMemo(
-    () =>
-      isXIChangeAllowed ? headersList : headersList.filter(header => header.key !== 'playingXI'),
-    [isXIChangeAllowed],
-  )
-
   return (
     <div className='flex flex-col w-full gap-5 pt-5 md:p-5'>
       <div className='shadow-lg rounded-lg p-2 border-2 border-gray-300'>
@@ -144,7 +138,7 @@ function PlayingXI(props: PlayingXIProps) {
         )}
       </div>
       <CricTable
-        headerList={updatedHeaders}
+        headerList={headersList}
         rowList={tableData}
         fullWidth={false}
         defOrder={'asc'}
