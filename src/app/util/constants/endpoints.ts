@@ -19,6 +19,10 @@ export const TOURNAMENTS = {
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
 }
 
+export const MATCHES = {
+  GET_ALL: 'matchSchedule',
+}
+
 export const TEAMS = {
   GET_ALL_TEAMS: 'teams',
   CREATE_TEAM_URL: 'teams',
