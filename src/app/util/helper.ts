@@ -239,8 +239,6 @@ export const groupListByProp = <T>(prop: string, list: T[]) => {
 export function hasMismatch(data1: number[], data2: number[]) {
   const array1 = data1.sort((a, b) => a - b)
   const array2 = data2.sort((a, b) => a - b)
-  console.log(array1)
-  console.log(array2)
 
   if (array1.length !== array2.length) {
     return true

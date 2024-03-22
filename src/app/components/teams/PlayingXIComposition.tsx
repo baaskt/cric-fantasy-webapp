@@ -7,10 +7,11 @@ import CompositionCard from './CompositionCard'
 type PlayingXICompositionProps = {
   playersCount: number
   playingXISquad: Map<string, SquadEntity[]>
+  isValidComp: boolean
 }
 
 function PlayingXIComposition(props: PlayingXICompositionProps) {
-  const { playersCount, playingXISquad } = props
+  const { playersCount, playingXISquad, isValidComp } = props
   return (
     <div>
       <div
@@ -37,9 +38,10 @@ function PlayingXIComposition(props: PlayingXICompositionProps) {
           validComp={playingXISquad.has(WK) && playersCount === 11}
         />
       </div>
-      {!(playingXISquad.has(WK) && playersCount === 11) && playersCount ? (
+      {!isValidComp && playersCount ? (
         <div className='text-center text-red-500 italic'>
-          Select a valid composition ( 1 WK and 11 Players )
+          Select a valid composition ( min - 3 BAT/3 BAT ALL ROUND, 3 BOWL/3 BOWL ALL ROUND, 1 ALL
+          ROUND, 1 WK and 11 Players Total )
         </div>
       ) : (
         <></>

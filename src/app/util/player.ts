@@ -80,3 +80,39 @@ export const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: Tea
   })
   return tempMenuList
 }
+
+export const checkValidComposition = (playersInXI: SquadEntity[]) => {
+  if (!(playersInXI?.length === 11)) return false
+  const minBat = 3,
+    minBowl = 3,
+    minAllRound = 1,
+    minWK = 1
+  let bat = 0,
+    bowl = 0,
+    wk = 0,
+    batAllRound = 0,
+    bowlAllRound = 0
+  const playerRoles = playersInXI.map(player => player.role)
+  playerRoles.forEach(role => {
+    if (role === BATTER) {
+      ++bat
+    }
+    if (role === BOWLER) {
+      ++bowl
+    }
+    if (role === BAT_ALLROUNDER) {
+      batAllRound < 1 ? ++batAllRound : ++bat
+    }
+    if (role === BOWL_ALLROUNDER) {
+      bowlAllRound < 1 ? ++bowlAllRound : ++bowl
+    }
+    if (role === BAT_WK || role === BOWL_WK) {
+      wk < 1 ? ++wk : ++bat
+    }
+  })
+  const validBat = bat >= minBat || bat + batAllRound >= minBat + minAllRound ? true : false
+  const validBowl = bowl >= minBowl || bowl + bowlAllRound >= minBowl + minAllRound ? true : false
+  const validAllRound = batAllRound + bowlAllRound >= minAllRound ? true : false
+  const validWK = wk >= minWK ? true : false
+  return validBat && validBowl && validAllRound && validWK
+}
