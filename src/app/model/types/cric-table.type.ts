@@ -3,6 +3,7 @@ export type CricHeaderRow = {
   label: string
   type: string
   iconPath?: string
+  isDisabled?: boolean
 }
 
 export type CricTableRow = {
@@ -15,6 +16,7 @@ export type CricTableCell = {
   cellType: string
   value: string | string[] | number | null | undefined
   color?: string
+  isDisabled?: boolean
 }
 
 export interface KeyValueType {

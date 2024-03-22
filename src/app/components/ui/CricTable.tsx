@@ -157,7 +157,7 @@ function CricTable(props: CricTableProps) {
             : cell.cellType === 'currency'
               ? currencyToString(Number(cell.value))
               : cell.cellType === 'switch'
-                ? renderToggleCell(row, Boolean(cell.value))
+                ? renderToggleCell(row, cell)
                 : cell.value}
       </StyledTableCell>
     )
@@ -173,7 +173,9 @@ function CricTable(props: CricTableProps) {
     )
   }
 
-  const renderToggleCell = (row: CricTableRow, isChecked: boolean) => {
+  const renderToggleCell = (row: CricTableRow, cell: CricTableCell) => {
+    const isChecked = Boolean(cell.value)
+    const isDisabled = Boolean(cell.isDisabled)
     const toggleRow = (isToggled: boolean) => {
       const preToggledIds = checkedIds || []
       if (isToggled) {
@@ -186,7 +188,9 @@ function CricTable(props: CricTableProps) {
         onRowToggled && onRowToggled(tempSelectedIds)
       }
     }
-    return <CricSwitch isChecked={isChecked} onChange={toggleRow}></CricSwitch>
+    return (
+      <CricSwitch isChecked={isChecked} disabled={isDisabled} onChange={toggleRow}></CricSwitch>
+    )
   }
 
   const renderListCell = (listData: string[]) => {
