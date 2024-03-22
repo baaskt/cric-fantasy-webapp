@@ -5,7 +5,7 @@ import { SquadEntity } from '@/model/entities/squad.interface'
 import { preparePlayingXITable } from '@/util/table'
 import CricButton from '../ui/CricButton'
 import PlayingXIComposition from './PlayingXIComposition'
-import { WK, groupPlayersByRole } from '@/util/player'
+import { checkValidComposition, groupPlayersByRole } from '@/util/player'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { TEAMS } from '@/util/constants/endpoints'
@@ -35,6 +35,7 @@ function PlayingXI(props: PlayingXIProps) {
   const [squad, setSquad] = useState<SquadEntity[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [isXIDirty, setXIDirty] = useState<boolean>(false)
+  const [isValidComp, setValidComp] = useState<boolean>(false)
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([])
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
   const PLAYING_XI_UPDATE_URL = tournamentId
@@ -65,6 +66,8 @@ function PlayingXI(props: PlayingXIProps) {
 
     const playingXIGroupedSquad = groupPlayersByRole(playersInXI)
     setPlayingXISquad(playingXIGroupedSquad)
+
+    checkComposition(playersInXI)
   }
 
   const handlePlayingXIToggle = (playerIds: number[]) => {
@@ -73,6 +76,13 @@ function PlayingXI(props: PlayingXIProps) {
     const playersInXI = tempSquad.filter(player => playerIds.includes(player.playerId))
     const playingXIGroupedSquad = groupPlayersByRole(playersInXI)
     setPlayingXISquad(playingXIGroupedSquad)
+
+    checkComposition(playersInXI)
+  }
+
+  const checkComposition = (playersInXI: SquadEntity[]) => {
+    const isValid = checkValidComposition(playersInXI)
+    setValidComp(isValid)
   }
 
   const handlePlayingXIUpdate = () => {
@@ -121,19 +131,17 @@ function PlayingXI(props: PlayingXIProps) {
         <PlayingXIComposition
           playingXISquad={playingXISquad}
           playersCount={selectedPlayerIds.length}
+          isValidComp={isValidComp}
         />
-        {isXIDirty &&
-          isXIChangeAllowed &&
-          playingXISquad.has(WK) &&
-          selectedPlayerIds.length === 11 && (
-            <div className='pt-5 flex justify-center'>
-              <CricButton
-                btnTxt='Save Changes'
-                onClick={handlePlayingXIUpdate}
-                isLoading={updatedPlayingXIRequest.isMutating}
-              ></CricButton>
-            </div>
-          )}
+        {isXIDirty && isXIChangeAllowed && isValidComp && (
+          <div className='pt-5 flex justify-center'>
+            <CricButton
+              btnTxt='Save Changes'
+              onClick={handlePlayingXIUpdate}
+              isLoading={updatedPlayingXIRequest.isMutating}
+            ></CricButton>
+          </div>
+        )}
       </div>
       <CricTable
         headerList={updatedHeaders}

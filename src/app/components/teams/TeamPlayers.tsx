@@ -28,8 +28,8 @@ function TeamPlayers(props: TeamPlayersProps) {
   const findTabsSubText = () => {
     const updatedTabs = [...tabOptions]
     updatedTabs.forEach(tab => {
-      const playingXICount = squad.filter(player => player.playingXI).length
-      tab.subText = tab.id === 2 ? `(${squad.length})` : `(${playingXICount})`
+      // const playingXICount = squad.filter(player => player.playingXI).length
+      tab.subText = tab.id === 2 ? `(${squad.length})` : ''
     })
     return updatedTabs
   }
