@@ -49,12 +49,13 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
 }))
 
 type CricSwitchProps = {
+  disabled: boolean
   isChecked: boolean
   onChange: (isToggled: boolean) => void
 }
 
 function CricSwitch(props: CricSwitchProps) {
-  const { onChange } = props
+  const { disabled, onChange } = props
   const [isChecked, setChecked] = useState(props.isChecked)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +63,9 @@ function CricSwitch(props: CricSwitchProps) {
     setChecked(event.target.checked)
   }
 
-  return <StyledSwitch checked={isChecked} onChange={handleChange}></StyledSwitch>
+  return (
+    <StyledSwitch checked={isChecked} disabled={disabled} onChange={handleChange}></StyledSwitch>
+  )
 }
 
 export default CricSwitch

@@ -101,10 +101,10 @@ export const checkValidComposition = (playersInXI: SquadEntity[]) => {
       ++bowl
     }
     if (role === BAT_ALLROUNDER) {
-      batAllRound < 1 ? ++batAllRound : ++bat
+      batAllRound + bowlAllRound < 1 ? ++batAllRound : ++bat
     }
     if (role === BOWL_ALLROUNDER) {
-      bowlAllRound < 1 ? ++bowlAllRound : ++bowl
+      batAllRound + bowlAllRound < 1 ? ++bowlAllRound : ++bowl
     }
     if (role === BAT_WK || role === BOWL_WK) {
       wk < 1 ? ++wk : ++bat
