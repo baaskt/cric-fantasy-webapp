@@ -12,7 +12,6 @@ function comparator(orderBy: string, order: string) {
   return function (a: CricTableRow, b: CricTableRow) {
     const valueA = a.dataList.find(item => item.cellKey === orderBy)?.value || 0
     const valueB = b.dataList.find(item => item.cellKey === orderBy)?.value || 0
-
     if (order === 'asc') {
       if (typeof valueA === 'string' && typeof valueB === 'string') {
         return valueA.localeCompare(valueB)

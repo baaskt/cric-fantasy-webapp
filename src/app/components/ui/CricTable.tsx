@@ -53,7 +53,7 @@ type CricTableProps = {
   checkedIds?: (string | number)[]
   onRowSelect?: (rowId: string | number) => void
   onRowChecked?: (rowId: (string | number)[]) => void
-  onRowToggled?: (rowId: (string | number)[]) => void
+  onRowToggled?: (rowId: string | number, isToggled: boolean) => void
 }
 
 function CricTable(props: CricTableProps) {
@@ -65,7 +65,6 @@ function CricTable(props: CricTableProps) {
     fullWidth,
     isSelectable,
     isResetCheck,
-    checkedIds,
     onRowChecked,
     onRowToggled,
   } = props
@@ -177,16 +176,7 @@ function CricTable(props: CricTableProps) {
     const isChecked = Boolean(cell.value)
     const isDisabled = Boolean(cell.isDisabled)
     const toggleRow = (isToggled: boolean) => {
-      const preToggledIds = checkedIds || []
-      if (isToggled) {
-        const tempSelectedIds = [...preToggledIds, row.rowId]
-        setSelectedIds(tempSelectedIds)
-        onRowToggled && onRowToggled(tempSelectedIds)
-      } else {
-        const tempSelectedIds = [...preToggledIds].filter(data => data !== row.rowId)
-        setSelectedIds(tempSelectedIds)
-        onRowToggled && onRowToggled(tempSelectedIds)
-      }
+      onRowToggled && onRowToggled(row.rowId, isToggled)
     }
     return (
       <CricSwitch isChecked={isChecked} disabled={isDisabled} onChange={toggleRow}></CricSwitch>
