@@ -115,6 +115,7 @@ export const TEAM = {
 }
 
 export const MATCH = {
+  CREATE: 'Create Match',
   LOADING_TXT: 'Fetching Match Details ...',
 }
 
