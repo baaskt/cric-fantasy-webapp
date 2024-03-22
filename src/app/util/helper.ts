@@ -12,6 +12,7 @@ import {
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { PlayingXIStatus } from '@/model/enum/playingxi-status.enum'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -183,6 +184,12 @@ export const prepareTeamTable = (
         cellKey: cellKey,
         cellType: cellType,
         value: cellValue,
+        color:
+          cellValue === PlayingXIStatus.SET
+            ? COLORS.sold
+            : cellValue === PlayingXIStatus.UNSET
+              ? COLORS.unsold
+              : '',
       }
       rowData.push(tableCell)
     })
@@ -207,6 +214,10 @@ const getTeamCellValue = (
     cellValue = iconPath
   } else if (cellKey === 'pos') {
     cellValue = teamIndex + 1
+  } else if (cellKey === 'teamMembers') {
+    cellValue = teamEntity.teamMembers.map(data => data.name)
+  } else if (cellKey === 'playingXI') {
+    cellValue = teamEntity.playingXI?.length === 11 ? 'SET' : 'UNSET'
   } else {
     cellValue = teamData[cellKey]
   }
@@ -223,4 +234,48 @@ export const groupListByProp = <T>(prop: string, list: T[]) => {
     grouped.set(key, existingArray)
   }
   return grouped
+}
+
+export function hasMismatch(data1: number[], data2: number[]) {
+  const array1 = data1.sort((a, b) => a - b)
+  const array2 = data2.sort((a, b) => a - b)
+
+  if (array1.length !== array2.length) {
+    return true
+  }
+
+  for (let i = 0; i < array1.length; i++) {
+    if (array1[i] !== array2[i]) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export function getFirstLetters(sentence: string) {
+  const words: string[] = sentence.split(' ')
+  const firstLetters = []
+  for (const word of words) {
+    const firstLetter = word.charAt(0).toUpperCase()
+    firstLetters.push(firstLetter)
+  }
+  return firstLetters.join('')
+}
+
+export function formatDateAndTime(dateTimeString: string) {
+  const dateTime = new Date(dateTimeString)
+
+  // Get the date components
+  const year = dateTime.getFullYear()
+  const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+  const day = String(dateTime.getDate()).padStart(2, '0')
+
+  // Get the time components
+  const hours = String(dateTime.getHours()).padStart(2, '0')
+  const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+
+  // Combine date and time components into a formatted string
+  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
+  return formattedDateTime
 }

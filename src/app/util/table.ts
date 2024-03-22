@@ -1,4 +1,10 @@
-import { CricTableRow } from '@/model/types/cric-table.type'
+import { SquadEntity } from '@/model/entities/squad.interface'
+import {
+  CricHeaderRow,
+  CricTableCell,
+  CricTableRow,
+  KeyValueType,
+} from '@/model/types/cric-table.type'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -30,4 +36,59 @@ export function sortTable(
 ): CricTableRow[] {
   const sortedData = tableRows.slice().sort(comparator(orderBy, order))
   return sortedData
+}
+
+export const preparePlayingXITable = (
+  playersList: SquadEntity[],
+  headersList: CricHeaderRow[],
+  isTeamOwner: boolean,
+): CricTableRow[] => {
+  const tempTableData: CricTableRow[] = []
+  playersList.forEach((playerEntity: SquadEntity, playerIndex: number) => {
+    const rowData: CricTableCell[] = []
+    headersList.forEach((headerEntity: CricHeaderRow) => {
+      if ((headerEntity.key === 'playingXI' && isTeamOwner) || headerEntity.key !== 'playingXI') {
+        const cellType = headerEntity.type
+        const cellKey = headerEntity.key
+        const iconPath = headerEntity.iconPath
+        const cellValue = getPlayingXICellValue(
+          cellType,
+          cellKey,
+          iconPath,
+          playerIndex,
+          playerEntity,
+        )
+        const tableCell: CricTableCell = {
+          cellKey: cellKey,
+          cellType: cellType,
+          value: cellValue,
+        }
+        rowData.push(tableCell)
+      }
+    })
+    tempTableData.push({
+      rowId: playerEntity.playerId,
+      dataList: rowData,
+    })
+  })
+  return tempTableData
+}
+
+const getPlayingXICellValue = (
+  cellType: string,
+  cellKey: string,
+  iconPath: string | undefined,
+  teamIndex: number,
+  playerEntity: SquadEntity,
+) => {
+  const playerData = playerEntity as never as KeyValueType
+  let cellValue
+  if (cellType === 'icon') {
+    cellValue = iconPath
+  } else if (cellKey === 'sno') {
+    cellValue = teamIndex + 1
+  } else {
+    cellValue = playerData[cellKey]
+  }
+  return cellValue
 }

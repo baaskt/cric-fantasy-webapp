@@ -41,10 +41,7 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
 
   const [mandatoryError, setMandatoryError] = useState<boolean>(false)
 
-  const createTournamentRequest = useMutateRequest(
-    TOURNAMENTS.CREATE_URL,
-    HttpMethod.POST,
-  )
+  const createTournamentRequest = useMutateRequest(TOURNAMENTS.CREATE_URL, HttpMethod.POST)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -66,16 +63,14 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
     void createTournament()
   }
 
-  const mutateTournament = (
-    payload: CreateTournamentRequest,
-    tournamentId: string,
-  ) => {
+  const mutateTournament = (payload: CreateTournamentRequest, tournamentId: string) => {
     const tournamentEntity: TournamentEntity = {
       ...payload,
       tournamentId: tournamentId,
       tournamentStatus: TournamentStatusLabel.Upcoming,
       isHost: true,
       isParticipant: false,
+      playingXI: false,
     }
     addTournament(tournamentEntity)
   }
@@ -134,10 +129,7 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
           onBlur={validateTournamentName}
           error={!nameValidity?.valid}
           placeholder={TOURNAMENT.CREATE_FORM.NAME.placeholder}
-          helperText={getErrorHelperTxt(
-            nameValidity,
-            TOURNAMENT.CREATE_FORM.NAME,
-          )}
+          helperText={getErrorHelperTxt(nameValidity, TOURNAMENT.CREATE_FORM.NAME)}
           inputProps={{ minLength: 5, maxLength: 35 }}
           required
         />
@@ -178,26 +170,14 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
         {/* <CricFileInput btnName={'Upload Image'} /> */}
         <CricAlert
           error={createTournamentRequest.error || mandatoryError}
-          message={
-            mandatoryError
-              ? TOURNAMENT.CREATE_FORM.mandatory
-              : TOURNAMENT.CREATE_FORM.error
-          }
+          message={mandatoryError ? TOURNAMENT.CREATE_FORM.mandatory : TOURNAMENT.CREATE_FORM.error}
         ></CricAlert>
         <div className='mt-3'>
           <CricButton
             isFullWidth={true}
-            isValid={
-              createTournamentRequest.error || !nameValidity?.valid
-                ? false
-                : true
-            }
+            isValid={createTournamentRequest.error || !nameValidity?.valid ? false : true}
             onClick={() => handleSubmit()}
-            btnTxt={
-              createTournamentRequest.isMutating
-                ? TOURNAMENT.CREATING
-                : TOURNAMENT.CREATE
-            }
+            btnTxt={createTournamentRequest.isMutating ? TOURNAMENT.CREATING : TOURNAMENT.CREATE}
           ></CricButton>
         </div>
       </form>
