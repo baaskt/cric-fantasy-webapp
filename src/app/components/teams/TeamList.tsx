@@ -5,8 +5,8 @@ import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { TEAMS } from '@/util/constants/endpoints'
 import { prepareTeamTable } from '@/util/helper'
 import React, { useEffect, useState } from 'react'
-import CricTable from './ui/CricTable'
-import Loading from './Loading'
+import CricTable from '../ui/CricTable'
+import Loading from '../Loading'
 import { TEAM } from '@/util/constants/constants'
 import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
@@ -17,7 +17,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'teamMembers', label: 'Participants', type: 'list' },
   { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
   { key: 'tournamentPoints', label: 'Total Points', type: 'number' },
-  { key: 'playingXI', label: 'Playing XI', type: 'number' },
+  { key: 'playingXI', label: 'Playing XI', type: 'number' }, // TODO: Disable after everyone sets their XI
   { key: '', label: '', type: 'icon', iconPath: '/detail' },
 ]
 

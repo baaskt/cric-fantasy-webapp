@@ -254,3 +254,30 @@ export function hasMismatch(data1: number[], data2: number[]) {
 
   return false
 }
+
+export function getFirstLetters(sentence: string) {
+  const words: string[] = sentence.split(' ')
+  const firstLetters = []
+  for (const word of words) {
+    const firstLetter = word.charAt(0).toUpperCase()
+    firstLetters.push(firstLetter)
+  }
+  return firstLetters.join('')
+}
+
+export function formatDateAndTime(dateTimeString: string) {
+  const dateTime = new Date(dateTimeString)
+
+  // Get the date components
+  const year = dateTime.getFullYear()
+  const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+  const day = String(dateTime.getDate()).padStart(2, '0')
+
+  // Get the time components
+  const hours = String(dateTime.getHours()).padStart(2, '0')
+  const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+
+  // Combine date and time components into a formatted string
+  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
+  return formattedDateTime
+}

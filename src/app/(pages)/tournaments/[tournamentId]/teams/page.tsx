@@ -1,6 +1,6 @@
 'use client'
 
-import TeamList from '@/components/TeamList'
+import TeamList from '@/components/teams/TeamList'
 import CreateTeamForm from '@/components/forms/CreateTeamForm'
 import CricButton from '@/components/ui/CricButton'
 import CricModal from '@/components/ui/CricModal'

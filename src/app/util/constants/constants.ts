@@ -114,6 +114,10 @@ export const TEAM = {
   },
 }
 
+export const MATCH = {
+  LOADING_TXT: 'Fetching Match Details ...',
+}
+
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },
