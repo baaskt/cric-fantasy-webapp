@@ -1,6 +1,6 @@
 import { COLORS } from '@/util/colors'
 import { Switch, styled } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const StyledSwitch = styled(Switch)(({ theme }) => ({
   width: 42,
@@ -57,6 +57,10 @@ type CricSwitchProps = {
 function CricSwitch(props: CricSwitchProps) {
   const { disabled, onChange } = props
   const [isChecked, setChecked] = useState(props.isChecked)
+
+  useEffect(() => {
+    setChecked(props.isChecked)
+  }, [props.isChecked])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.checked)
