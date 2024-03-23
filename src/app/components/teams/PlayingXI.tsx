@@ -12,6 +12,8 @@ import { TEAMS } from '@/util/constants/endpoints'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useTournament } from '@/providers/TournamentProvider'
 import { hasMismatch } from '@/util/helper'
+import CricAlert from '../ui/CricAlert'
+import axios, { AxiosError } from 'axios'
 
 const headersList: CricHeaderRow[] = [
   { key: 'playingXI', label: 'Playing XI', type: 'switch', isDisabled: false },
@@ -36,8 +38,11 @@ function PlayingXI(props: PlayingXIProps) {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [isXIDirty, setXIDirty] = useState<boolean>(false)
   const [isValidComp, setValidComp] = useState<boolean>(false)
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([])
+  const [error, setError] = useState<string>('')
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState<Set<number>>(new Set())
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
+  const [defaultPlayerIds, setDefaultPlayerIds] = useState<number[]>([])
+
   const PLAYING_XI_UPDATE_URL = tournamentId
     ? TEAMS.UPDATE_PLAYINGXI_URL.replace('teamId', teamId).replace('tournamentId', tournamentId)
     : ''
@@ -45,15 +50,19 @@ function PlayingXI(props: PlayingXIProps) {
 
   useEffect(() => {
     setSquad(props.squad)
-    prepareTableData(props.squad)
     preparePlayingXIData(props.squad)
+    findDefaultIds(props.squad)
   }, [props.squad])
 
   useEffect(() => {
-    const defaultPlayerIds = squad.filter(player => player.playingXI).map(player => player.playerId)
-    const isXIDirty = hasMismatch(selectedPlayerIds, defaultPlayerIds)
+    const isXIDirty = hasMismatch(Array.from(selectedPlayerIds), defaultPlayerIds)
     setXIDirty(isXIDirty)
   }, [selectedPlayerIds])
+
+  const findDefaultIds = (tempSquad: SquadEntity[]) => {
+    const tempDefIds = tempSquad.filter(player => player.playingXI).map(player => player.playerId)
+    setDefaultPlayerIds(tempDefIds)
+  }
 
   const prepareTableData = (tempSquad: SquadEntity[]) => {
     const tempTableData = preparePlayingXITable(tempSquad, headersList, isXIChangeAllowed)
@@ -62,21 +71,28 @@ function PlayingXI(props: PlayingXIProps) {
 
   const preparePlayingXIData = (tempSquad: SquadEntity[]) => {
     const playersInXI = tempSquad.filter(player => player.playingXI)
-    setSelectedPlayerIds(playersInXI.map(player => player.playerId))
-
-    const playingXIGroupedSquad = groupPlayersByRole(playersInXI)
-    setPlayingXISquad(playingXIGroupedSquad)
-
-    checkComposition(playersInXI)
+    const defaultPlayerIds = new Set(playersInXI.map(player => player.playerId))
+    setSelectedPlayerIds(defaultPlayerIds)
+    handleSquadAndComposition(playersInXI)
+    prepareTableData(tempSquad)
   }
 
-  const handlePlayingXIToggle = (playerIds: number[]) => {
-    setSelectedPlayerIds(playerIds)
+  const handlePlayingXIToggle = (playerId: number, isToggled: boolean) => {
+    const updatedSet = new Set(selectedPlayerIds)
+    if (isToggled) {
+      updatedSet.add(playerId)
+    } else {
+      updatedSet.delete(playerId)
+    }
+    setSelectedPlayerIds(updatedSet)
     const tempSquad = [...squad]
-    const playersInXI = tempSquad.filter(player => playerIds.includes(player.playerId))
+    const playersInXI: SquadEntity[] = tempSquad.filter(player => updatedSet.has(player.playerId))
+    handleSquadAndComposition(playersInXI)
+  }
+
+  const handleSquadAndComposition = (playersInXI: SquadEntity[]) => {
     const playingXIGroupedSquad = groupPlayersByRole(playersInXI)
     setPlayingXISquad(playingXIGroupedSquad)
-
     checkComposition(playersInXI)
   }
 
@@ -89,20 +105,23 @@ function PlayingXI(props: PlayingXIProps) {
     void updatePlayingXI()
   }
 
-  const mutateSquadDetails = (playingXI: number[]) => {
+  const mutateSquadDetails = () => {
     const updatedSquad = squad.map(prop => ({
       ...prop,
-      playingXI: playingXI.includes(prop.playerId) ? true : false,
+      playingXI: selectedPlayerIds?.has(prop.playerId) ? true : false,
     }))
     setSquad(updatedSquad)
+    findDefaultIds(updatedSquad)
+    prepareTableData(updatedSquad)
   }
 
   const updatePlayingXI = async () => {
+    setError('')
     if (!updatedPlayingXIRequest.isMutating) {
       const payload = {
-        playingXI: selectedPlayerIds,
+        playingXI: Array.from(selectedPlayerIds),
         nonPlaying: squad
-          .filter(player => !selectedPlayerIds.includes(player.playerId))
+          .filter(player => !selectedPlayerIds?.has(player.playerId))
           .map(player => player.playerId),
       }
       try {
@@ -112,9 +131,13 @@ function PlayingXI(props: PlayingXIProps) {
         const responseData: string | null = response?.result ? response.result : null
         console.log(responseData)
         setXIDirty(false)
-        mutateSquadDetails(payload.playingXI)
-      } catch (e) {
-        console.log(e)
+        mutateSquadDetails()
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError
+          const errorMsg = axiosError.response?.data as CricResponse<string>
+          setError(errorMsg.error || '')
+        }
       }
     }
   }
@@ -124,16 +147,19 @@ function PlayingXI(props: PlayingXIProps) {
       <div className='shadow-lg rounded-lg p-2 border-2 border-gray-300'>
         <PlayingXIComposition
           playingXISquad={playingXISquad}
-          playersCount={selectedPlayerIds.length}
+          playersCount={selectedPlayerIds ? selectedPlayerIds.size : 0}
           isValidComp={isValidComp}
         />
         {isXIDirty && isXIChangeAllowed && isValidComp && (
-          <div className='pt-5 flex justify-center'>
+          <div className='pt-5 flex flex-col items-center justify-center'>
             <CricButton
               btnTxt='Save Changes'
               onClick={handlePlayingXIUpdate}
               isLoading={updatedPlayingXIRequest.isMutating}
             ></CricButton>
+            <div className='pt-5'>
+              <CricAlert message={error} error={error} />
+            </div>
           </div>
         )}
       </div>
@@ -143,8 +169,7 @@ function PlayingXI(props: PlayingXIProps) {
         fullWidth={false}
         defOrder={'asc'}
         defOrderBy={'role'}
-        checkedIds={selectedPlayerIds}
-        onRowToggled={playerIds => handlePlayingXIToggle(playerIds as Array<number>)}
+        onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
       />
     </div>
   )

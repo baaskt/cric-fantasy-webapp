@@ -12,7 +12,6 @@ function comparator(orderBy: string, order: string) {
   return function (a: CricTableRow, b: CricTableRow) {
     const valueA = a.dataList.find(item => item.cellKey === orderBy)?.value || 0
     const valueB = b.dataList.find(item => item.cellKey === orderBy)?.value || 0
-
     if (order === 'asc') {
       if (typeof valueA === 'string' && typeof valueB === 'string') {
         return valueA.localeCompare(valueB)
@@ -93,4 +92,22 @@ const getPlayingXICellValue = (
     cellValue = playerData[cellKey]
   }
   return cellValue
+}
+
+export function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
+  // Convert the search term to lowercase for case-insensitive search
+  const term = searchTerm.toLowerCase().trim()
+
+  // Filter the array based on the search term
+  return data.filter(
+    item =>
+      // Check if any of the properties contain the search term
+      (typeof item.rowId === 'string' && item.rowId.toLowerCase().includes(term)) ||
+      (typeof item.rowId === 'number' && item.rowId.toString().toLowerCase().includes(term)) ||
+      item.dataList.some(
+        cell =>
+          (typeof cell.value === 'string' && cell.value.toLowerCase().includes(term)) ||
+          (typeof cell.value === 'number' && cell.value.toString().toLowerCase().includes(term)),
+      ),
+  )
 }
