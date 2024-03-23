@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,10 +10,11 @@ import { COLORS } from '@/util/colors'
 import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-table.type'
 import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
 import CricTableHead from '../table/CricTableHeader'
-import { sortTable } from '@/util/table'
+import { searchItems, sortTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
 import { Checkbox, IconButton, checkboxClasses } from '@mui/material'
 import CricSwitch from './CricSwitch'
+import CricSearch from './CricSearch'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -68,26 +69,30 @@ function CricTable(props: CricTableProps) {
     onRowChecked,
     onRowToggled,
   } = props
-  const [order, setOrder] = React.useState(defOrder || 'asc')
-  const [orderBy, setOrderBy] = React.useState(defOrderBy || '')
-  const [selectedIds, setSelectedIds] = React.useState<(string | number)[]>([])
+  const [order, setOrder] = useState(defOrder || 'asc')
+  const [orderBy, setOrderBy] = useState(defOrderBy || '')
+  const [selectedIds, setSelectedIds] = useState<(string | number)[]>([])
+  const [tableData, setTableData] = useState<CricTableRow[]>([])
+  const isSearchEnabled = false
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isResetCheck) {
       setSelectedIds([])
     }
   }, [isResetCheck])
 
+  useEffect(() => {
+    const sortedRows = sortTable(rowList, orderBy, order)
+    setTableData(sortedRows)
+  }, [rowList])
+
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
+    const sortedRows = sortTable(rowList, orderBy, order)
+    setTableData(sortedRows)
   }
-
-  const tableRows = React.useMemo(
-    () => sortTable(rowList, orderBy, order),
-    [order, orderBy, rowList],
-  )
 
   const renderTableRow = (row: CricTableRow, rowIndex: number, fullWidth: boolean) => {
     const checkRow = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,25 +209,32 @@ function CricTable(props: CricTableProps) {
     }
   }
 
+  const onTableSearch = (searchStr: string) => {
+    const searchList = searchItems(rowList, searchStr)
+    setTableData(searchList)
+  }
+
   return (
-    <Paper sx={{ overflow: 'scroll' }}>
-      {/* <TableContainer sx={{ maxHeight: 440 }}> */}
-      <TableContainer>
-        <Table stickyHeader aria-label='customized table'>
-          <CricTableHead
-            headerList={headerList}
-            order={order as SortDirection}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            onSelectAllClick={selectAllRows}
-            isMultiSelect={isSelectable}
-          />
-          <TableBody>
-            {tableRows.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <div>
+      {isSearchEnabled && <CricSearch onSearch={onTableSearch} />}
+      <Paper sx={{ overflow: 'scroll' }}>
+        <TableContainer>
+          <Table stickyHeader aria-label='customized table'>
+            <CricTableHead
+              headerList={headerList}
+              order={order as SortDirection}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              onSelectAllClick={selectAllRows}
+              isMultiSelect={isSelectable}
+            />
+            <TableBody>
+              {tableData.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </div>
   )
 }
 

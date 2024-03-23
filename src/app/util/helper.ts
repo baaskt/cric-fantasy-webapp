@@ -173,7 +173,8 @@ export const prepareTeamTable = (
   headersList: CricHeaderRow[],
 ): CricTableRow[] => {
   const tempTableData: CricTableRow[] = []
-  teamList.forEach((teamEntity: TeamEntity, teamIndex: number) => {
+  const sortedTeamList = teamList.sort((a, b) => b.tournamentPoints - a.tournamentPoints)
+  sortedTeamList.forEach((teamEntity: TeamEntity, teamIndex: number) => {
     const rowData: CricTableCell[] = []
     headersList.forEach((headerEntity: CricHeaderRow) => {
       const cellType = headerEntity.type
