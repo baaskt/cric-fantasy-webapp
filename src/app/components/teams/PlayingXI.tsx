@@ -51,7 +51,7 @@ function PlayingXI(props: PlayingXIProps) {
   useEffect(() => {
     setSquad(props.squad)
     preparePlayingXIData(props.squad)
-    findDefaultIds(props.squad)
+    setDefaultIds(props.squad)
   }, [props.squad])
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function PlayingXI(props: PlayingXIProps) {
     setXIDirty(isXIDirty)
   }, [selectedPlayerIds])
 
-  const findDefaultIds = (tempSquad: SquadEntity[]) => {
+  const setDefaultIds = (tempSquad: SquadEntity[]) => {
     const tempDefIds = tempSquad.filter(player => player.playingXI).map(player => player.playerId)
     setDefaultPlayerIds(tempDefIds)
   }
@@ -86,8 +86,16 @@ function PlayingXI(props: PlayingXIProps) {
     }
     setSelectedPlayerIds(updatedSet)
     const tempSquad = [...squad]
-    const playersInXI: SquadEntity[] = tempSquad.filter(player => updatedSet.has(player.playerId))
+    const playersInXI: SquadEntity[] = []
+    tempSquad.forEach(player => {
+      const isPlayerinXI = updatedSet.has(player.playerId)
+      player.playingXI = isPlayerinXI ? true : false
+      if (isPlayerinXI) {
+        playersInXI.push(player)
+      }
+    })
     handleSquadAndComposition(playersInXI)
+    prepareTableData(tempSquad)
   }
 
   const handleSquadAndComposition = (playersInXI: SquadEntity[]) => {
@@ -111,8 +119,7 @@ function PlayingXI(props: PlayingXIProps) {
       playingXI: selectedPlayerIds?.has(prop.playerId) ? true : false,
     }))
     setSquad(updatedSquad)
-    findDefaultIds(updatedSquad)
-    prepareTableData(updatedSquad)
+    setDefaultIds(updatedSquad)
   }
 
   const updatePlayingXI = async () => {

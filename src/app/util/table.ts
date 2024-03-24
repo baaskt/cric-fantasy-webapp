@@ -28,12 +28,15 @@ function comparator(orderBy: string, order: string) {
   }
 }
 
-export function sortTable(
+export function sortSearchTable(
   tableRows: CricTableRow[],
+  searchStr: string,
   orderBy: string,
   order: string,
 ): CricTableRow[] {
-  const sortedData = tableRows.slice().sort(comparator(orderBy, order))
+  const tableData = searchStr ? searchItems(tableRows, searchStr) : tableRows
+  const sortedData =
+    orderBy && order ? tableData.slice().sort(comparator(orderBy, order)) : tableData
   return sortedData
 }
 
@@ -94,7 +97,7 @@ const getPlayingXICellValue = (
   return cellValue
 }
 
-export function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
+function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
   // Convert the search term to lowercase for case-insensitive search
   const term = searchTerm.toLowerCase().trim()
 

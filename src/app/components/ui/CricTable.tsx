@@ -10,7 +10,7 @@ import { COLORS } from '@/util/colors'
 import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-table.type'
 import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
 import CricTableHead from '../table/CricTableHeader'
-import { searchItems, sortTable } from '@/util/table'
+import { sortSearchTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
 import { Checkbox, IconButton, checkboxClasses } from '@mui/material'
 import CricSwitch from './CricSwitch'
@@ -69,11 +69,11 @@ function CricTable(props: CricTableProps) {
     onRowChecked,
     onRowToggled,
   } = props
-  const [order, setOrder] = useState(defOrder || 'asc')
+  const [order, setOrder] = useState(defOrder || '')
   const [orderBy, setOrderBy] = useState(defOrderBy || '')
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
-  const isSearchEnabled = false
+  const [searchStr, setSearchStr] = useState<string>('')
 
   useEffect(() => {
     if (isResetCheck) {
@@ -82,15 +82,18 @@ function CricTable(props: CricTableProps) {
   }, [isResetCheck])
 
   useEffect(() => {
-    const sortedRows = sortTable(rowList, orderBy, order)
-    setTableData(sortedRows)
+    if (!searchStr) {
+      const sortedRows = sortSearchTable(rowList, searchStr, orderBy, order)
+      setTableData(sortedRows)
+    }
   }, [rowList])
 
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
+    const tempSortOrder = isAsc ? 'desc' : 'asc'
+    setOrder(tempSortOrder)
     setOrderBy(property)
-    const sortedRows = sortTable(rowList, orderBy, order)
+    const sortedRows = sortSearchTable(rowList, searchStr, property, tempSortOrder)
     setTableData(sortedRows)
   }
 
@@ -209,14 +212,15 @@ function CricTable(props: CricTableProps) {
     }
   }
 
-  const onTableSearch = (searchStr: string) => {
-    const searchList = searchItems(rowList, searchStr)
+  const onTableSearch = (tempSearchStr: string) => {
+    setSearchStr(tempSearchStr)
+    const searchList = sortSearchTable(rowList, tempSearchStr, orderBy, order)
     setTableData(searchList)
   }
 
   return (
     <div>
-      {isSearchEnabled && <CricSearch onSearch={onTableSearch} />}
+      <CricSearch onSearch={onTableSearch} />
       <Paper sx={{ overflow: 'scroll' }}>
         <TableContainer>
           <Table stickyHeader aria-label='customized table'>
