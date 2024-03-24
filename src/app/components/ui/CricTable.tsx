@@ -82,10 +82,8 @@ function CricTable(props: CricTableProps) {
   }, [isResetCheck])
 
   useEffect(() => {
-    if (!searchStr) {
-      const sortedRows = sortSearchTable(rowList, searchStr, orderBy, order)
-      setTableData(sortedRows)
-    }
+    const sortedRows = sortSearchTable(rowList, searchStr, orderBy, order)
+    setTableData(sortedRows)
   }, [rowList])
 
   const handleRequestSort = (property: string) => {
