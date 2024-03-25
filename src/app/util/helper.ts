@@ -265,16 +265,19 @@ export function getFirstLetters(sentence: string) {
 }
 
 export function formatDateAndTime(dateTimeString: string) {
-  const dateTime = new Date(dateTimeString)
+  if (!dateTimeString) return ''
+  const dateComponents = dateTimeString.split(' ')
+  const utcTimeString = `${dateComponents[0]}T${dateComponents[1]}Z`
+  const localTime = new Date(utcTimeString)
 
   // Get the date components
-  const year = dateTime.getFullYear()
-  const month = String(dateTime.getMonth() + 1).padStart(2, '0')
-  const day = String(dateTime.getDate()).padStart(2, '0')
+  const year = localTime.getFullYear()
+  const month = String(localTime.getMonth() + 1).padStart(2, '0')
+  const day = String(localTime.getDate()).padStart(2, '0')
 
   // Get the time components
-  const hours = String(dateTime.getHours()).padStart(2, '0')
-  const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+  const hours = String(localTime.getHours()).padStart(2, '0')
+  const minutes = String(localTime.getMinutes()).padStart(2, '0')
 
   // Combine date and time components into a formatted string
   const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`

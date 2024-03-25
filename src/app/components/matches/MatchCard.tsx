@@ -15,7 +15,7 @@ function MatchCard(props: MatchCardProps) {
 
   const statusColor = useMemo(
     () =>
-      state === 'complete' ? COLORS.sold : state === 'abandoned' ? COLORS.unsold : COLORS.cricDark,
+      state === 'Complete' ? COLORS.sold : state === 'abandoned' ? COLORS.unsold : COLORS.cricDark,
     [state],
   )
   return (

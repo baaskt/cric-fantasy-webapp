@@ -1,10 +1,13 @@
 import { SquadEntity } from '@/model/entities/squad.interface'
+import { TableType } from '@/model/enum/table-type.enum'
+import { PlayerEntity } from '@/model/response/player-response.interface'
 import {
   CricHeaderRow,
   CricTableCell,
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
+import { getPlayerTableData } from './player'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -113,4 +116,31 @@ function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
           (typeof cell.value === 'number' && cell.value.toString().toLowerCase().includes(term)),
       ),
   )
+}
+
+export const prepareTableData = <T>(
+  rowList: T[],
+  headersList: CricHeaderRow[],
+  rowIdParam: string,
+  tableType: string,
+) => {
+  const tempTableData: CricTableRow[] = []
+  rowList.forEach((rowEntity: T, rowIndex: number) => {
+    const tableRows: CricTableCell[] = []
+    headersList.forEach((headerEntity: CricHeaderRow) => {
+      let tableCell: CricTableCell | undefined = undefined
+      if (tableType === TableType.PLAYERS.toString()) {
+        tableCell = getPlayerTableData(headerEntity, rowEntity as PlayerEntity, rowIndex)
+      } else if (tableType === TableType.TEAMS.toString()) {
+        tableCell = getPlayerTableData(headerEntity, rowEntity as PlayerEntity, rowIndex)
+      }
+      tableRows.push(tableCell as CricTableCell)
+    })
+    const rowData = rowEntity as never as KeyValueType
+    tempTableData.push({
+      rowId: rowData[rowIdParam] as string | number,
+      dataList: tableRows,
+    })
+  })
+  return tempTableData
 }

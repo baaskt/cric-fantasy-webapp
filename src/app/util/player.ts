@@ -1,10 +1,11 @@
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricMenuEntity } from '@/model/types/cric-menu.type'
-import { KeyValueType } from '@/model/types/cric-table.type'
+import { CricHeaderRow, CricTableCell, KeyValueType } from '@/model/types/cric-table.type'
 import { currencyToString } from './bidding'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { groupListByProp } from './helper'
 import { TeamMember } from '@/model/entities/team-member.interface'
+import { PlayerEntity } from '@/model/response/player-response.interface'
 
 const ALLROUNDER = 'All Rounder'
 const BAT_ALLROUNDER = 'Batting Allrounder'
@@ -115,4 +116,41 @@ export const checkValidComposition = (playersInXI: SquadEntity[]) => {
   const validAllRound = batAllRound + bowlAllRound >= minAllRound ? true : false
   const validWK = wk >= minWK ? true : false
   return validBat && validBowl && validAllRound && validWK
+}
+
+export const getPlayerTableData = (
+  headerEntity: CricHeaderRow,
+  playerEntity: PlayerEntity,
+  playerIndex: number,
+): CricTableCell => {
+  const cellType = headerEntity.type
+  const cellKey = headerEntity.key
+  const iconPath = headerEntity.iconPath
+  const value = getPlayerListCellValue(cellType, cellKey, iconPath, playerEntity, playerIndex)
+  const tableCell: CricTableCell = {
+    cellKey: cellKey,
+    cellType: cellType,
+    value: value,
+    color: '',
+  }
+  return tableCell
+}
+
+const getPlayerListCellValue = (
+  cellType: string,
+  cellKey: string,
+  iconPath: string | undefined,
+  teamEntity: PlayerEntity,
+  playerIndex: number,
+) => {
+  const teamData = teamEntity as never as KeyValueType
+  let cellValue
+  if (cellType === 'icon') {
+    cellValue = iconPath
+  } else if (cellKey === 'pos') {
+    cellValue = playerIndex + 1
+  } else {
+    cellValue = teamData[cellKey]
+  }
+  return cellValue
 }
