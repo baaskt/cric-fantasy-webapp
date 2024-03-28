@@ -55,6 +55,13 @@ const detailConfig: SideBarMenuEntity[] = [
     fullPath: TITLES.TEAM_DETAIL.fullPath,
     hidden: true,
   },
+  {
+    icon: FormatListBulletedRoundedIcon,
+    title: TITLES.MATCH_DETAIL.label,
+    path: TITLES.MATCH_DETAIL.path,
+    fullPath: TITLES.MATCH_DETAIL.fullPath,
+    hidden: true,
+  },
 ]
 
 const auctionConfig: SideBarMenuEntity[] = [

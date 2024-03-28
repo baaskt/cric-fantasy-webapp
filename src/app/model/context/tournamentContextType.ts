@@ -13,6 +13,8 @@ export type TournamentContextType = {
   setSubTitle: (tournamentList: string) => void
   activeTeam: TeamEntity | undefined
   markActiveTeam: (team: TeamEntity) => void
+  activeMatch: MatchEntity | undefined
+  markActiveMatch: (team: MatchEntity) => void
   matchList: MatchEntity[]
   setMatchesList: (tournament: MatchEntity[]) => void
 }

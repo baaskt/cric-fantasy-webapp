@@ -254,29 +254,44 @@ export function hasMismatch(data1: number[], data2: number[]) {
   return false
 }
 
-export function getFirstLetters(sentence: string) {
-  const words: string[] = sentence.split(' ')
-  const firstLetters = []
-  for (const word of words) {
-    const firstLetter = word.charAt(0).toUpperCase()
-    firstLetters.push(firstLetter)
-  }
-  return firstLetters.join('')
-}
-
 export function formatDateAndTime(dateTimeString: string) {
-  const dateTime = new Date(dateTimeString)
+  if (!dateTimeString) return ''
+  const dateComponents = dateTimeString.split(' ')
+  const utcTimeString = `${dateComponents[0]}T${dateComponents[1]}Z`
+  const localTime = new Date(utcTimeString)
 
   // Get the date components
-  const year = dateTime.getFullYear()
-  const month = String(dateTime.getMonth() + 1).padStart(2, '0')
-  const day = String(dateTime.getDate()).padStart(2, '0')
+  const year = localTime.getFullYear()
+  const month = String(localTime.getMonth() + 1).padStart(2, '0')
+  const day = String(localTime.getDate()).padStart(2, '0')
 
   // Get the time components
-  const hours = String(dateTime.getHours()).padStart(2, '0')
-  const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+  const hours = String(localTime.getHours()).padStart(2, '0')
+  const minutes = String(localTime.getMinutes()).padStart(2, '0')
 
   // Combine date and time components into a formatted string
   const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
   return formattedDateTime
+}
+
+export const getTeamColors = (team1: string | undefined, team2: string | undefined) => {
+  const team1Name = team1 || ''
+  const team2Name = team2 || ''
+  const fromColor = getColor(team1Name)
+  const toColor = getColor(team2Name)
+  return `bg-gradient-to-r from-${fromColor} to-${toColor}`
+}
+
+const getColor = (team: string): string => {
+  if (team === 'RCB') return 'rose-200'
+  else if (team === 'CSK') return 'yellow-200'
+  else if (team === 'DC') return 'violet-200'
+  else if (team === 'PBKS') return 'red-200'
+  else if (team === 'KKR') return 'indigo-200'
+  else if (team === 'SRH') return 'orange-200'
+  else if (team === 'RR') return 'pink-200'
+  else if (team === 'LSG') return 'teal-200'
+  else if (team === 'GT') return 'sky-200'
+  else if (team === 'MI') return 'blue-200'
+  else return 'blue-200'
 }

@@ -8,10 +8,12 @@ import React, { useEffect } from 'react'
 import Loading from '../Loading'
 import { MATCH } from '@/util/constants/constants'
 import MatchCard from './MatchCard'
+import { useRouter } from 'next/navigation'
 
 function MatchList() {
-  const { matchList, setMatchesList } = useTournament()
+  const { matchList, setMatchesList, markActiveMatch } = useTournament()
   const matchRequest = useRequest(MATCHES.GET_ALL)
+  const router = useRouter()
 
   useEffect(() => {
     if (matchRequest.data) {
@@ -32,6 +34,12 @@ function MatchList() {
     return <p className='p-5'>No matches found</p>
   }
 
+  const navigateToMatchSelect = (matchId: number) => {
+    const selectedMatch = matchList.find(match => match.matchId === matchId)
+    if (selectedMatch) markActiveMatch(selectedMatch)
+    router.push('matches/detail')
+  }
+
   return (
     <div className='flex flex-row flex-wrap justify-center gap-3'>
       {matchList.map((matchEntity, matchIndex) => (
@@ -39,6 +47,7 @@ function MatchList() {
           key={matchIndex}
           matchEntity={matchEntity}
           matchNumber={matchIndex + 1}
+          onMatchSelect={navigateToMatchSelect}
         ></MatchCard>
       ))}
     </div>
