@@ -102,7 +102,13 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
       <div className='p-5 text-lg font-bold'>Previous Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
-          <PlayerCard playerData={playerData} />
+          <PlayerCard
+            name={playerData.name}
+            imageUrl={playerData.imageUrl}
+            soldAmount={playerData.soldAmount}
+            role={playerData.role}
+            clubName={playerData.clubName}
+          />
           <Image
             src={
               playerData.soldStatus === SoldStatus.SOLD.toString()

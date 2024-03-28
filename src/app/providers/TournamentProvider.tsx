@@ -14,10 +14,12 @@ const { Provider } = ListContext
 
 export const TOURNAMENT_ID = 'tournamentId'
 export const TEAM_ID = 'teamId'
+export const MATCH_ID = 'matchId'
 
 export const TournamentProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeTournament, setActiveTournament] = useState<TournamentEntity>()
   const [activeTeam, setActiveTeam] = useState<TeamEntity>()
+  const [activeMatch, setActiveMatch] = useState<MatchEntity>()
   const [tournamentList, setTournamentList] = useState<TournamentEntity[]>([])
   const [matchList, setMatchesList] = useState<MatchEntity[]>([])
   const [subTitle, setSubTitle] = useState<string>('')
@@ -60,6 +62,11 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     setActiveTeam(activeTeam)
   }
 
+  const markActiveMatch = (activeMatch: MatchEntity) => {
+    cookieHelper().setCookieItem(MATCH_ID, activeMatch.matchId.toString())
+    setActiveMatch(activeMatch)
+  }
+
   const value: TournamentContextType = {
     activeTournament,
     markActiveTournament,
@@ -71,6 +78,8 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     setSubTitle,
     activeTeam,
     markActiveTeam,
+    activeMatch,
+    markActiveMatch,
     matchList,
     setMatchesList,
   }

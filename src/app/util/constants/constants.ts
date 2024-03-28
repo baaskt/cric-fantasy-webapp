@@ -133,6 +133,11 @@ export const TITLES = {
     path: '/matches',
     fullPath: '/tournaments/tournamentId/matches',
   },
+  MATCH_DETAIL: {
+    label: 'Match Centre',
+    path: '/matches/detail',
+    fullPath: '/tournaments/tournamentId/matches/detail',
+  },
   PLAYERS: {
     label: 'Players',
     path: '/players',

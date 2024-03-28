@@ -27,9 +27,10 @@ function TeamDetail() {
     }
   }, [teamDetailRequest.data])
 
-  if (teamDetailRequest.isLoading) {
+  if (teamDetailRequest.isValidating) {
     return <Loading txt={TEAM.LOADING_TXT}></Loading>
   }
+
   if (!teamDetailEntity) return <></>
 
   return (

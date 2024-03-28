@@ -254,16 +254,6 @@ export function hasMismatch(data1: number[], data2: number[]) {
   return false
 }
 
-export function getFirstLetters(sentence: string) {
-  const words: string[] = sentence.split(' ')
-  const firstLetters = []
-  for (const word of words) {
-    const firstLetter = word.charAt(0).toUpperCase()
-    firstLetters.push(firstLetter)
-  }
-  return firstLetters.join('')
-}
-
 export function formatDateAndTime(dateTimeString: string) {
   if (!dateTimeString) return ''
   const dateComponents = dateTimeString.split(' ')
@@ -282,4 +272,26 @@ export function formatDateAndTime(dateTimeString: string) {
   // Combine date and time components into a formatted string
   const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
   return formattedDateTime
+}
+
+export const getTeamColors = (team1: string | undefined, team2: string | undefined) => {
+  const team1Name = team1 || ''
+  const team2Name = team2 || ''
+  const fromColor = getColor(team1Name)
+  const toColor = getColor(team2Name)
+  return `bg-gradient-to-r from-${fromColor} to-${toColor}`
+}
+
+const getColor = (team: string): string => {
+  if (team === 'RCB') return 'rose-200'
+  else if (team === 'CSK') return 'yellow-200'
+  else if (team === 'DC') return 'violet-200'
+  else if (team === 'PBKS') return 'red-200'
+  else if (team === 'KKR') return 'indigo-200'
+  else if (team === 'SRH') return 'orange-200'
+  else if (team === 'RR') return 'pink-200'
+  else if (team === 'LSG') return 'teal-200'
+  else if (team === 'GT') return 'sky-200'
+  else if (team === 'MI') return 'blue-200'
+  else return 'blue-200'
 }
