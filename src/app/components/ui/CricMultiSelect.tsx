@@ -43,7 +43,9 @@ function CricMultiSelect(props: CricSelectProps) {
                   color: COLORS.cricPrimary,
                 },
               }}
-              checked={menu.value && selectedValue.indexOf(menu.value) > -1 ? true : false}
+              checked={
+                menu.value && selectedValue.indexOf(menu.value.toString()) > -1 ? true : false
+              }
             />
             {menu.label}
           </MenuItem>

@@ -16,7 +16,7 @@ function PlayerCard(props: PlayerCardProps) {
   const playerUrl = imageUrl || ''
 
   return (
-    <div>
+    <div className='flex flex-col items-center'>
       <Image
         src={playerUrl}
         alt='player profile'
@@ -25,7 +25,7 @@ function PlayerCard(props: PlayerCardProps) {
         sizes='100vw'
         className='w-[180px] h-auto'
       />
-      <div className='p-2 flex flex-col items-center shadow-lg'>
+      <div className='p-2 flex flex-col items-center shadow-lg w-full'>
         <div className='text-md text-center font-medium'>{name}</div>
         {role && <div className='text-sm text-center font-normal text-slate-500'>{role}</div>}
         {clubName && (
