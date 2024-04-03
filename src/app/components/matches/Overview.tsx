@@ -5,6 +5,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import POMCard from './POMCard'
 import MatchScore from './MatchScore'
+import Confetti from 'react-confetti'
 
 type OverviewProps = {
   scoreCardData: MatchDetailEntity | undefined
@@ -17,25 +18,41 @@ function Overview(props: OverviewProps) {
   const { activeMatch } = useTournament()
   const team1Url = activeMatch?.team1Image || ''
   const team2Url = activeMatch?.team2Image || ''
-  const [gradientColor, setGradientColor] = useState('')
+  const [gradientColor, setGradientColor] = useState({ fromColor: '', toColor: '' })
+  const team1DivRef = React.useRef<HTMLDivElement>(null)
+  const team2DivRef = React.useRef<HTMLDivElement>(null)
+  const isInnings1Won =
+    inningsOne && inningsTwo && inningsOne.score.runs > inningsTwo.score.runs ? true : false
 
   useEffect(() => {
     if (activeMatch) {
-      console.log(activeMatch?.team1SName)
       const bannerColor = getTeamColors(activeMatch?.team1SName, activeMatch?.team2SName)
-      console.log(bannerColor)
       setGradientColor(bannerColor)
     }
   }, [activeMatch])
 
   if (!gradientColor) return
-  console.log(gradientColor)
 
   return (
     <div>
-      <div className={`p-5 ${gradientColor}`}>
+      <div
+        className='p-5 rounded-lg'
+        style={{
+          background: `linear-gradient(90deg, ${gradientColor.fromColor} 9%, ${gradientColor.toColor} 91%)`,
+        }}
+      >
         <div className='flex items-end w-full justify-around'>
-          <div className='flex flex-col items-center'>
+          <div
+            className='flex flex-col items-center'
+            ref={team1DivRef}
+            style={{ position: 'relative' }}
+          >
+            {scoreCardData?.isMatchComplete && !isInnings1Won && (
+              <Confetti
+                width={team1DivRef.current?.clientWidth}
+                height={team1DivRef.current?.clientWidth}
+              />
+            )}
             <Image
               src={team1Url}
               alt='team1'
@@ -47,10 +64,20 @@ function Overview(props: OverviewProps) {
             <div className='pt-5 text-center text-md md:text-xl'>{activeMatch?.team1}</div>
             {inningsOne && <MatchScore score={inningsOne.score} />}
           </div>
-          <div className='flex flex-col items-center'>
+          <div
+            className='flex flex-col items-center'
+            ref={team2DivRef}
+            style={{ position: 'relative' }}
+          >
+            {scoreCardData?.isMatchComplete && !isInnings1Won && (
+              <Confetti
+                width={team2DivRef.current?.clientWidth}
+                height={team2DivRef.current?.clientWidth}
+              />
+            )}
             <Image
               src={team2Url}
-              alt='team1'
+              alt='team2'
               width='0'
               height='0'
               sizes='100vw'

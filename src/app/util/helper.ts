@@ -10,9 +10,7 @@ import {
   KeyValueType,
 } from '@/model/types/cric-table.type'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
-import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
-import { PlayingXIStatus } from '@/model/enum/playingxi-status.enum'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -168,63 +166,6 @@ const getPlayerCellValue = (playerData: KeyValueType, cellKey: string, playerInd
   return cellValue
 }
 
-export const prepareTeamTable = (
-  teamList: TeamEntity[],
-  headersList: CricHeaderRow[],
-): CricTableRow[] => {
-  const tempTableData: CricTableRow[] = []
-  const sortedTeamList = teamList.sort((a, b) => b.tournamentPoints - a.tournamentPoints)
-  sortedTeamList.forEach((teamEntity: TeamEntity, teamIndex: number) => {
-    const rowData: CricTableCell[] = []
-    headersList.forEach((headerEntity: CricHeaderRow) => {
-      const cellType = headerEntity.type
-      const cellKey = headerEntity.key
-      const iconPath = headerEntity.iconPath
-      const cellValue = getTeamCellValue(cellType, cellKey, iconPath, teamIndex, teamEntity)
-      const tableCell: CricTableCell = {
-        cellKey: cellKey,
-        cellType: cellType,
-        value: cellValue,
-        color:
-          cellValue === PlayingXIStatus.SET
-            ? COLORS.sold
-            : cellValue === PlayingXIStatus.UNSET
-              ? COLORS.unsold
-              : '',
-      }
-      rowData.push(tableCell)
-    })
-    tempTableData.push({
-      rowId: teamEntity.teamId,
-      dataList: rowData,
-    })
-  })
-  return tempTableData
-}
-
-const getTeamCellValue = (
-  cellType: string,
-  cellKey: string,
-  iconPath: string | undefined,
-  teamIndex: number,
-  teamEntity: TeamEntity,
-) => {
-  const teamData = teamEntity as never as KeyValueType
-  let cellValue
-  if (cellType === 'icon') {
-    cellValue = iconPath
-  } else if (cellKey === 'pos') {
-    cellValue = teamIndex + 1
-  } else if (cellKey === 'teamMembers') {
-    cellValue = teamEntity.teamMembers.map(data => data.name)
-  } else if (cellKey === 'playingXI') {
-    cellValue = teamEntity.playingXI?.length === 11 ? 'SET' : 'UNSET'
-  } else {
-    cellValue = teamData[cellKey]
-  }
-  return cellValue
-}
-
 export const groupListByProp = <T>(prop: string, list: T[]) => {
   const grouped = new Map<string, T[]>()
   for (const item of list) {
@@ -279,19 +220,19 @@ export const getTeamColors = (team1: string | undefined, team2: string | undefin
   const team2Name = team2 || ''
   const fromColor = getColor(team1Name)
   const toColor = getColor(team2Name)
-  return `bg-gradient-to-r from-${fromColor} to-${toColor}`
+  return { fromColor, toColor }
 }
 
 const getColor = (team: string): string => {
-  if (team === 'RCB') return 'rose-200'
-  else if (team === 'CSK') return 'yellow-200'
-  else if (team === 'DC') return 'violet-200'
-  else if (team === 'PBKS') return 'red-200'
-  else if (team === 'KKR') return 'indigo-200'
-  else if (team === 'SRH') return 'orange-200'
-  else if (team === 'RR') return 'pink-200'
-  else if (team === 'LSG') return 'teal-200'
-  else if (team === 'GT') return 'sky-200'
-  else if (team === 'MI') return 'blue-200'
-  else return 'blue-200'
+  if (team === 'RCB') return COLORS.iplTeam.rcb
+  else if (team === 'CSK') return COLORS.iplTeam.csk
+  else if (team === 'DC') return COLORS.iplTeam.dc
+  else if (team === 'PBKS') return COLORS.iplTeam.pbks
+  else if (team === 'KKR') return COLORS.iplTeam.kkr
+  else if (team === 'SRH') return COLORS.iplTeam.srh
+  else if (team === 'RR') return COLORS.iplTeam.rr
+  else if (team === 'LSG') return COLORS.iplTeam.lsg
+  else if (team === 'GT') return COLORS.iplTeam.gt
+  else if (team === 'MI') return COLORS.iplTeam.mi
+  else return COLORS.cricPrimary
 }

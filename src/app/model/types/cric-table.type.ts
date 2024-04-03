@@ -1,9 +1,11 @@
 export type CricHeaderRow = {
   key: string
   label: string
+  alias?: string
   type: string
   iconPath?: string
   isDisabled?: boolean
+  isMobile?: boolean
 }
 
 export type CricTableRow = {
@@ -17,6 +19,8 @@ export type CricTableCell = {
   value: string | string[] | number | null | undefined
   color?: string
   isDisabled?: boolean
+  isMobileView?: boolean
+  headerName?: string
 }
 
 export interface KeyValueType {

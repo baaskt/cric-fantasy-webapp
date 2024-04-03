@@ -14,9 +14,9 @@ type ScoreCardProps = {
 
 function ScoreCard(props: ScoreCardProps) {
   const { scoreCardData } = props
-  const innings1 = scoreCardData.inningsOne
-  const innings2 = scoreCardData.inningsTwo
-  const isInnings1Won = innings1.score.runs > innings2.score.runs ? true : false
+  const inningsOne = scoreCardData.inningsOne
+  const inningsTwo = scoreCardData.inningsTwo
+  const isInnings1Won = inningsOne.score.runs > inningsTwo.score.runs ? true : false
 
   return (
     <div className='flex justify-around text-sm flex-col md:flex-row md:text-lg md:p-5'>
@@ -37,13 +37,13 @@ function ScoreCard(props: ScoreCardProps) {
                 }}
               />
             }
-            aria-controls='innings1'
-            id='innings1'
+            aria-controls='inningsOne'
+            id='inningsOne'
           >
             <ScoreHeader
               isInnings2={false}
-              teamName={innings1.battingTeam}
-              score={innings1.score}
+              teamName={inningsOne.battingTeam}
+              score={inningsOne.score}
               status={scoreCardData.status}
               isMatchComplete={scoreCardData.isMatchComplete}
               isVictory={isInnings1Won}
@@ -51,10 +51,10 @@ function ScoreCard(props: ScoreCardProps) {
           </AccordionSummary>
           <AccordionDetails sx={{ padding: 0 }}>
             <BattingCard
-              battingData={innings1.batting}
+              battingData={inningsOne.batting}
               isVictory={isInnings1Won && scoreCardData.isMatchComplete}
             />
-            <BowlingCard bowlingData={innings1.bowling} />
+            <BowlingCard bowlingData={inningsOne.bowling} />
           </AccordionDetails>
         </Accordion>
         <Accordion className='mt-5'>
@@ -75,21 +75,21 @@ function ScoreCard(props: ScoreCardProps) {
                 }}
               />
             }
-            aria-controls='innings2'
-            id='innings2'
+            aria-controls='inningsTwo'
+            id='inningsTwo'
           >
             <ScoreHeader
               isInnings2={true}
-              teamName={innings2.battingTeam}
-              score={innings2.score}
+              teamName={inningsTwo.battingTeam}
+              score={inningsTwo.score}
               status={scoreCardData.status}
               isMatchComplete={scoreCardData.isMatchComplete}
               isVictory={!isInnings1Won}
             />
           </AccordionSummary>
           <AccordionDetails sx={{ padding: 0 }}>
-            <BattingCard battingData={innings2.batting} isVictory={!isInnings1Won} />
-            <BowlingCard bowlingData={innings2.bowling} />
+            <BattingCard battingData={inningsTwo.batting} isVictory={!isInnings1Won} />
+            <BowlingCard bowlingData={inningsTwo.bowling} />
           </AccordionDetails>
         </Accordion>
       </div>

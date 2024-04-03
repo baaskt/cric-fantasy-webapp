@@ -37,10 +37,10 @@ function PlayersList() {
     }
   }, [playerResponse])
 
-  const prepareTableRows = (teamsResponse: PlayerEntity[]) => {
-    if (teamsResponse.length) {
+  const prepareTableRows = (response: PlayerEntity[]) => {
+    if (response.length) {
       const tempTableData: CricTableRow[] = prepareTableData(
-        teamsResponse,
+        response,
         headersList,
         'playerId',
         TableType.PLAYERS,

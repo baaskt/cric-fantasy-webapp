@@ -3,6 +3,7 @@ import { COLORS } from '@/util/colors'
 import { formatDateAndTime } from '@/util/helper'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
+import ShieldIcon from '@mui/icons-material/Shield'
 
 type MatchCardProps = {
   matchEntity: MatchEntity
@@ -24,17 +25,20 @@ function MatchCard(props: MatchCardProps) {
   )
 
   return (
-    <div className='cursor-pointer shadow-lg rounded-lg p-5 min-w-64' onClick={handleMatchSelect}>
+    <div
+      className='cursor-pointer shadow-lg rounded-lg p-5 min-w-64 w-full md:w-64'
+      onClick={handleMatchSelect}
+    >
       <div className='text-center font-bold'>{matchDesc}</div>
       <div className='text-center'>{formatDateAndTime(startTime)}</div>
-      <div className='flex items-center pt-5'>
+      <div className='flex justify-center items-center pt-5'>
         <div className='flex items-center gap-3'>
-          <Image src={team1Image ? team1Image : ''} alt='Club 1' width={40} height={40} />
+          <TeamImg imgUrl={team1Image} />
           <div>{team1SName}</div>
         </div>
         <div className='pl-2 pr-2'>vs</div>
         <div className='flex items-center gap-3'>
-          <Image src={team2Image ? team2Image : ''} alt='Club 2' width={40} height={40} />
+          <TeamImg imgUrl={team2Image} />
           <div>{team2SName}</div>
         </div>
       </div>
@@ -42,6 +46,14 @@ function MatchCard(props: MatchCardProps) {
         {state}
       </div>
     </div>
+  )
+}
+
+const TeamImg = ({ imgUrl }: { imgUrl: string }) => {
+  return imgUrl ? (
+    <Image src={imgUrl} alt='Club' width={40} height={40} />
+  ) : (
+    <ShieldIcon sx={{ color: COLORS.cricPrimary }} />
   )
 }
 

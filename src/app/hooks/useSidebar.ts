@@ -1,5 +1,5 @@
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
-import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
+import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
@@ -19,7 +19,7 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     fullPath: TITLES.DASHBOARD.fullPath,
   },
   {
-    icon: FormatListBulletedRoundedIcon,
+    icon: SportsCricketIcon,
     title: TITLES.MATCHES.label,
     path: TITLES.MATCHES.path,
     fullPath: TITLES.MATCHES.fullPath,
@@ -56,7 +56,7 @@ const detailConfig: SideBarMenuEntity[] = [
     hidden: true,
   },
   {
-    icon: FormatListBulletedRoundedIcon,
+    icon: SportsCricketIcon,
     title: TITLES.MATCH_DETAIL.label,
     path: TITLES.MATCH_DETAIL.path,
     fullPath: TITLES.MATCH_DETAIL.fullPath,

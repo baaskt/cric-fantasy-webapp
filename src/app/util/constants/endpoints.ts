@@ -22,6 +22,7 @@ export const TOURNAMENTS = {
 export const MATCHES = {
   GET_ALL: 'matchSchedule',
   GET_SCORECARD_URL: 'match/scorecard?matchId=',
+  UPDATE_DOTS_URL: 'match/matchId/tournaments/tournamentId/updateDots',
 }
 
 export const TEAMS = {

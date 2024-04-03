@@ -147,7 +147,11 @@ export default function SignupForm() {
           btnTxt={signupRequest.isMutating ? 'creating account...' : AUTH.SIGN_UP.txtSignup}
         ></CricButton>
       </div>
-      <CricToast open={isSignupSuccess} message='Account Created, please login to continue...' />
+      <CricToast
+        open={isSignupSuccess}
+        message='Account Created, please login to continue...'
+        onClose={setSignupSuccess}
+      />
     </Box>
   )
 }
