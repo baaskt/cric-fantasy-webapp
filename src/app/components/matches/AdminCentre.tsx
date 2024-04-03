@@ -14,6 +14,7 @@ import { MATCHES } from '@/util/constants/endpoints'
 import { useTournament } from '@/providers/TournamentProvider'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import CricToast from '../ui/CricToast'
+import { useMatch } from '@/providers/MatchProvider'
 
 type AdminCentreProps = {
   scoreCardData: MatchDetailEntity
@@ -28,7 +29,8 @@ function AdminCentre(props: AdminCentreProps) {
   const [inningsTwoDots, setInningsTwoDots] = useState<PlayerDotsEntity[]>([])
   const [juryPlayer, setJuryPlayer] = useState<OptionsEntity>()
   const [updateSuccess, setUpdateSuccess] = useState<boolean>(false)
-  const { activeMatch, activeTournament } = useTournament()
+  const { activeTournament } = useTournament()
+  const { activeMatch } = useMatch()
 
   const matchId = activeMatch?.matchId || 0
   const tournamentId = activeTournament?.tournamentId || ''

@@ -27,11 +27,9 @@ function TeamDetail() {
     }
   }, [teamDetailRequest.data])
 
-  if (teamDetailRequest.isValidating) {
+  if (teamDetailRequest.isValidating || !teamDetailEntity) {
     return <Loading txt={TEAM.LOADING_TXT}></Loading>
   }
-
-  if (!teamDetailEntity) return <></>
 
   return (
     <div className='flex flex-col'>

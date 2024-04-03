@@ -3,7 +3,9 @@ import { cookieHelper } from './cookieHelper'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { USERS } from '@/util/constants/endpoints'
 import { apiHelper } from './apiHelper'
-import { MATCH_ID, TEAM_ID, TOURNAMENT_ID } from '@/providers/TournamentProvider'
+import { TOURNAMENT_ID } from '@/providers/TournamentProvider'
+import { MATCH_ID } from '@/providers/MatchProvider'
+import { TEAM_ID } from '@/providers/TeamProvider'
 
 export const auth = () => {
   const ACCESS_TOKEN = 'accessToken'

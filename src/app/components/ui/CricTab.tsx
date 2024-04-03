@@ -21,7 +21,7 @@ function TabPanel(props: TabPanelProps) {
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
     </div>
   )
 }
@@ -45,8 +45,12 @@ function CricTab(props: CricTabProps) {
   const [value, setValue] = React.useState(0)
 
   useEffect(() => {
-    const selectedIndex = optionList.findIndex(option => option.id === selectedTab?.id)
-    setValue(selectedIndex !== -1 ? selectedIndex : 0)
+    if (selectedTab && optionList.length) {
+      const selectedIndex = optionList.findIndex(option => option.id === selectedTab.id)
+      const tempValue = selectedIndex !== -1 ? selectedIndex : 0
+      setValue(tempValue)
+      onChange && onChange(optionList[tempValue])
+    }
   }, [optionList, selectedTab])
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
@@ -61,7 +65,13 @@ function CricTab(props: CricTabProps) {
   return (
     <ThemeProvider theme={tabTheme}>
       <div className='flex flex-col'>
-        <Tabs variant='scrollable' value={value} onChange={handleChange} aria-label='tabs'>
+        <Tabs
+          className='p-5'
+          variant='scrollable'
+          value={value}
+          onChange={handleChange}
+          aria-label='tabs'
+        >
           {optionList.map((optionEntity, index) => (
             <Tab
               key={optionEntity.id}

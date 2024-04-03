@@ -7,8 +7,8 @@ import { PlayerRandomEntity } from '@/model/response/player-response.interface'
 import { twentyFiveCrores } from '@/util/bidding'
 import React, { createContext, useContext, useState } from 'react'
 
-const ListContext = createContext<AuctionContextType>({} as AuctionContextType)
-const { Provider } = ListContext
+const AuctionContext = createContext<AuctionContextType>({} as AuctionContextType)
+const { Provider } = AuctionContext
 
 export const AuctionProvider = ({ children }: { children: React.ReactNode }) => {
   const [playersList, setPlayersList] = useState<AuctionPlayerEntity[]>([])
@@ -142,4 +142,4 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   return <Provider value={value}>{children}</Provider>
 }
 
-export const useAuction = () => useContext(ListContext)
+export const useAuction = () => useContext(AuctionContext)

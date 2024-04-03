@@ -12,7 +12,7 @@ function POMCard(props: POMCard) {
   const { isMatchComplete, playerData, title } = props
   return (
     <div className='flex flex-col items-center mt-5'>
-      <div style={{ color: COLORS.cricPrimary }} className='text-md pb-5'>
+      <div style={{ color: COLORS.cricPrimary }} className='text-md pb-5 font-semibold'>
         {title}
       </div>
       {isMatchComplete && playerData ? (

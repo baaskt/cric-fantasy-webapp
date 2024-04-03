@@ -19,8 +19,8 @@ function ScoreCard(props: ScoreCardProps) {
   const isInnings1Won = inningsOne.score.runs > inningsTwo.score.runs ? true : false
 
   return (
-    <div className='flex justify-around text-sm flex-col md:flex-row md:text-lg md:p-5'>
-      <div>
+    <div className='flex justify-around text-sm flex-col gap-10 md:flex-row md:text-lg md:p-5'>
+      <div className='w-full'>
         <Accordion>
           <AccordionSummary
             sx={{
@@ -93,7 +93,7 @@ function ScoreCard(props: ScoreCardProps) {
           </AccordionDetails>
         </Accordion>
       </div>
-      <div className='flex flex-col'>
+      <div className='flex flex-col min-w-80'>
         <POMCard
           title={'Player of the Match'}
           isMatchComplete={scoreCardData.isMatchComplete}
