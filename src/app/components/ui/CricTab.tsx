@@ -45,8 +45,12 @@ function CricTab(props: CricTabProps) {
   const [value, setValue] = React.useState(0)
 
   useEffect(() => {
-    const selectedIndex = optionList.findIndex(option => option.id === selectedTab?.id)
-    setValue(selectedIndex !== -1 ? selectedIndex : 0)
+    if (selectedTab && optionList.length) {
+      const selectedIndex = optionList.findIndex(option => option.id === selectedTab.id)
+      const tempValue = selectedIndex !== -1 ? selectedIndex : 0
+      setValue(tempValue)
+      onChange && onChange(optionList[tempValue])
+    }
   }, [optionList, selectedTab])
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {

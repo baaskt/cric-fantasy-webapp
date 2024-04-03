@@ -44,7 +44,7 @@ function MatchDetail() {
   }
 
   const findAdminTabs = () => {
-    if (!isAdmin()) {
+    if (isAdmin()) {
       return tabOptions
     } else {
       return tabOptions.filter(tab => tab.id !== 3)

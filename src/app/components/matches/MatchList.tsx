@@ -1,8 +1,8 @@
-import { useTournament } from '@/providers/TournamentProvider'
 import React from 'react'
 import MatchCard from './MatchCard'
 import { useRouter } from 'next/navigation'
 import { MatchEntity } from '@/model/response/match.response'
+import { useMatch } from '@/providers/MatchProvider'
 
 type MatchListProps = {
   matchList: MatchEntity[]
@@ -10,7 +10,7 @@ type MatchListProps = {
 
 function MatchList(props: MatchListProps) {
   const { matchList } = props
-  const { markActiveMatch } = useTournament()
+  const { markActiveMatch } = useMatch()
   const router = useRouter()
 
   if (!matchList?.length) {

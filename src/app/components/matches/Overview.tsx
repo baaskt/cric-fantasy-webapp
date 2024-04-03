@@ -1,11 +1,11 @@
 import { MatchDetailEntity } from '@/model/response/match-detail.interface'
-import { useTournament } from '@/providers/TournamentProvider'
 import { getTeamColors } from '@/util/helper'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import POMCard from './POMCard'
 import MatchScore from './MatchScore'
 import Confetti from 'react-confetti'
+import { useMatch } from '@/providers/MatchProvider'
 
 type OverviewProps = {
   scoreCardData: MatchDetailEntity | undefined
@@ -15,7 +15,7 @@ function Overview(props: OverviewProps) {
   const { scoreCardData } = props
   const inningsOne = scoreCardData?.inningsOne
   const inningsTwo = scoreCardData?.inningsTwo
-  const { activeMatch } = useTournament()
+  const { activeMatch } = useMatch()
   const team1Url = activeMatch?.team1Image || ''
   const team2Url = activeMatch?.team2Image || ''
   const [gradientColor, setGradientColor] = useState({ fromColor: '', toColor: '' })

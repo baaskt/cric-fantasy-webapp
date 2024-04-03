@@ -8,9 +8,9 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import { MATCH } from '@/util/constants/constants'
 import Loading from '@/components/Loading'
 import { useEffect, useState } from 'react'
-import { useTournament } from '@/providers/TournamentProvider'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import CricTab from '@/components/ui/CricTab'
+import { useMatch } from '@/providers/MatchProvider'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Active' },
@@ -18,7 +18,8 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 export default function Matches() {
-  const { matchList, setMatchesList } = useTournament()
+  const { matchList, setMatchesList, activeScheduleCategory, setActiveScheduleCategory } =
+    useMatch()
   const matchRequest = useRequest(MATCHES.GET_ALL)
   const [activeMatches, setActiveMatches] = useState<MatchEntity[]>([])
   const [completedMatches, setCompletedMatches] = useState<MatchEntity[]>([])
@@ -58,7 +59,11 @@ export default function Matches() {
 
   return (
     <div className='p-5'>
-      <CricTab optionList={tabOptions}>
+      <CricTab
+        optionList={tabOptions}
+        selectedTab={activeScheduleCategory}
+        onChange={setActiveScheduleCategory}
+      >
         <MatchList matchList={activeMatches} />
         <MatchList matchList={completedMatches} />
       </CricTab>
