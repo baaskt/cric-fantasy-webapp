@@ -220,6 +220,7 @@ export const getTeamColors = (team1: string | undefined, team2: string | undefin
   const team2Name = team2 || ''
   const fromColor = getColor(team1Name)
   const toColor = getColor(team2Name)
+  console.log(team1Name)
   return { fromColor, toColor }
 }
 

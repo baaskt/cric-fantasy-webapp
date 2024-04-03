@@ -21,7 +21,7 @@ function TabPanel(props: TabPanelProps) {
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
     </div>
   )
 }
@@ -65,7 +65,13 @@ function CricTab(props: CricTabProps) {
   return (
     <ThemeProvider theme={tabTheme}>
       <div className='flex flex-col'>
-        <Tabs variant='scrollable' value={value} onChange={handleChange} aria-label='tabs'>
+        <Tabs
+          className='p-5'
+          variant='scrollable'
+          value={value}
+          onChange={handleChange}
+          aria-label='tabs'
+        >
           {optionList.map((optionEntity, index) => (
             <Tab
               key={optionEntity.id}

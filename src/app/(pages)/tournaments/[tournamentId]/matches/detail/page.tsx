@@ -25,7 +25,6 @@ function MatchDetail() {
   const { isAdmin } = useAuth()
   const matchId = auth().getMatchId()
   const [matchDetailEntity, setMatchDetailEntity] = useState<MatchDetailEntity>()
-  const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
   const MATCH_DETAIL_URL = matchId ? `${MATCHES.GET_SCORECARD_URL}${matchId}` : ''
   const matchDetailRequest = useRequest(MATCH_DETAIL_URL)
 
@@ -39,10 +38,6 @@ function MatchDetail() {
     }
   }, [matchDetailRequest.data])
 
-  const handleChange = (selectedEntity: OptionsEntity) => {
-    setSelectedTab(selectedEntity)
-  }
-
   const findAdminTabs = () => {
     if (isAdmin()) {
       return tabOptions
@@ -52,21 +47,16 @@ function MatchDetail() {
   }
   const updatedTabs = useMemo(() => findAdminTabs(), [])
 
-  if (matchDetailRequest.isValidating) {
+  if (matchDetailRequest.isValidating || !matchDetailEntity) {
     return <Loading txt={MATCH.LOADING_TXT}></Loading>
   }
 
   return (
-    <div>
-      <div className='flex flex-row justify-between p-5'>
-        <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
-      </div>
-      {selectedTab.id === 1 && <Overview scoreCardData={matchDetailEntity} />}
-      {selectedTab.id === 2 && matchDetailEntity && <ScoreCard scoreCardData={matchDetailEntity} />}
-      {selectedTab.id === 3 && matchDetailEntity && (
-        <AdminCentre scoreCardData={matchDetailEntity} />
-      )}
-    </div>
+    <CricTab optionList={updatedTabs}>
+      <Overview scoreCardData={matchDetailEntity} />
+      <ScoreCard scoreCardData={matchDetailEntity} />
+      <AdminCentre scoreCardData={matchDetailEntity} />
+    </CricTab>
   )
 }
 

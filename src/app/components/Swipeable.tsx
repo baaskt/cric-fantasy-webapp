@@ -26,11 +26,11 @@ const Swipeable = (props: SwipeableProps) => {
     const deltaX = endX - startX
     if (deltaX < -minSwipeDistance) {
       //left swipe
+      console.log('left')
       onChangeIndex(value < maxValue ? value + 1 : maxValue)
     } else if (deltaX > minSwipeDistance) {
       //right swipe
       console.log('right')
-
       onChangeIndex(value > minValue ? value - 1 : minValue)
     }
   }
