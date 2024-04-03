@@ -7,10 +7,10 @@ import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import Loading from '../Loading'
 import { TEAM } from '@/util/constants/constants'
-import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
 import { prepareTableData } from '@/util/table'
 import { TableType } from '@/model/enum/table-type.enum'
+import { useTeam } from '@/providers/TeamProvider'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -26,7 +26,7 @@ const headersList: CricHeaderRow[] = [
 function TeamList() {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [teamList, setTeamList] = useState<TeamEntity[]>([])
-  const { markActiveTeam } = useTournament()
+  const { markActiveTeam } = useTeam()
   const router = useRouter()
 
   const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)

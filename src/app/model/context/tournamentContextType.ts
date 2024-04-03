@@ -1,4 +1,3 @@
-import { TeamEntity } from '../response/team.interface'
 import { TournamentEntity } from '../response/tournament.interface'
 
 export type TournamentContextType = {
@@ -10,6 +9,4 @@ export type TournamentContextType = {
   updateTournament: (id: string, newData: TournamentEntity) => void
   subTitle: string
   setSubTitle: (tournamentList: string) => void
-  activeTeam: TeamEntity | undefined
-  markActiveTeam: (team: TeamEntity) => void
 }

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import POMCard from './POMCard'
 import MatchScore from './MatchScore'
-import Confetti from 'react-confetti'
+// import Confetti from 'react-confetti'
 import { useMatch } from '@/providers/MatchProvider'
 
 type OverviewProps = {
@@ -21,8 +21,8 @@ function Overview(props: OverviewProps) {
   const [gradientColor, setGradientColor] = useState({ fromColor: '', toColor: '' })
   const team1DivRef = React.useRef<HTMLDivElement>(null)
   const team2DivRef = React.useRef<HTMLDivElement>(null)
-  const isInnings1Won =
-    inningsOne && inningsTwo && inningsOne.score.runs > inningsTwo.score.runs ? true : false
+  // const isInnings1Won =
+  //   inningsOne && inningsTwo && inningsOne.score.runs > inningsTwo.score.runs ? true : false
 
   useEffect(() => {
     if (activeMatch) {
@@ -47,12 +47,12 @@ function Overview(props: OverviewProps) {
             ref={team1DivRef}
             style={{ position: 'relative' }}
           >
-            {scoreCardData?.isMatchComplete && !isInnings1Won && (
+            {/* {scoreCardData?.isMatchComplete && !isInnings1Won && (
               <Confetti
                 width={team1DivRef.current?.clientWidth}
                 height={team1DivRef.current?.clientWidth}
               />
-            )}
+            )} */}
             <Image
               src={team1Url}
               alt='team1'
@@ -69,12 +69,12 @@ function Overview(props: OverviewProps) {
             ref={team2DivRef}
             style={{ position: 'relative' }}
           >
-            {scoreCardData?.isMatchComplete && !isInnings1Won && (
+            {/* {scoreCardData?.isMatchComplete && !isInnings1Won && (
               <Confetti
                 width={team2DivRef.current?.clientWidth}
                 height={team2DivRef.current?.clientWidth}
               />
-            )}
+            )} */}
             <Image
               src={team2Url}
               alt='team2'
