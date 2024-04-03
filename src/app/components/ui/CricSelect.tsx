@@ -1,21 +1,29 @@
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { FormControl, InputLabel, MenuItem, Select, ThemeProvider } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SelectChangeEvent } from '@mui/material'
 import { selectTheme } from '@/styles/themes/select'
 
 type CricSelectProps = {
   label: string
+  defaultValue?: string | number
   menuList: OptionsEntity[]
   onChange: (option: OptionsEntity) => void
 }
 
 function CricSelect(props: CricSelectProps) {
   const [selectedValue, setSelectedValue] = React.useState<string>('')
-  const { label, menuList, onChange } = props
+  const { label, menuList, defaultValue, onChange } = props
+
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedValue(defaultValue.toString())
+    }
+  }, [defaultValue])
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value
+    console.log(value)
     setSelectedValue(value)
     const selectedMenu = menuList.find(menu => menu.value === value)
     if (selectedMenu) {

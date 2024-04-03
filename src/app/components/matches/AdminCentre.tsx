@@ -98,6 +98,7 @@ function AdminCentre(props: AdminCentreProps) {
           </div>
           <div className='w-64 p-5 flex justify-center items-center'>
             <CricSelect
+              defaultValue={scoreCardData.peoplePlayerOfTheMatch.playerId}
               label={'Jury Player'}
               menuList={playersList}
               onChange={handlePlayerSelect}
