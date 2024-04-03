@@ -3,7 +3,7 @@ import { Tab, Tabs, ThemeProvider } from '@mui/material'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { tabTheme } from '@/styles/themes/tabs'
 import Box from '@mui/material/Box'
-import SwipeableViews from 'react-swipeable-views'
+import Swipeable from '../Swipeable'
 
 type TabPanelProps = {
   children: ReactNode
@@ -71,13 +71,18 @@ function CricTab(props: CricTabProps) {
           ))}
         </Tabs>
         {children && (
-          <SwipeableViews index={value} onChangeIndex={handleSwipe}>
+          <Swipeable
+            value={value}
+            onChangeIndex={handleSwipe}
+            minValue={0}
+            maxValue={children.length - 1}
+          >
             {children?.map((childNode, tabIndex) => (
               <TabPanel key={tabIndex} value={value} index={tabIndex}>
                 {childNode}
               </TabPanel>
             ))}
-          </SwipeableViews>
+          </Swipeable>
         )}
       </div>
     </ThemeProvider>
