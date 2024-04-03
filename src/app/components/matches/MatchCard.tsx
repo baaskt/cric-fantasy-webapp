@@ -25,7 +25,10 @@ function MatchCard(props: MatchCardProps) {
   )
 
   return (
-    <div className='cursor-pointer shadow-lg rounded-lg p-5 min-w-64' onClick={handleMatchSelect}>
+    <div
+      className='cursor-pointer shadow-lg rounded-lg p-5 min-w-64 w-full md:w-64'
+      onClick={handleMatchSelect}
+    >
       <div className='text-center font-bold'>{matchDesc}</div>
       <div className='text-center'>{formatDateAndTime(startTime)}</div>
       <div className='flex justify-center items-center pt-5'>

@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from 'react'
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Overview', value: 'overview' },
   { id: 2, label: 'Scorecard', value: 'scoreCard' },
-  { id: 3, label: 'Admin Center', value: 'adminCenter' },
+  { id: 3, label: 'Admin Centre', value: 'adminCenter' },
 ]
 
 function MatchDetail() {

@@ -102,7 +102,11 @@ export default function LoginForm() {
           btnTxt={loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
         ></CricButton>
       </div>
-      <CricToast open={isLoginSuccess} message='Login successfull. Redirecting...' />
+      <CricToast
+        open={isLoginSuccess}
+        message='Login successfull. Redirecting...'
+        onClose={setLoginSuccess}
+      />
     </Box>
   )
 }

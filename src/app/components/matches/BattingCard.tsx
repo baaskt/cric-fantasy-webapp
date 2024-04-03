@@ -1,7 +1,6 @@
 import { BattingCardEntity } from '@/model/response/match-detail.interface'
 import { COLORS } from '@/util/colors'
 import React from 'react'
-import FlightIcon from '@mui/icons-material/Flight'
 
 const headerList = [
   { name: 'Batters' },
@@ -48,7 +47,7 @@ function BattingCard(props: BattingCardProps) {
           <div className={`w-[40%] md:w-[50%] p-2 md:pl-5`}>
             <div style={{ color: COLORS.cricPrimary }} className='flex flex-row gap-2'>
               <div>{`${batEntity.batName} ${batEntity.outDesc === 'not out' ? '*' : ''}`}</div>
-              {batEntity.isOverseas && <FlightIcon />}
+              <div>{batEntity.isOverseas ? <div>&#9992;</div> : <></>}</div>
               <div>{!batEntity.runs ? <div>&#129414;</div> : <></>}</div>
             </div>
             <div className='text-slate-500'>{batEntity.outDesc}</div>

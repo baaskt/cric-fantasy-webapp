@@ -1,7 +1,6 @@
 import { BowlingCardEntity } from '@/model/response/match-detail.interface'
 import { COLORS } from '@/util/colors'
 import React from 'react'
-import FlightIcon from '@mui/icons-material/Flight'
 
 const headerList = [
   { name: 'Bowlers' },
@@ -43,7 +42,7 @@ function BowlingCard(props: BowlingCardProps) {
             className={`flex flex-row gap-2 w-[40%] md:w-[50%] p-2 md:pl-5`}
           >
             {bowlEntity.bowlName}
-            {bowlEntity.isOverseas && <FlightIcon />}
+            <div>{bowlEntity.isOverseas ? <div>&#9992;</div> : <></>}</div>
           </div>
           <div className={`w-[8%] md:w-[10%] p-2 text-center`}>{bowlEntity.overs}</div>
           <div className={`w-[8%] md:w-[10%] p-2 text-center`}>{bowlEntity.maidens}</div>

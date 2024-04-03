@@ -1,7 +1,8 @@
 import { OptionsEntity } from '@/model/entities/options.interface'
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, ThemeProvider } from '@mui/material'
 import React from 'react'
 import { SelectChangeEvent } from '@mui/material'
+import { selectTheme } from '@/styles/themes/select'
 
 type CricSelectProps = {
   label: string
@@ -23,22 +24,24 @@ function CricSelect(props: CricSelectProps) {
   }
 
   return (
-    <FormControl variant='filled' fullWidth sx={{ maxWidth: 1 }}>
-      <InputLabel id='select-label'>{label}</InputLabel>
-      <Select
-        labelId='select-label'
-        id='cric-select'
-        value={selectedValue}
-        label={label}
-        onChange={handleChange}
-      >
-        {menuList.map(menu => (
-          <MenuItem key={menu.id} value={menu.value}>
-            {menu.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <ThemeProvider theme={selectTheme}>
+      <FormControl variant='filled' fullWidth sx={{ maxWidth: 1 }}>
+        <InputLabel id='select-label'>{label}</InputLabel>
+        <Select
+          labelId='select-label'
+          id='cric-select'
+          value={selectedValue}
+          label={label}
+          onChange={handleChange}
+        >
+          {menuList.map(menu => (
+            <MenuItem key={menu.id} value={menu.value}>
+              {menu.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </ThemeProvider>
   )
 }
 

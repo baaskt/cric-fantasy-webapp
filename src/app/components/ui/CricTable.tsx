@@ -12,9 +12,13 @@ import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined
 import CricTableHead from '../table/CricTableHeader'
 import { sortSearchTable } from '@/util/table'
 import { currencyToString } from '@/util/bidding'
-import { Checkbox, IconButton, checkboxClasses } from '@mui/material'
+import { Checkbox, Collapse, IconButton, checkboxClasses } from '@mui/material'
 import CricSwitch from './CricSwitch'
 import CricSearch from './CricSearch'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import useMobile from '@/hooks/useMobile'
+import TableDetailView from '../table/TableDetailView'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -74,6 +78,8 @@ function CricTable(props: CricTableProps) {
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [searchStr, setSearchStr] = useState<string>('')
+  const [expandIndex, setExpandIndex] = useState(-1)
+  const isMobileView = useMobile()
 
   useEffect(() => {
     if (isResetCheck) {
@@ -108,36 +114,69 @@ function CricTable(props: CricTableProps) {
       }
     }
 
+    const defaultViewList = row.dataList.filter(
+      cell => (isMobileView && cell.isMobileView) || (!isMobileView && cell.cellType !== 'expand'),
+    )
+    const expandViewList = row.dataList.filter(cell => isMobileView && !cell.isMobileView)
+
     return (
-      <StyledTableRow key={rowIndex}>
-        {props.isSelectable && (
-          <StyledTableCell padding='checkbox'>
-            <Checkbox
-              color='primary'
-              checked={selectedIds.includes(row.rowId)}
-              onChange={event => checkRow(event)}
-              inputProps={{
-                'aria-label': 'select all desserts',
-              }}
-              sx={{
-                [`&, &.${checkboxClasses.checked}`]: {
-                  color: COLORS.cricPrimary,
-                },
-              }}
-            />
-          </StyledTableCell>
+      <React.Fragment key={rowIndex}>
+        <StyledTableRow>
+          {props.isSelectable && (
+            <StyledTableCell padding='checkbox'>
+              <Checkbox
+                color='primary'
+                checked={selectedIds.includes(row.rowId)}
+                onChange={event => checkRow(event)}
+                inputProps={{
+                  'aria-label': 'select all desserts',
+                }}
+                sx={{
+                  [`&, &.${checkboxClasses.checked}`]: {
+                    color: COLORS.cricPrimary,
+                  },
+                }}
+              />
+            </StyledTableCell>
+          )}
+          {defaultViewList.map((cell, cellIndex) =>
+            renderTableCell(row, rowIndex, cell, cellIndex, fullWidth),
+          )}
+        </StyledTableRow>
+        {expandViewList?.length && expandIndex === rowIndex ? (
+          <StyledTableRow>
+            <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+              <Collapse in={expandIndex === rowIndex}>
+                <TableDetailView
+                  expandViewList={expandViewList}
+                  onRowSelect={() => props.onRowSelect && props.onRowSelect(row.rowId)}
+                />
+              </Collapse>
+            </StyledTableCell>
+          </StyledTableRow>
+        ) : (
+          <></>
         )}
-        {row.dataList.map((cell, dataIndex) => renderTableCell(row, cell, dataIndex, fullWidth))}
-      </StyledTableRow>
+      </React.Fragment>
     )
   }
 
   const renderTableCell = (
     row: CricTableRow,
+    rowIndex: number,
     cell: CricTableCell,
     cellIndex: number,
     fullWidth: boolean,
   ) => {
+    const renderTableCells = () => {
+      if (cell.cellType === 'icon') return renderIconCell(row)
+      else if (cell.cellType === 'list') return renderListCell(cell.value as string[])
+      else if (cell.cellType === 'currency') return currencyToString(Number(cell.value))
+      else if (cell.cellType === 'switch') return renderToggleCell(row, cell)
+      else if (cell.cellType === 'expand') return renderExpandCell(rowIndex)
+      else return cell.value
+    }
+
     return (
       <StyledTableCell
         key={cellIndex}
@@ -150,21 +189,26 @@ function CricTable(props: CricTableProps) {
           cell.cellType === 'currency' ||
           cell.cellType === 'icon' ||
           cell.cellType === 'list' ||
-          cell.cellType === 'switch'
+          cell.cellType === 'switch' ||
+          cell.cellType === 'expand'
             ? 'center'
             : 'left'
         }
       >
-        {cell.cellType === 'icon'
-          ? renderIconCell(row)
-          : cell.cellType === 'list'
-            ? renderListCell(cell.value as string[])
-            : cell.cellType === 'currency'
-              ? currencyToString(Number(cell.value))
-              : cell.cellType === 'switch'
-                ? renderToggleCell(row, cell)
-                : cell.value}
+        {renderTableCells()}
       </StyledTableCell>
+    )
+  }
+
+  const renderExpandCell = (rowIndex: number) => {
+    return (
+      <IconButton
+        aria-label='expand row'
+        size='small'
+        onClick={() => setExpandIndex(p => (p !== rowIndex ? rowIndex : -1))}
+      >
+        {expandIndex === rowIndex ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+      </IconButton>
     )
   }
 

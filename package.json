@@ -25,6 +25,7 @@
     "dayjs": "^1.11.10",
     "next": "14.0.4",
     "react": "^18",
+    "react-confetti": "^6.1.0",
     "react-dom": "^18",
     "react-swipeable-views": "^0.14.0",
     "react-tailwindcss-datepicker": "^1.6.6",

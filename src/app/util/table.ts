@@ -8,6 +8,8 @@ import {
   KeyValueType,
 } from '@/model/types/cric-table.type'
 import { getPlayerTableData } from './player'
+import { prepareTeamTable } from './team'
+import { TeamEntity } from '@/model/response/team.interface'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -123,24 +125,31 @@ export const prepareTableData = <T>(
   headersList: CricHeaderRow[],
   rowIdParam: string,
   tableType: string,
+  sortParam?: string,
 ) => {
-  const tempTableData: CricTableRow[] = []
-  rowList.forEach((rowEntity: T, rowIndex: number) => {
-    const tableRows: CricTableCell[] = []
+  const tableRows: CricTableRow[] = []
+  const sortedRowList = sortParam
+    ? rowList.sort(
+        (a: T, b: T) => (b[sortParam as keyof T] as number) - (a[sortParam as keyof T] as number),
+      )
+    : rowList
+  console.log(sortedRowList)
+  sortedRowList.forEach((rowEntity: T, rowIndex: number) => {
+    const tableCells: CricTableCell[] = []
     headersList.forEach((headerEntity: CricHeaderRow) => {
       let tableCell: CricTableCell | undefined = undefined
       if (tableType === TableType.PLAYERS.toString()) {
         tableCell = getPlayerTableData(headerEntity, rowEntity as PlayerEntity, rowIndex)
       } else if (tableType === TableType.TEAMS.toString()) {
-        tableCell = getPlayerTableData(headerEntity, rowEntity as PlayerEntity, rowIndex)
+        tableCell = prepareTeamTable(headerEntity, rowEntity as TeamEntity, rowIndex)
       }
-      tableRows.push(tableCell as CricTableCell)
+      tableCells.push(tableCell as CricTableCell)
     })
     const rowData = rowEntity as never as KeyValueType
-    tempTableData.push({
+    tableRows.push({
       rowId: rowData[rowIdParam] as string | number,
-      dataList: tableRows,
+      dataList: tableCells,
     })
   })
-  return tempTableData
+  return tableRows
 }
