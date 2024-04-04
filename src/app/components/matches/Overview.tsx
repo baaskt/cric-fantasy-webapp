@@ -33,7 +33,7 @@ function Overview(props: OverviewProps) {
   if (!gradientColor || !inningsOne || !inningsTwo) return <></>
 
   return (
-    <div>
+    <div className='pt-5'>
       <div
         className='p-5'
         style={{

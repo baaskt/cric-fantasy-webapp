@@ -40,7 +40,7 @@ export default function Matches() {
     const tempCompMatchList: MatchEntity[] = []
     matchList.forEach(match => {
       if (match.state === 'Complete') {
-        tempCompMatchList.push(match)
+        tempCompMatchList.unshift(match)
       } else {
         tempActiveMatchList.push(match)
       }
@@ -58,13 +58,15 @@ export default function Matches() {
   }
 
   return (
-    <CricTab
-      optionList={tabOptions}
-      selectedTab={activeScheduleCategory}
-      onChange={setActiveScheduleCategory}
-    >
-      <MatchList matchList={activeMatches} />
-      <MatchList matchList={completedMatches} />
-    </CricTab>
+    <div className='p-5'>
+      <CricTab
+        optionList={tabOptions}
+        selectedTab={activeScheduleCategory}
+        onChange={setActiveScheduleCategory}
+      >
+        <MatchList matchList={activeMatches} />
+        <MatchList matchList={completedMatches} />
+      </CricTab>
+    </div>
   )
 }

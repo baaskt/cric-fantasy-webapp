@@ -45,14 +45,14 @@ function MatchDetail() {
       return tabOptions.filter(tab => tab.id !== 3)
     }
   }
-  const updatedTabs = useMemo(() => findAdminTabs(), [])
+  const updatedTabs = useMemo(() => findAdminTabs(), [isAdmin])
 
   if (matchDetailRequest.isValidating || !matchDetailEntity) {
     return <Loading txt={MATCH.LOADING_TXT}></Loading>
   }
 
   return (
-    <CricTab optionList={updatedTabs}>
+    <CricTab optionList={updatedTabs} padding={true}>
       <Overview scoreCardData={matchDetailEntity} />
       <ScoreCard scoreCardData={matchDetailEntity} />
       <AdminCentre scoreCardData={matchDetailEntity} />

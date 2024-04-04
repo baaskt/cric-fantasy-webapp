@@ -14,7 +14,7 @@ const participantStatList: CricMenuEntity[] = [
 ]
 
 const fantasyStatList: CricMenuEntity[] = [
-  { label: 'Position', icon: PersonIcon, value: 'position' },
+  // { label: 'Position', icon: PersonIcon, value: 'position' },
   { label: 'Purse Balance', icon: PersonIcon, value: 'purseBalance' },
   { label: 'Squad', icon: PersonIcon, value: 'squad' },
 ]
