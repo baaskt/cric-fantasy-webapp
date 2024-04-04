@@ -10,9 +10,7 @@ import {
   KeyValueType,
 } from '@/model/types/cric-table.type'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
-import { TeamEntity } from '@/model/response/team.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
-import { PlayingXIStatus } from '@/model/enum/playingxi-status.enum'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -168,63 +166,6 @@ const getPlayerCellValue = (playerData: KeyValueType, cellKey: string, playerInd
   return cellValue
 }
 
-export const prepareTeamTable = (
-  teamList: TeamEntity[],
-  headersList: CricHeaderRow[],
-): CricTableRow[] => {
-  const tempTableData: CricTableRow[] = []
-  const sortedTeamList = teamList.sort((a, b) => b.tournamentPoints - a.tournamentPoints)
-  sortedTeamList.forEach((teamEntity: TeamEntity, teamIndex: number) => {
-    const rowData: CricTableCell[] = []
-    headersList.forEach((headerEntity: CricHeaderRow) => {
-      const cellType = headerEntity.type
-      const cellKey = headerEntity.key
-      const iconPath = headerEntity.iconPath
-      const cellValue = getTeamCellValue(cellType, cellKey, iconPath, teamIndex, teamEntity)
-      const tableCell: CricTableCell = {
-        cellKey: cellKey,
-        cellType: cellType,
-        value: cellValue,
-        color:
-          cellValue === PlayingXIStatus.SET
-            ? COLORS.sold
-            : cellValue === PlayingXIStatus.UNSET
-              ? COLORS.unsold
-              : '',
-      }
-      rowData.push(tableCell)
-    })
-    tempTableData.push({
-      rowId: teamEntity.teamId,
-      dataList: rowData,
-    })
-  })
-  return tempTableData
-}
-
-const getTeamCellValue = (
-  cellType: string,
-  cellKey: string,
-  iconPath: string | undefined,
-  teamIndex: number,
-  teamEntity: TeamEntity,
-) => {
-  const teamData = teamEntity as never as KeyValueType
-  let cellValue
-  if (cellType === 'icon') {
-    cellValue = iconPath
-  } else if (cellKey === 'pos') {
-    cellValue = teamIndex + 1
-  } else if (cellKey === 'teamMembers') {
-    cellValue = teamEntity.teamMembers.map(data => data.name)
-  } else if (cellKey === 'playingXI') {
-    cellValue = teamEntity.playingXI?.length === 11 ? 'SET' : 'UNSET'
-  } else {
-    cellValue = teamData[cellKey]
-  }
-  return cellValue
-}
-
 export const groupListByProp = <T>(prop: string, list: T[]) => {
   const grouped = new Map<string, T[]>()
   for (const item of list) {
@@ -254,29 +195,44 @@ export function hasMismatch(data1: number[], data2: number[]) {
   return false
 }
 
-export function getFirstLetters(sentence: string) {
-  const words: string[] = sentence.split(' ')
-  const firstLetters = []
-  for (const word of words) {
-    const firstLetter = word.charAt(0).toUpperCase()
-    firstLetters.push(firstLetter)
-  }
-  return firstLetters.join('')
-}
-
 export function formatDateAndTime(dateTimeString: string) {
-  const dateTime = new Date(dateTimeString)
+  if (!dateTimeString) return ''
+  const dateComponents = dateTimeString.split(' ')
+  const utcTimeString = `${dateComponents[0]}T${dateComponents[1]}Z`
+  const localTime = new Date(utcTimeString)
 
   // Get the date components
-  const year = dateTime.getFullYear()
-  const month = String(dateTime.getMonth() + 1).padStart(2, '0')
-  const day = String(dateTime.getDate()).padStart(2, '0')
+  const year = localTime.getFullYear()
+  const month = String(localTime.getMonth() + 1).padStart(2, '0')
+  const day = String(localTime.getDate()).padStart(2, '0')
 
   // Get the time components
-  const hours = String(dateTime.getHours()).padStart(2, '0')
-  const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+  const hours = String(localTime.getHours()).padStart(2, '0')
+  const minutes = String(localTime.getMinutes()).padStart(2, '0')
 
   // Combine date and time components into a formatted string
   const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
   return formattedDateTime
+}
+
+export const getTeamColors = (team1: string | undefined, team2: string | undefined) => {
+  const team1Name = team1 || ''
+  const team2Name = team2 || ''
+  const fromColor = getColor(team1Name)
+  const toColor = getColor(team2Name)
+  return { fromColor, toColor }
+}
+
+const getColor = (team: string): string => {
+  if (team === 'RCB') return COLORS.iplTeam.rcb
+  else if (team === 'CSK') return COLORS.iplTeam.csk
+  else if (team === 'DC') return COLORS.iplTeam.dc
+  else if (team === 'PBKS') return COLORS.iplTeam.pbks
+  else if (team === 'KKR') return COLORS.iplTeam.kkr
+  else if (team === 'SRH') return COLORS.iplTeam.srh
+  else if (team === 'RR') return COLORS.iplTeam.rr
+  else if (team === 'LSG') return COLORS.iplTeam.lsg
+  else if (team === 'GT') return COLORS.iplTeam.gt
+  else if (team === 'MI') return COLORS.iplTeam.mi
+  else return COLORS.cricPrimary
 }

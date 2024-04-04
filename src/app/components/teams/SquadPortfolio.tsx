@@ -23,7 +23,15 @@ function SquadPortfolio(props: SquadPortfolioProps) {
             {groupedSquad
               .get(role)
               ?.map(player => (
-                <PlayerCard key={player.playerId} playerData={player} showPrice={true} />
+                <PlayerCard
+                  key={player.playerId}
+                  name={player.name}
+                  imageUrl={player.imageUrl}
+                  soldAmount={player.soldAmount}
+                  role={player.role}
+                  clubName={player.clubName}
+                  showPrice={true}
+                ></PlayerCard>
               ))}
           </div>
         </div>

@@ -2,24 +2,19 @@ import { useRequest } from '@/hooks/useRequest'
 import { auth } from '@/lib/auth'
 import { cookieHelper } from '@/lib/cookieHelper'
 import { TournamentContextType } from '@/model/context/tournamentContextType'
-import { MatchEntity } from '@/model/response/match.response'
-import { TeamEntity } from '@/model/response/team.interface'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-const ListContext = createContext<TournamentContextType>({} as TournamentContextType)
-const { Provider } = ListContext
+const TournamentContext = createContext<TournamentContextType>({} as TournamentContextType)
+const { Provider } = TournamentContext
 
 export const TOURNAMENT_ID = 'tournamentId'
-export const TEAM_ID = 'teamId'
 
 export const TournamentProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeTournament, setActiveTournament] = useState<TournamentEntity>()
-  const [activeTeam, setActiveTeam] = useState<TeamEntity>()
   const [tournamentList, setTournamentList] = useState<TournamentEntity[]>([])
-  const [matchList, setMatchesList] = useState<MatchEntity[]>([])
   const [subTitle, setSubTitle] = useState<string>('')
 
   const tournamentId = auth().getTournamentId()
@@ -55,11 +50,6 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     setActiveTournament(activeTournament)
   }
 
-  const markActiveTeam = (activeTeam: TeamEntity) => {
-    cookieHelper().setCookieItem(TEAM_ID, activeTeam.teamId)
-    setActiveTeam(activeTeam)
-  }
-
   const value: TournamentContextType = {
     activeTournament,
     markActiveTournament,
@@ -69,13 +59,9 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
     updateTournament,
     subTitle,
     setSubTitle,
-    activeTeam,
-    markActiveTeam,
-    matchList,
-    setMatchesList,
   }
 
   return <Provider value={value}>{children}</Provider>
 }
 
-export const useTournament = () => useContext(ListContext)
+export const useTournament = () => useContext(TournamentContext)

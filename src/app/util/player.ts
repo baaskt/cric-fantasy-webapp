@@ -1,10 +1,15 @@
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricMenuEntity } from '@/model/types/cric-menu.type'
-import { KeyValueType } from '@/model/types/cric-table.type'
+import { CricHeaderRow, CricTableCell, KeyValueType } from '@/model/types/cric-table.type'
 import { currencyToString } from './bidding'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { groupListByProp } from './helper'
 import { TeamMember } from '@/model/entities/team-member.interface'
+import { OtherTableData } from './table'
+import { TournamentEntity } from '@/model/response/tournament.interface'
+import { OptionsEntity } from '@/model/entities/options.interface'
+import { PLAYERS } from './constants/endpoints'
+import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 
 const ALLROUNDER = 'All Rounder'
 const BAT_ALLROUNDER = 'Batting Allrounder'
@@ -115,4 +120,120 @@ export const checkValidComposition = (playersInXI: SquadEntity[]) => {
   const validAllRound = batAllRound + bowlAllRound >= minAllRound ? true : false
   const validWK = wk >= minWK ? true : false
   return validBat && validBowl && validAllRound && validWK
+}
+
+export const getPlayerTableData = (
+  headerEntity: CricHeaderRow,
+  playerListEntity: PlayersListEntity,
+  playerIndex: number,
+  otherData: OtherTableData | undefined,
+): CricTableCell => {
+  const cellType = headerEntity.type
+  const cellKey = headerEntity.key
+  const iconPath = headerEntity.iconPath
+  const value = getPlayerListCellValue(
+    cellType,
+    cellKey,
+    iconPath,
+    playerListEntity,
+    playerIndex,
+    otherData,
+  )
+  const tableCell: CricTableCell = {
+    cellKey: cellKey,
+    cellType: cellType,
+    value: value,
+    color: '',
+    isMobileView: headerEntity.isMobile ? true : false,
+    headerName: headerEntity.label,
+  }
+  return tableCell
+}
+
+const getPlayerListCellValue = (
+  cellType: string,
+  cellKey: string,
+  iconPath: string | undefined,
+  playerListEntity: PlayersListEntity,
+  playerIndex: number,
+  otherData: OtherTableData | undefined,
+) => {
+  const playerData = playerListEntity as never as KeyValueType
+  let cellValue
+  if (cellType === 'icon') {
+    cellValue = iconPath
+  } else if (cellKey === 'pos') {
+    cellValue = playerIndex + 1
+  } else if (cellKey === 'teamName') {
+    cellValue = playerData[cellKey] ? playerData[cellKey] : otherData?.teamName
+  } else if (cellKey === 'runs' || cellKey === 'wickets' || cellKey === 'catches') {
+    cellValue = playerData[cellKey] ? playerData[cellKey] : 0
+  } else {
+    cellValue = playerData[cellKey]
+  }
+  return cellValue
+}
+
+export const getPlayingXITableData = (
+  headerEntity: CricHeaderRow,
+  playerEntity: SquadEntity,
+  playerIndex: number,
+  otherData: OtherTableData | undefined,
+): CricTableCell => {
+  const cellType = headerEntity.type
+  const cellKey = headerEntity.key
+  const iconPath = headerEntity.iconPath
+  const isXIChangeAllowed = otherData?.isXIChangeAllowed ? true : false
+  const value = getPlayingXICellValue(cellType, cellKey, iconPath, playerEntity, playerIndex)
+  const tableCell: CricTableCell = {
+    cellKey: cellKey,
+    cellType: cellType,
+    value: value,
+    color: '',
+    isDisabled:
+      (headerEntity.key === 'playingXI' && isXIChangeAllowed) || headerEntity.key !== 'playingXI'
+        ? false
+        : true,
+    isMobileView: headerEntity.isMobile ? true : false,
+    headerName: headerEntity.label,
+  }
+  return tableCell
+}
+
+const getPlayingXICellValue = (
+  cellType: string,
+  cellKey: string,
+  iconPath: string | undefined,
+  playerEntity: SquadEntity,
+  playerIndex: number,
+) => {
+  const playerData = playerEntity as never as KeyValueType
+  let cellValue
+  if (cellType === 'icon') {
+    cellValue = iconPath
+  } else if (cellKey === 'sno') {
+    cellValue = playerIndex + 1
+  } else {
+    cellValue = playerData[cellKey]
+  }
+  return cellValue
+}
+
+export const getPlayersFilterUrl = (
+  activeTournament: TournamentEntity,
+  selectedTab: OptionsEntity,
+  selectedTeam: OptionsEntity,
+): string => {
+  const tournamentId = activeTournament.tournamentId
+  const TOURNAMENT_URL = PLAYERS.GET_PLAYERS_URL.replace('tournamentId', tournamentId)
+  const TEAM_SUFFIX = selectedTeam.id !== -1 ? `teamId=${selectedTeam.id}` : ''
+  const ROLE_SUFFIX =
+    selectedTab.id === 2 || selectedTab.id === 3 ? `role=${selectedTab.value}` : ''
+  const CATEGORY_SUFFIX = selectedTab.id === 4 ? `soldStatus=${selectedTab.value}` : ''
+  //Remove team filter if the sold status is unsold
+  const FILTERS_SUFFIX = CATEGORY_SUFFIX
+    ? [ROLE_SUFFIX, CATEGORY_SUFFIX]
+    : [TEAM_SUFFIX, ROLE_SUFFIX, CATEGORY_SUFFIX]
+  const PLAYERS_URL = `${TOURNAMENT_URL}${FILTERS_SUFFIX.filter(url => url !== '').join('&')}`
+  return PLAYERS_URL
 }

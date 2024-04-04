@@ -67,7 +67,7 @@ export default function Header(props: HeaderProps) {
   }
 
   return (
-    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 right-0 z-50 left-0 md:left-[20%]'>
+    <div className='h-16 px-5 white-bg flex justify-between items-center shadow-md fixed top-0 right-0 z-[1000] left-0 md:left-[20%]'>
       <div className='block md:hidden'>
         <IconButton onClick={onMenuToggle}>{show ? <MenuOpenIcon /> : <MenuIcon />}</IconButton>
       </div>

@@ -3,7 +3,9 @@ import { cookieHelper } from './cookieHelper'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { USERS } from '@/util/constants/endpoints'
 import { apiHelper } from './apiHelper'
-import { TEAM_ID, TOURNAMENT_ID } from '@/providers/TournamentProvider'
+import { TOURNAMENT_ID } from '@/providers/TournamentProvider'
+import { MATCH_ID } from '@/providers/MatchProvider'
+import { TEAM_ID } from '@/providers/TeamProvider'
 
 export const auth = () => {
   const ACCESS_TOKEN = 'accessToken'
@@ -29,6 +31,11 @@ export const auth = () => {
     return teamId ? teamId : ''
   }
 
+  function getMatchId(): string {
+    const teamId = cookieHelper().getCookieItem(MATCH_ID)
+    return teamId ? teamId : ''
+  }
+
   function setAuthCred(authCred: LoginResponse): void {
     cookieHelper().setCookieItem(ACCESS_TOKEN, authCred.accessToken)
     cookieHelper().setCookieItem(REFRESH_TOKEN, authCred.refreshToken)
@@ -38,6 +45,8 @@ export const auth = () => {
     cookieHelper().removeCookieItem(ACCESS_TOKEN)
     cookieHelper().removeCookieItem(REFRESH_TOKEN)
     cookieHelper().removeCookieItem(TOURNAMENT_ID)
+    cookieHelper().removeCookieItem(TEAM_ID)
+    cookieHelper().removeCookieItem(MATCH_ID)
   }
 
   const refreshAccessToken = async () => {
@@ -56,6 +65,7 @@ export const auth = () => {
     getRefreshToken,
     getTournamentId,
     getTeamId,
+    getMatchId,
     setAuthCred,
     clearAuthCred,
     refreshAccessToken,

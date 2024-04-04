@@ -1,35 +1,26 @@
-'use client'
-import { useRequest } from '@/hooks/useRequest'
-import { MatchEntity } from '@/model/response/match.response'
-import { CricResponse } from '@/model/types/cric-response.type'
-import { useTournament } from '@/providers/TournamentProvider'
-import { MATCHES } from '@/util/constants/endpoints'
-import React, { useEffect } from 'react'
-import Loading from '../Loading'
-import { MATCH } from '@/util/constants/constants'
+import React from 'react'
 import MatchCard from './MatchCard'
+import { useRouter } from 'next/navigation'
+import { MatchEntity } from '@/model/response/match.response'
+import { useMatch } from '@/providers/MatchProvider'
 
-function MatchList() {
-  const { matchList, setMatchesList } = useTournament()
-  const matchRequest = useRequest(MATCHES.GET_ALL)
+type MatchListProps = {
+  matchList: MatchEntity[]
+}
 
-  useEffect(() => {
-    if (matchRequest.data) {
-      const matchresponse: CricResponse<MatchEntity[]> = matchRequest.data as CricResponse<
-        MatchEntity[]
-      >
-      if (matchresponse.result) {
-        setMatchesList(matchresponse.result)
-      }
-    }
-  }, [matchRequest?.data])
-
-  if (matchRequest.isValidating) {
-    return <Loading txt={MATCH.LOADING_TXT}></Loading>
-  }
+function MatchList(props: MatchListProps) {
+  const { matchList } = props
+  const { markActiveMatch } = useMatch()
+  const router = useRouter()
 
   if (!matchList?.length) {
     return <p className='p-5'>No matches found</p>
+  }
+
+  const navigateToMatchSelect = (matchId: number) => {
+    const selectedMatch = matchList.find(match => match.matchId === matchId)
+    if (selectedMatch) markActiveMatch(selectedMatch)
+    router.push('matches/detail')
   }
 
   return (
@@ -39,6 +30,7 @@ function MatchList() {
           key={matchIndex}
           matchEntity={matchEntity}
           matchNumber={matchIndex + 1}
+          onMatchSelect={navigateToMatchSelect}
         ></MatchCard>
       ))}
     </div>

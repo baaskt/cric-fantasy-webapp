@@ -3,28 +3,30 @@ import { TeamEntity } from '@/model/response/team.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { TEAMS } from '@/util/constants/endpoints'
-import { prepareTeamTable } from '@/util/helper'
 import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import Loading from '../Loading'
 import { TEAM } from '@/util/constants/constants'
-import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
+import { prepareTableData } from '@/util/table'
+import { TableType } from '@/model/enum/table-type.enum'
+import { useTeam } from '@/providers/TeamProvider'
 
 const headersList: CricHeaderRow[] = [
-  { key: 'pos', label: 'Position', type: 'number' },
-  { key: 'teamName', label: 'Team', type: 'string' },
-  { key: 'teamMembers', label: 'Participants', type: 'list' },
+  { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
+  { key: 'pos', label: 'Position', alias: 'Pos', type: 'number', isMobile: true },
+  { key: 'teamName', label: 'Team', type: 'string', isMobile: true },
+  { key: 'teamMembers', label: 'Owners', type: 'list' },
   { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
-  { key: 'tournamentPoints', label: 'Total Points', type: 'number' },
-  { key: 'playingXI', label: 'Playing XI', type: 'number' }, // TODO: Disable after everyone sets their XI
-  { key: '', label: '', type: 'icon', iconPath: '/detail' },
+  { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'number', isMobile: true },
+  // { key: 'playingXI', label: 'Playing XI', type: 'number' }, // TODO: Disable after everyone sets their XI
+  { key: '', label: 'View Team Details', type: 'icon', iconPath: '/detail' },
 ]
 
 function TeamList() {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [teamList, setTeamList] = useState<TeamEntity[]>([])
-  const { markActiveTeam } = useTournament()
+  const { markActiveTeam } = useTeam()
   const router = useRouter()
 
   const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
@@ -32,15 +34,21 @@ function TeamList() {
 
   useEffect(() => {
     if (teamResponse?.result) {
-      prepareTableData(teamResponse.result)
+      prepareTableRows(teamResponse.result)
     }
   }, [teamResponse])
 
-  const prepareTableData = (teamsResponse: TeamEntity[]) => {
-    if (teamsResponse.length) {
-      const tempTableData: CricTableRow[] = prepareTeamTable(teamsResponse, headersList)
+  const prepareTableRows = (response: TeamEntity[]) => {
+    if (response.length) {
+      const tempTableData: CricTableRow[] = prepareTableData(
+        response,
+        headersList,
+        'teamId',
+        TableType.TEAMS,
+        'tournamentPoints',
+      )
       setTableData(tempTableData)
-      setTeamList(teamsResponse)
+      setTeamList(response)
     }
   }
 
@@ -59,16 +67,14 @@ function TeamList() {
   }
 
   return (
-    <div className='p-5'>
-      <CricTable
-        headerList={headersList}
-        rowList={tableData}
-        defOrder={'desc'}
-        defOrderBy={'tournamentPoints'}
-        fullWidth={false}
-        onRowSelect={navigateToTeamDetail}
-      />
-    </div>
+    <CricTable
+      headerList={headersList}
+      rowList={tableData}
+      defOrder={'desc'}
+      defOrderBy={'tournamentPoints'}
+      fullWidth={false}
+      onRowSelect={navigateToTeamDetail}
+    />
   )
 }
 

@@ -15,7 +15,6 @@ import { useTournament } from '@/providers/TournamentProvider'
 import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
 import { useRouter } from 'next/navigation'
-import { useSWRConfig } from 'swr'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 
@@ -58,7 +57,6 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
     ? PLAYERS.RESET_UNSOLD_PLAYER.replace('tournamentId', tournamentId)
     : ''
   const resetPlayerStatusRequest = useMutateRequest(RESET_PLAYER_URL, HttpMethod.PUT)
-  const { cache } = useSWRConfig()
 
   useEffect(() => {
     if (auctionPlayersRequest?.data) {
@@ -75,9 +73,6 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
 
   useEffect(() => {
     if (playersList) {
-      console.log(cache)
-      console.log(playersList)
-      console.log(props.selectedTab.value)
       prepareTableData(playersList)
     }
   }, [playersList, playerSetType])

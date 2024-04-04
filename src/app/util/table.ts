@@ -1,10 +1,15 @@
 import { SquadEntity } from '@/model/entities/squad.interface'
+import { TableType } from '@/model/enum/table-type.enum'
 import {
   CricHeaderRow,
   CricTableCell,
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
+import { getPlayerTableData, getPlayingXITableData } from './player'
+import { prepareTeamTable } from './team'
+import { TeamEntity } from '@/model/response/team.interface'
+import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -40,63 +45,6 @@ export function sortSearchTable(
   return sortedData
 }
 
-export const preparePlayingXITable = (
-  playersList: SquadEntity[],
-  headersList: CricHeaderRow[],
-  isTeamOwner: boolean,
-): CricTableRow[] => {
-  const tempTableData: CricTableRow[] = []
-  playersList.forEach((playerEntity: SquadEntity, playerIndex: number) => {
-    const rowData: CricTableCell[] = []
-    headersList.forEach((headerEntity: CricHeaderRow) => {
-      const cellType = headerEntity.type
-      const cellKey = headerEntity.key
-      const iconPath = headerEntity.iconPath
-      const cellValue = getPlayingXICellValue(
-        cellType,
-        cellKey,
-        iconPath,
-        playerIndex,
-        playerEntity,
-      )
-      const tableCell: CricTableCell = {
-        cellKey: cellKey,
-        cellType: cellType,
-        value: cellValue,
-        isDisabled:
-          (headerEntity.key === 'playingXI' && isTeamOwner) || headerEntity.key !== 'playingXI'
-            ? false
-            : true,
-      }
-      rowData.push(tableCell)
-    })
-    tempTableData.push({
-      rowId: playerEntity.playerId,
-      dataList: rowData,
-    })
-  })
-  return tempTableData
-}
-
-const getPlayingXICellValue = (
-  cellType: string,
-  cellKey: string,
-  iconPath: string | undefined,
-  teamIndex: number,
-  playerEntity: SquadEntity,
-) => {
-  const playerData = playerEntity as never as KeyValueType
-  let cellValue
-  if (cellType === 'icon') {
-    cellValue = iconPath
-  } else if (cellKey === 'sno') {
-    cellValue = teamIndex + 1
-  } else {
-    cellValue = playerData[cellKey]
-  }
-  return cellValue
-}
-
 function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
   // Convert the search term to lowercase for case-insensitive search
   const term = searchTerm.toLowerCase().trim()
@@ -113,4 +61,55 @@ function searchItems(data: CricTableRow[], searchTerm: string): CricTableRow[] {
           (typeof cell.value === 'number' && cell.value.toString().toLowerCase().includes(term)),
       ),
   )
+}
+
+export const prepareTableData = <T>(
+  rowList: T[],
+  headersList: CricHeaderRow[],
+  rowIdParam: string,
+  tableType: string,
+  sortParam?: string,
+  otherData?: OtherTableData,
+) => {
+  const tableRows: CricTableRow[] = []
+  const sortedRowList = sortParam
+    ? rowList.sort(
+        (a: T, b: T) => (b[sortParam as keyof T] as number) - (a[sortParam as keyof T] as number),
+      )
+    : rowList
+  sortedRowList.forEach((rowEntity: T, rowIndex: number) => {
+    const tableCells: CricTableCell[] = []
+    headersList.forEach((headerEntity: CricHeaderRow) => {
+      let tableCell: CricTableCell | undefined = undefined
+      if (tableType === TableType.PLAYERS.toString()) {
+        tableCell = getPlayerTableData(
+          headerEntity,
+          rowEntity as PlayersListEntity,
+          rowIndex,
+          otherData,
+        )
+      } else if (tableType === TableType.TEAMS.toString()) {
+        tableCell = prepareTeamTable(headerEntity, rowEntity as TeamEntity, rowIndex)
+      } else if (tableType === TableType.PLAYING_XI.toString()) {
+        tableCell = getPlayingXITableData(
+          headerEntity,
+          rowEntity as SquadEntity,
+          rowIndex,
+          otherData,
+        )
+      }
+      tableCells.push(tableCell as CricTableCell)
+    })
+    const rowData = rowEntity as never as KeyValueType
+    tableRows.push({
+      rowId: rowData[rowIdParam] as string | number,
+      dataList: tableCells,
+    })
+  })
+  return tableRows
+}
+
+export interface OtherTableData {
+  isXIChangeAllowed?: boolean
+  teamName?: string
 }
