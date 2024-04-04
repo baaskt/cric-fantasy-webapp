@@ -37,11 +37,14 @@ function PlayersList(props: PlayersListProp) {
   const { selectedTab, selectedTeam } = props
   const { activeTournament } = useTournament()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
+  const [columnList, setColumnList] = useState<CricHeaderRow[]>([])
+  const [playersList, setPlayersList] = useState<PlayersListEntity[]>([])
 
   const PLAYERS_URL =
     activeTournament && selectedTeam
       ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam)
       : ''
+  console.log(PLAYERS_URL)
   const playerRequest = useRequest(PLAYERS_URL)
 
   useEffect(() => {
@@ -50,34 +53,56 @@ function PlayersList(props: PlayersListProp) {
         PlayersListEntity[]
       >
       if (playerResponse?.result) {
-        prepareTableRows(playerResponse.result)
+        setPlayersList(playerResponse?.result)
       }
     }
   }, [playerRequest.data])
 
-  const prepareTableRows = (response: PlayersListEntity[]) => {
+  useEffect(() => {
+    if (playersList.length) {
+      const updatedColumns = getUpdatedColumns()
+      setColumnList(updatedColumns)
+      prepareTableRows(playersList, updatedColumns)
+    }
+  }, [playersList, selectedTab, selectedTeam])
+
+  const prepareTableRows = (
+    response: PlayersListEntity[],
+    updatedHeadersList?: CricHeaderRow[],
+  ) => {
     let tempTableData: CricTableRow[] = []
     if (response.length) {
       tempTableData = prepareTableData(
         response,
-        headersList,
+        updatedHeadersList || headersList,
         'playerId',
         TableType.PLAYERS,
         'totalPoints',
-        { teamName: selectedTeam ? selectedTeam.label : '' },
+        {
+          teamName: selectedTeam && selectedTeam?.id !== -1 ? selectedTeam.label : '',
+        },
       )
     }
     setTableData(tempTableData)
   }
 
-  if (playerRequest.isValidating) {
+  const getUpdatedColumns = (): CricHeaderRow[] => {
+    const updatedColumns: CricHeaderRow[] = []
+    headersList.forEach(column => {
+      if (!(column.key === 'teamName' && (selectedTeam?.id !== -1 || selectedTab.id === 4)))
+        updatedColumns.push(column)
+    })
+    return updatedColumns
+  }
+
+  if (playerRequest.isValidating || !tableData) {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 
   return (
     <div className='p-5'>
       <CricTable
-        headerList={headersList}
+        headerList={columnList}
         rowList={tableData}
         defOrder={'desc'}
         defOrderBy={'totalPoints'}
