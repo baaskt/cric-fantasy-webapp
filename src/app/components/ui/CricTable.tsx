@@ -278,6 +278,7 @@ function CricTable(props: CricTableProps) {
               {tableData.map((row, rowIndex) => renderTableRow(row, rowIndex, fullWidth))}
             </TableBody>
           </Table>
+          {!tableData.length && <div className='p-5 text-center'>No data found</div>}
         </TableContainer>
       </Paper>
     </div>

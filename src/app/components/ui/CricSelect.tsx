@@ -3,17 +3,19 @@ import { FormControl, InputLabel, MenuItem, Select, ThemeProvider } from '@mui/m
 import React, { useEffect } from 'react'
 import { SelectChangeEvent } from '@mui/material'
 import { selectTheme } from '@/styles/themes/select'
+import { COLORS } from '@/util/colors'
 
 type CricSelectProps = {
   label: string
   defaultValue?: string | number
+  isDisabled?: boolean
   menuList: OptionsEntity[]
   onChange: (option: OptionsEntity) => void
 }
 
 function CricSelect(props: CricSelectProps) {
   const [selectedValue, setSelectedValue] = React.useState<string>('')
-  const { label, menuList, defaultValue, onChange } = props
+  const { label, menuList, defaultValue, isDisabled, onChange } = props
 
   useEffect(() => {
     if (defaultValue) {
@@ -23,7 +25,6 @@ function CricSelect(props: CricSelectProps) {
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value
-    console.log(value)
     setSelectedValue(value)
     const selectedMenu = menuList.find(menu => menu.value === value)
     if (selectedMenu) {
@@ -40,7 +41,9 @@ function CricSelect(props: CricSelectProps) {
           id='cric-select'
           value={selectedValue}
           label={label}
+          disabled={isDisabled}
           onChange={handleChange}
+          sx={{ backgroundColor: COLORS.white }}
         >
           {menuList.map(menu => (
             <MenuItem key={menu.id} value={menu.value}>

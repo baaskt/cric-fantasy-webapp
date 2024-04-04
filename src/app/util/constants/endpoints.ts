@@ -35,7 +35,7 @@ export const TEAMS = {
 export const PLAYERS = {
   PLAYERS: 'players',
   GET_ALL_URL: 'players',
-  GET_ALL_PLAYERS_URL: 'players/tournamentId',
+  GET_PLAYERS_URL: 'players/tournamentId/list?',
   GET_AUCTION_PLAYERS_URL: 'players/tournamentId/auction?category=',
   GET_AUCTION_UNSOLD_PLAYERS_URL: 'players/tournamentId/auction?soldStatus=',
   LAST_AUCTIONED_URL: 'players/tournaments/tournamentId/last-auctioned-player',
