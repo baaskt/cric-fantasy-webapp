@@ -4,50 +4,74 @@ import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import { CricResponse } from '@/model/types/cric-response.type'
-import { PLAYERS } from '@/util/constants/endpoints'
 import { useRequest } from '@/hooks/useRequest'
-import { PlayerEntity } from '@/model/response/player-response.interface'
 import { prepareTableData } from '@/util/table'
 import { TableType } from '@/model/enum/table-type.enum'
 import { useTournament } from '@/providers/TournamentProvider'
+import { OptionsEntity } from '@/model/entities/options.interface'
+import Loading from '../Loading'
+import { PLAYER } from '@/util/constants/constants'
+import { getPlayersFilterUrl } from '@/util/player'
+import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 
 const headersList: CricHeaderRow[] = [
-  { key: 'pos', label: 'Position', type: 'number' },
-  { key: 'teamName', label: 'Name', type: 'string' },
-  { key: 'teamMembers', label: 'Participants', type: 'list' },
-  { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
-  { key: 'tournamentPoints', label: 'Total Points', type: 'number' },
-  { key: '', label: '', type: 'icon', iconPath: '/detail' },
+  { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
+  { key: 'pos', label: 'Position', alias: 'Pos', type: 'number', isMobile: true },
+  { key: 'name', label: 'Name', type: 'string', isMobile: true },
+  { key: 'intlTeam', label: 'Country', type: 'string' },
+  { key: 'clubName', label: 'Club', type: 'string' },
+  { key: 'teamName', label: 'Team', type: 'string' },
+  { key: 'runs', label: 'Runs', alias: 'R', type: 'number' },
+  { key: 'wickets', label: 'Wickets', alias: 'W', type: 'number' },
+  { key: 'catches', label: 'Catches', alias: 'C', type: 'number' },
+  { key: 'totalPoints', label: 'Points', alias: 'Pts', type: 'number', isMobile: true },
+  { key: '', label: 'View Player Details', type: 'icon', iconPath: '/detail' },
 ]
 
-function PlayersList() {
+type PlayersListProp = {
+  selectedTab: OptionsEntity
+  selectedTeam: OptionsEntity | undefined
+}
+
+function PlayersList(props: PlayersListProp) {
+  const { selectedTab, selectedTeam } = props
   const { activeTournament } = useTournament()
   const [tableData, setTableData] = useState<CricTableRow[]>([])
 
-  const tournamentId = activeTournament?.tournamentId || ''
-  const PLAYERS_URL = PLAYERS.GET_ALL_PLAYERS_URL.replace('tournamentId', tournamentId)
+  const PLAYERS_URL =
+    activeTournament && selectedTeam
+      ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam)
+      : ''
   const playerRequest = useRequest(PLAYERS_URL)
-  const playerResponse: CricResponse<PlayerEntity[]> = playerRequest.data as CricResponse<
-    PlayerEntity[]
-  >
 
   useEffect(() => {
-    if (playerResponse?.result) {
-      prepareTableRows(playerResponse.result)
+    if (playerRequest.data) {
+      const playerResponse: CricResponse<PlayersListEntity[]> = playerRequest.data as CricResponse<
+        PlayersListEntity[]
+      >
+      if (playerResponse?.result) {
+        prepareTableRows(playerResponse.result)
+      }
     }
-  }, [playerResponse])
+  }, [playerRequest.data])
 
-  const prepareTableRows = (response: PlayerEntity[]) => {
+  const prepareTableRows = (response: PlayersListEntity[]) => {
+    let tempTableData: CricTableRow[] = []
     if (response.length) {
-      const tempTableData: CricTableRow[] = prepareTableData(
+      tempTableData = prepareTableData(
         response,
         headersList,
         'playerId',
         TableType.PLAYERS,
+        'totalPoints',
+        { teamName: selectedTeam ? selectedTeam.label : '' },
       )
-      console.log(tempTableData)
-      setTableData(tempTableData)
     }
+    setTableData(tempTableData)
+  }
+
+  if (playerRequest.isValidating) {
+    return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 
   return (
@@ -56,7 +80,7 @@ function PlayersList() {
         headerList={headersList}
         rowList={tableData}
         defOrder={'desc'}
-        defOrderBy={'tournamentPoints'}
+        defOrderBy={'totalPoints'}
         fullWidth={false}
         // onRowSelect={navigateToTeamDetail}
       />

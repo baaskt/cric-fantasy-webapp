@@ -11,32 +11,28 @@ type SwipeableProps = {
 const Swipeable = (props: SwipeableProps) => {
   const { value, minValue, maxValue, children, onChangeIndex } = props
   const [startX, setStartX] = useState<number>(0)
-  const [endX, setEndX] = useState<number>(0)
   const minSwipeDistance = 50
 
   const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    setStartX(event.touches[0].clientX)
+    console.log('start', event.targetTouches[0].clientX)
+    setStartX(event.targetTouches[0].clientX)
   }
 
-  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    setEndX(event.touches[0].clientX)
-  }
-
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const endX = event.changedTouches[0].clientX
     const deltaX = endX - startX
-    if (deltaX < -minSwipeDistance) {
+    const absDeltaX = Math.abs(Math.abs(endX) - Math.abs(startX))
+    if (absDeltaX > minSwipeDistance && deltaX < minSwipeDistance && endX) {
       //left swipe
-      console.log('left')
       onChangeIndex(value < maxValue ? value + 1 : maxValue)
-    } else if (deltaX > minSwipeDistance) {
+    } else if (deltaX > minSwipeDistance && endX) {
       //right swipe
-      console.log('right')
       onChangeIndex(value > minValue ? value - 1 : minValue)
     }
   }
 
   return (
-    <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+    <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       {children}
     </div>
   )

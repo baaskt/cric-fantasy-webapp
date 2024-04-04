@@ -2,7 +2,7 @@ import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import { SquadEntity } from '@/model/entities/squad.interface'
-import { preparePlayingXITable } from '@/util/table'
+import { prepareTableData } from '@/util/table'
 import CricButton from '../ui/CricButton'
 import PlayingXIComposition from './PlayingXIComposition'
 import { checkValidComposition, groupPlayersByRole } from '@/util/player'
@@ -14,14 +14,23 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { hasMismatch } from '@/util/helper'
 import CricAlert from '../ui/CricAlert'
 import axios, { AxiosError } from 'axios'
+import { TableType } from '@/model/enum/table-type.enum'
 
 const headersList: CricHeaderRow[] = [
-  { key: 'playingXI', label: 'Playing XI', type: 'switch', isDisabled: false },
-  { key: 'name', label: 'Players', type: 'string' },
+  { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
+  {
+    key: 'playingXI',
+    label: 'Playing XI',
+    alias: 'XIs',
+    type: 'switch',
+    isDisabled: false,
+    isMobile: true,
+  },
+  { key: 'name', label: 'Players', type: 'string', isMobile: true },
   { key: 'role', label: 'Role', type: 'string' },
   { key: 'clubName', label: 'Club', type: 'string' },
-  { key: 'points', label: 'Points', type: 'number' },
-  { key: '', label: '', type: 'icon' },
+  { key: 'points', label: 'Points', alias: 'Pts', type: 'number', isMobile: true },
+  { key: '', label: 'View Player Details', type: 'icon' },
 ]
 
 type PlayingXIProps = {
@@ -64,8 +73,15 @@ function PlayingXI(props: PlayingXIProps) {
     setDefaultPlayerIds(tempDefIds)
   }
 
-  const prepareTableData = (tempSquad: SquadEntity[]) => {
-    const tempTableData = preparePlayingXITable(tempSquad, headersList, isXIChangeAllowed)
+  const prepareTableRows = (tempSquad: SquadEntity[]) => {
+    const tempTableData = prepareTableData(
+      tempSquad,
+      headersList,
+      'playerId',
+      TableType.PLAYING_XI,
+      '',
+      { isXIChangeAllowed },
+    )
     setTableData(tempTableData)
   }
 
@@ -74,7 +90,7 @@ function PlayingXI(props: PlayingXIProps) {
     const defaultPlayerIds = new Set(playersInXI.map(player => player.playerId))
     setSelectedPlayerIds(defaultPlayerIds)
     handleSquadAndComposition(playersInXI)
-    prepareTableData(tempSquad)
+    prepareTableRows(tempSquad)
   }
 
   const handlePlayingXIToggle = (playerId: number, isToggled: boolean) => {
@@ -95,7 +111,7 @@ function PlayingXI(props: PlayingXIProps) {
       }
     })
     handleSquadAndComposition(playersInXI)
-    prepareTableData(tempSquad)
+    prepareTableRows(tempSquad)
   }
 
   const handleSquadAndComposition = (playersInXI: SquadEntity[]) => {

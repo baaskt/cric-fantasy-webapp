@@ -42,10 +42,10 @@ function AdminCentre(props: AdminCentreProps) {
 
   useEffect(() => {
     if (scoreCardData) {
-      const tempPlayersList: OptionsEntity[] = []
       const inningsOnePlayers = scoreCardData.inningsOne.batting
       const inningsTwoPlayers = scoreCardData.inningsTwo.batting
       const totalPlayers = [...inningsOnePlayers, ...inningsTwoPlayers]
+      const tempPlayersList: OptionsEntity[] = []
       totalPlayers.forEach(player => {
         const tempPlayer: OptionsEntity = {
           id: player.batId,

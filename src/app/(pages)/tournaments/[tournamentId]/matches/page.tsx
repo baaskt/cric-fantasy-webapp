@@ -58,15 +58,13 @@ export default function Matches() {
   }
 
   return (
-    <div className='p-5'>
-      <CricTab
-        optionList={tabOptions}
-        selectedTab={activeScheduleCategory}
-        onChange={setActiveScheduleCategory}
-      >
-        <MatchList matchList={activeMatches} />
-        <MatchList matchList={completedMatches} />
-      </CricTab>
-    </div>
+    <CricTab
+      optionList={tabOptions}
+      selectedTab={activeScheduleCategory}
+      onChange={setActiveScheduleCategory}
+    >
+      <MatchList matchList={activeMatches} />
+      <MatchList matchList={completedMatches} />
+    </CricTab>
   )
 }

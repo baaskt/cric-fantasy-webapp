@@ -1,5 +1,88 @@
-// import PlayersList from '@/components/players/PlayersList'
+'use client'
+import Loading from '@/components/Loading'
+import PlayersList from '@/components/players/PlayersList'
+import CricSelect from '@/components/ui/CricSelect'
+import CricTab from '@/components/ui/CricTab'
+import { useRequest } from '@/hooks/useRequest'
+import { OptionsEntity } from '@/model/entities/options.interface'
+import { TeamEntity } from '@/model/response/team.interface'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { useAuth } from '@/providers/AuthProvider'
+import { TEAMS } from '@/util/constants/endpoints'
+import { useEffect, useState } from 'react'
+
+const tabOptions: OptionsEntity[] = [
+  { id: 1, label: 'All' },
+  { id: 2, label: 'Batsman', value: 'Batter' },
+  { id: 3, label: 'Bowler', value: 'Bowler' },
+  { id: 4, label: 'Unsold', value: 'UNSOLD' },
+]
 
 export default function Players() {
-  return <div className='p-5'>{/* <PlayersList /> */}</div>
+  const { user } = useAuth()
+  const [teamsList, setTeamsList] = useState<OptionsEntity[]>([])
+  const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
+  const [selectedTeam, setSelectedTeam] = useState<OptionsEntity>()
+  const [defaultTeam, setDefaultTeam] = useState<OptionsEntity>()
+  const allTeam = {
+    id: -1,
+    label: 'All Teams',
+    value: -1,
+  }
+
+  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
+
+  useEffect(() => {
+    if (teamRequest.data) {
+      const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<
+        TeamEntity[]
+      >
+      if (teamResponse.result) {
+        prepareTeamsList(teamResponse.result)
+      }
+    }
+  }, [teamRequest.data])
+
+  const prepareTeamsList = (teamData: TeamEntity[]) => {
+    const tempTeamList: OptionsEntity[] = []
+    tempTeamList.push(allTeam)
+    teamData.forEach(team => {
+      const tempTeam: OptionsEntity = {
+        id: team.teamId,
+        label: team.teamName,
+        value: team.teamId,
+      }
+      if (team.teamMembers.find(member => member.id === user?.id)) {
+        setDefaultTeam(tempTeam)
+        handleTeamSelect(tempTeam)
+      }
+      tempTeamList.push(tempTeam)
+    })
+    setTeamsList(tempTeamList)
+  }
+
+  const handleTeamSelect = (newSelectedTeam: OptionsEntity) => {
+    setSelectedTeam(newSelectedTeam)
+  }
+
+  if (teamRequest.isValidating) {
+    return <Loading txt={'Loading Filters'}></Loading>
+  }
+
+  return (
+    <div>
+      <CricTab optionList={tabOptions} onChange={setSelectedTab}></CricTab>
+      {selectedTab.id !== 4 && (
+        <div className='w-64 pl-6 flex justify-center items-center'>
+          <CricSelect
+            defaultValue={defaultTeam?.id}
+            label={'Fantasy Team'}
+            menuList={teamsList}
+            onChange={handleTeamSelect}
+          />
+        </div>
+      )}
+      <PlayersList selectedTab={selectedTab} selectedTeam={selectedTeam} />
+    </div>
+  )
 }

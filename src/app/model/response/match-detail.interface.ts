@@ -5,17 +5,13 @@ export interface MatchDetailEntity {
   playerOfTheMatch: POMEntity
   peoplePlayerOfTheMatch: POMEntity
   status: string
-  team1: string
-  team1Image: string
-  team1SName: string
-  team2: string
-  team2Image: string
-  team2SName: string
 }
 
 export interface InningsEntity {
   batting: BattingCardEntity[]
   battingTeam: string
+  battingTeamImage: string
+  battingTeamSName: string
   bowling: BowlingCardEntity[]
   bowlingTeam: string
   score: ScoreEntity

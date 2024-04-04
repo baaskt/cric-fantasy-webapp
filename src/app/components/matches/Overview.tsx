@@ -15,8 +15,6 @@ function Overview(props: OverviewProps) {
   const { scoreCardData } = props
   const inningsOne = scoreCardData?.inningsOne
   const inningsTwo = scoreCardData?.inningsTwo
-  const team1Url = scoreCardData?.team1Image || ''
-  const team2Url = scoreCardData?.team2Image || ''
   const [gradientColor, setGradientColor] = useState({ fromColor: '', toColor: '' })
   const team1DivRef = React.useRef<HTMLDivElement>(null)
   const team2DivRef = React.useRef<HTMLDivElement>(null)
@@ -27,17 +25,17 @@ function Overview(props: OverviewProps) {
 
   useEffect(() => {
     if (scoreCardData) {
-      const bannerColor = getTeamColors(scoreCardData?.team1SName, scoreCardData?.team2SName)
+      const bannerColor = getTeamColors(inningsOne?.battingTeamSName, inningsTwo?.battingTeamSName)
       setGradientColor(bannerColor)
     }
   }, [scoreCardData])
 
-  if (!gradientColor || !scoreCardData) return <></>
+  if (!gradientColor || !inningsOne || !inningsTwo) return <></>
 
   return (
     <div>
       <div
-        className='p-5 rounded-lg'
+        className='p-5'
         style={{
           background: `linear-gradient(90deg, ${gradientColor.fromColor} 9%, ${gradientColor.toColor} 91%)`,
         }}
@@ -55,7 +53,7 @@ function Overview(props: OverviewProps) {
               />
             )} */}
             <Image
-              src={team1Url}
+              src={inningsOne?.battingTeamImage || ''}
               alt='team1'
               width='0'
               height='0'
@@ -63,7 +61,7 @@ function Overview(props: OverviewProps) {
               className='w-[100px] h-auto md:w-[180px]'
             />
             <div className='pt-5 text-center text-md md:text-xl'>
-              {isMobileView ? scoreCardData.team1SName : scoreCardData.team1}
+              {isMobileView ? inningsOne.battingTeamSName : inningsOne.battingTeam}
             </div>
             {inningsOne && <MatchScore score={inningsOne.score} />}
           </div>
@@ -79,7 +77,7 @@ function Overview(props: OverviewProps) {
               />
             )} */}
             <Image
-              src={team2Url}
+              src={inningsTwo?.battingTeamImage || ''}
               alt='team2'
               width='0'
               height='0'
@@ -87,7 +85,7 @@ function Overview(props: OverviewProps) {
               className='w-[100px] h-auto md:w-[180px]'
             />
             <div className='pt-5 text-center text-md md:text-xl'>
-              {isMobileView ? scoreCardData.team2SName : scoreCardData.team2}
+              {isMobileView ? inningsTwo.battingTeamSName : inningsTwo.battingTeam}
             </div>
             {inningsTwo && <MatchScore score={inningsTwo.score} />}
           </div>
@@ -97,12 +95,12 @@ function Overview(props: OverviewProps) {
       {scoreCardData && (
         <div className='flex flex-row justify-center gap-5'>
           <POMCard
-            title={'Player of the Match'}
+            title={isMobileView ? 'POM' : 'Player of the Match'}
             isMatchComplete={scoreCardData.isMatchComplete}
             playerData={scoreCardData.playerOfTheMatch}
           />
           <POMCard
-            title={'Jury Player of the Match'}
+            title={isMobileView ? 'Jury POM' : 'Jury Player of the Match'}
             isMatchComplete={scoreCardData.isMatchComplete}
             playerData={scoreCardData.peoplePlayerOfTheMatch}
           />
