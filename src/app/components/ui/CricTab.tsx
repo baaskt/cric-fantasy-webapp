@@ -38,10 +38,11 @@ type CricTabProps = {
   optionList: OptionsEntity[]
   children?: ReactNode[]
   onChange?: (event: OptionsEntity) => void
+  padding?: boolean
 }
 
 function CricTab(props: CricTabProps) {
-  const { children, selectedTab, optionList, onChange } = props
+  const { children, selectedTab, optionList, padding, onChange } = props
   const [value, setValue] = React.useState(0)
 
   useEffect(() => {
@@ -66,7 +67,7 @@ function CricTab(props: CricTabProps) {
     <ThemeProvider theme={tabTheme}>
       <div className='flex flex-col'>
         <Tabs
-          className='p-5'
+          className={padding ? 'p-5' : ''}
           variant='scrollable'
           value={value}
           onChange={handleChange}

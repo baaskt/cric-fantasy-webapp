@@ -71,9 +71,11 @@ export default function Players() {
 
   return (
     <div>
-      <CricTab optionList={tabOptions} onChange={setSelectedTab}></CricTab>
+      <div className='p-5'>
+        <CricTab optionList={tabOptions} onChange={setSelectedTab}></CricTab>
+      </div>
       {selectedTab.id !== 4 && (
-        <div className='w-64 pl-6 flex justify-center items-center'>
+        <div className='w-64 pl-5 flex justify-center items-center'>
           <CricSelect
             defaultValue={selectedTeam?.id || defaultTeam?.id}
             label={'Fantasy Team'}

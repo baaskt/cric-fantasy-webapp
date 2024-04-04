@@ -29,7 +29,7 @@ function SquadPortfolio(props: SquadPortfolioProps) {
                   imageUrl={player.imageUrl}
                   soldAmount={player.soldAmount}
                   role={player.role}
-                  clubName={player.clubName}
+                  clubName={player.clubSName}
                   showPrice={true}
                 ></PlayerCard>
               ))}

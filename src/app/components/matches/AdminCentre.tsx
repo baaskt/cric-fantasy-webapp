@@ -24,6 +24,9 @@ function AdminCentre(props: AdminCentreProps) {
   const { scoreCardData } = props
   const inningsOneBowlers = scoreCardData.inningsOne.bowling
   const inningsTwoBowlers = scoreCardData.inningsTwo.bowling
+  const defaultJuryPlayer = scoreCardData.peoplePlayerOfTheMatch
+    ? scoreCardData.peoplePlayerOfTheMatch.playerId
+    : ''
   const [playersList, setPlayersList] = useState<OptionsEntity[]>([])
   const [inningsOneDots, setInningsOneDots] = useState<PlayerDotsEntity[]>([])
   const [inningsTwoDots, setInningsTwoDots] = useState<PlayerDotsEntity[]>([])
@@ -89,7 +92,7 @@ function AdminCentre(props: AdminCentreProps) {
   }
 
   return (
-    <div>
+    <div className='pt-5'>
       <div>
         <div className='flex flex-col'>
           <div
@@ -100,7 +103,7 @@ function AdminCentre(props: AdminCentreProps) {
           </div>
           <div className='w-64 p-5 flex justify-center items-center'>
             <CricSelect
-              defaultValue={scoreCardData.peoplePlayerOfTheMatch.playerId}
+              defaultValue={defaultJuryPlayer}
               label={'Jury Player'}
               menuList={playersList}
               onChange={handlePlayerSelect}
@@ -142,6 +145,7 @@ function AdminCentre(props: AdminCentreProps) {
           onClick={handleSave}
           isFullWidth
           isLoading={updateDotsRequest.isMutating}
+          isDisabled={defaultJuryPlayer ? true : false}
         />
       </div>
       <CricToast open={updateSuccess} message='Update successfull' onClose={setUpdateSuccess} />

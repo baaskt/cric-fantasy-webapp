@@ -4,6 +4,7 @@ export interface SquadEntity {
   role: string
   intlTeam: string
   clubName: string
+  clubSName: string
   points: number
   playingXI: boolean
   imageUrl: string

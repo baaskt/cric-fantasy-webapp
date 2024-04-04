@@ -24,7 +24,7 @@ function MatchList(props: MatchListProps) {
   }
 
   return (
-    <div className='flex flex-row flex-wrap justify-center gap-3'>
+    <div className='flex flex-row flex-wrap justify-center gap-3 p-5'>
       {matchList.map((matchEntity, matchIndex) => (
         <MatchCard
           key={matchIndex}

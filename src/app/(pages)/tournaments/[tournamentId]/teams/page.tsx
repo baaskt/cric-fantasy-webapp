@@ -29,7 +29,7 @@ export default function Teams() {
   }
 
   return (
-    <div>
+    <div className='p-5'>
       <div className='flex justify-between items-center flex-col gap-5 md:flex-row'>
         <div style={{ color: COLORS.darkGray }} className='text-sm italic p-5'>
           Teams are sorted based on the total points in descending order
@@ -42,9 +42,7 @@ export default function Teams() {
           ></CricButton>
         )}
       </div>
-      <div className='p-5'>
-        <TeamList />
-      </div>
+      <TeamList />
       <CricModal open={open} onClose={handleClose}>
         <CreateTeamForm onCreate={onCreate}></CreateTeamForm>
       </CricModal>
