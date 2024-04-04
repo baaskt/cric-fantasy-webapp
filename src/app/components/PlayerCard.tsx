@@ -23,7 +23,7 @@ function PlayerCard(props: PlayerCardProps) {
         width='0'
         height='0'
         sizes='100vw'
-        className='w-[150px] md:w-[180px] h-auto'
+        className='w-[180px] h-auto'
       />
       <div className='p-2 flex flex-col items-center shadow-lg w-full'>
         <div className='text-md text-center font-medium'>{name}</div>

@@ -41,7 +41,7 @@ export default function Players() {
         prepareTeamsList(teamResponse.result)
       }
     }
-  }, [teamRequest.data])
+  }, [teamRequest.data, user])
 
   const prepareTeamsList = (teamData: TeamEntity[]) => {
     const tempTeamList: OptionsEntity[] = []
@@ -75,7 +75,7 @@ export default function Players() {
       {selectedTab.id !== 4 && (
         <div className='w-64 pl-6 flex justify-center items-center'>
           <CricSelect
-            defaultValue={defaultTeam?.id}
+            defaultValue={selectedTeam?.id || defaultTeam?.id}
             label={'Fantasy Team'}
             menuList={teamsList}
             onChange={handleTeamSelect}
