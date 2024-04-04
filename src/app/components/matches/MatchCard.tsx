@@ -15,7 +15,9 @@ function MatchCard(props: MatchCardProps) {
     props.matchEntity
 
   const handleMatchSelect = () => {
-    props.onMatchSelect(matchId)
+    if (state !== 'Upcoming') {
+      props.onMatchSelect(matchId)
+    }
   }
 
   const statusColor = useMemo(
@@ -26,7 +28,7 @@ function MatchCard(props: MatchCardProps) {
 
   return (
     <div
-      className='cursor-pointer shadow-lg rounded-lg p-5 min-w-64 w-full md:w-64'
+      className={`rounded-lg p-5 min-w-64 w-full md:w-64 ${state === 'Upcoming' ? 'border-solid border-2 border-slate-300 cursor-default' : 'shadow-lg cursor-pointer'}`}
       onClick={handleMatchSelect}
     >
       <div className='text-center font-bold'>{matchDesc}</div>

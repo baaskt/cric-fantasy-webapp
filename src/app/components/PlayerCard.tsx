@@ -12,8 +12,9 @@ type PlayerCardProps = {
 }
 
 function PlayerCard(props: PlayerCardProps) {
+  const ALTERNATE_IMAGE_SRC = '/assets/images/default_player.jpg'
   const { imageUrl, name, role, soldAmount, clubName } = props
-  const playerUrl = imageUrl || ''
+  const playerUrl = imageUrl || ALTERNATE_IMAGE_SRC
 
   return (
     <div className='flex flex-col items-center'>

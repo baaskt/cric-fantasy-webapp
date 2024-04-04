@@ -18,7 +18,7 @@ function POMCard(props: POMCard) {
       {isMatchComplete && playerData ? (
         <PlayerCard name={playerData.name} imageUrl={playerData.imageUrl} />
       ) : (
-        <div>TBD</div>
+        <PlayerCard name={'TBD'} imageUrl={''} />
       )}
     </div>
   )

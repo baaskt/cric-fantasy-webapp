@@ -44,7 +44,6 @@ function PlayersList(props: PlayersListProp) {
     activeTournament && selectedTeam
       ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam)
       : ''
-  console.log(PLAYERS_URL)
   const playerRequest = useRequest(PLAYERS_URL)
 
   useEffect(() => {

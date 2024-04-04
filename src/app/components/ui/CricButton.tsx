@@ -13,10 +13,21 @@ type CricButtonProps = {
   color?: string
   startIcon?: ReactElement
   isLoading?: boolean
+  isDisabled?: boolean
 }
 
 export default function CricButton(props: CricButtonProps) {
-  const { btnTxt, isValid, isFullWidth, startIcon, bgColor, color, isLoading, onClick } = props
+  const {
+    btnTxt,
+    isValid,
+    isDisabled,
+    isFullWidth,
+    startIcon,
+    bgColor,
+    color,
+    isLoading,
+    onClick,
+  } = props
   const [validBtn, setValidBtn] = useState<boolean>(true)
 
   useEffect(() => {
@@ -53,7 +64,7 @@ export default function CricButton(props: CricButtonProps) {
           },
         }}
         className={!validBtn ? 'btn_shake' : ''}
-        disabled={validBtn ? false : true}
+        disabled={isDisabled || !validBtn ? true : false}
         onClick={onClick}
         fullWidth={isFullWidth}
       >
