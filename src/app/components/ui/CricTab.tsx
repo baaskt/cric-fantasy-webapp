@@ -86,11 +86,11 @@ function CricTab(props: CricTabProps) {
             value={value}
             onChangeIndex={handleSwipe}
             minValue={0}
-            maxValue={children.length - 1}
+            maxValue={optionList.length - 1}
           >
-            {children?.map((childNode, tabIndex) => (
-              <TabPanel key={tabIndex} value={value} index={tabIndex}>
-                {childNode}
+            {optionList.map((optionEntity, index) => (
+              <TabPanel key={index} value={value} index={index}>
+                {children[index]}
               </TabPanel>
             ))}
           </Swipeable>
