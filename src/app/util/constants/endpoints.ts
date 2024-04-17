@@ -1,5 +1,5 @@
-// export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
-export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
+export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
 
 export const HEALTH_URL = 'health'
 export const USERS = {
@@ -17,6 +17,7 @@ export const TOURNAMENTS = {
   ADD_HOST: 'tournaments/addHost',
   JOIN_URL: 'tournaments/join?tournamentId=',
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
+  GET_STATS: 'tournaments/tournamentId/stats',
 }
 
 export const MATCHES = {

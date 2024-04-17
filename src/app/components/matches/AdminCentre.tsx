@@ -48,6 +48,8 @@ function AdminCentre(props: AdminCentreProps) {
     if (scoreCardData) {
       const inningsOnePlayers = scoreCardData.inningsOne.batting
       const inningsTwoPlayers = scoreCardData.inningsTwo.batting
+        ? scoreCardData.inningsTwo.batting
+        : []
       const totalPlayers = [...inningsOnePlayers, ...inningsTwoPlayers]
       const tempPlayersList: OptionsEntity[] = []
       totalPlayers.forEach(player => {

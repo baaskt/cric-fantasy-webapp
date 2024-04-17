@@ -15,7 +15,7 @@ function PlayerDotsUpdate(props: PlayerDotsUpdateProps) {
   const [playerDots, setPlayerDots] = useState<PlayerDotsEntity[]>([])
 
   useEffect(() => {
-    if (bowlers.length) {
+    if (bowlers?.length) {
       const tempPlayerDots: PlayerDotsEntity[] = []
       bowlers.forEach(bowler => {
         const playerDot = {

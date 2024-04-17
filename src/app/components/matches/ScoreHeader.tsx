@@ -25,7 +25,7 @@ function ScoreHeader(props: ScoreHeaderProps) {
             : ''}
         </div>
       </div>
-      <MatchScore score={score} />
+      {score && <MatchScore score={score} />}
     </div>
   )
 }
