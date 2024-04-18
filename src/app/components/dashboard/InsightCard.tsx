@@ -39,7 +39,7 @@ function InsightCard(props: InsightCardProps) {
   return (
     <div
       style={{ backgroundColor: COLORS.cricPrimaryUltraLight }}
-      className='p-5 rounded-lg w-full md:w-fit'
+      className='p-5 rounded-lg w-full md:w-fit md:min-w-64'
     >
       <div className='flex flex-row justify-between'>
         <div className='flex flex-col gap-2 justify-between'>

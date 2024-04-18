@@ -59,6 +59,7 @@ type CricTableProps = {
   onRowSelect?: (rowId: string | number) => void
   onRowChecked?: (rowId: (string | number)[]) => void
   onRowToggled?: (rowId: string | number, isToggled: boolean) => void
+  hideSearch?: boolean
 }
 
 function CricTable(props: CricTableProps) {
@@ -72,6 +73,7 @@ function CricTable(props: CricTableProps) {
     isResetCheck,
     onRowChecked,
     onRowToggled,
+    hideSearch,
   } = props
   const [order, setOrder] = useState(defOrder || '')
   const [orderBy, setOrderBy] = useState(defOrderBy || '')
@@ -262,7 +264,7 @@ function CricTable(props: CricTableProps) {
 
   return (
     <div>
-      <CricSearch onSearch={onTableSearch} />
+      {!hideSearch && <CricSearch onSearch={onTableSearch} />}
       <Paper sx={{ overflow: 'scroll' }}>
         <TableContainer>
           <Table stickyHeader aria-label='customized table'>
