@@ -1,5 +1,5 @@
 import DashboardTeams from '@/components/dashboard/DashboardTeams'
-import { Insights } from '@mui/icons-material'
+import Insights from '@/components/dashboard/Insights'
 
 export default function Dashboard() {
   return (
