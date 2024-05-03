@@ -94,6 +94,10 @@ export const PLAYER = {
   LOADING_TXT: 'Fetching Player Details ...',
 }
 
+export const DASHBOARD = {
+  LOADING_TXT: 'Fetching Dashboard Details ...',
+}
+
 export const TEAM = {
   CREATE: 'Create Team',
   CREATING: 'Creating...',

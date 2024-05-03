@@ -13,6 +13,7 @@ export const COLORS = {
   asterisk: '#f00',
   darkGray: '#808080',
   gray: '#c8c8c8',
+  stockGreen: '#1cac78',
   lightRed: '#ff7373',
   sold: '#10b981',
   unsold: '#e11d48',

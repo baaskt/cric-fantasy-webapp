@@ -28,6 +28,7 @@ export const MATCHES = {
 
 export const TEAMS = {
   GET_ALL_TEAMS: 'teams',
+  GET_TEAM_POINTS: 'teams/getPointsTable?tournamentId=',
   CREATE_TEAM_URL: 'teams',
   TEAM_DETAIL_URL: 'teams/teamId',
   UPDATE_PLAYINGXI_URL: 'teams/teamId/tournaments/tournamentId',

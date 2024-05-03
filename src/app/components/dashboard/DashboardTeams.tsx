@@ -1,53 +1,58 @@
 'use client'
 
 import { useRequest } from '@/hooks/useRequest'
-import { TeamEntity } from '@/model/response/team.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { TEAMS } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import Loading from '../Loading'
-import { TEAM } from '@/util/constants/constants'
+import { DASHBOARD } from '@/util/constants/constants'
 import { useRouter } from 'next/navigation'
-import { prepareTableData } from '@/util/table'
+import { prepareTableData } from '@/util/tables/table'
 import { TableType } from '@/model/enum/table-type.enum'
 import { useTeam } from '@/providers/TeamProvider'
 import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import { COLORS } from '@/util/colors'
+import { useTournament } from '@/providers/TournamentProvider'
+import { TeamPointsEntity } from '@/model/response/team-points.interface'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
-  { key: 'pos', label: 'Position', alias: 'Pos', type: 'number', isMobile: true },
+  { key: 'position', label: 'Position', alias: 'Pos', type: 'stock', isMobile: true },
   { key: 'teamName', label: 'Team', type: 'string', isMobile: true },
-  { key: 'teamMembers', label: 'Owners', type: 'list' },
-  { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
-  { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'number', isMobile: true },
+  { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'stock', isMobile: true },
   { key: '', label: 'View Team Details', type: 'icon', iconPath: '/detail' },
 ]
 
 function DashboardTeams() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const [tableData, setTableData] = useState<CricTableRow[]>([])
-  const [teamList, setTeamList] = useState<TeamEntity[]>([])
+  const [teamList, setTeamList] = useState<TeamPointsEntity[]>([])
   const { markActiveTeam } = useTeam()
   const router = useRouter()
 
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
-  const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
+  const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_TEAM_POINTS}${tournamentId}` : '')
 
   useEffect(() => {
-    if (teamResponse?.result) {
-      prepareTableRows(teamResponse.result)
+    if (teamRequest.data) {
+      const teamResponse: CricResponse<TeamPointsEntity[]> = teamRequest.data as CricResponse<
+        TeamPointsEntity[]
+      >
+      if (teamResponse.result) {
+        prepareTableRows(teamResponse.result)
+      }
     }
-  }, [teamResponse])
+  }, [teamRequest.data])
 
-  const prepareTableRows = (response: TeamEntity[]) => {
+  const prepareTableRows = (response: TeamPointsEntity[]) => {
     if (response.length) {
       const tempTableData: CricTableRow[] = prepareTableData(
         response,
         headersList,
         'teamId',
-        TableType.TEAMS,
+        TableType.DASHBOARD,
         'tournamentPoints',
       )
       setTableData(tempTableData)
@@ -55,17 +60,17 @@ function DashboardTeams() {
     }
   }
 
-  if (teamRequest.isLoading) {
-    return <Loading txt={TEAM.LOADING_TXT}></Loading>
+  if (teamRequest.isValidating) {
+    return <Loading txt={DASHBOARD.LOADING_TXT}></Loading>
   }
 
-  if (!teamResponse?.result?.length) {
-    return <p className='p-5'>No teams found</p>
+  if (!teamRequest.isValidating && !teamList.length) {
+    return <p className='p-5'>...</p>
   }
 
-  const navigateToTeamDetail = (rowId: string | number) => {
-    const selectedTeam = teamList.find(team => team.teamId === rowId)
-    if (selectedTeam) markActiveTeam(selectedTeam)
+  const navigateToTeamDetail = (teamId: string | number) => {
+    const selectedTeam = teamList.find(team => team.teamId === teamId)
+    if (selectedTeam) markActiveTeam(teamId.toString())
     router.push('teams/detail')
   }
 

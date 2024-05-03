@@ -7,10 +7,15 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { COLORS } from '@/util/colors'
-import { CricHeaderRow, CricTableCell, CricTableRow } from '@/model/types/cric-table.type'
+import {
+  CricCellObj,
+  CricHeaderRow,
+  CricTableCell,
+  CricTableRow,
+} from '@/model/types/cric-table.type'
 import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined'
 import CricTableHead from '../table/CricTableHeader'
-import { sortSearchTable } from '@/util/table'
+import { sortSearchTable } from '@/util/tables/table'
 import { currencyToString } from '@/util/bidding'
 import { Checkbox, Collapse, IconButton, checkboxClasses } from '@mui/material'
 import CricSwitch from './CricSwitch'
@@ -19,6 +24,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import useMobile from '@/hooks/useMobile'
 import TableDetailView from '../table/TableDetailView'
+import { TableCellType } from '@/model/enum/table-cell-type.enum'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import TrendingDownIcon from '@mui/icons-material/TrendingDown'
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 interface CustomTableCellProps {
   fullwidth?: string
@@ -171,12 +181,15 @@ function CricTable(props: CricTableProps) {
     fullWidth: boolean,
   ) => {
     const renderTableCells = () => {
-      if (cell.cellType === 'icon') return renderIconCell(row)
-      else if (cell.cellType === 'list') return renderListCell(cell.value as string[])
-      else if (cell.cellType === 'currency') return currencyToString(Number(cell.value))
-      else if (cell.cellType === 'switch') return renderToggleCell(row, cell)
-      else if (cell.cellType === 'expand') return renderExpandCell(rowIndex)
-      else return cell.value
+      if (cell.cellType === TableCellType.icon.toString()) return renderIconCell(row)
+      else if (cell.cellType === TableCellType.list.toString())
+        return renderListCell(cell.value as string[])
+      else if (cell.cellType === TableCellType.currency.toString())
+        return currencyToString(Number(cell.value))
+      else if (cell.cellType === TableCellType.switch.toString()) return renderToggleCell(row, cell)
+      else if (cell.cellType === TableCellType.expand.toString()) return renderExpandCell(rowIndex)
+      else if (cell.cellType === TableCellType.stock.toString()) return renderStockCell(cell)
+      else return <>{cell.value}</>
     }
 
     return (
@@ -187,12 +200,13 @@ function CricTable(props: CricTableProps) {
         scope='row'
         style={{ color: cell.color }}
         align={
-          cell.cellType === 'number' ||
-          cell.cellType === 'currency' ||
-          cell.cellType === 'icon' ||
-          cell.cellType === 'list' ||
-          cell.cellType === 'switch' ||
-          cell.cellType === 'expand'
+          cell.cellType === TableCellType.number.toString() ||
+          cell.cellType === TableCellType.currency.toString() ||
+          cell.cellType === TableCellType.icon.toString() ||
+          cell.cellType === TableCellType.stock.toString() ||
+          cell.cellType === TableCellType.list.toString() ||
+          cell.cellType === TableCellType.switch.toString() ||
+          cell.cellType === TableCellType.expand.toString()
             ? 'center'
             : 'left'
         }
@@ -211,6 +225,38 @@ function CricTable(props: CricTableProps) {
       >
         {expandIndex === rowIndex ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </IconButton>
+    )
+  }
+
+  const renderStockCell = (cell: CricTableCell) => {
+    const stockData = cell.value as CricCellObj
+    return (
+      <div>
+        <div>{stockData.original}</div>
+        {stockData.delta !== 0 && (
+          <div
+            className='flex justify-center opacity-970'
+            style={{ color: stockData.delta > 0 ? COLORS.stockGreen : COLORS.lightRed }}
+          >
+            <div>{stockData.delta}</div>
+            {stockData.delta > 0 ? (
+              stockData.iconType === 'trend' ? (
+                <TrendingUpIcon />
+              ) : (
+                <ArrowDropUpIcon />
+              )
+            ) : stockData.delta < 0 ? (
+              stockData.iconType === 'trend' ? (
+                <TrendingDownIcon />
+              ) : (
+                <ArrowDropDownIcon />
+              )
+            ) : (
+              <></>
+            )}
+          </div>
+        )}
+      </div>
     )
   }
 

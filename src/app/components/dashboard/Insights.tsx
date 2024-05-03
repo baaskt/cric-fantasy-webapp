@@ -43,6 +43,11 @@ function Insights() {
           title={'Maximum Wickets'}
           data={insightsData.wickets}
         />
+        <InsightCard
+          type={InsightsType.POINTS}
+          title={'Maximum Points'}
+          data={insightsData.points}
+        />
       </div>
     </div>
   )

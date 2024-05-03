@@ -5,7 +5,7 @@ import { currencyToString } from './bidding'
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { groupListByProp } from './helper'
 import { TeamMember } from '@/model/entities/team-member.interface'
-import { OtherTableData } from './table'
+import { OtherTableData } from './tables/table'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { PLAYERS } from './constants/endpoints'
@@ -20,6 +20,8 @@ const BAT_WK = 'WK-Batter'
 const BOWL_WK = 'WK-Bowler'
 const BATTER = 'Batter'
 const BOWLER = 'Bowler'
+
+const MAX_SQUAD_COUNT = 16
 
 export const PLAYER_ROLES: string[] = [BATTER, BOWLER, ALLROUNDER, WK]
 export const getPlayerDisplayRole = (role: string, squadCount: number): string => {
@@ -76,7 +78,7 @@ export const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: Tea
       label: statEntity.label,
       value:
         statEntity.value === 'squad'
-          ? `${teamDetail.squad?.length.toString()}${'/15'}`
+          ? `${teamDetail.squad?.length.toString()}/${MAX_SQUAD_COUNT}`
           : statEntity.value === 'purseBalance'
             ? `${currencyToString(teamDetail.purseBalance)}`
             : (statData[statEntity.value] as never),

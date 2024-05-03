@@ -1,6 +1,7 @@
 export interface InsightsResponse {
   runs: InsightsEntity[]
   wickets: InsightsEntity[]
+  points: InsightsEntity[]
 }
 
 export interface InsightsEntity {
