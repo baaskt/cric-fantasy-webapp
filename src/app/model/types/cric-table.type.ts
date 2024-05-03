@@ -16,7 +16,7 @@ export type CricTableRow = {
 export type CricTableCell = {
   cellKey: string
   cellType: string
-  value: string | string[] | number | null | undefined
+  value: string | string[] | number | null | undefined | CricCellObj
   color?: string
   isDisabled?: boolean
   isMobileView?: boolean
@@ -25,4 +25,10 @@ export type CricTableCell = {
 
 export interface KeyValueType {
   [key: string]: string | string[] | number | null
+}
+
+export type CricCellObj = {
+  original: number
+  delta: number
+  iconType: string
 }

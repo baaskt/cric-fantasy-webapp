@@ -27,6 +27,7 @@ function AdminCentre(props: AdminCentreProps) {
   const defaultJuryPlayer = scoreCardData.peoplePlayerOfTheMatch
     ? scoreCardData.peoplePlayerOfTheMatch.playerId
     : ''
+  const isSaveEnabled: boolean = defaultJuryPlayer ? false : true
   const [playersList, setPlayersList] = useState<OptionsEntity[]>([])
   const [inningsOneDots, setInningsOneDots] = useState<PlayerDotsEntity[]>([])
   const [inningsTwoDots, setInningsTwoDots] = useState<PlayerDotsEntity[]>([])
@@ -47,6 +48,8 @@ function AdminCentre(props: AdminCentreProps) {
     if (scoreCardData) {
       const inningsOnePlayers = scoreCardData.inningsOne.batting
       const inningsTwoPlayers = scoreCardData.inningsTwo.batting
+        ? scoreCardData.inningsTwo.batting
+        : []
       const totalPlayers = [...inningsOnePlayers, ...inningsTwoPlayers]
       const tempPlayersList: OptionsEntity[] = []
       totalPlayers.forEach(player => {
@@ -107,6 +110,7 @@ function AdminCentre(props: AdminCentreProps) {
               label={'Jury Player'}
               menuList={playersList}
               onChange={handlePlayerSelect}
+              isDisabled={!isSaveEnabled}
             />
           </div>
         </div>
@@ -122,6 +126,7 @@ function AdminCentre(props: AdminCentreProps) {
               bowlers={inningsOneBowlers}
               teamName={scoreCardData.inningsTwo.battingTeam}
               onChange={setInningsOneDots}
+              isEditable={isSaveEnabled}
             />
           </div>
           <Divider
@@ -135,6 +140,7 @@ function AdminCentre(props: AdminCentreProps) {
               bowlers={inningsTwoBowlers}
               teamName={scoreCardData.inningsOne.battingTeam}
               onChange={setInningsTwoDots}
+              isEditable={isSaveEnabled}
             />
           </div>
         </div>
@@ -145,7 +151,7 @@ function AdminCentre(props: AdminCentreProps) {
           onClick={handleSave}
           isFullWidth
           isLoading={updateDotsRequest.isMutating}
-          isDisabled={defaultJuryPlayer ? true : false}
+          isDisabled={!isSaveEnabled}
         />
       </div>
       <CricToast open={updateSuccess} message='Update successfull' onClose={setUpdateSuccess} />

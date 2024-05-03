@@ -18,7 +18,7 @@ function TableDetailView(props: TableDetailViewProps) {
     if (cell.cellType === TableCellType.list.toString()) return (cell.value as string[]).join(' / ')
     else if (cell.cellType === TableCellType.currency.toString())
       return currencyToString(Number(cell.value))
-    else return cell.value
+    else return <>{cell.value}</>
   }
 
   return (

@@ -1,7 +1,7 @@
 import { PlayingXIStatus } from '@/model/enum/playingxi-status.enum'
 import { TeamEntity } from '@/model/response/team.interface'
 import { CricHeaderRow, CricTableCell, KeyValueType } from '@/model/types/cric-table.type'
-import { COLORS } from './colors'
+import { COLORS } from '../colors'
 
 export const prepareTeamTable = (
   headerEntity: CricHeaderRow,

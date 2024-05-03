@@ -12,7 +12,7 @@ import { CricHeaderRow } from '@/model/types/cric-table.type'
 import { visuallyHidden } from '@mui/utils'
 import { styled } from '@mui/material/styles'
 import { COLORS } from '@/util/colors'
-import { SortOrderType } from '@/util/table'
+import { SortOrderType } from '@/util/tables/table'
 import { TableCellType } from '@/model/enum/table-cell-type.enum'
 import useMobile from '@/hooks/useMobile'
 

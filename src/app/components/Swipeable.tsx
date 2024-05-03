@@ -11,10 +11,9 @@ type SwipeableProps = {
 const Swipeable = (props: SwipeableProps) => {
   const { value, minValue, maxValue, children, onChangeIndex } = props
   const [startX, setStartX] = useState<number>(0)
-  const minSwipeDistance = 50
+  const minSwipeDistance = 80
 
   const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    console.log('start', event.targetTouches[0].clientX)
     setStartX(event.targetTouches[0].clientX)
   }
 

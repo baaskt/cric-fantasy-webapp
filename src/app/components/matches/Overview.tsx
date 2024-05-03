@@ -63,7 +63,7 @@ function Overview(props: OverviewProps) {
             <div className='pt-5 text-center text-md md:text-xl'>
               {isMobileView ? inningsOne.battingTeamSName : inningsOne.battingTeam}
             </div>
-            {inningsOne && <MatchScore score={inningsOne.score} />}
+            {inningsOne?.score && <MatchScore score={inningsOne.score} />}
           </div>
           <div
             className='flex flex-col items-center'
@@ -87,7 +87,7 @@ function Overview(props: OverviewProps) {
             <div className='pt-5 text-center text-md md:text-xl'>
               {isMobileView ? inningsTwo.battingTeamSName : inningsTwo.battingTeam}
             </div>
-            {inningsTwo && <MatchScore score={inningsTwo.score} />}
+            {inningsTwo?.score && <MatchScore score={inningsTwo.score} />}
           </div>
         </div>
         <div className='text-center text-lg mt-5 md:text-2xl'>{scoreCardData.status}</div>
