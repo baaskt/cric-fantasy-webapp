@@ -7,14 +7,15 @@ import { PlayerDotsEntity } from '@/model/entities/player-dots.interface'
 type PlayerDotsUpdateProps = {
   teamName: string
   bowlers: BowlingCardEntity[]
+  isEditable: boolean
   onChange: (playerDots: PlayerDotsEntity[]) => void
 }
 function PlayerDotsUpdate(props: PlayerDotsUpdateProps) {
-  const { bowlers, teamName, onChange } = props
+  const { bowlers, teamName, isEditable, onChange } = props
   const [playerDots, setPlayerDots] = useState<PlayerDotsEntity[]>([])
 
   useEffect(() => {
-    if (bowlers.length) {
+    if (bowlers?.length) {
       const tempPlayerDots: PlayerDotsEntity[] = []
       bowlers.forEach(bowler => {
         const playerDot = {
@@ -70,6 +71,7 @@ function PlayerDotsUpdate(props: PlayerDotsUpdateProps) {
                     : COLORS.white,
               }}
               value={playerDots[bowlerIndex]?.dots}
+              disabled={!isEditable}
             />
           </div>
         ))}

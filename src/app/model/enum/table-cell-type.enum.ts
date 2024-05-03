@@ -5,4 +5,5 @@ export enum TableCellType {
   number = 'number',
   currency = 'currency',
   switch = 'switch',
+  stock = 'stock',
 }

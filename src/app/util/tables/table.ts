@@ -6,10 +6,12 @@ import {
   CricTableRow,
   KeyValueType,
 } from '@/model/types/cric-table.type'
-import { getPlayerTableData, getPlayingXITableData } from './player'
+import { getPlayerTableData, getPlayingXITableData } from '../player'
 import { prepareTeamTable } from './team'
 import { TeamEntity } from '@/model/response/team.interface'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
+import { prepareDashboardTable } from './dashboard'
+import { TeamPointsEntity } from '@/model/response/team-points.interface'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -97,6 +99,8 @@ export const prepareTableData = <T>(
           rowIndex,
           otherData,
         )
+      } else if (tableType === TableType.DASHBOARD.toString()) {
+        tableCell = prepareDashboardTable(headerEntity, rowEntity as TeamPointsEntity)
       }
       tableCells.push(tableCell as CricTableCell)
     })

@@ -17,6 +17,7 @@ export const TOURNAMENTS = {
   ADD_HOST: 'tournaments/addHost',
   JOIN_URL: 'tournaments/join?tournamentId=',
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
+  GET_STATS: 'tournaments/tournamentId/stats',
 }
 
 export const MATCHES = {
@@ -27,6 +28,7 @@ export const MATCHES = {
 
 export const TEAMS = {
   GET_ALL_TEAMS: 'teams',
+  GET_TEAM_POINTS: 'teams/getPointsTable?tournamentId=',
   CREATE_TEAM_URL: 'teams',
   TEAM_DETAIL_URL: 'teams/teamId',
   UPDATE_PLAYINGXI_URL: 'teams/teamId/tournaments/tournamentId',

@@ -8,7 +8,7 @@ import CricTable from '../ui/CricTable'
 import Loading from '../Loading'
 import { TEAM } from '@/util/constants/constants'
 import { useRouter } from 'next/navigation'
-import { prepareTableData } from '@/util/table'
+import { prepareTableData } from '@/util/tables/table'
 import { TableType } from '@/model/enum/table-type.enum'
 import { useTeam } from '@/providers/TeamProvider'
 
@@ -62,7 +62,7 @@ function TeamList() {
 
   const navigateToTeamDetail = (rowId: string | number) => {
     const selectedTeam = teamList.find(team => team.teamId === rowId)
-    if (selectedTeam) markActiveTeam(selectedTeam)
+    if (selectedTeam) markActiveTeam(selectedTeam.teamId)
     router.push('teams/detail')
   }
 
