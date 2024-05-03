@@ -15,12 +15,13 @@ export function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname
   const isValidRoute = totalRoutes.find(route => pathName.includes(route))
   const accessToken = cookies().get('accessToken')?.value
-  // const tournamentId = cookies().get('tournamentId')?.value
-  // const validTournament = tournamentId && pathName.includes(tournamentId)
+  const tournamentId = cookies().get('tournamentId')?.value
   if (!isValidRoute || (!accessToken && !isAuthRoute(pathName))) {
     return redirectRoute(request, TITLES.SIGNIN.path)
   } else if (accessToken && isAuthRoute(pathName)) {
-    return redirectRoute(request, TITLES.HOME.fullPath)
+    if (tournamentId) {
+      return redirectRoute(request, TITLES.DASHBOARD.fullPath.replace('tournamentId', tournamentId))
+    } else return redirectRoute(request, TITLES.HOME.fullPath)
   }
 }
 
