@@ -43,7 +43,7 @@ const getDashboardCellValue = (
     if (cellKey === 'position') {
       cellValue = {
         original: teamEntity.position,
-        delta: teamEntity.position - teamEntity.prevPosition,
+        delta: teamEntity.prevPosition - teamEntity.position,
         iconType: 'arrow',
       }
     } else if (cellKey === 'tournamentPoints') {
