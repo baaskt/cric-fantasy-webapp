@@ -2,6 +2,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
+import SportsHandballIcon from '@mui/icons-material/SportsHandball'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import HomeIcon from '@mui/icons-material/Home'
 import { useTournament } from '@/providers/TournamentProvider'
@@ -60,6 +61,13 @@ const detailConfig: SideBarMenuEntity[] = [
     title: TITLES.MATCH_DETAIL.label,
     path: TITLES.MATCH_DETAIL.path,
     fullPath: TITLES.MATCH_DETAIL.fullPath,
+    hidden: true,
+  },
+  {
+    icon: SportsHandballIcon,
+    title: TITLES.PLAYER_DETAIL.label,
+    path: TITLES.PLAYER_DETAIL.path,
+    fullPath: TITLES.PLAYER_DETAIL.fullPath,
     hidden: true,
   },
 ]
