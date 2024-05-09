@@ -1,5 +1,5 @@
-// export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
-export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
+export const API_URL = 'https://cric-fantasy-backend.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
 
 export const HEALTH_URL = 'health'
 export const USERS = {
