@@ -16,7 +16,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import { COLORS } from '@/util/colors'
 import { useTournament } from '@/providers/TournamentProvider'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
-import { formatDateAndTime } from '@/util/helper'
+import { convertUtcToLocal } from '@/util/helper'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -84,7 +84,7 @@ function DashboardTeams() {
           <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
           <div className='text-xl'>Leaderboard</div>
         </div>
-        <div className='text-sm italic text-gray-500 md:text-lg'>{`( Last updated : ${formatDateAndTime(teamList[0].pointsUpdatedAt, true)} )`}</div>
+        <div className='text-sm italic text-gray-500 md:text-lg'>{`( Last updated : ${convertUtcToLocal(teamList[0].pointsUpdatedAt)} )`}</div>
       </div>
       <CricTable
         headerList={headersList}
