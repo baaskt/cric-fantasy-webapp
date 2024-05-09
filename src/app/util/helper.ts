@@ -195,11 +195,11 @@ export function hasMismatch(data1: number[], data2: number[]) {
   return false
 }
 
-export function formatDateAndTime(dateTimeString: string) {
+export function formatDateAndTime(dateTimeString: string, isDate?: boolean) {
   if (!dateTimeString) return ''
   const dateComponents = dateTimeString.split(' ')
   const utcTimeString = `${dateComponents[0]}T${dateComponents[1]}Z`
-  const localTime = new Date(utcTimeString)
+  const localTime = new Date(isDate ? dateTimeString : utcTimeString)
 
   // Get the date components
   const year = localTime.getFullYear()

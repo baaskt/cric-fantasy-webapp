@@ -13,6 +13,8 @@ import Loading from '../Loading'
 import { PLAYER } from '@/util/constants/constants'
 import { getPlayersFilterUrl } from '@/util/player'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
+import { useRouter } from 'next/navigation'
+import { usePlayer } from '@/providers/PlayerProvider'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -39,6 +41,8 @@ function PlayersList(props: PlayersListProp) {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [columnList, setColumnList] = useState<CricHeaderRow[]>([])
   const [playersList, setPlayersList] = useState<PlayersListEntity[]>([])
+  const router = useRouter()
+  const { markActivePlayer } = usePlayer()
 
   const PLAYERS_URL =
     activeTournament && selectedTeam
@@ -94,6 +98,12 @@ function PlayersList(props: PlayersListProp) {
     return updatedColumns
   }
 
+  const navigateToPlayerDetail = (rowId: string | number) => {
+    const selectedPlayer = playersList.find(player => player.playerId === rowId)
+    if (selectedPlayer) markActivePlayer(selectedPlayer.playerId)
+    router.push('players/detail')
+  }
+
   if (playerRequest.isValidating || !tableData) {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
@@ -106,7 +116,7 @@ function PlayersList(props: PlayersListProp) {
         defOrder={'desc'}
         defOrderBy={'totalPoints'}
         fullWidth={false}
-        // onRowSelect={navigateToTeamDetail}
+        onRowSelect={navigateToPlayerDetail}
       />
     </div>
   )

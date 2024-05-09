@@ -16,11 +16,14 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import { COLORS } from '@/util/colors'
 import { useTournament } from '@/providers/TournamentProvider'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
+import { formatDateAndTime } from '@/util/helper'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
   { key: 'position', label: 'Position', alias: 'Pos', type: 'stock', isMobile: true },
   { key: 'teamName', label: 'Team', type: 'string', isMobile: true },
+  { key: 'points', label: 'Match Points', alias: '', type: 'number', isMobile: false },
+  { key: 'statPoints', label: 'Milestone Points', alias: '', type: 'number', isMobile: false },
   { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'stock', isMobile: true },
   { key: '', label: 'View Team Details', type: 'icon', iconPath: '/detail' },
 ]
@@ -65,7 +68,7 @@ function DashboardTeams() {
   }
 
   if (!teamRequest.isValidating && !teamList.length) {
-    return <p className='p-5'>...</p>
+    return <Loading txt={'Fetching Stats...'}></Loading>
   }
 
   const navigateToTeamDetail = (teamId: string | number) => {
@@ -76,9 +79,12 @@ function DashboardTeams() {
 
   return (
     <div className='p-5 pt-0'>
-      <div className='flex gap-2 p-3 items-center'>
-        <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
-        <div className='text-xl'>Leaderboard</div>
+      <div className='flex gap-2 p-3 flex-col md:flex-row'>
+        <div className='flex gap-2 items-center'>
+          <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
+          <div className='text-xl'>Leaderboard</div>
+        </div>
+        <div className='text-sm italic text-gray-500 md:text-lg'>{`( Last updated : ${formatDateAndTime(teamList[0].pointsUpdatedAt, true)} )`}</div>
       </div>
       <CricTable
         headerList={headersList}

@@ -6,6 +6,7 @@ import { apiHelper } from './apiHelper'
 import { TOURNAMENT_ID } from '@/providers/TournamentProvider'
 import { MATCH_ID } from '@/providers/MatchProvider'
 import { TEAM_ID } from '@/providers/TeamProvider'
+import { PLAYER_ID } from '@/providers/PlayerProvider'
 
 export const auth = () => {
   const ACCESS_TOKEN = 'accessToken'
@@ -28,6 +29,11 @@ export const auth = () => {
 
   function getTeamId(): string {
     const teamId = cookieHelper().getCookieItem(TEAM_ID)
+    return teamId ? teamId : ''
+  }
+
+  function getPlayerId(): string {
+    const teamId = cookieHelper().getCookieItem(PLAYER_ID)
     return teamId ? teamId : ''
   }
 
@@ -66,6 +72,7 @@ export const auth = () => {
     getTournamentId,
     getTeamId,
     getMatchId,
+    getPlayerId,
     setAuthCred,
     clearAuthCred,
     refreshAccessToken,
