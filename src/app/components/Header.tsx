@@ -74,7 +74,7 @@ export default function Header(props: HeaderProps) {
       <div className='flex items-center gap-2'>
         {ActivePathIcon && <ActivePathIcon />}
         <span className='text-xl uppercase font-semibold'>
-          {headerData ? headerData.title : '...loading'}
+          {headerData ? headerData.title : 'loading...'}
         </span>
       </div>
       <AvatarMenu />

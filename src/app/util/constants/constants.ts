@@ -95,7 +95,7 @@ export const PLAYER = {
 }
 
 export const DASHBOARD = {
-  LOADING_TXT: 'Fetching Dashboard Details ...',
+  LOADING_TXT: 'Fetching Team Details ...',
 }
 
 export const TEAM = {
@@ -146,6 +146,11 @@ export const TITLES = {
     label: 'Players',
     path: '/players',
     fullPath: '/tournaments/tournamentId/players',
+  },
+  PLAYER_DETAIL: {
+    label: 'Player Detail',
+    path: '/players/detail',
+    fullPath: '/tournaments/tournamentId/players/detail',
   },
   TEAMS: {
     label: 'Teams',
