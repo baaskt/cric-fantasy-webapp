@@ -195,11 +195,11 @@ export function hasMismatch(data1: number[], data2: number[]) {
   return false
 }
 
-export function formatDateAndTime(dateTimeString: string, isDate?: boolean) {
+export function formatDateAndTime(dateTimeString: string) {
   if (!dateTimeString) return ''
   const dateComponents = dateTimeString.split(' ')
   const utcTimeString = `${dateComponents[0]}T${dateComponents[1]}Z`
-  const localTime = new Date(isDate ? dateTimeString : utcTimeString)
+  const localTime = new Date(utcTimeString)
 
   // Get the date components
   const year = localTime.getFullYear()
@@ -213,6 +213,12 @@ export function formatDateAndTime(dateTimeString: string, isDate?: boolean) {
   // Combine date and time components into a formatted string
   const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`
   return formattedDateTime
+}
+
+export function convertUtcToLocal(utcString: string): string {
+  const utcDate = new Date(utcString)
+  utcDate.setMinutes(utcDate.getMinutes() - utcDate.getTimezoneOffset())
+  return `${utcDate.toLocaleDateString()} - ${utcDate.toLocaleTimeString()}`
 }
 
 export const getTeamColors = (team1: string | undefined, team2: string | undefined) => {
