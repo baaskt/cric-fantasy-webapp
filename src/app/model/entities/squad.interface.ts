@@ -6,6 +6,7 @@ export interface SquadEntity {
   clubName: string
   clubSName: string
   points: number
+  prevPoints: number
   playingXI: boolean
   imageUrl: string
   soldAmount: number

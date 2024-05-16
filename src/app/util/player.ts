@@ -215,6 +215,14 @@ const getPlayingXICellValue = (
     cellValue = iconPath
   } else if (cellKey === 'sno') {
     cellValue = playerIndex + 1
+  } else if (cellType === 'stock') {
+    if (cellKey === 'points') {
+      cellValue = {
+        original: playerEntity.points,
+        delta: playerEntity.points - playerEntity.prevPoints,
+        iconType: 'trend',
+      }
+    }
   } else {
     cellValue = playerData[cellKey]
   }
