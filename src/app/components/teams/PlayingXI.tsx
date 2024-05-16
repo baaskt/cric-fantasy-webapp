@@ -29,7 +29,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'name', label: 'Players', type: 'string', isMobile: true },
   { key: 'role', label: 'Role', type: 'string' },
   { key: 'clubName', label: 'Club', type: 'string' },
-  { key: 'points', label: 'Points', alias: 'Pts', type: 'number', isMobile: true },
+  { key: 'points', label: 'Points', alias: 'Pts', type: 'stock', isMobile: true },
   { key: '', label: 'View Player Details', type: 'icon' },
 ]
 
@@ -190,8 +190,8 @@ function PlayingXI(props: PlayingXIProps) {
         headerList={headersList}
         rowList={tableData}
         fullWidth={false}
-        defOrder={'asc'}
-        defOrderBy={'role'}
+        defOrder={'desc'}
+        defOrderBy={'points'}
         onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
       />
     </div>

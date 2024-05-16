@@ -1,6 +1,7 @@
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { TableType } from '@/model/enum/table-type.enum'
 import {
+  CricCellObj,
   CricHeaderRow,
   CricTableCell,
   CricTableRow,
@@ -17,8 +18,12 @@ export type SortOrderType = 'asc' | 'desc'
 
 function comparator(orderBy: string, order: string) {
   return function (a: CricTableRow, b: CricTableRow) {
-    const valueA = a.dataList.find(item => item.cellKey === orderBy)?.value || 0
-    const valueB = b.dataList.find(item => item.cellKey === orderBy)?.value || 0
+    const entityA = a.dataList.find(item => item.cellKey === orderBy)
+    const entityB = b.dataList.find(item => item.cellKey === orderBy)
+    const valueA =
+      entityA?.cellType === 'stock' ? (entityA.value as CricCellObj).original : entityA?.value || 0
+    const valueB =
+      entityB?.cellType === 'stock' ? (entityB.value as CricCellObj).original : entityB?.value || 0
     if (order === 'asc') {
       if (typeof valueA === 'string' && typeof valueB === 'string') {
         return valueA.localeCompare(valueB)
