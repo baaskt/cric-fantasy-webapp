@@ -38,8 +38,7 @@ const getDashboardCellValue = (
   let cellValue
   if (cellType === 'icon') {
     cellValue = iconPath
-  }
-  if (cellType === 'stock') {
+  } else if (cellType === 'stock') {
     if (cellKey === 'position') {
       cellValue = {
         original: teamEntity.position,
