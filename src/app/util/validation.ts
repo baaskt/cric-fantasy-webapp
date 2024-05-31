@@ -1,7 +1,4 @@
-import {
-  FieldTxtEntity,
-  NameValidationEntity,
-} from '@/model/entities/name-validation.interface'
+import { FieldTxtEntity, NameValidationEntity } from '@/model/entities/name-validation.interface'
 
 export const validateEmail = (email: string): boolean => {
   const emailRegex: RegExp =
@@ -9,14 +6,16 @@ export const validateEmail = (email: string): boolean => {
   return String(email).toLowerCase().match(emailRegex) ? true : false
 }
 
+export const validateOtp = (otp: string): boolean => {
+  return otp ? true : false
+}
+
 // Minimum eight characters, Maxium 32 characters, at least one uppercase letter, one lowercase letter , one symbol and one number
 export const UPPERCASE_REGEX = new RegExp(/.*[A-Z]/)
 export const LOWERCASE_REGEX = new RegExp(/.*[a-z]/)
 export const NUMBER_REGEX = new RegExp(/.*\d/)
 export const LENGTH_REGEX = new RegExp(/.{8,}$/)
-export const SPECIAL_CHARS_REGEX = new RegExp(
-  /.*[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/,
-)
+export const SPECIAL_CHARS_REGEX = new RegExp(/.*[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/)
 
 export const PASSWORD_VALID_REGEX = new RegExp(
   `^(?=${[
@@ -36,10 +35,7 @@ export const validatePwdLength = (pwd: string): boolean => {
   return pwd?.length >= 8 ? true : false
 }
 
-export const validateName = (
-  name: string,
-  skipAlpha?: boolean,
-): NameValidationEntity => {
+export const validateName = (name: string, skipAlpha?: boolean): NameValidationEntity => {
   const isErrorAlpha = skipAlpha ? false : validateAlphaNumeric(name)
   const isErrorLength = validateMinNameLength(name)
   return {
@@ -54,13 +50,7 @@ export const getErrorHelperTxt = (
   fieldEntity: FieldTxtEntity,
 ): string => {
   const { valid, alpha, length } = validityEntity
-  return valid
-    ? ''
-    : alpha
-      ? fieldEntity.errorSplChar
-      : length
-        ? fieldEntity.errorLength
-        : ''
+  return valid ? '' : alpha ? fieldEntity.errorSplChar : length ? fieldEntity.errorLength : ''
 }
 
 export const validateAlphaNumeric = (name: string): boolean => {

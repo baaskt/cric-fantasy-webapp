@@ -1,0 +1,97 @@
+'use client'
+
+import React, { FormEvent, FocusEvent, useState } from 'react'
+import Box from '@mui/material/Box'
+import CricEmailField from '../ui/CricEmailField'
+import CricButton from '../ui/CricButton'
+import { AUTH, TITLES } from '@/util/constants/constants'
+import { validateEmail } from '@/util/validation'
+import { USERS } from '@/util/constants/endpoints'
+import CricAlert from '../ui/CricAlert'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { HttpMethod } from '@/model/enum/http-method.enum'
+import { ForgotPwdRequest } from '@/model/request/login-request.type'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { LoginResponse } from '@/model/response/login.interface'
+
+type ForgotPwdFormProps = {
+  onSuccess: (email: string) => void
+}
+
+export default function ForgotPwdForm(props: ForgotPwdFormProps) {
+  const [email, setEmail] = useState<string>('')
+  const [verifyStatus, setVerifyStatus] = useState<string>('')
+
+  const forgotPwdRequest = useMutateRequest(USERS.FORGOT_PWD_URL, HttpMethod.POST)
+
+  const onEmailChange = (event: FocusEvent<HTMLInputElement>) => {
+    const value: string = event.target.value
+    setEmail(value)
+  }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    void loginUser()
+  }
+
+  const loginUser = async () => {
+    setVerifyStatus('')
+    if (validateEmail(email)) {
+      const payload: ForgotPwdRequest = {
+        email: email.toLowerCase(),
+      }
+      try {
+        const response: CricResponse<LoginResponse> = (await forgotPwdRequest.trigger(
+          payload as never,
+        )) as CricResponse<LoginResponse>
+        if (response?.result) {
+          setVerifyStatus('')
+          props.onSuccess(email.toLowerCase())
+        } else {
+          setVerifyStatus('error')
+        }
+      } catch (e) {
+        console.log(e)
+        setVerifyStatus('error')
+      }
+    }
+  }
+
+  return (
+    <>
+      <div className='font-bold text-2xl mb-10'>{TITLES.FORGOT_PWD.label}</div>
+      <Box
+        component='form'
+        className='flex flex-col'
+        sx={{
+          '& .MuiTextField-root': { mb: 3 },
+          width: '100%',
+        }}
+        noValidate
+        autoComplete='on'
+        onSubmit={handleSubmit}
+      >
+        <CricEmailField
+          id='forgotpwd-email'
+          label={AUTH.EMAIL.label}
+          variant='filled'
+          autoComplete='username'
+          placeholder={AUTH.EMAIL.placeholder}
+          helperText={AUTH.EMAIL.error}
+          onChange={onEmailChange}
+        />
+        <CricAlert
+          error={forgotPwdRequest.error || verifyStatus === 'error'}
+          message={AUTH.FORGOT_PWD.error}
+        ></CricAlert>
+        <div className='mt-3'>
+          <CricButton
+            isFullWidth={true}
+            onClick={() => {}}
+            btnTxt={forgotPwdRequest.isMutating ? 'verifying...' : AUTH.FORGOT_PWD.verifyEmail}
+          ></CricButton>
+        </div>
+      </Box>
+    </>
+  )
+}

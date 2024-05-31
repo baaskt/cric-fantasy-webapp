@@ -165,7 +165,6 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
           name='imgUrl'
           onChange={handleChange}
           placeholder={TOURNAMENT.CREATE_FORM.IMAGE.placeholder}
-          inputProps={{ minLength: 5, maxLength: 35 }}
         />
         {/* <CricFileInput btnName={'Upload Image'} /> */}
         <CricAlert

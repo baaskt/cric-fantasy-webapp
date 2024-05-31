@@ -7,6 +7,11 @@ export const USERS = {
   SIGNUP_URL: 'users',
   MY_USER_URL: 'users/me',
   REFRESH_URL: 'users/refresh',
+  SEND_OTP_URL: 'users/sendOTP',
+  VERIFY_OTP_URL: 'users/verifyOTP',
+  RESEND_OTP_URL: 'users/resendOTP',
+  RESET_PWD_URL: 'users/resetpassword',
+  FORGOT_PWD_URL: 'users/forgotpassword',
 }
 
 export const TOURNAMENTS = {

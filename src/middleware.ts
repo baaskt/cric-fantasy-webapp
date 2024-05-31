@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { TITLES } from '@/util/constants/constants'
 
-const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path]
+const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path, TITLES.FORGOT_PWD.path]
 const protectedRoutes = [
   TITLES.DASHBOARD.path,
   TITLES.TOURNAMENTS.path,
