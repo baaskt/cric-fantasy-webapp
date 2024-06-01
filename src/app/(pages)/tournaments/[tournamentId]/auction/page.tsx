@@ -16,7 +16,7 @@ const tabOptions: OptionsEntity[] = [
   // { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
   // { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
   // { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
-  // { id: 9, label: 'Unsold', value: 'UNSOLD' },
+  { id: 6, label: 'Unsold', value: 'UNSOLD' },
 ]
 
 function Auction() {
@@ -42,7 +42,7 @@ function Auction() {
   }
 
   return (
-    <div className='m-5'>
+    <div className=''>
       <div className='flex justify-between flex-col-reverse md:flex-row gap-5 md:gap-0'>
         <div>
           <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />

@@ -13,6 +13,8 @@ import { TeamEntity } from '@/model/response/team.interface'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { prepareDashboardTable } from './dashboard'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
+import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
+import { getAuctionTableData } from './auction'
 
 export type SortOrderType = 'asc' | 'desc'
 
@@ -106,6 +108,8 @@ export const prepareTableData = <T>(
         )
       } else if (tableType === TableType.DASHBOARD.toString()) {
         tableCell = prepareDashboardTable(headerEntity, rowEntity as TeamPointsEntity)
+      } else if (tableType === TableType.AUCTION.toString()) {
+        tableCell = getAuctionTableData(headerEntity, rowEntity as AuctionPlayerEntity, rowIndex)
       }
       tableCells.push(tableCell as CricTableCell)
     })
