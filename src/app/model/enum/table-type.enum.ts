@@ -3,4 +3,5 @@ export enum TableType {
   DASHBOARD = 'dashboard',
   TEAMS = 'teams',
   PLAYING_XI = 'PlayingXI',
+  AUCTION = 'auction',
 }

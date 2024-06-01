@@ -10,22 +10,24 @@ import { AuctionPlayerEntity } from '@/model/response/auction-player-response.in
 import { useAuction } from '@/providers/AuctionProvider'
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
 import { COLORS } from '@/util/colors'
-import { prepareAuctionPlayersTable } from '@/util/helper'
 import { useTournament } from '@/providers/TournamentProvider'
 import CricButton from '../ui/CricButton'
 import FlagIcon from '@mui/icons-material/Flag'
 import { useRouter } from 'next/navigation'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
+import { prepareTableData } from '@/util/tables/table'
+import { TableType } from '@/model/enum/table-type.enum'
 
 const headersList: CricHeaderRow[] = [
-  { key: 'sno', label: 'S.No', type: 'number' },
-  { key: 'name', label: 'Players', type: 'string' },
-  { key: 'clubName', label: 'Club', type: 'string' },
-  { key: 'basePrice', label: 'Base Price', type: 'currency' },
-  { key: 'role', label: 'Role', type: 'number' },
-  { key: 'category', label: 'Category', type: 'string' },
-  { key: 'soldStatus', label: 'Auction Status', type: 'number' },
+  { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
+  // { key: 'sno', label: 'S.No', type: 'number', isMobile: true },
+  { key: 'name', label: 'Players', type: 'string', isMobile: true },
+  { key: 'clubName', label: 'Club / Country', type: 'string' },
+  { key: 'basePrice', label: 'Base Price', type: 'currency', isMobile: false },
+  { key: 'role', label: 'Role', type: 'number', isMobile: true },
+  { key: 'category', label: 'Category', type: 'string', isMobile: false },
+  { key: 'soldStatus', label: 'Auction Status', alias: 'Status', type: 'number', isMobile: true },
 ]
 
 type AuctionPlayersListProps = {
@@ -43,7 +45,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const playerSetType = props.selectedTab.value
   const tournamentId = activeTournament?.tournamentId || ''
   const SOLD_CATEGORY_URL =
-    props.selectedTab.id === 9
+    props.selectedTab.id === 6
       ? PLAYERS.GET_AUCTION_UNSOLD_PLAYERS_URL
       : PLAYERS.GET_AUCTION_PLAYERS_URL
   const PLAYERS_URL = tournamentId
@@ -73,13 +75,21 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
 
   useEffect(() => {
     if (playersList) {
-      prepareTableData(playersList)
+      prepareTableRows(playersList)
     }
   }, [playersList, playerSetType])
 
-  const prepareTableData = (playersList: AuctionPlayerEntity[]) => {
+  const prepareTableRows = (playersList: AuctionPlayerEntity[]) => {
     if (playersList.length) {
-      const tempTableData: CricTableRow[] = prepareAuctionPlayersTable(playersList, headersList)
+      // const tempTableData: CricTableRow[] = prepareAuctionPlayersTable(playersList, headersList)
+      let tempTableData: CricTableRow[] = []
+      tempTableData = prepareTableData(
+        playersList,
+        headersList,
+        'playerId',
+        TableType.AUCTION,
+        'totalPoints',
+      )
       setTableData(tempTableData)
     }
   }
@@ -135,7 +145,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         headerList={headersList}
         rowList={tableData}
         fullWidth={false}
-        isSelectable={props.selectedTab.id === 9 && activeTournament?.isHost}
+        isSelectable={props.selectedTab.id === 6 && activeTournament?.isHost}
         isResetCheck={!selectedIds?.length}
         onRowChecked={setSelectedIds}
       />
@@ -147,7 +157,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
             btnTxt={`Begin auction for ${activeCategory?.label}`}
           ></CricButton>
         )}
-        {activeTournament?.isHost && props.selectedTab.id === 9 && (
+        {activeTournament?.isHost && props.selectedTab.id === 6 && (
           <CricButton
             startIcon={<FlagIcon />}
             onClick={() => handlePlayerStatus()}

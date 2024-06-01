@@ -22,6 +22,21 @@ const nextConfig = {
         hostname: 'api.bdcrictime.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'makeitmatta.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '91-cdn.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'thefederal.com',
+        pathname: '**',
+      },
     ],
   },
 }

@@ -60,7 +60,7 @@ export const TOURNAMENT = {
   CREATING: 'Creating...',
   LOADING_TXT: 'Fetching Tournament Details ...',
   NO_DATA_TITLE: 'No tournaments found',
-  NO_DATA_SUB: 'Create a tournament by using the Create Tournament',
+  NO_DATA_SUB: 'Join a tournament from All Tournaments',
   CREATE_FORM: {
     NAME: {
       label: 'Tournament Name',

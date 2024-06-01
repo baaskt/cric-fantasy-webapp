@@ -21,7 +21,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'pos', label: 'Position', alias: 'Pos', type: 'number', isMobile: true },
   { key: 'name', label: 'Name', type: 'string', isMobile: true },
   { key: 'intlTeam', label: 'Country', type: 'string' },
-  { key: 'clubName', label: 'Club', type: 'string' },
+  // { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'teamName', label: 'Team', type: 'string' },
   { key: 'runs', label: 'Runs', alias: 'R', type: 'number' },
   { key: 'wickets', label: 'Wickets', alias: 'W', type: 'number' },

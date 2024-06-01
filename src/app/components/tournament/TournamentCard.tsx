@@ -67,7 +67,7 @@ const TournamentCard = (props: TournamentCardProps) => {
           <IconMenu icon={<PlaceIcon />} label1={tournamentLocation} color={COLORS.cricLabel} />
         </div>
       </div>
-      <div className='flex flex-col justify-between items-center p-5'>
+      <div className='flex flex-col justify-between items-center p-5 pt-0 md:pt-5'>
         <TournamentStatus status={tournamentStatus}></TournamentStatus>
         <TournamentAction tournamentData={tournamentData}></TournamentAction>
       </div>
