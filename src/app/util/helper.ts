@@ -3,14 +3,7 @@ import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { UserResponse } from '@/model/response/user-me.interface'
 import { COLORS } from './colors'
 import { TOURNAMENT } from './constants/constants'
-import {
-  CricHeaderRow,
-  CricTableCell,
-  CricTableRow,
-  KeyValueType,
-} from '@/model/types/cric-table.type'
-import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
-import { SoldStatus } from '@/model/enum/sold-status.enum'
+import { KeyValueType } from '@/model/types/cric-table.type'
 
 export const getUserObject = (user: User | undefined, userData: UserResponse): User => {
   const userEntity = user || new User()
@@ -119,51 +112,6 @@ export const getTournamentStatusConfig = (status: string) => {
     }
   }
   return statusTheme
-}
-
-export const prepareAuctionPlayersTable = (
-  playersList: AuctionPlayerEntity[],
-  headersList: CricHeaderRow[],
-): CricTableRow[] => {
-  const tempTableData: CricTableRow[] = []
-  playersList.forEach((playerEntity: AuctionPlayerEntity, playerIndex: number) => {
-    const playerData = playerEntity as never as KeyValueType
-    const rowData: CricTableCell[] = []
-    headersList.forEach((headerEntity: CricHeaderRow) => {
-      const cellKey = headerEntity.key
-      const cellType = headerEntity.type
-      const cellValue = getPlayerCellValue(playerData, cellKey, playerIndex)
-      const tableCell: CricTableCell = {
-        cellKey: cellKey,
-        cellType: cellType,
-        value: cellValue,
-        color:
-          playerData[cellKey] === SoldStatus.SOLD
-            ? COLORS.sold
-            : playerData[cellKey] === SoldStatus.UNSOLD
-              ? COLORS.unsold
-              : '',
-      }
-      rowData.push(tableCell)
-    })
-    tempTableData.push({
-      rowId: playerEntity.playerId,
-      dataList: rowData,
-    })
-  })
-  return tempTableData
-}
-
-const getPlayerCellValue = (playerData: KeyValueType, cellKey: string, playerIndex: number) => {
-  let cellValue
-  if (cellKey === 'sno') {
-    cellValue = playerIndex + 1
-  } else if (cellKey === 'soldStatus' && playerData[cellKey] === SoldStatus.NOT_AUCTIONED) {
-    cellValue = 'To be auctioned'
-  } else {
-    cellValue = playerData[cellKey]
-  }
-  return cellValue
 }
 
 export const groupListByProp = <T>(prop: string, list: T[]) => {
