@@ -12,6 +12,7 @@ export const AUTH = {
     txtSignup: 'Sign up',
     hasAccount: 'Already have an account ? ',
     error: "Couldn't create account, please try again",
+    verifyEmail: 'Verify Email',
   },
   EMAIL: {
     label: 'Email',

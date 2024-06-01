@@ -6,7 +6,7 @@ import useMobile from '@/hooks/useMobile'
 interface CricModalProps {
   open: boolean
   hideClose?: boolean
-  onClose: () => void
+  onClose?: () => void
   children: ReactNode
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FormEvent, useState, useRef, ChangeEvent, KeyboardEvent } from 'react'
+import React, { FormEvent, useState, ChangeEvent, KeyboardEvent } from 'react'
 import Box from '@mui/material/Box'
 import CricButton from '../ui/CricButton'
 import { AUTH } from '@/util/constants/constants'
@@ -23,7 +23,6 @@ type VerifyOtpFormProps = {
 export default function VerifyOtpForm(props: VerifyOtpFormProps) {
   const [otp, setOtp] = useState(['', '', '', ''])
   const [otpStatus, setOtpStatus] = useState<string>('')
-  const inputs = useRef<(HTMLInputElement | HTMLDivElement | null)[]>([])
   const [seconds, setSeconds] = useState<number>(0)
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(false)
 
@@ -137,7 +136,6 @@ export default function VerifyOtpForm(props: VerifyOtpFormProps) {
               key={index}
               id={`otp-${index}`}
               type='text'
-              ref={el => (inputs.current[index] = el)}
               inputProps={{ maxLength: 1, style: { textAlign: 'center' } }}
               onChange={e => handleChange(e, index)}
               onKeyDown={e => handleKeyDown(e, index)}

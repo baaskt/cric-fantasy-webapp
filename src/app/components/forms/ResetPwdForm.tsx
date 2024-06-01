@@ -70,10 +70,6 @@ export default function ResetPwdForm(props: ResetPwdFormProps) {
     }
   }
 
-  const handleClose = () => {
-    // setOpen(false)
-  }
-
   return (
     <>
       <div className='font-bold text-2xl mb-10'>{AUTH.RESET_PWD.label}</div>
@@ -117,7 +113,7 @@ export default function ResetPwdForm(props: ResetPwdFormProps) {
             btnTxt={resetPwdRequest.isMutating ? 'resetting...' : AUTH.RESET_PWD.reset}
           ></CricButton>
         </div>
-        <CricModal open={open} onClose={handleClose} hideClose={true}>
+        <CricModal open={open} hideClose={true}>
           <ResetPwdSuccess />
         </CricModal>
       </Box>
