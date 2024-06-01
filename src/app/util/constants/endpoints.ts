@@ -7,6 +7,11 @@ export const USERS = {
   SIGNUP_URL: 'users',
   MY_USER_URL: 'users/me',
   REFRESH_URL: 'users/refresh',
+  SEND_OTP_URL: 'users/sendOTP',
+  VERIFY_OTP_URL: 'users/verifyOTP',
+  RESEND_OTP_URL: 'users/resendOTP',
+  RESET_PWD_URL: 'users/resetpassword',
+  FORGOT_PWD_URL: 'users/forgotpassword',
 }
 
 export const TOURNAMENTS = {
@@ -21,13 +26,13 @@ export const TOURNAMENTS = {
 }
 
 export const MATCHES = {
-  GET_ALL: 'matchSchedule',
+  GET_ALL: 'matchSchedule?tourId=',
   GET_SCORECARD_URL: 'match/scorecard?matchId=',
   UPDATE_DOTS_URL: 'match/matchId/tournaments/tournamentId/updateDots',
 }
 
 export const TEAMS = {
-  GET_ALL_TEAMS: 'teams',
+  GET_ALL_TEAMS: 'teams?tournamentId=',
   GET_TEAM_POINTS: 'teams/getPointsTable?tournamentId=',
   CREATE_TEAM_URL: 'teams',
   TEAM_DETAIL_URL: 'teams/teamId',

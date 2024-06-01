@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { prepareTableData } from '@/util/tables/table'
 import { TableType } from '@/model/enum/table-type.enum'
 import { useTeam } from '@/providers/TeamProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -24,12 +25,14 @@ const headersList: CricHeaderRow[] = [
 ]
 
 function TeamList() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [teamList, setTeamList] = useState<TeamEntity[]>([])
   const { markActiveTeam } = useTeam()
   const router = useRouter()
 
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
+  const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_ALL_TEAMS}${tournamentId}` : '')
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import CricTab from '@/components/ui/CricTab'
 import { useMatch } from '@/providers/MatchProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Active' },
@@ -18,9 +19,12 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 export default function Matches() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const { matchList, setMatchesList, activeScheduleCategory, setActiveScheduleCategory } =
     useMatch()
-  const matchRequest = useRequest(MATCHES.GET_ALL)
+  const matchRequest = useRequest(tournamentId ? `${MATCHES.GET_ALL}${tournamentId}` : '')
+
   const [activeMatches, setActiveMatches] = useState<MatchEntity[]>([])
   const [completedMatches, setCompletedMatches] = useState<MatchEntity[]>([])
 
@@ -39,7 +43,7 @@ export default function Matches() {
     const tempActiveMatchList: MatchEntity[] = []
     const tempCompMatchList: MatchEntity[] = []
     matchList.forEach(match => {
-      if (match.state === 'Complete') {
+      if (match.state === 'Complete' || match.state === 'Abandon') {
         tempCompMatchList.unshift(match)
       } else {
         tempActiveMatchList.push(match)

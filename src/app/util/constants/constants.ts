@@ -1,4 +1,4 @@
-export const APP_NAME = 'CriKCC Fantasy'
+export const APP_NAME = 'Crik Fantasy'
 
 /* LOGIN / SIGNUP SCREENS */
 export const AUTH = {
@@ -12,6 +12,7 @@ export const AUTH = {
     txtSignup: 'Sign up',
     hasAccount: 'Already have an account ? ',
     error: "Couldn't create account, please try again",
+    verifyEmail: 'Verify Email',
   },
   EMAIL: {
     label: 'Email',
@@ -26,6 +27,24 @@ export const AUTH = {
     errorUpper: 'Password must contain at least one upper case letter',
     errorDigit: 'Password must contain at least one digit',
     errorSplChar: 'Password must contain at least one symbol',
+  },
+  FORGOT_PWD: {
+    label: 'Forgot Password ?',
+    verifyEmail: 'Verify Email',
+    error: 'User not available !',
+  },
+  RESET_PWD: {
+    label: 'Reset Password',
+    confirmPwd: 'Confirm Password',
+    reset: 'Reset',
+    error: 'Passwords do not match !',
+  },
+  VERIFY_OTP: {
+    label: 'Verify your email',
+    desc: 'Please enter the 4 digit code sent to ',
+    confirm: 'Confirm',
+    resendOtp: 'Resend Code',
+    error: 'Invalid Otp',
   },
   NAME: {
     label: 'Full Name',
@@ -126,6 +145,7 @@ export const MATCH = {
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },
+  FORGOT_PWD: { label: 'Forgot Password', path: '/forgotPwd', fullPath: '/forgotPwd' },
   SIGNUP: { label: 'Create an account', path: '/signup', fullPath: '/signup' },
   DASHBOARD: {
     label: 'Dashboard',

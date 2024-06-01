@@ -13,10 +13,10 @@ const tabOptions: OptionsEntity[] = [
   { id: 3, label: 'Star B', value: 'STAR-B' },
   { id: 4, label: 'Capped A', value: 'CAPPED-A' },
   { id: 5, label: 'Capped B', value: 'CAPPED-B' },
-  { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
-  { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
-  { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
-  { id: 9, label: 'Unsold', value: 'UNSOLD' },
+  // { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
+  // { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
+  // { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
+  // { id: 9, label: 'Unsold', value: 'UNSOLD' },
 ]
 
 function Auction() {

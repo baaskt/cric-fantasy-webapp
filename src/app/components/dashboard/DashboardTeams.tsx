@@ -84,7 +84,9 @@ function DashboardTeams() {
           <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
           <div className='text-xl'>Leaderboard</div>
         </div>
-        <div className='text-sm italic text-gray-500 md:text-lg'>{`( Last updated : ${convertUtcToLocal(teamList[0].pointsUpdatedAt)} )`}</div>
+        {teamList[0].pointsUpdatedAt && (
+          <div className='text-sm italic text-gray-500 md:text-lg'>{`( Last updated : ${convertUtcToLocal(teamList[0].pointsUpdatedAt)} )`}</div>
+        )}
       </div>
       <CricTable
         headerList={headersList}

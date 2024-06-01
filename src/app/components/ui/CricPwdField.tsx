@@ -10,18 +10,17 @@ import PwdChecklist from '../PwdChecklist'
 
 type CricPwdProps = ComponentProps<typeof TextField> & {
   validatePwd?: boolean
+  showPwd?: boolean
 }
 
-export default function CricPwdField({ validatePwd, ...props }: CricPwdProps) {
+export default function CricPwdField({ validatePwd, showPwd, ...props }: CricPwdProps) {
   const [pwd, setPwd] = useState<string>('')
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(showPwd ? showPwd : false)
   const [isPwdValid, setPwdValidity] = useState<boolean>(true)
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
 
