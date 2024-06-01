@@ -4,11 +4,12 @@ import type { Metadata, Viewport } from 'next'
 import { Lexend } from 'next/font/google'
 import '@/styles/globals.scss'
 import AppProvider from '@/providers/AppProvider'
+import { APP_NAME } from './util/constants/constants'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'CriKCC Fantasy',
+  title: APP_NAME,
   description: 'Cricket Fantasy Auction',
   icons: {
     icon: '/favicon.ico',

@@ -8,6 +8,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { TeamEntity } from '@/model/response/team.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useAuth } from '@/providers/AuthProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 import { TEAMS } from '@/util/constants/endpoints'
 import { useEffect, useState } from 'react'
 
@@ -19,6 +20,8 @@ const tabOptions: OptionsEntity[] = [
 ]
 
 export default function Players() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const { user } = useAuth()
   const [teamsList, setTeamsList] = useState<OptionsEntity[]>([])
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
@@ -30,7 +33,7 @@ export default function Players() {
     value: -1,
   }
 
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS)
+  const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_ALL_TEAMS}${tournamentId}` : '')
 
   useEffect(() => {
     if (teamRequest.data) {

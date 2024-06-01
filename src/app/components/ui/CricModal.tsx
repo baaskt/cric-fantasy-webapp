@@ -1,10 +1,12 @@
 import React, { FC, ReactNode } from 'react'
 import { Modal, Box, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import useMobile from '@/hooks/useMobile'
 
 interface CricModalProps {
   open: boolean
-  onClose: () => void
+  hideClose?: boolean
+  onClose?: () => void
   children: ReactNode
 }
 
@@ -17,7 +19,7 @@ const styles = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-    minWidth: 400,
+    m: 2,
   },
   closeIconWrapper: {
     position: 'absolute',
@@ -26,7 +28,9 @@ const styles = {
   },
 }
 
-const CricModal: FC<CricModalProps> = ({ open, onClose, children }) => {
+const CricModal: FC<CricModalProps> = ({ open, hideClose, onClose, children }) => {
+  const isMobileView = useMobile()
+
   return (
     <Modal
       open={open}
@@ -34,10 +38,12 @@ const CricModal: FC<CricModalProps> = ({ open, onClose, children }) => {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box sx={styles.modalStyle}>
-        <IconButton onClick={onClose} sx={styles.closeIconWrapper}>
-          <CloseIcon />
-        </IconButton>
+      <Box sx={{ ...styles.modalStyle, minWidth: isMobileView ? 320 : 400 }}>
+        {!hideClose && (
+          <IconButton onClick={onClose} sx={styles.closeIconWrapper}>
+            <CloseIcon />
+          </IconButton>
+        )}
         {children}
       </Box>
     </Modal>
