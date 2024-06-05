@@ -1,14 +1,30 @@
 'use client'
 
+import DailySpin from '@/components/spin/DailySpin'
 import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
+import useMobile from '@/hooks/useMobile'
+import { useAuth } from '@/providers/AuthProvider'
 import { PlayerProvider } from '@/providers/PlayerProvider'
 import { TeamProvider } from '@/providers/TeamProvider'
 import { TournamentProvider } from '@/providers/TournamentProvider'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showSidebar, setShowSidebar] = useState(false)
+  const [isSpinOpen, setSpinOpen] = useState(false)
+  const isMobileView = useMobile()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (user && isMobileView) {
+      setSpinOpen(user.canSpin)
+    }
+  }, [user, isMobileView])
+
+  const handleSpinEnd = () => {
+    setSpinOpen(false)
+  }
 
   return (
     <TournamentProvider>
@@ -20,6 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Header show={showSidebar} toggleMenu={setShowSidebar}></Header>
               {children}
             </div>
+            <DailySpin isSpinActive={isSpinOpen} onClose={handleSpinEnd} />
           </div>
         </PlayerProvider>
       </TeamProvider>

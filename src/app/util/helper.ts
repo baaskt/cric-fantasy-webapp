@@ -13,6 +13,8 @@ export const getUserObject = (user: User | undefined, userData: UserResponse): U
     fullName: userData.fullName,
     email: userData.email,
     roles: userData.roles,
+    tournament: userData.tournament,
+    canSpin: userData.canSpin,
   }
   return userObject
 }

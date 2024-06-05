@@ -29,8 +29,8 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   const { categories, playerReset } = props
   const { activeCategory, setAuctionCompleted, setActiveCategory, setLastAuctionplayer } =
     useAuction()
-  const { activeTournament, setSubTitle } = useTournament()
   const router = useRouter()
+  const { activeTournament, setSubTitle } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
   const LAST_AUCTIONED_PLAYER_URL = tournamentId
     ? PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', tournamentId)

@@ -5,6 +5,7 @@ export const COLORS = {
   cricPrimary: '#6d31ed',
   cricPrimaryLight: '#6d31ed7d',
   cricPrimaryUltraLight: '#f5f1feff',
+  cricSecondary: '#ff0d90',
   cricError: '#d32f2f',
   cricLabel: '#CACDD4F',
   updateHighlight: '#fff4247d',
