@@ -15,6 +15,7 @@ const styles = {
   modalStyle: {
     transform: 'translate(-50%, -50%)',
     boxShadow: 24,
+    outline: 0,
   },
   closeIconWrapper: {
     position: 'absolute',
@@ -81,6 +82,7 @@ function DailySpin(props: DailySpinProps) {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
       className='flex md:hidden'
+      disableAutoFocus={true}
     >
       <Box
         sx={{ ...styles.modalStyle }}
@@ -104,7 +106,7 @@ function DailySpin(props: DailySpinProps) {
                   points={playerData.totalPoints ? playerData.totalPoints.toString() : ''}
                 />
               </div>
-              <p className='absolute bottom-8 font-pacifico text-md text-white'>
+              <p className='absolute bottom-1 font-pacifico text-md text-white'>
                 New player in your squad
               </p>
               <Confetti />
