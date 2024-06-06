@@ -38,6 +38,8 @@ function SpinWizards(props: SpinWizardsProps) {
     setSpinData(data)
   }
 
+  if (!spinData?.length) return <></>
+
   return (
     <div className='flex gap-2 p-3 flex-col'>
       <div className='flex gap-2 items-center'>

@@ -41,7 +41,7 @@ function PlayingXiWindowAlert() {
     return () => clearInterval(interval)
   }, [])
 
-  if (!user || user.isPlayingXIUpdateOpen) return <></>
+  if (!user || !user.isPlayingXIUpdateOpen) return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
