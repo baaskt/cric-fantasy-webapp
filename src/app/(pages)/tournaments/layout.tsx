@@ -9,6 +9,7 @@ import { PlayerProvider } from '@/providers/PlayerProvider'
 import { TeamProvider } from '@/providers/TeamProvider'
 import { TournamentProvider } from '@/providers/TournamentProvider'
 import { useEffect, useState } from 'react'
+import PlayingXiWindowAlert from '@/components/PlayingXiWindowAlert'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showSidebar, setShowSidebar] = useState(false)
@@ -34,6 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Sidebar show={showSidebar} onClose={setShowSidebar}></Sidebar>
             <div className='flex flex-col w-full'>
               <Header show={showSidebar} toggleMenu={setShowSidebar}></Header>
+              <PlayingXiWindowAlert />
               {children}
             </div>
             <DailySpin isSpinActive={isSpinOpen} onClose={handleSpinEnd} />
