@@ -3,5 +3,7 @@ export class User {
   fullName: string = ''
   email: string = ''
   roles: string[] = []
-  isPlayingXISet: boolean = false
+  isPlayingXIUpdateOpen: boolean = false
+  canSpin: boolean = false
+  tournament: string = ''
 }

@@ -132,7 +132,7 @@ function CreateTeamForm(props: CreateTeamFormProps) {
       <Typography id='modal-modal-title' variant='h6' component='h2'>
         Create Team
       </Typography>
-      <form className='mt-5 flex flex-col gap-4 self-center'>
+      <form className='mt-5 flex flex-col gap-4 self-center' onSubmit={handleSubmit}>
         <CricTextField
           type='text'
           id='team-name'
@@ -160,7 +160,7 @@ function CreateTeamForm(props: CreateTeamFormProps) {
           <CricButton
             isFullWidth={true}
             isValid={createTeamRequest.error || !nameValidity?.valid ? false : true}
-            onClick={() => handleSubmit()}
+            onClick={() => {}}
             btnTxt={createTeamRequest.isMutating ? TEAM.CREATING : TEAM.CREATE}
           ></CricButton>
         </div>

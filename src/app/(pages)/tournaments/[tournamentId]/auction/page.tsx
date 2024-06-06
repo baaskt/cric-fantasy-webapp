@@ -42,7 +42,7 @@ function Auction() {
   }
 
   return (
-    <div className=''>
+    <div className='m-0 md:m-5'>
       <div className='flex justify-between flex-col-reverse md:flex-row gap-5 md:gap-0'>
         <div>
           <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
