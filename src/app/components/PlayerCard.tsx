@@ -10,13 +10,14 @@ type PlayerCardProps = {
   soldAmount?: number
   role?: string
   clubName?: string
+  teamName?: string
   isDark?: boolean
   points?: string
 }
 
 function PlayerCard(props: PlayerCardProps) {
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_player.jpg'
-  const { imageUrl, name, role, soldAmount, clubName, points, isDark } = props
+  const { imageUrl, name, role, soldAmount, clubName, points, teamName, isDark } = props
   const playerUrl = imageUrl || ALTERNATE_IMAGE_SRC
 
   return (
@@ -31,18 +32,11 @@ function PlayerCard(props: PlayerCardProps) {
       />
       <div
         className='p-2 flex flex-col items-center shadow-lg w-full'
-        style={{ backgroundColor: isDark ? COLORS.cricSecondary : COLORS.cricPrimary }}
+        style={{ backgroundColor: isDark ? COLORS.cricSecondary : '' }}
       >
         <div className={`text-md text-center font-medium ${isDark ? 'text-white' : 'text-black'}`}>
           {name}
         </div>
-        {points && (
-          <div
-            className={`text-sm text-center font-normal ${isDark ? 'text-white' : 'text-slate-500'}`}
-          >
-            {points} points
-          </div>
-        )}
         {role && (
           <div
             className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'}`}
@@ -50,9 +44,16 @@ function PlayerCard(props: PlayerCardProps) {
             {role}
           </div>
         )}
+        {teamName && (
+          <div
+            className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'}`}
+          >
+            {teamName}
+          </div>
+        )}
         {clubName && (
           <div
-            className={`text-sm pt-2 text-center font-normal ${isDark ? 'text-black' : 'text-slate-700'}`}
+            className={`text-sm pt-2 text-center font-normal ${isDark ? 'text-white' : 'text-slate-700'}`}
           >
             {clubName}
           </div>
@@ -62,6 +63,13 @@ function PlayerCard(props: PlayerCardProps) {
             className={`italic text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-600'}`}
           >
             {currencyToString(soldAmount ? soldAmount : 0)}
+          </div>
+        )}
+        {points && (
+          <div
+            className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'}`}
+          >
+            {points} points
           </div>
         )}
       </div>

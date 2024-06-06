@@ -1,6 +1,6 @@
 import { useAuth } from '@/providers/AuthProvider'
 import React, { useEffect, useState } from 'react'
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
+
 function PlayingXiWindowAlert() {
   const { user } = useAuth()
   const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 })
@@ -45,7 +45,7 @@ function PlayingXiWindowAlert() {
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
-      <NotificationsActiveIcon sx={{ fontSize: 36 }} />
+      {/* <NotificationsActiveIcon sx={{ fontSize: 36 }} /> */}
       <div className='flex flex-col items-center justify-center'>
         <div className='pr-1'>Playing XI window closes in</div>
         <div className='font-bold text-lg'>
