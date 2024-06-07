@@ -15,6 +15,7 @@ export const getUserObject = (user: User | undefined, userData: UserResponse): U
     roles: userData.roles,
     tournament: userData.tournament,
     canSpin: userData.canSpin,
+    isPlayingXIUpdateOpen: userData.isPlayingXIUpdateOpen,
   }
   return userObject
 }

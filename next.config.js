@@ -37,6 +37,11 @@ const nextConfig = {
         hostname: 'thefederal.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.icc-cricket.com',
+        pathname: '**',
+      },
     ],
   },
 }

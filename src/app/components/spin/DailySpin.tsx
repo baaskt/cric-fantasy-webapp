@@ -41,7 +41,7 @@ function DailySpin(props: DailySpinProps) {
 
   const tournamentId = user?.tournament || ''
   const SPIN_PLAYER_URL = tournamentId
-    ? PLAYERS.SPIN_RANDOM_PLAYER.replace('tournamentId', 'c8e71937-a155-4794-95da-c22bab8d6a90')
+    ? PLAYERS.SPIN_RANDOM_PLAYER.replace('tournamentId', tournamentId)
     : ''
   const spinPlayerRequest = useRequest(isSpinning ? SPIN_PLAYER_URL : '')
 
