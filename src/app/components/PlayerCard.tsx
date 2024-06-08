@@ -34,7 +34,9 @@ function PlayerCard(props: PlayerCardProps) {
         className='p-2 flex flex-col items-center shadow-lg w-full'
         style={{ backgroundColor: isDark ? COLORS.cricSecondary : '' }}
       >
-        <div className={`text-md text-center font-medium ${isDark ? 'text-white' : 'text-black'}`}>
+        <div
+          className={`text-md text-center font-medium truncate max-w-40 ${isDark ? 'text-white' : 'text-black'}`}
+        >
           {name}
         </div>
         {role && (
@@ -46,14 +48,14 @@ function PlayerCard(props: PlayerCardProps) {
         )}
         {teamName && (
           <div
-            className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'}`}
+            className={`text-sm text-center font-normal truncate max-w-40 ${isDark ? 'text-black' : 'text-slate-500'}`}
           >
             {teamName}
           </div>
         )}
         {clubName && (
           <div
-            className={`text-sm pt-2 text-center font-normal ${isDark ? 'text-white' : 'text-slate-700'}`}
+            className={`text-sm pt-2 text-center font-normal truncate max-w-40 ${isDark ? 'text-white' : 'text-slate-700'}`}
           >
             {clubName}
           </div>
