@@ -6,22 +6,34 @@ import React from 'react'
 type PlayerCardProps = {
   name: string
   imageUrl: string
-  showPrice?: boolean
   soldAmount?: number
   role?: string
   clubName?: string
   teamName?: string
-  isDark?: boolean
   points?: string
+  isDark?: boolean
+  showPrice?: boolean
+  showPoints?: boolean
 }
 
 function PlayerCard(props: PlayerCardProps) {
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_player.jpg'
-  const { imageUrl, name, role, soldAmount, clubName, points, teamName, isDark } = props
+  const {
+    imageUrl,
+    name,
+    role,
+    soldAmount,
+    clubName,
+    points,
+    teamName,
+    isDark,
+    showPrice,
+    showPoints,
+  } = props
   const playerUrl = imageUrl || ALTERNATE_IMAGE_SRC
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center w-1/2 md:w-auto'>
       <Image
         src={playerUrl}
         alt='player profile'
@@ -60,20 +72,16 @@ function PlayerCard(props: PlayerCardProps) {
             {clubName}
           </div>
         )}
-        {props.showPrice && (
-          <div
-            className={`italic text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-600'}`}
-          >
-            {currencyToString(soldAmount ? soldAmount : 0)}
-          </div>
-        )}
-        {points && (
-          <div
-            className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'}`}
-          >
-            {points} points
-          </div>
-        )}
+        <div
+          className={`italic text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-600'} ${showPrice ? 'min-h-6' : ''}`}
+        >
+          {showPrice && soldAmount ? currencyToString(soldAmount ? soldAmount : 0) : ''}
+        </div>
+        <div
+          className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'} ${showPoints ? 'min-h-6' : ''}`}
+        >
+          {showPoints && points ? `${points} points` : ''}
+        </div>
       </div>
     </div>
   )
