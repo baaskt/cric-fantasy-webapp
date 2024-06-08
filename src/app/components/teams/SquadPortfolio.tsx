@@ -19,7 +19,7 @@ function SquadPortfolio(props: SquadPortfolioProps) {
               {role} ({groupedSquad.get(role)?.length})
             </div>
           )}
-          <div className='flex gap-5 flex-wrap'>
+          <div className='flex flex-wrap md:gap-2'>
             {groupedSquad
               .get(role)
               ?.map(player => (

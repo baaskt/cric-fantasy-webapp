@@ -20,7 +20,7 @@ function SpinWizards(props: SpinWizardsProps) {
   }, [teamList])
 
   const prepareSpinData = () => {
-    const data: SpinPlayersListEntity[] = []
+    let data: SpinPlayersListEntity[] = []
     teamList.forEach(teamEntity => {
       const spinPlayer = teamEntity.spinPlayer?.length ? teamEntity.spinPlayer[0] : null
       if (spinPlayer) {
@@ -35,18 +35,19 @@ function SpinWizards(props: SpinWizardsProps) {
         data.push(tempSpinData)
       }
     })
+    data = data.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0))
     setSpinData(data)
   }
 
   if (!spinData?.length) return <></>
 
   return (
-    <div className='flex gap-2 p-3 flex-col'>
-      <div className='flex gap-2 items-center'>
+    <div className='flex flex-col'>
+      <div className='flex gap-1 items-center'>
         <CardGiftcardIcon style={{ color: COLORS.cricPrimary }} />
-        <div className='text-xl'>Spin Wizards</div>
+        <div className='text-xl p-3'>Spin Wizards</div>
       </div>
-      <div className='flex gap-5 flex-wrap'>
+      <div className='flex flex-wrap md:gap-2'>
         {spinData?.map(player => (
           <PlayerCard
             key={player.playerId}
@@ -55,6 +56,7 @@ function SpinWizards(props: SpinWizardsProps) {
             clubName={player.clubName}
             points={player.totalPoints ? player.totalPoints.toString() : ''}
             teamName={player.teamName}
+            showPoints={true}
           ></PlayerCard>
         ))}
       </div>
