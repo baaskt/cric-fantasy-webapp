@@ -9,20 +9,8 @@ function PlayingXiWindowAlert() {
     const calculateTimeRemaining = () => {
       const now = new Date()
 
-      // Get the current time in UTC
-      const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 6000)
-
-      // Get the current time in IST (UTC + 5:30)
-      const istNow = new Date(utcNow.getTime() + (5 * 60 + 30) * 60000)
-
-      // Get 6 PM IST today
-      const targetTime = new Date(istNow)
-      targetTime.setHours(18, 0, 0, 0) // 6 PM in IST
-
-      // If it's already past 6 PM IST, set the target to 6 PM tomorrow
-      if (istNow.getHours() >= 18) {
-        targetTime.setDate(targetTime.getDate() + 1)
-      }
+      const targetTime = new Date(now)
+      targetTime.setUTCHours(12, 30, 0, 0) // 6 PM in IST
 
       // Calculate the difference in milliseconds
       const timeDifference = targetTime.getTime() - now.getTime()
