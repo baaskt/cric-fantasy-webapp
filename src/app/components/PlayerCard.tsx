@@ -14,6 +14,7 @@ type PlayerCardProps = {
   isDark?: boolean
   showPrice?: boolean
   showPoints?: boolean
+  isStandalone?: boolean
 }
 
 function PlayerCard(props: PlayerCardProps) {
@@ -29,11 +30,12 @@ function PlayerCard(props: PlayerCardProps) {
     isDark,
     showPrice,
     showPoints,
+    isStandalone,
   } = props
   const playerUrl = imageUrl || ALTERNATE_IMAGE_SRC
 
   return (
-    <div className='flex flex-col items-center w-1/2 md:w-auto'>
+    <div className={`flex flex-col items-center md:w-auto ${!isStandalone ? 'w-1/2' : ''}`}>
       <Image
         src={playerUrl}
         alt='player profile'
@@ -75,7 +77,11 @@ function PlayerCard(props: PlayerCardProps) {
         <div
           className={`italic text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-600'} ${showPrice ? 'min-h-6' : ''}`}
         >
-          {showPrice && soldAmount ? currencyToString(soldAmount ? soldAmount : 0) : ''}
+          {showPrice
+            ? soldAmount
+              ? currencyToString(soldAmount ? soldAmount : 0)
+              : 'Lucky Spin'
+            : ''}
         </div>
         <div
           className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'} ${showPoints ? 'min-h-6' : ''}`}

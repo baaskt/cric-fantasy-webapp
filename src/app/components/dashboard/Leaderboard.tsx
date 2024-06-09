@@ -55,8 +55,8 @@ function Leaderboard(props: LeaderboardProps) {
   }
 
   return (
-    <>
-      <div className='flex gap-2 p-3 flex-col md:flex-row'>
+    <div className='mt-16'>
+      <div className='flex gap-2 p-2 flex-col md:flex-row'>
         <div className='flex gap-2 items-center'>
           <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
           <div className='text-xl'>Leaderboard</div>
@@ -74,7 +74,7 @@ function Leaderboard(props: LeaderboardProps) {
         onRowSelect={navigateToTeamDetail}
         hideSearch={true}
       />
-    </>
+    </div>
   )
 }
 

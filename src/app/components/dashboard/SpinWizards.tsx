@@ -1,6 +1,6 @@
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
 import React, { useEffect, useState } from 'react'
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard'
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import { COLORS } from '@/util/colors'
 import PlayerCard from '../PlayerCard'
 import { SpinPlayersListEntity } from '@/model/entities/spin-players.interface'
@@ -42,10 +42,10 @@ function SpinWizards(props: SpinWizardsProps) {
   if (!spinData?.length) return <></>
 
   return (
-    <div className='flex flex-col'>
-      <div className='flex gap-1 items-center'>
-        <CardGiftcardIcon style={{ color: COLORS.cricPrimary }} />
-        <div className='text-xl p-3'>Spin Wizards</div>
+    <div className='flex flex-col mt-4'>
+      <div className='flex gap-1 p-2 items-center'>
+        <AutoFixHighIcon style={{ color: COLORS.cricPrimary }} />
+        <div className='text-xl p-1'>Spin Wizards</div>
       </div>
       <div className='flex flex-wrap md:gap-2'>
         {spinData?.map(player => (
