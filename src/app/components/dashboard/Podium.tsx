@@ -1,6 +1,4 @@
-// components/Podium.tsx
-
-import React from 'react'
+import React, { useMemo } from 'react'
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech'
 import { COLORS } from '@/util/colors'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
@@ -11,6 +9,13 @@ type PodiumProps = {
 
 function Podium(props: PodiumProps) {
   const { teamList } = props
+
+  const sortStalwarts = () => {
+    return teamList.sort((a, b) => b.points - a.points)
+  }
+
+  const sortedTeams = useMemo(() => sortStalwarts(), [teamList])
+
   const POS_1 = 0,
     POS_2 = 1,
     POS_3 = 2
@@ -26,22 +31,28 @@ function Podium(props: PodiumProps) {
           <div className='bg-indigo-400 h-40 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_2 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_2].teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-400'>{teamList[POS_2].points}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_2].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-400'>
+            {sortedTeams[POS_2].points}
+          </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-700 h-48 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_1 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_1].teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-700'>{teamList[POS_1].points}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_1].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-700'>
+            {sortedTeams[POS_1].points}
+          </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-500 h-32 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_3 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_3].teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-500'>{teamList[POS_3].points}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_3].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-500'>
+            {sortedTeams[POS_3].points}
+          </p>
         </div>
       </div>
     </div>
