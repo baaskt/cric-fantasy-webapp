@@ -1,34 +1,47 @@
 // components/Podium.tsx
 
 import React from 'react'
-import LeaderboardIcon from '@mui/icons-material/Leaderboard'
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech'
 import { COLORS } from '@/util/colors'
+import { TeamPointsEntity } from '@/model/response/team-points.interface'
 
-const Podium: React.FC = () => {
+type PodiumProps = {
+  teamList: TeamPointsEntity[]
+}
+
+function Podium(props: PodiumProps) {
+  const { teamList } = props
+  const POS_1 = 0,
+    POS_2 = 1,
+    POS_3 = 2
+
   return (
-    <div className='flex gap-2 p-3 flex-col h-64'>
-      <div className='flex gap-2 pl-5 items-center'>
-        <LeaderboardIcon style={{ color: COLORS.cricPrimary }} />
-        <div className='text-xl'>Leaderboard</div>
+    <div className='flex gap-2 flex-col h-64'>
+      <div className='flex gap-2 p-2 items-center'>
+        <MilitaryTechIcon style={{ color: COLORS.cricPrimary }} />
+        <div className='text-xl'>Stalwarts</div>
       </div>
       <div className='flex justify-center items-end space-x-4'>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-400 h-40 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            2
+            {POS_2 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>Mullaperiyar CC</p>
+          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_2].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-400'>{teamList[POS_2].points}</p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-700 h-48 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            1
+            {POS_1 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>SSIYAN</p>
+          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_1].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-700'>{teamList[POS_1].points}</p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-500 h-32 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            3
+            {POS_3 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>Varuthapadatha Valibar Sangam</p>
+          <p className='mt-2 truncate w-24 text-center'>{teamList[POS_3].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center text-indigo-500'>{teamList[POS_3].points}</p>
         </div>
       </div>
     </div>

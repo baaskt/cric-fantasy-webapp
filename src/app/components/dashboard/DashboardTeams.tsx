@@ -10,6 +10,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
 import Leaderboard from './Leaderboard'
 import SpinWizards from './SpinWizards'
+import Podium from './Podium'
 
 function DashboardTeams() {
   const { activeTournament } = useTournament()
@@ -39,6 +40,7 @@ function DashboardTeams() {
 
   return (
     <div className='p-5 pt-0'>
+      <Podium teamList={teamList} />
       <Leaderboard teamList={teamList} />
       <SpinWizards teamList={teamList} />
     </div>

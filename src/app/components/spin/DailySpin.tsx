@@ -104,6 +104,7 @@ function DailySpin(props: DailySpinProps) {
                   imageUrl={playerData.imageUrl}
                   clubName={playerData.clubName}
                   points={playerData.totalPoints ? playerData.totalPoints.toString() : ''}
+                  isStandalone={true}
                 />
               </div>
               <p className='absolute bottom-1 font-pacifico text-md text-white'>
