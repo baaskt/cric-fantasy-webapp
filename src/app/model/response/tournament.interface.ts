@@ -11,4 +11,5 @@ export interface TournamentEntity {
   isHost: boolean
   isParticipant: boolean
   playingXI: boolean
+  funStat?: string
 }
