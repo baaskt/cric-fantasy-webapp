@@ -22,14 +22,15 @@ import { useTournament } from '@/providers/TournamentProvider'
 
 type LastAuctionPlayerCardProps = {
   categories: OptionsEntity[]
+  playerReset: boolean
 }
 
 function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
-  const { categories } = props
+  const { categories, playerReset } = props
   const { activeCategory, setAuctionCompleted, setActiveCategory, setLastAuctionplayer } =
     useAuction()
-  const { activeTournament, setSubTitle } = useTournament()
   const router = useRouter()
+  const { activeTournament, setSubTitle } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
   const LAST_AUCTIONED_PLAYER_URL = tournamentId
     ? PLAYERS.LAST_AUCTIONED_URL.replace('tournamentId', tournamentId)
@@ -50,6 +51,16 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
   useEffect(() => {
     setDefaultCategory()
   }, [])
+
+  useEffect(() => {
+    if (playerReset) {
+      void resetLastPlayer()
+    }
+  }, [playerReset])
+
+  const resetLastPlayer = async () => {
+    await lastauctionPlayerRequest.mutate()
+  }
 
   useEffect(() => {
     if (lastauctionPlayerResponse?.result) {
@@ -91,7 +102,13 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
       <div className='p-5 text-lg font-bold'>Previous Player in Auction</div>
       <div className='flex flex-col items-center gap-10'>
         <div className='flex items-center justify-between'>
-          <PlayerCard playerData={playerData} />
+          <PlayerCard
+            name={playerData.name}
+            imageUrl={playerData.imageUrl}
+            soldAmount={playerData.soldAmount}
+            role={playerData.role}
+            clubName={playerData.clubName}
+          />
           <Image
             src={
               playerData.soldStatus === SoldStatus.SOLD.toString()

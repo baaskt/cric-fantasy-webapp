@@ -8,10 +8,17 @@ import { NO_CACHE, TEAM } from '@/util/constants/constants'
 import BiddingTeamCard from './BiddingTeamCard'
 import { useAuction } from '@/providers/AuctionProvider'
 import { getBiddingValue } from '@/util/bidding'
+import { useTournament } from '@/providers/TournamentProvider'
 
 function BiddingTeams() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const { auctionPlayer, highestBidder, secondHighestBidder, updateBiddingList } = useAuction()
-  const teamRequest = useRequest(TEAMS.GET_ALL_TEAMS, NO_CACHE)
+  const teamRequest = useRequest(
+    tournamentId ? `${TEAMS.GET_ALL_TEAMS}${tournamentId}` : '',
+    NO_CACHE,
+  )
+
   const teamResponse: CricResponse<TeamEntity[]> = teamRequest.data as CricResponse<TeamEntity[]>
 
   if (teamRequest.isLoading) {

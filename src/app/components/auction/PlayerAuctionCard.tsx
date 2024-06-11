@@ -91,7 +91,13 @@ function PlayerAuctionCard() {
   return (
     <>
       <div className='flex items-center flex-col justify-between'>
-        <PlayerCard playerData={playerEntity}></PlayerCard>
+        <PlayerCard
+          name={playerEntity.name}
+          imageUrl={playerEntity.imageUrl}
+          soldAmount={playerEntity.soldAmount}
+          role={playerEntity.role}
+          clubName={playerEntity.clubName}
+        ></PlayerCard>
         <div className='mt-5 flex flex-col items-center'>
           <div className='text-2xl'>{playerEntity.basePrice}</div>
           <div>( {currencyToString(playerEntity.basePrice)} )</div>

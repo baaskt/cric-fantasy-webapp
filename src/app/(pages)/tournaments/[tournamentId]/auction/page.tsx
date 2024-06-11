@@ -13,16 +13,18 @@ const tabOptions: OptionsEntity[] = [
   { id: 3, label: 'Star B', value: 'STAR-B' },
   { id: 4, label: 'Capped A', value: 'CAPPED-A' },
   { id: 5, label: 'Capped B', value: 'CAPPED-B' },
-  { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
-  { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
-  { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
+  // { id: 6, label: 'Uncapped A', value: 'UNCAPPED-A' },
+  // { id: 7, label: 'Uncapped B', value: 'UNCAPPED-B' },
+  // { id: 8, label: 'Youngsters', value: 'YOUNGSTERS' },
+  { id: 6, label: 'Unsold', value: 'UNSOLD' },
 ]
 
 function Auction() {
-  const { activeCategory, lastAuctionPlayer, updateBiddingList } = useAuction()
+  const { activeCategory, updateBiddingList } = useAuction()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(
     activeCategory ? activeCategory : tabOptions[0],
   )
+  const [playerReset, setPlayerReset] = useState<boolean>(false)
 
   useEffect(() => {
     updateBiddingList()
@@ -30,6 +32,7 @@ function Auction() {
 
   useEffect(() => {
     if (activeCategory) {
+      setPlayerReset(false)
       setSelectedTab(activeCategory)
     }
   }, [activeCategory])
@@ -39,16 +42,23 @@ function Auction() {
   }
 
   return (
-    <div className='m-5'>
-      <div className='flex flex-row justify-between'>
-        <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
-      </div>
-      <div className='flex justify-between'>
-        <div className={`${lastAuctionPlayer ? 'w-[70%]' : 'w-full'}`}>
-          <AuctionPlayersList selectedTab={selectedTab} categories={tabOptions} />
+    <div className='m-0 md:m-5'>
+      <div className='flex justify-between flex-col-reverse md:flex-row gap-5 md:gap-0'>
+        <div>
+          <CricTab optionList={tabOptions} selectedTab={selectedTab} onChange={handleChange} />
+          <div>
+            <AuctionPlayersList
+              selectedTab={selectedTab}
+              categories={tabOptions}
+              onPlayerReset={() => setPlayerReset(true)}
+            />
+          </div>
         </div>
-        <div className={`${lastAuctionPlayer ? 'w-[30%]' : 'w-0'}`}>
-          <LastAuctionPlayerCard categories={tabOptions}></LastAuctionPlayerCard>
+        <div className='flex items-start'>
+          <LastAuctionPlayerCard
+            categories={tabOptions}
+            playerReset={playerReset}
+          ></LastAuctionPlayerCard>
         </div>
       </div>
     </div>

@@ -1,12 +1,12 @@
 import Brand from '@/components/Brand'
 import { COLORS } from '@/util/colors'
-import { AUTH } from '@/util/constants/constants'
+import { APP_NAME, AUTH } from '@/util/constants/constants'
 import { Metadata } from 'next'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: 'CriKCC Fantasy Authentication',
-  description: 'Login or Signup for CriKCC Fantasy',
+  title: APP_NAME,
+  description: APP_NAME,
 }
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {

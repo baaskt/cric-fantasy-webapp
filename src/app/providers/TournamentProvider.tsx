@@ -7,8 +7,8 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-const ListContext = createContext<TournamentContextType>({} as TournamentContextType)
-const { Provider } = ListContext
+const TournamentContext = createContext<TournamentContextType>({} as TournamentContextType)
+const { Provider } = TournamentContext
 
 export const TOURNAMENT_ID = 'tournamentId'
 
@@ -64,4 +64,4 @@ export const TournamentProvider = ({ children }: { children: React.ReactNode }) 
   return <Provider value={value}>{children}</Provider>
 }
 
-export const useTournament = () => useContext(ListContext)
+export const useTournament = () => useContext(TournamentContext)

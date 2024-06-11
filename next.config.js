@@ -1,7 +1,48 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['i.cricketcb.com'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'i.cricketcb.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bcciplayerimages.s3.ap-south-1.amazonaws.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'gallery.chennaisuperkings.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.bdcrictime.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'makeitmatta.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '91-cdn.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'thefederal.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.icc-cricket.com',
+        pathname: '**',
+      },
+    ],
   },
 }
 

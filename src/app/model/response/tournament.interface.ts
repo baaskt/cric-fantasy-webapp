@@ -10,4 +10,5 @@ export interface TournamentEntity {
   imgUrl?: string
   isHost: boolean
   isParticipant: boolean
+  playingXI: boolean
 }

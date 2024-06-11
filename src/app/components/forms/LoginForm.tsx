@@ -16,11 +16,13 @@ import { LoginRequest } from '@/model/request/login-request.type'
 import { useRouter } from 'next/navigation'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { LoginResponse } from '@/model/response/login.interface'
+import CricToast from '../ui/CricToast'
 
 export default function LoginForm() {
   const router = useRouter()
   const [email, setEmail] = useState<string>('')
   const [pwd, setPwd] = useState<string>('')
+  const [isLoginSuccess, setLoginSuccess] = useState<boolean>(false)
   const { login } = useAuth()
 
   const loginRequest = useMutateRequest(USERS.LOGIN_URL, HttpMethod.POST)
@@ -41,9 +43,10 @@ export default function LoginForm() {
   }
 
   const loginUser = async () => {
+    setLoginSuccess(false)
     if (validateEmail(email) && pwd) {
       const payload: LoginRequest = {
-        email: email,
+        email: email.toLowerCase(),
         password: pwd,
       }
       try {
@@ -52,8 +55,10 @@ export default function LoginForm() {
         )) as CricResponse<LoginResponse>
         const authCred: LoginResponse | null = response?.result ? response.result : null
         if (authCred) login(email, authCred)
+        setLoginSuccess(true)
       } catch (e) {
         console.log(e)
+        setLoginSuccess(false)
       } finally {
         router.push('/tournaments')
       }
@@ -97,6 +102,11 @@ export default function LoginForm() {
           btnTxt={loginRequest.isMutating ? 'logging in...' : AUTH.SIGN_IN.txtSignin}
         ></CricButton>
       </div>
+      <CricToast
+        open={isLoginSuccess}
+        message='Login successfull. Redirecting...'
+        onClose={setLoginSuccess}
+      />
     </Box>
   )
 }

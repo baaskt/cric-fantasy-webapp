@@ -1,6 +1,6 @@
 'use client'
 
-import TeamList from '@/components/TeamList'
+import TeamList from '@/components/teams/TeamList'
 import CreateTeamForm from '@/components/forms/CreateTeamForm'
 import CricButton from '@/components/ui/CricButton'
 import CricModal from '@/components/ui/CricModal'
@@ -29,9 +29,9 @@ export default function Teams() {
   }
 
   return (
-    <div className='m-5'>
+    <div className='p-5'>
       <div className='flex justify-between items-center flex-col gap-5 md:flex-row'>
-        <div style={{ color: COLORS.darkGray }} className='text-sm italic'>
+        <div style={{ color: COLORS.darkGray }} className='text-sm italic p-5'>
           Teams are sorted based on the total points in descending order
         </div>
         {activeTournament?.isHost && (

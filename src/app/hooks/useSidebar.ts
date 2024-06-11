@@ -1,8 +1,8 @@
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
-import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded'
+import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
-// import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
+import SportsHandballIcon from '@mui/icons-material/SportsHandball'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import HomeIcon from '@mui/icons-material/Home'
 import { useTournament } from '@/providers/TournamentProvider'
@@ -20,7 +20,7 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     fullPath: TITLES.DASHBOARD.fullPath,
   },
   {
-    icon: FormatListBulletedRoundedIcon,
+    icon: SportsCricketIcon,
     title: TITLES.MATCHES.label,
     path: TITLES.MATCHES.path,
     fullPath: TITLES.MATCHES.fullPath,
@@ -45,6 +45,30 @@ const homeConfig: SideBarMenuEntity[] = [
     title: TITLES.HOME.label,
     path: TITLES.HOME.path,
     fullPath: TITLES.HOME.fullPath,
+  },
+]
+
+const detailConfig: SideBarMenuEntity[] = [
+  {
+    icon: WorkspacesRoundedIcon,
+    title: TITLES.TEAM_DETAIL.label,
+    path: TITLES.TEAM_DETAIL.path,
+    fullPath: TITLES.TEAM_DETAIL.fullPath,
+    hidden: true,
+  },
+  {
+    icon: SportsCricketIcon,
+    title: TITLES.MATCH_DETAIL.label,
+    path: TITLES.MATCH_DETAIL.path,
+    fullPath: TITLES.MATCH_DETAIL.fullPath,
+    hidden: true,
+  },
+  {
+    icon: SportsHandballIcon,
+    title: TITLES.PLAYER_DETAIL.label,
+    path: TITLES.PLAYER_DETAIL.path,
+    fullPath: TITLES.PLAYER_DETAIL.fullPath,
+    hidden: true,
   },
 ]
 
@@ -86,8 +110,8 @@ const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideB
 
   const sidebarConfig = activeTournament
     ? isAuctionProgress
-      ? [...homeConfig, ...tournamentConfig, ...auctionConfig]
-      : [...homeConfig, ...tournamentConfig]
+      ? [...homeConfig, ...tournamentConfig, ...detailConfig, ...auctionConfig]
+      : [...homeConfig, ...tournamentConfig, ...detailConfig]
     : homeConfig
   return sidebarConfig
 }

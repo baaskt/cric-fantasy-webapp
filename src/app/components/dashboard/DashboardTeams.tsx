@@ -1,0 +1,50 @@
+'use client'
+
+import { useRequest } from '@/hooks/useRequest'
+import { CricResponse } from '@/model/types/cric-response.type'
+import { TEAMS } from '@/util/constants/endpoints'
+import React, { useEffect, useState } from 'react'
+import Loading from '../Loading'
+import { DASHBOARD } from '@/util/constants/constants'
+import { useTournament } from '@/providers/TournamentProvider'
+import { TeamPointsEntity } from '@/model/response/team-points.interface'
+import Leaderboard from './Leaderboard'
+import SpinWizards from './SpinWizards'
+import Podium from './Podium'
+
+function DashboardTeams() {
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
+  const [teamList, setTeamList] = useState<TeamPointsEntity[]>([])
+
+  const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_TEAM_POINTS}${tournamentId}` : '')
+
+  useEffect(() => {
+    if (teamRequest.data) {
+      const teamResponse: CricResponse<TeamPointsEntity[]> = teamRequest.data as CricResponse<
+        TeamPointsEntity[]
+      >
+      if (teamResponse.result) {
+        setTeamList(teamResponse.result)
+      }
+    }
+  }, [teamRequest.data])
+
+  if (teamRequest.isValidating) {
+    return <Loading txt={DASHBOARD.LOADING_TXT}></Loading>
+  }
+
+  if (!teamRequest.isValidating && !teamList.length) {
+    return <Loading txt={'Fetching Stats...'}></Loading>
+  }
+
+  return (
+    <div className='p-5 pt-0'>
+      <Podium teamList={teamList} />
+      <Leaderboard teamList={teamList} />
+      <SpinWizards teamList={teamList} />
+    </div>
+  )
+}
+
+export default DashboardTeams

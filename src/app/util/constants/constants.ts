@@ -1,4 +1,4 @@
-export const APP_NAME = 'CriKCC Fantasy'
+export const APP_NAME = 'Crik Fantasy'
 
 /* LOGIN / SIGNUP SCREENS */
 export const AUTH = {
@@ -12,6 +12,7 @@ export const AUTH = {
     txtSignup: 'Sign up',
     hasAccount: 'Already have an account ? ',
     error: "Couldn't create account, please try again",
+    verifyEmail: 'Verify Email',
   },
   EMAIL: {
     label: 'Email',
@@ -27,6 +28,24 @@ export const AUTH = {
     errorDigit: 'Password must contain at least one digit',
     errorSplChar: 'Password must contain at least one symbol',
   },
+  FORGOT_PWD: {
+    label: 'Forgot Password ?',
+    verifyEmail: 'Verify Email',
+    error: 'User not available !',
+  },
+  RESET_PWD: {
+    label: 'Reset Password',
+    confirmPwd: 'Confirm Password',
+    reset: 'Reset',
+    error: 'Passwords do not match !',
+  },
+  VERIFY_OTP: {
+    label: 'Verify your email',
+    desc: 'Please enter the 4 digit code sent to ',
+    confirm: 'Confirm',
+    resendOtp: 'Resend Code',
+    error: 'Invalid Otp',
+  },
   NAME: {
     label: 'Full Name',
     placeholder: 'Enter your full name',
@@ -41,7 +60,7 @@ export const TOURNAMENT = {
   CREATING: 'Creating...',
   LOADING_TXT: 'Fetching Tournament Details ...',
   NO_DATA_TITLE: 'No tournaments found',
-  NO_DATA_SUB: 'Create a tournament by using the Create Tournament',
+  NO_DATA_SUB: 'Join a tournament from All Tournaments',
   CREATE_FORM: {
     NAME: {
       label: 'Tournament Name',
@@ -94,6 +113,10 @@ export const PLAYER = {
   LOADING_TXT: 'Fetching Player Details ...',
 }
 
+export const DASHBOARD = {
+  LOADING_TXT: 'Fetching Team Details ...',
+}
+
 export const TEAM = {
   CREATE: 'Create Team',
   CREATING: 'Creating...',
@@ -114,9 +137,15 @@ export const TEAM = {
   },
 }
 
+export const MATCH = {
+  CREATE: 'Create Match',
+  LOADING_TXT: 'Fetching Match Details ...',
+}
+
 /* SCREEN TITLES */
 export const TITLES = {
   SIGNIN: { label: 'Sign In', path: '/login', fullPath: '/login' },
+  FORGOT_PWD: { label: 'Forgot Password', path: '/forgotPwd', fullPath: '/forgotPwd' },
   SIGNUP: { label: 'Create an account', path: '/signup', fullPath: '/signup' },
   DASHBOARD: {
     label: 'Dashboard',
@@ -128,15 +157,30 @@ export const TITLES = {
     path: '/matches',
     fullPath: '/tournaments/tournamentId/matches',
   },
+  MATCH_DETAIL: {
+    label: 'Match Centre',
+    path: '/matches/detail',
+    fullPath: '/tournaments/tournamentId/matches/detail',
+  },
   PLAYERS: {
     label: 'Players',
     path: '/players',
     fullPath: '/tournaments/tournamentId/players',
   },
+  PLAYER_DETAIL: {
+    label: 'Player Detail',
+    path: '/players/detail',
+    fullPath: '/tournaments/tournamentId/players/detail',
+  },
   TEAMS: {
     label: 'Teams',
     path: '/teams',
     fullPath: '/tournaments/tournamentId/teams',
+  },
+  TEAM_DETAIL: {
+    label: 'Team Detail',
+    path: '/teams/detail',
+    fullPath: '/tournaments/tournamentId/teams/detail',
   },
   TOURNAMENTS: {
     label: 'Tournaments',
