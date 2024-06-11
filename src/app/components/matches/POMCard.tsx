@@ -16,9 +16,9 @@ function POMCard(props: POMCard) {
         {title}
       </div>
       {isMatchComplete && playerData ? (
-        <PlayerCard name={playerData.name} imageUrl={playerData.imageUrl} />
+        <PlayerCard name={playerData.name} imageUrl={playerData.imageUrl} isStandalone={true} />
       ) : (
-        <PlayerCard name={'TBD'} imageUrl={''} />
+        <PlayerCard name={'TBD'} imageUrl={''} isStandalone={true} />
       )}
     </div>
   )

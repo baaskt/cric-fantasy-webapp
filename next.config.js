@@ -42,6 +42,11 @@ const nextConfig = {
         hostname: 'images.icc-cricket.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets-icc.sportz.io',
+        pathname: '**',
+      },
     ],
   },
 }

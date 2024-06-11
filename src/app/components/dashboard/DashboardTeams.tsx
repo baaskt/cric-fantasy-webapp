@@ -11,6 +11,7 @@ import { TeamPointsEntity } from '@/model/response/team-points.interface'
 import Leaderboard from './Leaderboard'
 import SpinWizards from './SpinWizards'
 import Podium from './Podium'
+import FunStats from './FunStats'
 
 function DashboardTeams() {
   const { activeTournament } = useTournament()
@@ -40,6 +41,7 @@ function DashboardTeams() {
 
   return (
     <div className='p-5 pt-0'>
+      <FunStats />
       <Podium teamList={teamList} />
       <Leaderboard teamList={teamList} />
       <SpinWizards teamList={teamList} />
