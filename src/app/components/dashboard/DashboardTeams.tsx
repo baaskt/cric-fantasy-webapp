@@ -9,7 +9,7 @@ import { DASHBOARD } from '@/util/constants/constants'
 import { useTournament } from '@/providers/TournamentProvider'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
 import Leaderboard from './Leaderboard'
-import SpinWizards from './SpinWizards'
+// import SpinWizards from './SpinWizards'
 import Podium from './Podium'
 import FunStats from './FunStats'
 
@@ -44,7 +44,7 @@ function DashboardTeams() {
       <FunStats />
       <Podium teamList={teamList} />
       <Leaderboard teamList={teamList} />
-      <SpinWizards teamList={teamList} />
+      {/* <SpinWizards teamList={teamList} /> */}
     </div>
   )
 }
