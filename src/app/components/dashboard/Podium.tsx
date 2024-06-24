@@ -11,7 +11,7 @@ function Podium(props: PodiumProps) {
   const { teamList } = props
 
   const sortStalwarts = () => {
-    return teamList.sort((a, b) => b.points - a.points)
+    return teamList.sort((a, b) => b.tournamentPoints - a.tournamentPoints)
   }
 
   const sortedTeams = useMemo(() => sortStalwarts(), [teamList])
@@ -33,7 +33,7 @@ function Podium(props: PodiumProps) {
           </div>
           <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_2].teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-400'>
-            {sortedTeams[POS_2].points}
+            {sortedTeams[POS_2].tournamentPoints}
           </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
@@ -42,7 +42,7 @@ function Podium(props: PodiumProps) {
           </div>
           <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_1].teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-700'>
-            {sortedTeams[POS_1].points}
+            {sortedTeams[POS_1].tournamentPoints}
           </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
@@ -51,7 +51,7 @@ function Podium(props: PodiumProps) {
           </div>
           <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_3].teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-500'>
-            {sortedTeams[POS_3].points}
+            {sortedTeams[POS_3].tournamentPoints}
           </p>
         </div>
       </div>
