@@ -49,7 +49,7 @@ function InsightCard(props: InsightCardProps) {
           </div>
           <div className='flex gap-2 items-center'>
             <div style={{ color: COLORS.cricPrimary }} className='font-bold text-lg md:text-2xl'>
-              {data[0].value}
+              {data[0].value ? data[0].value : 0}
             </div>{' '}
             <span>{valueType}</span>
           </div>
