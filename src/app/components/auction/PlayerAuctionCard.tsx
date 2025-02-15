@@ -21,8 +21,8 @@ import { useSWRConfig } from 'swr'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 
 const tabOptions: OptionsEntity[] = [
-  { id: STATS.ipl, label: 'IPL' },
   { id: STATS.t20, label: 'T20' },
+  { id: STATS.ipl, label: 'IPL' },
 ]
 
 function PlayerAuctionCard() {

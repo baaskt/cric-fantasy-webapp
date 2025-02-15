@@ -21,7 +21,7 @@ const BOWL_WK = 'WK-Bowler'
 const BATTER = 'Batter'
 const BOWLER = 'Bowler'
 
-const MAX_SQUAD_COUNT = 30
+const MAX_SQUAD_COUNT = 15
 
 export const PLAYER_ROLES: string[] = [BATTER, BOWLER, ALLROUNDER, WK]
 export const getPlayerDisplayRole = (role: string, squadCount: number): string => {

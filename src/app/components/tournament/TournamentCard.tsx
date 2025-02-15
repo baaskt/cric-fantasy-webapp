@@ -10,6 +10,7 @@ import { MouseEvent, useState } from 'react'
 import TournamentAction from './TournamentAction'
 import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 
 type TournamentCardProps = {
   tournamentData: TournamentEntity
@@ -27,6 +28,7 @@ const TournamentCard = (props: TournamentCardProps) => {
     tournamentLocation,
     tournamentStatus,
     tournamentId,
+    tournamentWinner,
   } = tournamentData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
   const [imgSrc, setImgSrc] = useState(imgUrl ? imgUrl : ALTERNATE_IMAGE_SRC)
@@ -65,6 +67,11 @@ const TournamentCard = (props: TournamentCardProps) => {
             type={'date'}
           />
           <IconMenu icon={<PlaceIcon />} label1={tournamentLocation} color={COLORS.cricLabel} />
+          <IconMenu
+            icon={<EmojiEventsIcon sx={{ color: COLORS.cricPrimary }} />}
+            label1={tournamentWinner}
+            color={COLORS.cricLabel}
+          />
         </div>
       </div>
       <div className='flex flex-col justify-between items-center p-5 pt-0 md:pt-5'>
