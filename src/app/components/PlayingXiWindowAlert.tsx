@@ -30,6 +30,7 @@ function PlayingXiWindowAlert() {
   }, [])
 
   if (!user || !user.isPlayingXIUpdateOpen) return <></>
+  return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
