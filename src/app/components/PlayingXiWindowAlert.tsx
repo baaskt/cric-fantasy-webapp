@@ -10,7 +10,12 @@ function PlayingXiWindowAlert() {
       const now = new Date()
 
       const targetTime = new Date(now)
-      targetTime.setUTCHours(12, 30, 0, 0) // 6 PM in IST
+      targetTime.setUTCHours(6, 30, 0, 0) // 6:30 AM UTC = 12:00 PM IST
+
+      // If target time has already passed today, set it to the next day's 12:00 PM IST
+      if (now > targetTime) {
+        targetTime.setDate(targetTime.getDate() + 1)
+      }
 
       // Calculate the difference in milliseconds
       const timeDifference = targetTime.getTime() - now.getTime()
@@ -30,7 +35,6 @@ function PlayingXiWindowAlert() {
   }, [])
 
   if (!user || !user.isPlayingXIUpdateOpen) return <></>
-  return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>

@@ -52,6 +52,11 @@ const nextConfig = {
         hostname: 'static.cricbuzz.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'drive.google.com',
+        pathname: '**',
+      },
     ],
   },
 }
