@@ -10,7 +10,7 @@ function PlayingXiWindowAlert() {
       const now = new Date()
 
       const targetTime = new Date(now)
-      targetTime.setUTCHours(6, 30, 0, 0) // 6:30 AM UTC = 12:00 PM IST
+      targetTime.setUTCHours(8, 0, 0, 0) // 8:00 AM UTC = 13:30 PM IST
 
       // If target time has already passed today, set it to the next day's 12:00 PM IST
       if (now > targetTime) {
