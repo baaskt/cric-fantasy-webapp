@@ -4,7 +4,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import { LastAuctionPlayerDetailEntity } from '@/model/response/last-aucton-player.response.interface'
 import { PlayerRandomEntity } from '@/model/response/player-response.interface'
-import { twentyFiveCrores } from '@/util/bidding'
+import { maxBidCap } from '@/util/bidding'
 import React, { createContext, useContext, useState } from 'react'
 
 const AuctionContext = createContext<AuctionContextType>({} as AuctionContextType)
@@ -64,10 +64,10 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
       secondHighestEntity = null
     } else {
       const sortedBidding = newBiddingList.slice().sort((a, b) => b.amount - a.amount)
-      const maxCapBidders = sortedBidding.filter(bidding => bidding.amount === twentyFiveCrores)
+      const maxCapBidders = sortedBidding.filter(bidding => bidding.amount === maxBidCap)
       const isPurseBalanceSame = hasSamePurseBalance(maxCapBidders)
       const sortedPurseBidders = maxCapBidders.sort((a, b) => b.purseBalance - a.purseBalance)
-      if (sortedBidding[0].amount < twentyFiveCrores || maxCapBidders.length < 2) {
+      if (sortedBidding[0].amount < maxBidCap || maxCapBidders.length < 2) {
         highestEntity = sortedBidding[0]
         secondHighestEntity = sortedBidding[1]
       } else if (maxCapBidders.length >= 2 && !isPurseBalanceSame) {

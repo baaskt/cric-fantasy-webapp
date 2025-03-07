@@ -2,7 +2,7 @@ export const APP_NAME = 'Crik Fantasy'
 
 /* LOGIN / SIGNUP SCREENS */
 export const AUTH = {
-  BANNER_DESC: 'Welcome to 1st Edition of KCC Fantasy League',
+  BANNER_DESC: 'Welcome to Cricket Fantasy Auction',
   SIGN_IN: {
     txtSignin: 'Sign in',
     noAccount: "Don't have an account ? ",
