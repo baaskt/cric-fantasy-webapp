@@ -1,6 +1,6 @@
 import { TeamEntity } from '@/model/response/team.interface'
 import { currencyToString } from '@/util/bidding'
-import { COLORS } from '@/util/colors'
+import Image from 'next/image'
 import React from 'react'
 
 type BiddingTeamCardProps = {
@@ -11,23 +11,28 @@ type BiddingTeamCardProps = {
 }
 
 function BiddingTeamCard(props: BiddingTeamCardProps) {
-  const { teamName, purseBalance } = props.teamData
+  const { teamName, purseBalance, imgUrl } = props.teamData
+  const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
+
   return (
     <div
       className={`${'flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0 border-t-4 border-b-4'} ${props.isHighestBidder ? 'border-t-indigo-600' : ''} ${props.isSecondHighestBidder ? 'border-b-indigo-300' : ''}`}
       onClick={() => props.onBidding(props.teamData)}
     >
       <div className='flex flex-col items-center'>
-        <div
-          className='w-24 h-24 rounded-full flex justify-center items-center text-2xl transform transition-transform hover:scale-110'
-          style={{ backgroundColor: COLORS.gray }}
-        >
-          {teamName[0]}
-        </div>
+        <Image
+          src={imgUrl || ALTERNATE_IMAGE_SRC}
+          alt='team img'
+          width='0'
+          height='0'
+          sizes='100vw'
+          className='w-[180px] h-auto'
+        />
         <div className='flex flex-col items-center p-1'>
           <div>{teamName}</div>
-          <div>Balance: {purseBalance}</div>
-          <div>( {currencyToString(purseBalance)} )</div>
+          <div>Balance: {currencyToString(purseBalance)}</div>
+          {/* <div>Balance: {purseBalance}</div>
+          <div>( {currencyToString(purseBalance)} )</div> */}
         </div>
       </div>
     </div>
