@@ -20,6 +20,8 @@ function Podium(props: PodiumProps) {
     POS_2 = 1,
     POS_3 = 2
 
+  if (sortedTeams.length < 3) return <></>
+
   return (
     <div className='flex gap-2 flex-col h-64'>
       <div className='flex gap-2 p-2 items-center'>
@@ -31,27 +33,27 @@ function Podium(props: PodiumProps) {
           <div className='bg-indigo-400 h-40 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_2 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_2].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_2]?.teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-400'>
-            {sortedTeams[POS_2].tournamentPoints}
+            {sortedTeams[POS_2]?.tournamentPoints}
           </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-700 h-48 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_1 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_1].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_1]?.teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-700'>
-            {sortedTeams[POS_1].tournamentPoints}
+            {sortedTeams[POS_1]?.tournamentPoints}
           </p>
         </div>
         <div className='flex flex-col justify-end items-center'>
           <div className='bg-indigo-500 h-32 w-24 flex justify-center items-center text-white font-bold text-8xl'>
             {POS_3 + 1}
           </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_3].teamName}</p>
+          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_3]?.teamName}</p>
           <p className='mt-2 truncate w-24 text-center text-indigo-500'>
-            {sortedTeams[POS_3].tournamentPoints}
+            {sortedTeams[POS_3]?.tournamentPoints}
           </p>
         </div>
       </div>
