@@ -21,8 +21,6 @@ const BOWL_WK = 'WK-Bowler'
 const BATTER = 'Batter'
 const BOWLER = 'Bowler'
 
-const MAX_SQUAD_COUNT = 15
-
 export const PLAYER_ROLES: string[] = [BATTER, BOWLER, ALLROUNDER, WK]
 export const getPlayerDisplayRole = (role: string, squadCount: number): string => {
   let displayRole = role
@@ -78,7 +76,7 @@ export const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: Tea
       label: statEntity.label,
       value:
         statEntity.value === 'squad'
-          ? `${teamDetail.squad?.length.toString()}/${MAX_SQUAD_COUNT}`
+          ? `${teamDetail.squad?.length.toString()}/${teamDetail.squadLimit}`
           : statEntity.value === 'purseBalance'
             ? `${currencyToString(teamDetail.purseBalance)}`
             : (statData[statEntity.value] as never),

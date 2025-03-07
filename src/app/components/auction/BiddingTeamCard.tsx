@@ -11,7 +11,7 @@ type BiddingTeamCardProps = {
 }
 
 function BiddingTeamCard(props: BiddingTeamCardProps) {
-  const { teamName, purseBalance, imgUrl } = props.teamData
+  const { teamName, purseBalance, imgUrl, squadCount } = props.teamData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
 
   return (
@@ -31,6 +31,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         <div className='flex flex-col items-center p-1'>
           <div>{teamName}</div>
           <div>Balance: {currencyToString(purseBalance)}</div>
+          <div>Squad Count: {squadCount} / 15</div>
           {/* <div>Balance: {purseBalance}</div>
           <div>( {currencyToString(purseBalance)} )</div> */}
         </div>
