@@ -6,7 +6,7 @@ const fiftyLakhs = 5000000
 const oneCrore = 10000000
 const twoCrores = 20000000
 const fiveCrores = 50000000
-export const twentyFiveCrores = 250000000
+export const maxBidCap = 1000000000
 
 // upto 50L - 5L
 // 50L TO 2CR-  10L
@@ -14,7 +14,7 @@ export const twentyFiveCrores = 250000000
 // 5CR to 25CR - 50L
 export function getBiddingValue(basePrice: number, maxBidPrice: number): number {
   if (!maxBidPrice) return basePrice
-  if (maxBidPrice === twentyFiveCrores) return maxBidPrice
+  if (maxBidPrice === maxBidCap) return maxBidPrice
   const currentPrice = maxBidPrice ? maxBidPrice : basePrice
   if (currentPrice < fiftyLakhs) {
     return currentPrice + fiveLakhs
