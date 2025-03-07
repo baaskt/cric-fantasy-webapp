@@ -16,9 +16,10 @@ function AuctionTable() {
   const { activeCategory, setAuctionPlayer } = useAuction()
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
-  const RANDOM_PLAYER_URL = tournamentId
-    ? `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', tournamentId)}${activeCategory?.value}`
-    : ''
+  const RANDOM_PLAYER_URL =
+    tournamentId && activeCategory?.value
+      ? `${PLAYERS.GET_RANDOM_PLAYER_URL.replace('tournamentId', tournamentId)}${activeCategory.value}`
+      : ''
   const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL, NO_CACHE)
   const randomPlayerResponse: CricResponse<PlayerRandomEntity> =
     randomPlayerRequest.data as CricResponse<PlayerRandomEntity>
@@ -36,7 +37,7 @@ function AuctionTable() {
   }
 
   if (!randomPlayerResponse?.result?.player) {
-    return <p className='p-5'>Auction ended</p>
+    return <p className='p-5'>No Players were sold</p>
   }
 
   return (
