@@ -1,5 +1,5 @@
 export interface TournamentEntity {
-  basePrice: { [key: string]: number }
+  basePrice?: { [key: string]: number }
   tournamentId: string
   tournamentName: string
   seriesId: number
