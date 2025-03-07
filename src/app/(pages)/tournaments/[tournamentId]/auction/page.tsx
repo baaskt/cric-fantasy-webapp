@@ -28,13 +28,16 @@ function Auction() {
 
   useEffect(() => {
     if (activeTournament?.basePrice) {
-      const categoryList = Object.keys(activeTournament.basePrice).map(
-        (category, categoryIndex) => ({
-          id: categoryIndex + 1,
+      const categoryList = Object.keys(activeTournament.basePrice ?? {}) // Provide an empty object as fallback
+        .sort(
+          (a, b) => (activeTournament.basePrice?.[b] ?? 0) - (activeTournament.basePrice?.[a] ?? 0),
+        ) // Sort safely
+        .map((category, index) => ({
+          id: index + 1,
           label: category,
           value: category,
-        }),
-      )
+        }))
+
       setPlayerCategories(categoryList)
       if (!activeCategory) {
         setSelectedTab(categoryList[0])
