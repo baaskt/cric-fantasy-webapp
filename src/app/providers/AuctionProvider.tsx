@@ -16,6 +16,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const [auctionPlayer, setAuctionPlayer] = useState<PlayerRandomEntity>()
   const [lastAuctionPlayer, setLastAuctionplayer] = useState<LastAuctionPlayerDetailEntity>()
   const [biddingList, setBiddingList] = useState<BiddingEntity[]>([])
+  const [biddingHistory, setBiddingHistory] = useState<BiddingEntity[]>([])
   const [highestBidder, setHighestBidder] = useState<BiddingEntity | null>(null)
   const [secondHighestBidder, setSecondHighestBidder] = useState<BiddingEntity | null>(null)
   const [isAuctionCompleted, setAuctionCompleted] = useState<boolean>(false)
@@ -52,6 +53,31 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     }
     updateHighestBidder(updatedList)
     setBiddingList(updatedList)
+    setBiddingHistory([...biddingHistory, newData])
+  }
+
+  const undoBidding = () => {
+    const updatedBiddingHistory = [...biddingHistory] // Copy the array
+    const previousBidding = updatedBiddingHistory.pop() // Remove last item
+    const teamBiddings = biddingHistory.filter(bid => bid.teamId === previousBidding?.teamId)
+    let updatedList = []
+    const penultimateBid =
+      teamBiddings.length > 1
+        ? teamBiddings[teamBiddings.length - 2]
+        : teamBiddings[teamBiddings.length - 1]
+    if (teamBiddings.length > 1) {
+      updatedList = biddingList.map((item: BiddingEntity) => {
+        if (item.teamId === penultimateBid.teamId) {
+          return { ...item, ...penultimateBid }
+        }
+        return item
+      })
+    } else {
+      updatedList = biddingList.filter(bid => bid.teamId !== previousBidding?.teamId)
+    }
+    setBiddingList(updatedList)
+    updateHighestBidder(updatedList)
+    setBiddingHistory(updatedBiddingHistory) // Update state with the modified array
   }
 
   const updateHighestBidder = (newBiddingList: BiddingEntity[]) => {
@@ -137,6 +163,8 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
     setLastAuctionplayer,
     isAuctionCompleted,
     setAuctionCompleted,
+    biddingHistory,
+    undoBidding,
   }
 
   return <Provider value={value}>{children}</Provider>

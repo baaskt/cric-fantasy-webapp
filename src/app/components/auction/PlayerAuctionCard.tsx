@@ -19,6 +19,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { currencyToString } from '@/util/bidding'
 import { useSWRConfig } from 'swr'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
+import UndoIcon from '@mui/icons-material/Undo'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'IPL' },
@@ -27,7 +28,14 @@ const tabOptions: OptionsEntity[] = [
 
 function PlayerAuctionCard() {
   const { activeTournament } = useTournament()
-  const { activeCategory, auctionPlayer, highestBidder, updatePlayer } = useAuction()
+  const {
+    activeCategory,
+    auctionPlayer,
+    highestBidder,
+    updatePlayer,
+    biddingHistory,
+    undoBidding,
+  } = useAuction()
   const { mutate } = useSWRConfig()
 
   const router = useRouter()
@@ -51,6 +59,10 @@ function PlayerAuctionCard() {
 
   const handleUnSoldPlayer = () => {
     void setPlayerUnsold()
+  }
+
+  const handleUndo = () => {
+    undoBidding()
   }
 
   const setPlayerUnsold = async () => {
@@ -120,6 +132,17 @@ function PlayerAuctionCard() {
               bgColor={COLORS.lightRed}
               onClick={() => handleUnSoldPlayer()}
               isLoading={unsoldPlayerRequest.isMutating}
+              isFullWidth={true}
+            ></CricButton>
+          </div>
+        )}
+        {highestBidder?.amount && (
+          <div className='mt-5'>
+            <CricButton
+              btnTxt={`${'Undo ('}${biddingHistory.length})`}
+              startIcon={<UndoIcon />}
+              bgColor={COLORS.cricPrimary}
+              onClick={() => handleUndo()}
               isFullWidth={true}
             ></CricButton>
           </div>

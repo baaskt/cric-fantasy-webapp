@@ -12,4 +12,5 @@ export interface TeamDetailEntity {
   teamMembers: TeamMember[]
   tournamentId: string
   squad: SquadEntity[]
+  squadLimit: number
 }
