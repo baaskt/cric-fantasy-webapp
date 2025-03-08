@@ -20,4 +20,6 @@ export type AuctionContextType = {
   setLastAuctionplayer: (lastAuctionPlayer: LastAuctionPlayerDetailEntity) => void
   isAuctionCompleted: boolean
   setAuctionCompleted: (isAuctionCompleted: boolean) => void
+  biddingHistory: BiddingEntity[]
+  undoBidding: () => void
 }

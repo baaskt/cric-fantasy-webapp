@@ -9,4 +9,5 @@ export interface TeamEntity {
   tournamentPoints: number
   playingXI: number[]
   imgUrl: string
+  squadCount: number
 }
