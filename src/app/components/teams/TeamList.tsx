@@ -19,6 +19,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'teamName', label: 'Team', type: 'string', isMobile: true },
   { key: 'teamMembers', label: 'Owners', type: 'list' },
   { key: 'purseBalance', label: 'Purse Balance', type: 'currency' },
+  { key: 'squadCount', label: 'Squad', type: 'number' },
   { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'number', isMobile: true },
   // { key: 'playingXI', label: 'Playing XI', type: 'number' }, // TODO: Disable after everyone sets their XI
   { key: '', label: 'View Team Details', type: 'icon', iconPath: '/detail' },

@@ -23,9 +23,13 @@ function TournamentList(props: TournamentListProps) {
     tournamentRequest.data as CricResponse<TournamentEntity[]>
 
   useEffect(() => {
-    if (tournamentResponse?.result)
-      setTournamentList(tournamentResponse?.result)
-  }, [setTournamentList, tournamentResponse?.result])
+    if (tournamentResponse?.result) {
+      const sortedTournamentList = tournamentResponse.result.sort((a, b) => {
+        return b.tournamentStatus.localeCompare(a.tournamentStatus)
+      })
+      setTournamentList(sortedTournamentList)
+    }
+  }, [tournamentResponse?.result])
 
   if (tournamentRequest.isLoading) {
     return <Loading txt={TOURNAMENT.LOADING_TXT}></Loading>
@@ -36,25 +40,16 @@ function TournamentList(props: TournamentListProps) {
   }
 
   if (!tournamentList?.length)
-    return (
-      <EmptyData
-        title={TOURNAMENT.NO_DATA_TITLE}
-        subTitle={TOURNAMENT.NO_DATA_SUB}
-      />
-    )
+    return <EmptyData title={TOURNAMENT.NO_DATA_TITLE} subTitle={TOURNAMENT.NO_DATA_SUB} />
 
   return (
     <div className='mt-5'>
       <div className='pb-5' style={{ color: COLORS.cricPrimary }}>
-        {tournamentList?.length}{' '}
-        {tournamentList?.length > 1 ? 'results' : 'result'}
+        {tournamentList?.length} {tournamentList?.length > 1 ? 'results' : 'result'}
       </div>
       <div className='flex flex-col gap-4 mb-5'>
         {tournamentList?.map(ttEntity => (
-          <TournamentCard
-            key={ttEntity.tournamentId}
-            tournamentData={ttEntity}
-          />
+          <TournamentCard key={ttEntity.tournamentId} tournamentData={ttEntity} />
         ))}
       </div>
     </div>
