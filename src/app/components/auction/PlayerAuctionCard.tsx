@@ -117,8 +117,9 @@ function PlayerAuctionCard() {
             Base Price
           </div>
         </div>
-        <div className='mt-5 text-base whitespace-nowrap italic text-slate-500'>
-          {playerEntity.clubName}
+        <div className='mt-5 text-base whitespace-nowrap italic text-slate-500 flex gap-4'>
+          {playerEntity.intlTeam}
+          <div>{playerEntity.intlTeam !== 'India' ? <div>&#9992;</div> : <></>}</div>
         </div>
       </div>
       <div className='pl-5 pr-5 flex flex-col items-center'>

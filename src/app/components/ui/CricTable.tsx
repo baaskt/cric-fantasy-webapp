@@ -141,7 +141,7 @@ function CricTable(props: CricTableProps) {
                 checked={selectedIds.includes(row.rowId)}
                 onChange={event => checkRow(event)}
                 inputProps={{
-                  'aria-label': 'select all desserts',
+                  'aria-label': 'select all rows',
                 }}
                 sx={{
                   [`&, &.${checkboxClasses.checked}`]: {
@@ -296,7 +296,7 @@ function CricTable(props: CricTableProps) {
       setSelectedIds([])
       onRowChecked && onRowChecked([])
     } else {
-      const tempSelectedIds = rowList.map(data => data.rowId)
+      const tempSelectedIds = tableData.map(data => data.rowId)
       setSelectedIds(tempSelectedIds)
       onRowChecked && onRowChecked(tempSelectedIds)
     }
