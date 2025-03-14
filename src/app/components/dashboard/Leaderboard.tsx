@@ -15,7 +15,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'position', label: 'Position', alias: 'Pos', type: 'stock', isMobile: true },
   { key: 'teamName', label: 'Team', type: 'string', isMobile: true },
   { key: 'points', label: 'Match Points', alias: '', type: 'number', isMobile: false },
-  { key: 'statPoints', label: 'Milestone Points', alias: '', type: 'number', isMobile: false },
+  { key: 'statPoints', label: 'Tournament Points', alias: '', type: 'number', isMobile: false },
   { key: 'tournamentPoints', label: 'Total Points', alias: 'Pts', type: 'stock', isMobile: true },
   { key: '', label: 'View Team Details', type: 'icon', iconPath: '/detail' },
 ]

@@ -35,6 +35,7 @@ export const AuctionProvider = ({ children }: { children: React.ReactNode }) => 
   const updateBiddingList = (newData?: BiddingEntity) => {
     if (!newData) {
       setBiddingList([])
+      setBiddingHistory([])
       setHighestBidder(null)
       setSecondHighestBidder(null)
       return
