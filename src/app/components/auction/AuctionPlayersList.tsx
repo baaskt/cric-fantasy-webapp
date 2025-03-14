@@ -18,6 +18,7 @@ import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { prepareTableData } from '@/util/tables/table'
 import { TableType } from '@/model/enum/table-type.enum'
+import RestartAltIcon from '@mui/icons-material/RestartAlt'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -145,11 +146,11 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
         headerList={headersList}
         rowList={tableData}
         fullWidth={false}
-        isSelectable={props.selectedTab.id === 6 && activeTournament?.isHost}
+        isSelectable={activeTournament?.isHost}
         isResetCheck={!selectedIds?.length}
         onRowChecked={setSelectedIds}
       />
-      <div className='flex justify-center pt-16'>
+      <div className='flex gap-4 justify-center pt-16'>
         {activeTournament?.isHost && !lastAuctionPlayer && (
           <CricButton
             startIcon={<FlagIcon />}
@@ -157,9 +158,9 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
             btnTxt={`Begin auction for ${activeCategory?.label}`}
           ></CricButton>
         )}
-        {activeTournament?.isHost && props.selectedTab.id === 6 && (
+        {activeTournament?.isHost && (
           <CricButton
-            startIcon={<FlagIcon />}
+            startIcon={<RestartAltIcon />}
             onClick={() => handlePlayerStatus()}
             btnTxt={`Reset player Status`}
             isLoading={resetPlayerStatusRequest?.isMutating}
