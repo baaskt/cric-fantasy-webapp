@@ -1,6 +1,6 @@
 import { TeamEntity } from '@/model/response/team.interface'
 import { currencyToString } from '@/util/bidding'
-import Image from 'next/image'
+import { convertDriveUrl } from '@/util/helper'
 import React from 'react'
 
 type BiddingTeamCardProps = {
@@ -13,15 +13,15 @@ type BiddingTeamCardProps = {
 function BiddingTeamCard(props: BiddingTeamCardProps) {
   const { teamName, purseBalance, imgUrl, squadCount } = props.teamData
   const ALTERNATE_IMAGE_SRC = '/assets/images/default_img.jpg'
-
+  const teamUrl = convertDriveUrl(imgUrl)
   return (
     <div
       className={`${'flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0 border-t-4 border-b-4'} ${props.isHighestBidder ? 'border-t-indigo-600' : ''} ${props.isSecondHighestBidder ? 'border-b-indigo-300' : ''}`}
       onClick={() => props.onBidding(props.teamData)}
     >
       <div className='flex flex-col items-center'>
-        <Image
-          src={imgUrl || ALTERNATE_IMAGE_SRC}
+        <img
+          src={teamUrl || ALTERNATE_IMAGE_SRC}
           alt='team img'
           width='0'
           height='0'
