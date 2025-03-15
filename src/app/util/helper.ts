@@ -193,3 +193,8 @@ const getColor = (team: string): string => {
   else if (team === 'MI') return COLORS.iplTeam.mi
   else return COLORS.cricPrimary
 }
+
+export const convertDriveUrl = (url: string): string => {
+  const match = url?.match(/id=([\w-]+)/)
+  return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : ''
+}

@@ -1,6 +1,6 @@
 import { currencyToString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
-import Image from 'next/image'
+import { convertDriveUrl } from '@/util/helper'
 import React from 'react'
 
 type PlayerCardProps = {
@@ -32,12 +32,12 @@ function PlayerCard(props: PlayerCardProps) {
     showPoints,
     isStandalone,
   } = props
-  const playerUrl = imageUrl || ALTERNATE_IMAGE_SRC
+  const playerUrl = convertDriveUrl(imageUrl)
 
   return (
     <div className={`flex flex-col items-center md:w-auto ${!isStandalone ? 'w-1/2' : ''}`}>
-      <Image
-        src={playerUrl}
+      <img
+        src={playerUrl || ALTERNATE_IMAGE_SRC}
         alt='player profile'
         width='0'
         height='0'
