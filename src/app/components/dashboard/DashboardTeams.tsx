@@ -12,6 +12,8 @@ import Leaderboard from './Leaderboard'
 // import SpinWizards from './SpinWizards'
 import Podium from './Podium'
 import FunStats from './FunStats'
+import SpinWizards from './SpinWizards'
+import LeaderboardCards from './LeaderboardCards'
 
 function DashboardTeams() {
   const { activeTournament } = useTournament()
@@ -43,8 +45,13 @@ function DashboardTeams() {
     <div className='p-5 pt-0'>
       <FunStats />
       <Podium teamList={teamList} />
-      <Leaderboard teamList={teamList} />
-      {/* <SpinWizards teamList={teamList} /> */}
+      <div className='hidden md:block'>
+        <Leaderboard teamList={teamList} />
+      </div>
+      <div className='block md:hidden'>
+        <LeaderboardCards teamList={teamList} />
+      </div>
+      <SpinWizards teamList={teamList} />
     </div>
   )
 }

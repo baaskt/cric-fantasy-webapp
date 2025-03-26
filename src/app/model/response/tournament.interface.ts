@@ -5,6 +5,8 @@ export interface TournamentEntity {
   seriesId: number
   tournamentStatus: string
   tournamentLocation?: string
+  playingXIEndTime?: string
+  playingXIStartTime?: string
   tournamentStartDate?: string | undefined
   tournamentEndDate?: string | undefined
   isMyTournament?: boolean

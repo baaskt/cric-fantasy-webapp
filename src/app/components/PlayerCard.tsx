@@ -15,6 +15,7 @@ type PlayerCardProps = {
   showPrice?: boolean
   showPoints?: boolean
   isStandalone?: boolean
+  desc?: string
 }
 
 function PlayerCard(props: PlayerCardProps) {
@@ -31,6 +32,7 @@ function PlayerCard(props: PlayerCardProps) {
     showPrice,
     showPoints,
     isStandalone,
+    desc,
   } = props
   const playerUrl = convertDriveUrl(imageUrl)
 
@@ -42,7 +44,7 @@ function PlayerCard(props: PlayerCardProps) {
         width='0'
         height='0'
         sizes='100vw'
-        className='w-[180px] h-auto'
+        className='w-[180px] h-[180px]'
       />
       <div
         className='p-2 flex flex-col items-center shadow-lg w-full'
@@ -87,6 +89,11 @@ function PlayerCard(props: PlayerCardProps) {
           className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'} ${showPoints ? 'min-h-6' : ''}`}
         >
           {showPoints && points ? `${points} points` : ''}
+        </div>
+        <div
+          className={`text-sm text-center font-bold ${desc === 'Playing XI' ? 'text-green-500' : 'text-red-500'} ${desc ? 'min-h-6' : ''}`}
+        >
+          {desc ? `${desc}` : ''}
         </div>
       </div>
     </div>
