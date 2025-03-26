@@ -31,6 +31,7 @@ function SquadPortfolio(props: SquadPortfolioProps) {
                   role={player.role}
                   clubName={player.clubSName}
                   showPrice={true}
+                  desc={player.playingXI ? 'Playing XI' : 'Benched'}
                 ></PlayerCard>
               ))}
           </div>
