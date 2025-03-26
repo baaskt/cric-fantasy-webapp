@@ -30,7 +30,7 @@ function LeaderboardCards(props: LeaderboardCardsProps) {
     if (teamPosition === 3) {
       return 'bg-orange-800 text-white'
     }
-    return 'bg-gray-200 text-gray-800' // Default color for other cases
+    return 'bg-violet-200 text-gray-800' // Default color for other cases
   }
 
   return (
@@ -47,12 +47,12 @@ function LeaderboardCards(props: LeaderboardCardsProps) {
       {teamList.map((team, teamIndex) => (
         <div
           key={team.teamId}
-          className='shadow-md p-4 rounded-lg flex flex-row justify-between items-center'
+          className='transition-transform duration-150 ease-in-out shadow-md p-4 rounded-lg flex flex-row justify-between items-center active:scale-95'
           onClick={() => navigateToTeamDetail(team.teamId)}
         >
           <div className='flex flex-row items-center gap-4'>
             <div
-              className={`font-bold rounded-full bg-violet-200 w-10 h-10 flex justify-center items-center ${getColorClass(teamIndex + 1)}`}
+              className={`font-bold rounded-full w-10 h-10 flex justify-center items-center ${getColorClass(teamIndex + 1)}`}
             >
               {teamIndex + 1}
             </div>
@@ -64,7 +64,7 @@ function LeaderboardCards(props: LeaderboardCardsProps) {
           <div className='text-right'>
             <div className='text-md font-bold text-slate-600'>{team.tournamentPoints}</div>
             <div
-              className={`text-md font-bold ${team.tournamentPoints - team.prevPoints > 0 ? 'text-green-500' : 'text-red-500'}`}
+              className={`text-md ${team.tournamentPoints - team.prevPoints > 0 ? 'text-green-500' : 'text-red-500'}`}
             >
               {team.tournamentPoints - team.prevPoints > 0 ? '+' : '-'}
               {team.tournamentPoints - team.prevPoints}
