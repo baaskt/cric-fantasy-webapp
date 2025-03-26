@@ -1,16 +1,19 @@
 import { useAuth } from '@/providers/AuthProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 import React, { useEffect, useState } from 'react'
 
 function PlayingXiWindowAlert() {
   const { user } = useAuth()
+  const { activeTournament } = useTournament()
   const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 })
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const now = new Date()
 
-      const targetTime = new Date(now)
-      targetTime.setUTCHours(8, 0, 0, 0) // 8:00 AM UTC = 13:30 PM IST
+      const targetTime = new Date(activeTournament?.playingXIEndTime || now)
+      const endTimeHrs = targetTime.getUTCHours()
+      targetTime.setUTCHours(endTimeHrs, 0, 0, 0) // 8:00 AM UTC = 13:30 PM IST
 
       // If target time has already passed today, set it to the next day's 12:00 PM IST
       if (now > targetTime) {
@@ -32,10 +35,9 @@ function PlayingXiWindowAlert() {
     const interval = setInterval(calculateTimeRemaining, 1000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [activeTournament])
 
   if (!user || !user.isPlayingXIUpdateOpen) return <></>
-  return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
