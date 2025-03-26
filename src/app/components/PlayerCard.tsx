@@ -42,7 +42,7 @@ function PlayerCard(props: PlayerCardProps) {
         width='0'
         height='0'
         sizes='100vw'
-        className='w-[180px] h-auto'
+        className='w-[180px] h-[180px]'
       />
       <div
         className='p-2 flex flex-col items-center shadow-lg w-full'
