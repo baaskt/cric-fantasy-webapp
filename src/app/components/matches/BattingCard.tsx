@@ -48,7 +48,9 @@ function BattingCard(props: BattingCardProps) {
             <div style={{ color: COLORS.cricPrimary }} className='flex flex-row gap-2'>
               <div>{`${batEntity.batName} ${batEntity.outDesc === 'not out' ? '*' : ''}`}</div>
               <div>{batEntity.isOverseas ? <div>&#9992;</div> : <></>}</div>
-              <div>{!batEntity.runs ? <div>&#129414;</div> : <></>}</div>
+              <div>
+                {!batEntity.runs && batEntity.outDesc !== 'not out' ? <div>&#129414;</div> : <></>}
+              </div>
             </div>
             <div className='text-slate-500'>{batEntity.outDesc}</div>
           </div>
