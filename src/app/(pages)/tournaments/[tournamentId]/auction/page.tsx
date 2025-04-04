@@ -29,9 +29,10 @@ function Auction() {
   useEffect(() => {
     if (activeTournament?.basePrice) {
       const categoryList = Object.keys(activeTournament.basePrice ?? {}) // Provide an empty object as fallback
-        .sort(
-          (a, b) => (activeTournament.basePrice?.[b] ?? 0) - (activeTournament.basePrice?.[a] ?? 0),
-        ) // Sort safely
+        // .sort(
+        //   (a, b) => (activeTournament.basePrice?.[b] ?? 0) - (activeTournament.basePrice?.[a] ?? 0),
+        // ) // Sort safely
+        .sort((a, b) => (a > b ? 1 : -1)) // Sort safely
         .map((category, index) => ({
           id: index + 1,
           label: category,

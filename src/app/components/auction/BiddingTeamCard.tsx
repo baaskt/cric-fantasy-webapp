@@ -19,7 +19,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
       className={`${'flex flex-col items-center cursor-pointer shadow-lg rounded-lg p-0 border-t-4 border-b-4'} ${props.isHighestBidder ? 'border-t-indigo-600' : ''} ${props.isSecondHighestBidder ? 'border-b-indigo-300' : ''}`}
       onClick={() => props.onBidding(props.teamData)}
     >
-      <div className='flex flex-col items-center'>
+      <div className='flex flex-col items-center justify-between h-full'>
         <img
           src={teamUrl || ALTERNATE_IMAGE_SRC}
           alt='team img'
@@ -31,7 +31,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         <div className='flex flex-col items-center p-1'>
           <div>{teamName}</div>
           <div>Balance: {currencyToString(purseBalance)}</div>
-          <div>Squad Count: {squadCount} / 15</div>
+          <div>Squad Count: {squadCount} / 12</div>
           {/* <div>Balance: {purseBalance}</div>
           <div>( {currencyToString(purseBalance)} )</div> */}
         </div>

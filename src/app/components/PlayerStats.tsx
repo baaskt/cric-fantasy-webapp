@@ -22,6 +22,7 @@ const battingStatList: CricMenuEntity[] = [
   { label: 'Matches', icon: SportsCricketOutlinedIcon, value: 'matches' },
   { label: 'Runs', icon: SportsCricketOutlinedIcon, value: 'runs' },
   { label: 'Strike Rate', icon: SportsCricketOutlinedIcon, value: 'sr' },
+  { label: 'Average', icon: SportsCricketOutlinedIcon, value: 'average' },
   { label: '50s', icon: SportsCricketOutlinedIcon, value: '50s' },
   { label: '100s', icon: SportsCricketOutlinedIcon, value: '100s' },
 ]
@@ -29,6 +30,7 @@ const battingStatList: CricMenuEntity[] = [
 const bowlingStatList: CricMenuEntity[] = [
   { label: 'Wickets', icon: SportsBaseballOutlinedIcon, value: 'wickets' },
   { label: 'Economy', icon: SportsBaseballOutlinedIcon, value: 'eco' },
+  { label: 'Average', icon: SportsCricketOutlinedIcon, value: 'avg' },
   { label: '4 wicket haul', icon: SportsBaseballOutlinedIcon, value: '4w' },
   { label: '5 wicket haul', icon: SportsBaseballOutlinedIcon, value: '5w' },
 ]
