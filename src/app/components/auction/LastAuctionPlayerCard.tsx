@@ -119,6 +119,7 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
             width={200}
             height={80}
             className='-rotate-11'
+            unoptimized
           />
         </div>
         {playerData.soldAmount > 0 && playerData.teamName && (

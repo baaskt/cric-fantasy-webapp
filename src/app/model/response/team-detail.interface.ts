@@ -13,4 +13,5 @@ export interface TeamDetailEntity {
   tournamentId: string
   squad: SquadEntity[]
   squadLimit: number
+  imgUrl: string
 }

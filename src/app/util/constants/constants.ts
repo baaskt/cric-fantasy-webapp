@@ -52,6 +52,8 @@ export const AUTH = {
     errorSplChar: 'Please enter a valid name',
     errorLength: 'Enter at least 5 characters',
   },
+  DISCLAIMER:
+    'This auction app is intended solely for entertainment purposes. It must not be used for betting, gambling, or any activity that violates local laws or regulations. By signing up, I acknowledge and agree to use this platform responsibly and legally.',
 }
 
 /* TOURNAMENT SCREENS */
@@ -206,7 +208,7 @@ export const TITLES = {
 
 export const STATS = {
   t20: 'T20 Career Stats',
-  ipl: 'IPL Career Stats',
+  ipl: 'Stumps Stats',
 }
 
 export const NO_CACHE = true

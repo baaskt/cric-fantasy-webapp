@@ -22,8 +22,8 @@ import { AuctionPlayerEntity } from '@/model/response/auction-player-response.in
 import UndoIcon from '@mui/icons-material/Undo'
 
 const tabOptions: OptionsEntity[] = [
-  { id: STATS.ipl, label: 'IPL' },
-  { id: STATS.t20, label: 'T20' },
+  { id: STATS.ipl, label: 'Stats' },
+  // { id: STATS.t20, label: 'T20' },
 ]
 
 function PlayerAuctionCard() {
@@ -117,9 +117,12 @@ function PlayerAuctionCard() {
             Base Price
           </div>
         </div>
-        <div className='mt-5 text-base whitespace-nowrap italic text-slate-500 flex gap-4'>
+        <div
+          className='mt-5 text-base whitespace-nowrap italic font-bold text-slate-500 flex gap-4'
+          style={{ color: COLORS.cricPrimary }}
+        >
           {playerEntity.intlTeam}
-          <div>{playerEntity.intlTeam !== 'India' ? <div>&#9992;</div> : <></>}</div>
+          <div>{playerEntity.intlTeam !== 'India' ? <div>&#127951;</div> : <></>}</div>
         </div>
       </div>
       <div className='pl-5 pr-5 flex flex-col items-center'>
