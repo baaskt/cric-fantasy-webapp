@@ -43,6 +43,7 @@ function TeamCard(props: TeamCardProps) {
           width='60'
           height='60'
           className='w-[180px] h-[180px]'
+          unoptimized
         />
         <div className='flex flex-col items-center'>
           <div className='font-bold uppercase text-xl'>{teamName}</div>
