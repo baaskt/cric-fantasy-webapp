@@ -18,6 +18,7 @@ import { AxiosError } from 'axios'
 import { CricResponse } from '@/model/types/cric-response.type'
 import CricModal from '../ui/CricModal'
 import CreateAccountSuccess from '../CreateAccountSuccess'
+import { Checkbox, FormControlLabel } from '@mui/material'
 
 type CreateAccountProps = {
   email: string
@@ -120,6 +121,7 @@ export default function CreateAccountForm(props: CreateAccountProps) {
           validatePwd={true}
           onChange={onPwdChange}
         />
+        <FormControlLabel control={<Checkbox defaultChecked checked />} label={AUTH.DISCLAIMER} />
         <CricAlert
           error={error || signupRequest.error}
           message={error ? error : AUTH.SIGN_UP.error}
