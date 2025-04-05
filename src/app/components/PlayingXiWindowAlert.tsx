@@ -1,9 +1,11 @@
 import { useAuth } from '@/providers/AuthProvider'
 import { useTournament } from '@/providers/TournamentProvider'
+import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 function PlayingXiWindowAlert() {
   const { user } = useAuth()
+  const pathname = usePathname()
   const { activeTournament } = useTournament()
   const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 })
 
@@ -37,7 +39,13 @@ function PlayingXiWindowAlert() {
     return () => clearInterval(interval)
   }, [activeTournament])
 
-  if (!user || !user.isPlayingXIUpdateOpen) return <></>
+  if (
+    !user ||
+    !user.isPlayingXIUpdateOpen ||
+    pathname.includes('auction') ||
+    activeTournament?.tournamentStatus === 'Completed'
+  )
+    return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
