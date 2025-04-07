@@ -70,7 +70,7 @@ export default function CricButton(props: CricButtonProps) {
       >
         <div className='flex flex-row gap-2 items-center'>
           <div>{btnTxt}</div>
-          {isLoading && <CircularProgress />}
+          {isLoading && <CircularProgress sx={{ color: 'white' }} />}
         </div>
       </Button>
     </ThemeProvider>

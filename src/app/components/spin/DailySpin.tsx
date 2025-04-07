@@ -32,7 +32,7 @@ type DailySpinProps = {
 
 function DailySpin(props: DailySpinProps) {
   const { isSpinActive, onClose } = props
-  const { user, setUserDetails } = useAuth()
+  const { user } = useAuth()
 
   const [isSpinning, setIsSpinning] = useState(false)
   const [isSpinAnimate, setSpinAnimate] = useState(false)
@@ -70,9 +70,6 @@ function DailySpin(props: DailySpinProps) {
   }
 
   const closeSpin = () => {
-    if (user) {
-      setUserDetails({ ...user, canSpin: false })
-    }
     onClose()
   }
 
