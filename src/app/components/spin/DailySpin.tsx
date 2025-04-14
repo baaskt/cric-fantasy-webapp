@@ -5,11 +5,11 @@ import { PLAYERS } from '@/util/constants/endpoints'
 import { useRequest } from '@/hooks/useRequest'
 import { CricResponse } from '@/model/types/cric-response.type'
 import Confetti from 'react-confetti'
-import { useAuth } from '@/providers/AuthProvider'
 import CloseIcon from '@mui/icons-material/Close'
 import { COLORS } from '@/util/colors'
 import BallSpin from './BallSpin'
 import { SpinPlayerEntity } from '@/model/response/spin-player.interface'
+import { useTournament } from '@/providers/TournamentProvider'
 
 const styles = {
   modalStyle: {
@@ -32,14 +32,13 @@ type DailySpinProps = {
 
 function DailySpin(props: DailySpinProps) {
   const { isSpinActive, onClose } = props
-  const { user } = useAuth()
-
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const [isSpinning, setIsSpinning] = useState(false)
   const [isSpinAnimate, setSpinAnimate] = useState(false)
   const [spinDegree, setSpinDegree] = useState(0)
   const [playerData, setPlayerData] = useState<SpinPlayerEntity>()
 
-  const tournamentId = user?.tournament || ''
   const SPIN_PLAYER_URL = tournamentId
     ? PLAYERS.SPIN_RANDOM_PLAYER.replace('tournamentId', tournamentId)
     : ''
