@@ -1,11 +1,14 @@
 import { useAuth } from '@/providers/AuthProvider'
 import { useTournament } from '@/providers/TournamentProvider'
+import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 function PlayingXiWindowAlert() {
   const { user } = useAuth()
+  const pathname = usePathname()
   const { activeTournament } = useTournament()
   const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 })
+  const [isWindowOpen, setWindowOpen] = useState(user?.isPlayingXIUpdateOpen)
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -17,18 +20,19 @@ function PlayingXiWindowAlert() {
 
       // If target time has already passed today, set it to the next day's 12:00 PM IST
       if (now > targetTime) {
-        targetTime.setDate(targetTime.getDate() + 1)
+        setWindowOpen(false)
+      } else {
+        // Calculate the difference in milliseconds
+        const timeDifference = targetTime.getTime() - now.getTime()
+
+        // Convert milliseconds to hours, minutes, and seconds
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
+
+        setTimeRemaining({ hours, minutes, seconds })
+        setWindowOpen(true)
       }
-
-      // Calculate the difference in milliseconds
-      const timeDifference = targetTime.getTime() - now.getTime()
-
-      // Convert milliseconds to hours, minutes, and seconds
-      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
-      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
-
-      setTimeRemaining({ hours, minutes, seconds })
     }
 
     calculateTimeRemaining()
@@ -37,7 +41,13 @@ function PlayingXiWindowAlert() {
     return () => clearInterval(interval)
   }, [activeTournament])
 
-  if (!user || !user.isPlayingXIUpdateOpen) return <></>
+  if (
+    !user ||
+    !isWindowOpen ||
+    pathname.includes('auction') ||
+    activeTournament?.tournamentStatus === 'Completed'
+  )
+    return <></>
 
   return (
     <div className='flex p-3 items-center justify-around bg-yellow-300'>
