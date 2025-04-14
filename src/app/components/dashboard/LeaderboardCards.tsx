@@ -5,7 +5,9 @@ import { convertUtcToLocal } from '@/util/helper'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
 import { useRouter } from 'next/navigation'
 import { useTeam } from '@/providers/TeamProvider'
-
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import TrendingDownIcon from '@mui/icons-material/TrendingDown'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 type LeaderboardCardsProps = {
   teamList: TeamPointsEntity[]
 }
@@ -64,10 +66,18 @@ function LeaderboardCards(props: LeaderboardCardsProps) {
           <div className='text-right'>
             <div className='text-md font-bold text-slate-600'>{team.tournamentPoints}</div>
             <div
-              className={`text-md ${team.tournamentPoints - team.prevPoints > 0 ? 'text-green-500' : 'text-red-500'}`}
+              className={`text-md flex gap-1 items-center justify-end ${team.tournamentPoints - team.prevPoints > 0 ? 'text-green-500' : 'text-red-500'}`}
             >
-              {team.tournamentPoints - team.prevPoints > 0 ? '+' : '-'}
-              {team.tournamentPoints - team.prevPoints}
+              {team.tournamentPoints - team.prevPoints > 0 ? (
+                <TrendingUpIcon sx={{ fontSize: 14 }} />
+              ) : team.tournamentPoints - team.prevPoints < 0 ? (
+                <TrendingDownIcon sx={{ fontSize: 14 }} />
+              ) : (
+                <SentimentVeryDissatisfiedIcon sx={{ fontSize: 16 }} />
+              )}
+              {team.tournamentPoints - team.prevPoints !== 0
+                ? team.tournamentPoints - team.prevPoints
+                : ''}
             </div>
           </div>
         </div>

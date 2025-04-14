@@ -4,6 +4,5 @@ export class User {
   email: string = ''
   roles: string[] = []
   isPlayingXIUpdateOpen: boolean = false
-  canSpin: boolean = false
   tournament: string = ''
 }
