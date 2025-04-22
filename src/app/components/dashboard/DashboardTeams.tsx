@@ -58,7 +58,7 @@ function DashboardTeams() {
   }
 
   if (!teamRequest.isValidating && !teamList.length) {
-    return <Loading txt={'Fetching Stats...'}></Loading>
+    return <Loading txt={'Fetching Stats....'}></Loading>
   }
 
   return (
