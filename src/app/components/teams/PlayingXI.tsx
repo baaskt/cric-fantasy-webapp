@@ -30,7 +30,8 @@ const headersList: CricHeaderRow[] = [
   { key: 'role', label: 'Role', type: 'string' },
   { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'points', label: 'Points', alias: 'Pts', type: 'stock', isMobile: true },
-  { key: '', label: 'View Player Details', type: 'icon' },
+  { key: 'statPoints', label: 'Milestone Points', type: 'number' },
+  // { key: '', label: 'View Player Details', type: 'icon' },
 ]
 
 type PlayingXIProps = {
