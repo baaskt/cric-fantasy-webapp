@@ -12,26 +12,30 @@ function PlayingXiWindowAlert() {
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
-      const now = new Date()
+      if (activeTournament?.playingXIEndTime) {
+        // Replace space with 'T' to make it ISO 8601-like
+        const isoString = activeTournament.playingXIEndTime.replace(' ', 'T') + 'Z' // Add Z to mark as UTC
+        const targetTime = new Date(isoString)
 
-      const targetTime = new Date(activeTournament?.playingXIEndTime || now)
-      const endTimeHrs = targetTime.getUTCHours()
-      targetTime.setUTCHours(endTimeHrs, 0, 0, 0) // 8:00 AM UTC = 13:30 PM IST
+        const endTimeHrs = targetTime.getUTCHours()
+        targetTime.setUTCHours(endTimeHrs, 0, 0, 0)
 
-      // If target time has already passed today, set it to the next day's 12:00 PM IST
-      if (now > targetTime) {
-        setWindowOpen(false)
-      } else {
-        // Calculate the difference in milliseconds
-        const timeDifference = targetTime.getTime() - now.getTime()
+        // If target time has already passed today, set it to the next day's 12:00 PM IST
+        const now = new Date()
+        if (now > targetTime) {
+          setWindowOpen(false)
+        } else {
+          // Calculate the difference in milliseconds
+          const timeDifference = targetTime.getTime() - now.getTime()
 
-        // Convert milliseconds to hours, minutes, and seconds
-        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
+          // Convert milliseconds to hours, minutes, and seconds
+          const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
+          const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
 
-        setTimeRemaining({ hours, minutes, seconds })
-        setWindowOpen(true)
+          setTimeRemaining({ hours, minutes, seconds })
+          setWindowOpen(true)
+        }
       }
     }
 

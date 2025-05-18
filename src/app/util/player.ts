@@ -10,6 +10,7 @@ import { TournamentEntity } from '@/model/response/tournament.interface'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { PLAYERS } from './constants/endpoints'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
+import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
 
 const ALLROUNDER = 'All Rounder'
 const BAT_ALLROUNDER = 'Batting Allrounder'
@@ -17,6 +18,7 @@ const BOWL_ALLROUNDER = 'Bowling Allrounder'
 
 export const WK = 'Wicket Keeper'
 const BAT_WK = 'WK-Batter'
+const BAT_WK_ALIAS = 'WK-Batsman'
 const BOWL_WK = 'WK-Bowler'
 const BATTER = 'Batter'
 const BOWLER = 'Bowler'
@@ -26,7 +28,7 @@ export const getPlayerDisplayRole = (role: string, squadCount: number): string =
   let displayRole = role
   if (role === BOWL_ALLROUNDER || role === BAT_ALLROUNDER) {
     displayRole = ALLROUNDER
-  } else if (role === BAT_WK || role === BOWL_WK) {
+  } else if (role === BAT_WK || role === BOWL_WK || role === BAT_WK_ALIAS) {
     displayRole = WK
   }
   return squadCount > 1 ? `${displayRole}s` : displayRole
@@ -41,12 +43,18 @@ export const groupPlayersByRole = (squad: SquadEntity[]): Map<string, SquadEntit
     tempGroupedSquad.delete(BAT_ALLROUNDER)
     tempGroupedSquad.set(ALLROUNDER, [...battingAllRounder, ...bowlingAllRounder])
   }
-  if (tempGroupedSquad.has(BAT_WK) || tempGroupedSquad.has(BOWL_WK)) {
+  if (
+    tempGroupedSquad.has(BAT_WK) ||
+    tempGroupedSquad.has(BOWL_WK) ||
+    tempGroupedSquad.has(BAT_WK_ALIAS)
+  ) {
     const battingWk = tempGroupedSquad.get(BAT_WK) || []
+    const battingWkAlias = tempGroupedSquad.get(BAT_WK_ALIAS) || []
     const bowlingWk = tempGroupedSquad.get(BOWL_WK) || []
     tempGroupedSquad.delete(BAT_WK)
+    tempGroupedSquad.delete(BAT_WK_ALIAS)
     tempGroupedSquad.delete(BOWL_WK)
-    tempGroupedSquad.set(WK, [...battingWk, ...bowlingWk])
+    tempGroupedSquad.set(WK, [...battingWk, ...bowlingWk, ...battingWkAlias])
   }
   return tempGroupedSquad
 }
@@ -86,8 +94,7 @@ export const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: Tea
   return tempMenuList
 }
 
-export const checkValidComposition = (playersInXI: SquadEntity[]) => {
-  if (!(playersInXI?.length === 11)) return false
+export const findTeamComposition = (playersInXI: SquadEntity[]): TeamCompositionEntity => {
   const minBat = 3,
     minBowl = 3,
     minAllRound = 1,
@@ -95,8 +102,7 @@ export const checkValidComposition = (playersInXI: SquadEntity[]) => {
   let bat = 0,
     bowl = 0,
     wk = 0,
-    batAllRound = 0,
-    bowlAllRound = 0
+    allRound = 0
   const playerRoles = playersInXI.map(player => player.role)
   playerRoles.forEach(role => {
     if (role === BATTER) {
@@ -106,20 +112,34 @@ export const checkValidComposition = (playersInXI: SquadEntity[]) => {
       ++bowl
     }
     if (role === BAT_ALLROUNDER) {
-      batAllRound + bowlAllRound < 1 ? ++batAllRound : ++bat
+      ++allRound
     }
     if (role === BOWL_ALLROUNDER) {
-      batAllRound + bowlAllRound < 1 ? ++bowlAllRound : ++bowl
+      ++allRound
     }
-    if (role === BAT_WK || role === BOWL_WK) {
+    if (role === BAT_WK || role === BAT_WK_ALIAS || role === BOWL_WK) {
       wk < 1 ? ++wk : ++bat
     }
   })
-  const validBat = bat >= minBat || bat + batAllRound >= minBat + minAllRound ? true : false
-  const validBowl = bowl >= minBowl || bowl + bowlAllRound >= minBowl + minAllRound ? true : false
-  const validAllRound = batAllRound + bowlAllRound >= minAllRound ? true : false
+  if (bat < minBat) {
+    ++bat
+    --allRound
+  } else if (bowl < minBowl) {
+    ++bowl
+    --allRound
+  }
+  const validBat = bat >= minBat ? true : false
+  const validBowl = bowl >= minBowl ? true : false
+  const validAllRound = allRound >= minAllRound ? true : false
   const validWK = wk >= minWK ? true : false
-  return validBat && validBowl && validAllRound && validWK
+  return {
+    isValid: validBat && validBowl && validAllRound && validWK && playersInXI?.length === 11,
+    count: playersInXI?.length,
+    bat,
+    bowl,
+    allRound,
+    wk,
+  }
 }
 
 export const getPlayerTableData = (
