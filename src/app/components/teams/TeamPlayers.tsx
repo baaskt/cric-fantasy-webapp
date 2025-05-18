@@ -6,18 +6,22 @@ import SquadPortfolio from './SquadPortfolio'
 import { useAuth } from '@/providers/AuthProvider'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { groupPlayersByRole } from '@/util/player'
+import MatchHistory from './MatchHistory'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Playing XI', value: 'PlayingXI' },
   { id: 2, label: 'Squad', value: 'Squad' },
+  { id: 3, label: 'Match History', value: 'History' },
 ]
 
 type TeamPlayersProps = {
   teamDetail: TeamDetailEntity
+  matchHistory: MatchHistoryDetails[]
 }
 
 function TeamPlayers(props: TeamPlayersProps) {
-  const { squad, teamMembers, teamId } = props.teamDetail
+  const { matchHistory, teamDetail } = props
+  const { squad, teamMembers, teamId } = teamDetail
   const { user } = useAuth()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
 
@@ -52,10 +56,12 @@ function TeamPlayers(props: TeamPlayersProps) {
       </div>
       <div className='flex justify-between'>
         {selectedTab.id === 1 ? (
-          <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId}></PlayingXI>
-        ) : (
-          <SquadPortfolio groupedSquad={groupedSquad}></SquadPortfolio>
-        )}
+          <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
+        ) : selectedTab.id === 2 ? (
+          <SquadPortfolio groupedSquad={groupedSquad} />
+        ) : selectedTab.id === 3 ? (
+          <MatchHistory matchHistory={matchHistory} />
+        ) : null}
       </div>
     </div>
   )
