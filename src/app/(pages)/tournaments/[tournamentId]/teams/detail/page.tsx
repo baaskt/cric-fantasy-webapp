@@ -7,15 +7,26 @@ import { useRequest } from '@/hooks/useRequest'
 import { auth } from '@/lib/auth'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
+import { useTournament } from '@/providers/TournamentProvider'
 import { TEAM } from '@/util/constants/constants'
 import { TEAMS } from '@/util/constants/endpoints'
 import React, { useEffect, useState } from 'react'
 
 function TeamDetail() {
   const teamId = auth().getTeamId()
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const [teamDetailEntity, setTeamDetailEntity] = useState<TeamDetailEntity>()
+  const [matchHistoryList, setMatchHistoryList] = useState<MatchHistoryDetails[]>([])
+
   const TEAM_DETAIL_URL = teamId ? TEAMS.TEAM_DETAIL_URL.replace('teamId', teamId) : ''
   const teamDetailRequest = useRequest(TEAM_DETAIL_URL)
+
+  const MATCH_HISTORY_URL =
+    tournamentId && teamId
+      ? TEAMS.MATCH_HISTORY_URL.replace('{tournamentId}', tournamentId).replace('{teamId}', teamId)
+      : ''
+  const matchHistoryRequest = useRequest(MATCH_HISTORY_URL)
 
   useEffect(() => {
     if (teamDetailRequest.data) {
@@ -27,6 +38,21 @@ function TeamDetail() {
     }
   }, [teamDetailRequest.data])
 
+  useEffect(() => {
+    if (matchHistoryRequest.data) {
+      const matchHistoryResponse: CricResponse<MatchHistoryResponse[]> =
+        matchHistoryRequest.data as CricResponse<MatchHistoryResponse[]>
+      const matchHistoryResult: MatchHistoryResponse[] =
+        matchHistoryResponse.Result as unknown as MatchHistoryResponse[]
+      if (matchHistoryResult) {
+        const matchListResponse: MatchHistoryDetails[] = Object.values(
+          matchHistoryResult,
+        ) as unknown as MatchHistoryDetails[]
+        setMatchHistoryList(matchListResponse)
+      }
+    }
+  }, [matchHistoryRequest.data])
+
   if (teamDetailRequest.isValidating || !teamDetailEntity) {
     return <Loading txt={TEAM.LOADING_TXT}></Loading>
   }
@@ -37,7 +63,7 @@ function TeamDetail() {
         <TeamCard teamDetail={teamDetailEntity}></TeamCard>
       </div>
       <div className='p-5'>
-        <TeamPlayers teamDetail={teamDetailEntity}></TeamPlayers>
+        <TeamPlayers teamDetail={teamDetailEntity} matchHistory={matchHistoryList}></TeamPlayers>
       </div>
     </div>
   )

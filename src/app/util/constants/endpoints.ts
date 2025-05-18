@@ -39,6 +39,7 @@ export const TEAMS = {
   TEAM_DETAIL_URL: 'teams/teamId',
   UPDATE_PLAYINGXI_URL: 'teams/teamId/tournaments/tournamentId',
   ENABLE_SPIN: 'teams/enableSpin',
+  MATCH_HISTORY_URL: 'teams/getMatchWiseDetails?tournamentId={tournamentId}&teamId={teamId}',
 }
 
 export const PLAYERS = {
