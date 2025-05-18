@@ -1,17 +1,54 @@
 import { SquadEntity } from '@/model/entities/squad.interface'
 import { COLORS } from '@/util/colors'
 import { PLAYER_ROLES, WK } from '@/util/player'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CompositionCard from './CompositionCard'
+import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
 
 type PlayingXICompositionProps = {
   playersCount: number
   playingXISquad: Map<string, SquadEntity[]>
-  isValidComp: boolean
+  composition: TeamCompositionEntity
 }
 
 function PlayingXIComposition(props: PlayingXICompositionProps) {
-  const { playersCount, playingXISquad, isValidComp } = props
+  const { playersCount, playingXISquad, composition } = props
+  const [issues, setIssues] = useState<string[]>([])
+  const { bat, bowl, allRound, wk, count } = composition
+
+  useEffect(() => {
+    if (composition) {
+      const issues = getCompositionMismatchMsg()
+      setIssues(issues)
+    }
+  }, [composition])
+
+  const getCompositionMismatchMsg = () => {
+    const minBat = 3,
+      minBowl = 3,
+      minAllRound = 1,
+      minWK = 1
+    const issues = []
+    if (count < 11) {
+      issues.push('You need 11 players in the playing XI')
+    } else if (count > 11) {
+      issues.push('More than 11 players in the playing XI')
+    }
+    if (bat < minBat) {
+      issues.push('At least 3 Batters (including batting All Rounders or Wicket Keeper Batsman)')
+    }
+    if (bowl < minBowl) {
+      issues.push('At least 3 Bowlers (including bowling All Rounders)')
+    }
+    if (allRound < minAllRound) {
+      issues.push('At least 1 All Rounder')
+    }
+    if (wk < minWK) {
+      issues.push('At least 1 Wicket Keeper')
+    }
+
+    return issues
+  }
   return (
     <div>
       <div
@@ -38,14 +75,17 @@ function PlayingXIComposition(props: PlayingXICompositionProps) {
           validComp={playingXISquad.has(WK) && playersCount === 11}
         />
       </div>
-      {!isValidComp && playersCount ? (
-        <div className='text-center text-red-500 italic'>
-          Select a valid composition ( min - 3 BAT/3 BAT ALL ROUND, 3 BOWL/3 BOWL ALL ROUND, 1 ALL
-          ROUND, 1 WK and 11 Players Total )
-        </div>
-      ) : (
-        <></>
-      )}
+      <ul className='list-disc pl-5 text-red-500 marker:text-red-700'>
+        {!composition.isValid && playersCount ? (
+          issues.map(issue => (
+            <li key={issue} className='text-left italic'>
+              {issue}
+            </li>
+          ))
+        ) : (
+          <></>
+        )}
+      </ul>
     </div>
   )
 }
