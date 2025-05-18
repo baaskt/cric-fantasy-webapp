@@ -35,16 +35,18 @@ function PlayingXIComposition(props: PlayingXICompositionProps) {
       issues.push('More than 11 players in the playing XI')
     }
     if (bat < minBat) {
-      issues.push('At least 3 Batters (including batting All Rounders or Wicket Keeper Batsman)')
+      issues.push(
+        'At least 3 Batters (including batting All Rounders or Wicket Keeper Batsman) required',
+      )
     }
     if (bowl < minBowl) {
-      issues.push('At least 3 Bowlers (including bowling All Rounders)')
+      issues.push('At least 3 Bowlers (including bowling All Rounders) required')
     }
     if (allRound < minAllRound) {
-      issues.push('At least 1 All Rounder')
+      issues.push('At least 1 All Rounder required')
     }
     if (wk < minWK) {
-      issues.push('At least 1 Wicket Keeper')
+      issues.push('At least 1 Wicket Keeper required')
     }
 
     return issues
