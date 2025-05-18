@@ -48,7 +48,10 @@ function TeamDetail() {
         const matchListResponse: MatchHistoryDetails[] = Object.values(
           matchHistoryResult,
         ) as unknown as MatchHistoryDetails[]
-        setMatchHistoryList(matchListResponse)
+        const sortedMatchList = matchListResponse.sort(
+          (a, b) => Number(b.matchId) - Number(a.matchId),
+        )
+        setMatchHistoryList(sortedMatchList)
       }
     }
   }, [matchHistoryRequest.data])
