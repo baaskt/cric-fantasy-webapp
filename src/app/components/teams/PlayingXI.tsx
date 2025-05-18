@@ -5,7 +5,7 @@ import { SquadEntity } from '@/model/entities/squad.interface'
 import { prepareTableData } from '@/util/tables/table'
 import CricButton from '../ui/CricButton'
 import PlayingXIComposition from './PlayingXIComposition'
-import { checkValidComposition, groupPlayersByRole } from '@/util/player'
+import { findTeamComposition, groupPlayersByRole } from '@/util/player'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { TEAMS } from '@/util/constants/endpoints'
@@ -15,6 +15,7 @@ import { hasMismatch } from '@/util/helper'
 import CricAlert from '../ui/CricAlert'
 import axios, { AxiosError } from 'axios'
 import { TableType } from '@/model/enum/table-type.enum'
+import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -46,7 +47,14 @@ function PlayingXI(props: PlayingXIProps) {
   const [squad, setSquad] = useState<SquadEntity[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [isXIDirty, setXIDirty] = useState<boolean>(false)
-  const [isValidComp, setValidComp] = useState<boolean>(false)
+  const [composition, setComposition] = useState<TeamCompositionEntity>({
+    isValid: false,
+    count: 0,
+    bat: 0,
+    bowl: 0,
+    allRound: 0,
+    wk: 0,
+  })
   const [error, setError] = useState<string>('')
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<Set<number>>(new Set())
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
@@ -121,8 +129,8 @@ function PlayingXI(props: PlayingXIProps) {
   }
 
   const checkComposition = (playersInXI: SquadEntity[]) => {
-    const isValid = checkValidComposition(playersInXI)
-    setValidComp(isValid)
+    const teamComposition: TeamCompositionEntity = findTeamComposition(playersInXI)
+    setComposition(teamComposition)
   }
 
   const handlePlayingXIUpdate = () => {
@@ -171,9 +179,9 @@ function PlayingXI(props: PlayingXIProps) {
         <PlayingXIComposition
           playingXISquad={playingXISquad}
           playersCount={selectedPlayerIds ? selectedPlayerIds.size : 0}
-          isValidComp={isValidComp}
+          composition={composition}
         />
-        {isXIDirty && isXIChangeAllowed && isValidComp && (
+        {isXIDirty && isXIChangeAllowed && composition?.isValid && (
           <div className='pt-5 flex flex-col items-center justify-center'>
             <CricButton
               btnTxt='Save Changes'
