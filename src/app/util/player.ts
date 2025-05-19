@@ -121,13 +121,18 @@ export const findTeamComposition = (playersInXI: SquadEntity[]): TeamComposition
       wk < 1 ? ++wk : ++bat
     }
   })
-  if (bat < minBat) {
-    ++bat
-    --allRound
-  } else if (bowl < minBowl) {
-    ++bowl
-    --allRound
+  while (allRound > 1) {
+    if (bat < minBat) {
+      ++bat
+      --allRound
+    } else if (bowl < minBowl) {
+      ++bowl
+      --allRound
+    } else {
+      break
+    }
   }
+
   const validBat = bat >= minBat ? true : false
   const validBowl = bowl >= minBowl ? true : false
   const validAllRound = allRound >= minAllRound ? true : false
