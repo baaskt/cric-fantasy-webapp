@@ -186,7 +186,7 @@ export const TITLES = {
   },
   TEAM_DETAIL: {
     label: 'Team Detail',
-    path: '/teams/detail',
+    path: 'teams/detail',
     fullPath: '/tournaments/tournamentId/teams/detail',
   },
   TOURNAMENTS: {

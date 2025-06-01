@@ -11,7 +11,6 @@ function TournamentStats() {
   const [statData, setStatData] = useState<TournamentStatsEntity>()
 
   useEffect(() => {
-    console.log(activeTournament)
     if (activeTournament?.stats) {
       setStatData(activeTournament.stats)
     }
