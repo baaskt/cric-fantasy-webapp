@@ -1,3 +1,5 @@
+import { InsightsEntity } from './insights-response.interface'
+
 export interface TournamentEntity {
   basePrice?: { [key: string]: number }
   tournamentId: string
@@ -16,4 +18,9 @@ export interface TournamentEntity {
   playingXI: boolean
   funStat?: string
   tournamentWinner?: string
+  stats?: TournamentStatsEntity
+}
+
+export interface TournamentStatsEntity {
+  [category: string]: InsightsEntity[]
 }

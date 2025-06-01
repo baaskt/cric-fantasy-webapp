@@ -51,12 +51,8 @@ function TeamCard(props: TeamCardProps) {
           <div className='text-sm'>{points} POINTS</div>
         </div>
       </div>
-      <div className='shadow-lg p-5'>
-        <StatCard title='Team Owners' menuList={participantsList}></StatCard>
-      </div>
-      <div className='shadow-lg p-5'>
-        <StatCard title='Fantasy Stats' menuList={fantasyList}></StatCard>
-      </div>
+      <StatCard title='Team Owners' menuList={participantsList}></StatCard>
+      <StatCard title='Fantasy Stats' menuList={fantasyList}></StatCard>
     </div>
   )
 }

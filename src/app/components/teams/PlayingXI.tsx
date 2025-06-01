@@ -175,8 +175,9 @@ function PlayingXI(props: PlayingXIProps) {
   }
 
   return (
-    <div className='flex flex-col w-full gap-5 pt-5 md:p-5'>
-      <div className='shadow-lg rounded-lg p-2 border-2 border-gray-300'>
+    <div className='flex flex-col h-screen w-full overflow-hidden pt-5 md:p-5 gap-5'>
+      {/* Sticky PlayingXIComposition section */}
+      <div className='sticky top-0 z-10 bg-white shadow-lg rounded-lg p-2 border-2 border-gray-300'>
         <PlayingXIComposition
           playingXISquad={playingXISquad}
           playersCount={selectedPlayerIds ? selectedPlayerIds.size : 0}
@@ -188,21 +189,25 @@ function PlayingXI(props: PlayingXIProps) {
               btnTxt='Save Changes'
               onClick={handlePlayingXIUpdate}
               isLoading={updatedPlayingXIRequest.isMutating}
-            ></CricButton>
+            />
             <div className='pt-5'>
               <CricAlert message={error} error={error} />
             </div>
           </div>
         )}
       </div>
-      <CricTable
-        headerList={headersList}
-        rowList={tableData}
-        fullWidth={false}
-        defOrder={'desc'}
-        defOrderBy={'points'}
-        onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
-      />
+
+      {/* Scrollable CricTable */}
+      <div className='flex-1 overflow-y-auto'>
+        <CricTable
+          headerList={headersList}
+          rowList={tableData}
+          fullWidth={false}
+          defOrder={'desc'}
+          defOrderBy={'points'}
+          onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
+        />
+      </div>
     </div>
   )
 }

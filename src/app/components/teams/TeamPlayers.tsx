@@ -50,18 +50,25 @@ function TeamPlayers(props: TeamPlayersProps) {
   if (!updatedTabs) return <>Loading</>
 
   return (
-    <div>
-      <div className='flex flex-row justify-between'>
-        <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
+    <div className='flex flex-col h-screen overflow-hidden'>
+      {/* Sticky CricTab */}
+      <div className='sticky top-0 bg-white z-10'>
+        <div className='flex flex-row justify-between border-b'>
+          <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
+        </div>
       </div>
-      <div className='flex justify-between'>
-        {selectedTab.id === 1 ? (
-          <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
-        ) : selectedTab.id === 2 ? (
-          <SquadPortfolio groupedSquad={groupedSquad} />
-        ) : selectedTab.id === 3 ? (
-          <MatchHistory matchHistory={matchHistory} />
-        ) : null}
+
+      {/* Scrollable Tab Content */}
+      <div className='flex-1 overflow-y-auto'>
+        <div className='flex justify-between p-4'>
+          {selectedTab.id === 1 ? (
+            <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
+          ) : selectedTab.id === 2 ? (
+            <SquadPortfolio groupedSquad={groupedSquad} />
+          ) : selectedTab.id === 3 ? (
+            <MatchHistory matchHistory={matchHistory} />
+          ) : null}
+        </div>
       </div>
     </div>
   )
