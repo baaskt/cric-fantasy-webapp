@@ -11,6 +11,7 @@ import { TITLES } from '@/util/constants/constants'
 import { usePathname } from 'next/navigation'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
+import EqualizerIcon from '@mui/icons-material/Equalizer'
 
 export const tournamentConfig: SideBarMenuEntity[] = [
   {
@@ -36,6 +37,12 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     title: TITLES.TEAMS.label,
     path: TITLES.TEAMS.path,
     fullPath: TITLES.TEAMS.fullPath,
+  },
+  {
+    icon: EqualizerIcon,
+    title: TITLES.ANALYTICS.label,
+    path: TITLES.ANALYTICS.path,
+    fullPath: TITLES.ANALYTICS.fullPath,
   },
 ]
 

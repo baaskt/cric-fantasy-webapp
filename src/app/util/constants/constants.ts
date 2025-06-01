@@ -179,9 +179,14 @@ export const TITLES = {
     path: '/teams',
     fullPath: '/tournaments/tournamentId/teams',
   },
+  ANALYTICS: {
+    label: 'Analytics',
+    path: '/analytics',
+    fullPath: '/tournaments/tournamentId/analytics',
+  },
   TEAM_DETAIL: {
     label: 'Team Detail',
-    path: '/teams/detail',
+    path: 'teams/detail',
     fullPath: '/tournaments/tournamentId/teams/detail',
   },
   TOURNAMENTS: {

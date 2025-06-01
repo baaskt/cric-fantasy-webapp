@@ -15,6 +15,7 @@ type PlayerCardProps = {
   showPrice?: boolean
   showPoints?: boolean
   isStandalone?: boolean
+  hidePointsLabel?: boolean
   desc?: string
 }
 
@@ -32,6 +33,7 @@ function PlayerCard(props: PlayerCardProps) {
     showPrice,
     showPoints,
     isStandalone,
+    hidePointsLabel,
     desc,
   } = props
   const playerUrl = convertDriveUrl(imageUrl)
@@ -88,7 +90,7 @@ function PlayerCard(props: PlayerCardProps) {
         <div
           className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'} ${showPoints ? 'min-h-6' : ''}`}
         >
-          {showPoints && points ? `${points} points` : ''}
+          {showPoints && points ? `${points} ${hidePointsLabel ? '' : 'points'}` : ''}
         </div>
         <div
           className={`text-sm text-center font-bold ${desc === 'Playing XI' ? 'text-green-500' : 'text-red-500'} ${desc ? 'min-h-6' : ''}`}
