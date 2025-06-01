@@ -18,7 +18,7 @@ export interface TournamentEntity {
   playingXI: boolean
   funStat?: string
   tournamentWinner?: string
-  stats: TournamentStatsEntity
+  stats?: TournamentStatsEntity
 }
 
 export interface TournamentStatsEntity {
