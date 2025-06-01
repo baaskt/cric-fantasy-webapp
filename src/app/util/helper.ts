@@ -197,3 +197,11 @@ export const convertDriveUrl = (url: string): string => {
   const match = url?.match(/id=([\w-]+)/)
   return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : ''
 }
+
+export function convertToSentenceCase(key: string): string {
+  // If key is all lowercase (no uppercase letters), return as-is
+  return key
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
+    .replace(/_/g, ' ') // Replace underscores with spaces (if needed)
+    .replace(/\b\w/g, char => char.toUpperCase()) // Capitalize each word
+}
