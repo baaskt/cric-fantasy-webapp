@@ -37,6 +37,7 @@ function TournamentStats() {
                   points={player.value.toString()}
                   showPoints={true}
                   hidePointsLabel={true}
+                  playerId={player.playerId}
                 ></PlayerCard>
               ))}
             </div>

@@ -16,6 +16,8 @@ import CricAlert from '../ui/CricAlert'
 import axios, { AxiosError } from 'axios'
 import { TableType } from '@/model/enum/table-type.enum'
 import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
+import { useRouter } from 'next/navigation'
+import { TITLES } from '@/util/constants/constants'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -32,7 +34,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'clubName', label: 'Club', type: 'string' },
   { key: 'points', label: 'Points', alias: 'Pts', type: 'stock', isMobile: true },
   { key: 'statPoints', label: 'Milestone Points', type: 'number' },
-  // { key: '', label: 'View Player Details', type: 'icon' },
+  { key: '', label: 'View Player Details', type: 'icon', iconPath: '/detail' },
 ]
 
 type PlayingXIProps = {
@@ -43,6 +45,7 @@ type PlayingXIProps = {
 
 function PlayingXI(props: PlayingXIProps) {
   const { activeTournament } = useTournament()
+  const router = useRouter()
   const tournamentId = activeTournament?.tournamentId || ''
   const { isXIChangeAllowed, teamId } = props
   const [squad, setSquad] = useState<SquadEntity[]>([])
@@ -174,6 +177,15 @@ function PlayingXI(props: PlayingXIProps) {
     }
   }
 
+  const navigateToPlayerDetail = (playerId: string | number) => {
+    if (playerId && activeTournament)
+      router.push(
+        TITLES.PLAYER_DETAIL.fullPath
+          .replace('tournamentId', activeTournament.tournamentId.toString())
+          .replace('playerId', playerId.toString()),
+      )
+  }
+
   return (
     <div className='flex flex-col h-screen w-full overflow-hidden pt-5 md:p-5 gap-5'>
       {/* Sticky PlayingXIComposition section */}
@@ -205,6 +217,7 @@ function PlayingXI(props: PlayingXIProps) {
           fullWidth={false}
           defOrder={'desc'}
           defOrderBy={'points'}
+          onRowSelect={navigateToPlayerDetail}
           onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
         />
       </div>

@@ -57,6 +57,7 @@ function SpinWizards(props: SpinWizardsProps) {
             points={player.totalPoints ? player.totalPoints.toString() : ''}
             teamName={player.teamName}
             showPoints={true}
+            playerId={player.playerId}
           ></PlayerCard>
         ))}
       </div>
