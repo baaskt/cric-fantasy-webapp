@@ -45,7 +45,9 @@ export const TEAMS = {
 export const PLAYERS = {
   PLAYERS: 'players',
   GET_ALL_URL: 'players',
-  GET_PLAYER_DETAIL_URL: 'players/tournamentId?player_id=',
+  GET_PLAYER_DETAIL_URL:
+    'teams/getPlayerWiseDetails?tournamentId={tournamentId}&teamId={teamId}&playerId={playerId}',
+  GET_PLAYER_DD_URL: 'matchPointsPlayers?matchId={matchId}&tourId={tournamentId}',
   GET_PLAYERS_URL: 'players/tournamentId/list?',
   GET_AUCTION_PLAYERS_URL: 'players/tournamentId/auction?category=',
   GET_AUCTION_UNSOLD_PLAYERS_URL: 'players/tournamentId/auction?soldStatus=',

@@ -10,11 +10,10 @@ import { TableType } from '@/model/enum/table-type.enum'
 import { useTournament } from '@/providers/TournamentProvider'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import Loading from '../Loading'
-import { PLAYER } from '@/util/constants/constants'
+import { PLAYER, TITLES } from '@/util/constants/constants'
 import { getPlayersFilterUrl } from '@/util/player'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { useRouter } from 'next/navigation'
-import { usePlayer } from '@/providers/PlayerProvider'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -42,7 +41,6 @@ function PlayersList(props: PlayersListProp) {
   const [columnList, setColumnList] = useState<CricHeaderRow[]>([])
   const [playersList, setPlayersList] = useState<PlayersListEntity[]>([])
   const router = useRouter()
-  const { markActivePlayer } = usePlayer()
 
   const PLAYERS_URL =
     activeTournament && selectedTeam
@@ -98,10 +96,13 @@ function PlayersList(props: PlayersListProp) {
     return updatedColumns
   }
 
-  const navigateToPlayerDetail = (rowId: string | number) => {
-    const selectedPlayer = playersList.find(player => player.playerId === rowId)
-    if (selectedPlayer) markActivePlayer(selectedPlayer.playerId)
-    router.push('players/detail')
+  const navigateToPlayerDetail = (playerId: string | number) => {
+    if (playerId && activeTournament)
+      router.push(
+        TITLES.PLAYER_DETAIL.fullPath
+          .replace('tournamentId', activeTournament.tournamentId.toString())
+          .replace('playerId', playerId.toString()),
+      )
   }
 
   if (playerRequest.isValidating || !tableData) {

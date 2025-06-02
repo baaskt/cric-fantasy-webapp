@@ -101,7 +101,7 @@ export function useSidebar() {
   const sidebarConfig = getSideBarConfig(activeTournament)
   const tournamentId = activeTournament?.tournamentId ? activeTournament?.tournamentId : ''
 
-  const activePath = getActivePath(sidebarConfig, tournamentId, pathname)
+  const activePath = getActivePath(sidebarConfig, pathname)
   return {
     tournamentId: tournamentId,
     activePath: activePath,
@@ -123,16 +123,39 @@ const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideB
   return sidebarConfig
 }
 
-const getActivePath = (
-  sidebarConfig: SideBarMenuEntity[],
-  tournamentId: string,
-  pathname: string,
-) => {
-  const TOURNAMENT_ID = 'tournamentId'
-  const matchingPath = sidebarConfig?.find(
-    sc =>
-      pathname.replace(`${tournamentId}`, '').replaceAll('/', '') ===
-      sc.fullPath.replace(TOURNAMENT_ID, '').replaceAll('/', ''),
+const getActivePath = (sidebarConfig: SideBarMenuEntity[], pathname: string) => {
+  const DYNAMIC_SEGMENTS = ['tournamentId', 'teamId', 'playerId']
+
+  return (
+    sidebarConfig.find(sc => matchPathIgnoringDynamic(pathname, sc.fullPath, DYNAMIC_SEGMENTS)) ||
+    null
   )
-  return matchingPath ? matchingPath : null
+
+  /**
+   * Checks if actualPath matches pattern with dynamic segments.
+   * Dynamic segments are those in pattern like "tournamentId", "playerId" and treated as wildcards.
+   */
+  function matchPathIgnoringDynamic(
+    actualPath: string,
+    pattern: string,
+    dynamicSegmentNames: string[],
+  ): boolean {
+    const actualSegments = actualPath.split('/').filter(Boolean)
+    const patternSegments = pattern.split('/').filter(Boolean)
+
+    if (actualSegments.length !== patternSegments.length) return false
+
+    for (let i = 0; i < actualSegments.length; i++) {
+      const patternPart = patternSegments[i]
+      const actualPart = actualSegments[i]
+
+      // If pattern part is dynamic, skip checking actual value
+      if (dynamicSegmentNames.includes(patternPart)) continue
+
+      // Else must match exactly
+      if (patternPart !== actualPart) return false
+    }
+
+    return true
+  }
 }
