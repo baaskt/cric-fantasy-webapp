@@ -171,8 +171,8 @@ export const TITLES = {
   },
   PLAYER_DETAIL: {
     label: 'Player Detail',
-    path: '/players/detail',
-    fullPath: '/tournaments/tournamentId/players/detail',
+    path: '/players/playerId',
+    fullPath: '/tournaments/tournamentId/players/playerId',
   },
   TEAMS: {
     label: 'Teams',

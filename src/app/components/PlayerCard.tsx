@@ -2,6 +2,9 @@ import { currencyToString } from '@/util/bidding'
 import { COLORS } from '@/util/colors'
 import { convertDriveUrl } from '@/util/helper'
 import React from 'react'
+import { useRouter } from 'next/navigation'
+import { TITLES } from '@/util/constants/constants'
+import { useTournament } from '@/providers/TournamentProvider'
 
 type PlayerCardProps = {
   name: string
@@ -17,6 +20,7 @@ type PlayerCardProps = {
   isStandalone?: boolean
   hidePointsLabel?: boolean
   desc?: string
+  playerId?: number
 }
 
 function PlayerCard(props: PlayerCardProps) {
@@ -35,11 +39,28 @@ function PlayerCard(props: PlayerCardProps) {
     isStandalone,
     hidePointsLabel,
     desc,
+    playerId,
   } = props
   const playerUrl = convertDriveUrl(imageUrl)
+  const router = useRouter()
+  const { activeTournament } = useTournament()
+
+  const navigateToPlayerDetail = () => {
+    if (playerId && activeTournament)
+      router.push(
+        TITLES.PLAYER_DETAIL.fullPath
+          .replace('tournamentId', activeTournament.tournamentId.toString())
+          .replace('playerId', playerId.toString()),
+      )
+  }
 
   return (
-    <div className={`flex flex-col items-center md:w-auto ${!isStandalone ? 'w-1/2' : ''}`}>
+    <div
+      className={`flex flex-col items-center md:w-auto ${!isStandalone ? 'w-1/2' : ''} cursor-pointer active:scale-95 transition-transform duration-100`}
+      onClick={() => navigateToPlayerDetail()}
+      role={'button'}
+      tabIndex={0}
+    >
       <img
         src={playerUrl || ALTERNATE_IMAGE_SRC}
         alt='player profile'
@@ -81,11 +102,7 @@ function PlayerCard(props: PlayerCardProps) {
         <div
           className={`italic text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-600'} ${showPrice ? 'min-h-6' : ''}`}
         >
-          {showPrice
-            ? soldAmount
-              ? currencyToString(soldAmount ? soldAmount : 0)
-              : 'Lucky Spin'
-            : ''}
+          {showPrice ? (soldAmount ? currencyToString(soldAmount) : 'Lucky Spin') : ''}
         </div>
         <div
           className={`text-sm text-center font-normal ${isDark ? 'text-black' : 'text-slate-500'} ${showPoints ? 'min-h-6' : ''}`}
@@ -95,7 +112,7 @@ function PlayerCard(props: PlayerCardProps) {
         <div
           className={`text-sm text-center font-bold ${desc === 'Playing XI' ? 'text-green-500' : 'text-red-500'} ${desc ? 'min-h-6' : ''}`}
         >
-          {desc ? `${desc}` : ''}
+          {desc || ''}
         </div>
       </div>
     </div>
