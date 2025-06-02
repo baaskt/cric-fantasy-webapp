@@ -11,6 +11,8 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { PLAYERS } from './constants/endpoints'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
+import { PlayerDetailEntity } from '@/model/response/player-detail.response.interface'
+import { PlayerInsightsEntity } from '@/model/entities/player-insights.interface'
 
 const ALLROUNDER = 'All Rounder'
 const BAT_ALLROUNDER = 'Batting Allrounder'
@@ -269,4 +271,40 @@ export const getPlayersFilterUrl = (
     : [TEAM_SUFFIX, ROLE_SUFFIX, CATEGORY_SUFFIX]
   const PLAYERS_URL = `${TOURNAMENT_URL}${FILTERS_SUFFIX.filter(url => url !== '').join('&')}`
   return PLAYERS_URL
+}
+
+export const generatePlayerInsights = (player: PlayerDetailEntity): PlayerInsightsEntity => {
+  const matches = player.matchWiseDetails || []
+  const totalMatches = matches.length
+  const pointsArray = matches.map(m => m.totalMatchPoints)
+  const total = pointsArray.reduce((sum, p) => sum + p, 0)
+  const average = total / pointsArray.length
+
+  const stdDev = Math.sqrt(
+    pointsArray.reduce((acc, p) => acc + Math.pow(p - average, 2), 0) / pointsArray.length,
+  )
+
+  const bestMatch = matches.reduce(
+    (max, m) => (m.totalMatchPoints > max.totalMatchPoints ? m : max),
+    matches[0],
+  )
+  const worstMatch = matches.reduce(
+    (min, m) => (m.totalMatchPoints < min.totalMatchPoints ? m : min),
+    matches[0],
+  )
+
+  const matchesAbove100 = pointsArray.filter(p => p >= 100).length
+  const matchesAbove50 = pointsArray.filter(p => p >= 50).length
+  const negativeMatches = pointsArray.filter(p => p < 0).length
+
+  return {
+    totalMatches,
+    averagePoints: Number(average.toFixed(1)),
+    consistency: Number(stdDev.toFixed(1)),
+    bestMatch,
+    worstMatch,
+    matchesAbove100,
+    matchesAbove50,
+    negativeMatches,
+  }
 }
