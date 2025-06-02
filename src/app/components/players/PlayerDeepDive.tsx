@@ -36,7 +36,6 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
         const matchingPlayer = playerDetailResponse.find(
           matchData => matchData.playerId === playerId.toString(),
         )
-        console.log(matchingPlayer)
         setPlayerDetailEntity(matchingPlayer)
       }
     }
