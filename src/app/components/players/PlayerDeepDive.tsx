@@ -54,8 +54,10 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
               .map(([statKey, statValue]) => (
                 <div
                   key={statKey}
-                  className={`flex justify-between gap-4 text-sm ${statValue !== '0' ? 'font-bold' : ''}`}
-                  style={{ color: statValue !== '0' ? COLORS.cricPrimary : '' }}
+                  className={`flex justify-between gap-4 text-sm ${statValue !== '0' && statValue !== '0.0' ? 'font-bold' : ''}`}
+                  style={{
+                    color: statValue !== '0' && statValue !== '0.0' ? COLORS.cricPrimary : '',
+                  }}
                 >
                   <div className='capitalize'>{convertToSentenceCase(statKey)}</div>
                   <div>{statValue}</div>
