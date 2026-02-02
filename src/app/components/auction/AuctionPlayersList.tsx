@@ -46,7 +46,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const playerSetType = props.selectedTab.value
   const tournamentId = activeTournament?.tournamentId || ''
   const SOLD_CATEGORY_URL =
-    props.selectedTab.id === 6
+    props.selectedTab.id === 7
       ? PLAYERS.GET_AUCTION_UNSOLD_PLAYERS_URL
       : PLAYERS.GET_AUCTION_PLAYERS_URL
   const PLAYERS_URL = tournamentId
