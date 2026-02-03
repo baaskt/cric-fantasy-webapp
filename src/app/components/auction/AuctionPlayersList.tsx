@@ -22,7 +22,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
-  // { key: 'sno', label: 'S.No', type: 'number', isMobile: true },
+  //// { key: 'sno', label: 'S.No', type: 'number', isMobile: true },
   { key: 'name', label: 'Players', type: 'string', isMobile: true },
   { key: 'clubName', label: 'Club / Country', type: 'string' },
   { key: 'basePrice', label: 'Base Price', type: 'currency', isMobile: false },
