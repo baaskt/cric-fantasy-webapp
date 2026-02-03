@@ -41,7 +41,6 @@ function Auction() {
       if (!activeCategory) {
         setSelectedTab(categoryList[0])
       }
-    }
   }, [activeTournament])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
