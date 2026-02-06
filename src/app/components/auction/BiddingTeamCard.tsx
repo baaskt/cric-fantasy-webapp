@@ -31,7 +31,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
         <div className='flex flex-col items-center p-1'>
           <div>{teamName}</div>
           <div>Balance: {currencyToString(purseBalance)}</div>
-          <div>Squad Count: {squadCount} / 12</div>
+          <div>Squad Count: {squadCount} / 15</div>
           {/* <div>Balance: {purseBalance}</div>
           <div>( {currencyToString(purseBalance)} )</div> */}
         </div>
