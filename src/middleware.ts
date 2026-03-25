@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { TITLES } from '@/util/constants/constants'
+import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
 
 const authRoutes = [TITLES.SIGNIN.path, TITLES.SIGNUP.path, TITLES.FORGOT_PWD.path]
 const protectedRoutes = [
@@ -8,6 +8,7 @@ const protectedRoutes = [
   TITLES.TOURNAMENTS.path,
   TITLES.PLAYERS.path,
   TITLES.TEAMS.path,
+  TITLES.RULE_BUILDER.path,
 ]
 const totalRoutes = [...authRoutes, ...protectedRoutes]
 

@@ -209,6 +209,11 @@ export const TITLES = {
     path: '/tournaments',
     fullPath: '/tournaments',
   },
+  RULE_BUILDER: {
+    label: 'Rule Builder',
+    path: '/ruleBuilder',
+    fullPath: '/tournaments/tournamentId/ruleBuilder',
+  },
 }
 
 export const STATS = {

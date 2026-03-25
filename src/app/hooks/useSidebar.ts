@@ -2,6 +2,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
+import RuleRoundedIcon from '@mui/icons-material/RuleRounded'
 import SportsHandballIcon from '@mui/icons-material/SportsHandball'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import HomeIcon from '@mui/icons-material/Home'
@@ -43,6 +44,12 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     title: TITLES.ANALYTICS.label,
     path: TITLES.ANALYTICS.path,
     fullPath: TITLES.ANALYTICS.fullPath,
+  },
+  {
+    icon: RuleRoundedIcon,
+    title: TITLES.RULE_BUILDER.label,
+    path: TITLES.RULE_BUILDER.path,
+    fullPath: TITLES.RULE_BUILDER.fullPath,
   },
 ]
 
