@@ -5,6 +5,7 @@ import ImportModal from "./ImportModal";
 import { CATEGORIES } from "./ruleBuilderConstants";
 import { buildJson, emptyRule, highlight, parseJsonToCategories, uid } from "./ruleBuilderUtils";
 import RuleEditor from "./RuleEditor";
+import { useAuth } from "@/providers/AuthProvider";
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
@@ -155,6 +156,7 @@ const css = `
 `;
 
 export default function RuleBuilder() {
+  const { isAdmin } = useAuth();
   const [categories,    setCategories]    = useState(() => CATEGORIES.map(name => ({ id: uid(), name, rules: [] })));
   const [selected,      setSelected]      = useState(null);
   const [copied,        setCopied]        = useState(false);
@@ -187,6 +189,17 @@ export default function RuleBuilder() {
 
   const activeRule   = selected ? categories.find(c => c.id === selected.catId)?.rules.find(r => r.id === selected.ruleId) : null;
   const totalRules   = categories.reduce((n, c) => n + c.rules.length, 0);
+
+  if (!isAdmin()) {
+    return (
+      <>
+        <style>{css}</style>
+        <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+          <h2>Access Denied. Admins Only.</h2>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
