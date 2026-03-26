@@ -2,6 +2,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded'
 import WorkspacesRoundedIcon from '@mui/icons-material/WorkspacesRounded'
+import RuleRoundedIcon from '@mui/icons-material/RuleRounded'
 import SportsHandballIcon from '@mui/icons-material/SportsHandball'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import HomeIcon from '@mui/icons-material/Home'
@@ -12,6 +13,7 @@ import { usePathname } from 'next/navigation'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import EqualizerIcon from '@mui/icons-material/Equalizer'
+import { useAuth } from '@/providers/AuthProvider'
 
 export const tournamentConfig: SideBarMenuEntity[] = [
   {
@@ -43,6 +45,12 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     title: TITLES.ANALYTICS.label,
     path: TITLES.ANALYTICS.path,
     fullPath: TITLES.ANALYTICS.fullPath,
+  },
+  {
+    icon: RuleRoundedIcon,
+    title: TITLES.RULE_BUILDER.label,
+    path: TITLES.RULE_BUILDER.path,
+    fullPath: TITLES.RULE_BUILDER.fullPath,
   },
 ]
 
@@ -98,7 +106,8 @@ const auctionConfig: SideBarMenuEntity[] = [
 export function useSidebar() {
   const pathname = usePathname()
   const { activeTournament } = useTournament()
-  const sidebarConfig = getSideBarConfig(activeTournament)
+  const { isAdmin } = useAuth()
+  const sidebarConfig = getSideBarConfig(activeTournament, isAdmin())
   const tournamentId = activeTournament?.tournamentId ? activeTournament?.tournamentId : ''
 
   const activePath = getActivePath(sidebarConfig, pathname)
@@ -109,17 +118,24 @@ export function useSidebar() {
   }
 }
 
-const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideBarMenuEntity[] => {
+const getSideBarConfig = (
+  activeTournament: TournamentEntity | undefined,
+  isAdmin: boolean,
+): SideBarMenuEntity[] => {
   const isAuctionProgress =
     activeTournament &&
     (activeTournament.tournamentStatus === (TournamentStatusLabel.PreAuction as string) ||
       activeTournament.tournamentStatus === (TournamentStatusLabel.InAuction as string))
 
-  const sidebarConfig = activeTournament
+  let sidebarConfig = activeTournament
     ? isAuctionProgress
       ? [...homeConfig, ...tournamentConfig, ...detailConfig, ...auctionConfig]
       : [...homeConfig, ...tournamentConfig, ...detailConfig]
     : homeConfig
+
+  if (!isAdmin) {
+    sidebarConfig = sidebarConfig.filter(item => item.title !== TITLES.RULE_BUILDER.label)
+  }
   return sidebarConfig
 }
 
