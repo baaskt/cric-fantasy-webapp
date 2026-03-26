@@ -13,7 +13,13 @@ export default function PointsCell({ value, onChange }) {
   }
   return (
     <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-      <select value={op} onChange={e => onChange({ operation: e.target.value })}>
+      <select value={op} onChange={e => {
+        const next = e.target.value;
+        if (next === "fixed")    return onChange(0);
+        if (next === "as_is")    return onChange({ operation: "as_is" });
+        if (next === "multiply") return onChange({ operation: "multiply", factor: value.factor ?? 1 });
+        if (next === "add")      return onChange({ operation: "add", value: value.value ?? 0 });
+      }}>
         {POINTS_OPS.map(o => <option key={o}>{o}</option>)}
       </select>
       {op === "multiply" && (

@@ -1,13 +1,54 @@
 import { useCallback } from "react";
-import { emptySegment } from "./ruleBuilderUtils";
+import { emptySegment, emptyChildRule } from "./ruleBuilderUtils";
 import SegmentEditor from "./SegmentEditor";
 
 export default function RuleEditor({ rule, onChange }) {
+  // scored_segments
   const updSeg = useCallback((id, seg) =>
     onChange({ ...rule, segments: rule.segments.map(s => s.id === id ? seg : s) }),
   [rule, onChange]);
   const rmSeg  = id => onChange({ ...rule, segments: rule.segments.filter(s => s.id !== id) });
   const addSeg = ()  => onChange({ ...rule, segments: [...rule.segments, emptySegment()] });
+
+  // group children
+  const updChild = useCallback((id, child) =>
+    onChange({ ...rule, rules: rule.rules.map(r => r.id === id ? child : r) }),
+  [rule, onChange]);
+  const rmChild  = id => onChange({ ...rule, rules: rule.rules.filter(r => r.id !== id) });
+  const addChild = ()  => onChange({ ...rule, rules: [...(rule.rules || []), emptyChildRule()] });
+
+  if (rule.type === "group") {
+    return (
+      <div>
+        <div className="rule-editor-header">
+          <input className="rule-name-input" value={rule.name}
+            onChange={e => onChange({ ...rule, name: e.target.value })} placeholder="groupName" />
+          <span style={{ color: "var(--accent2)", fontSize: 11, paddingTop: 8 }}>group</span>
+        </div>
+        <div className="section-label" style={{ marginBottom: 12 }}>
+          child rules — each evaluates independently and contributes to <code style={{ color: "var(--accent2)" }}>{rule.name}.<em>childName</em></code>
+        </div>
+        {(rule.rules || []).map(child => (
+          <div key={child.id} style={{ border: "1px solid var(--border)", borderRadius: 10, marginBottom: 12, overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", background: "var(--surface2)", borderBottom: "1px solid var(--border)" }}>
+              <span style={{ color: "var(--accent2)", fontSize: 11, minWidth: 80 }}>{rule.name}.</span>
+              <input
+                style={{ flex: 1, background: "none", border: "none", fontFamily: "var(--mono)", fontSize: 12, fontWeight: 500, color: "var(--accent2)", outline: "none" }}
+                value={child.name}
+                onChange={e => updChild(child.id, { ...child, name: e.target.value })}
+              />
+              <span style={{ color: "var(--muted)", fontSize: 10 }}>scored_segments</span>
+              <button className="btn-icon" onClick={() => rmChild(child.id)}>✕</button>
+            </div>
+            <div style={{ padding: "14px 14px 0" }}>
+              <RuleEditor rule={child} onChange={updated => updChild(child.id, updated)} />
+            </div>
+          </div>
+        ))}
+        <button className="add-segment-btn" onClick={addChild}>＋ add child rule</button>
+      </div>
+    );
+  }
 
   return (
     <div>

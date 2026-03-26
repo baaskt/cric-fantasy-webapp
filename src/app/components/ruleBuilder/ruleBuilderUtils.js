@@ -1,3 +1,5 @@
+import { MODES } from './ruleBuilderConstants';
+
 export const uid = () => Math.random().toString(36).slice(2, 8);
 export const emptyCondition = () => ({ id: uid(), field: "runs", operator: "gte", value: 0 });
 export const emptyThreshold = () => ({ id: uid(), value: 0, operator: "gte", points: 0 });
@@ -7,6 +9,12 @@ export const emptySegment   = () => ({
 });
 export const emptyRule = () => ({
   id: uid(), name: "newRule", type: "scored_segments", segments: [emptySegment()],
+});
+export const emptyGroupRule = () => ({
+  id: uid(), name: "impact", type: "group", rules: [],
+});
+export const emptyChildRule = () => ({
+  id: uid(), name: "newChild", type: "scored_segments", segments: [emptySegment()],
 });
 
 export function buildFormulaPreview(score) {
@@ -98,48 +106,107 @@ export function buildFormulaPreview(score) {
   return null;
 }
 
+export function initModeData(defaultRules) {
+  return Object.fromEntries(
+    Object.entries(MODES).map(([mode, { categories }]) => {
+      const base = categories.map(name => ({ id: uid(), name, rules: [] }));
+      return [mode, parseJsonToCategories(defaultRules[mode] || {}, base)];
+    })
+  );
+}
+
+export function parseJsonToModes(parsed, existing) {
+  return Object.fromEntries(
+    Object.entries(existing).map(([mode, cats]) => [
+      mode,
+      parseJsonToCategories(parsed[mode] || {}, cats),
+    ])
+  );
+}
+
 export function parseJsonToCategories(parsed, existing) {
+  const parseRule = (name, def) => {
+    if (def.type === "group") {
+      return {
+        id: uid(), name, type: "group",
+        rules: Object.entries(def.rules || {}).map(([cn, cd]) => parseRule(cn, cd)),
+      };
+    }
+    return {
+      id: uid(), name, type: def.type || "scored_segments",
+      segments: (def.segments || []).map(seg => ({
+        id: uid(),
+        label: seg.label || "Segment",
+        when: (seg.when || []).map(c => ({ id: uid(), ...c })),
+        score: seg.score || { operation: "field", field: "runs" },
+        thresholds: (seg.thresholds || []).map(t => ({ id: uid(), ...t })),
+        default: seg.default ?? 0,
+      })),
+    };
+  };
+
   return existing.map(cat => {
     const data = parsed[cat.name];
     if (!data) return cat;
     return {
       ...cat,
-      rules: Object.entries(data).map(([name, def]) => ({
-        id: uid(), name, type: def.type || "scored_segments",
-        segments: (def.segments || []).map(seg => ({
-          id: uid(),
-          label: seg.label || "Segment",
-          when: (seg.when || []).map(c => ({ id: uid(), ...c })),
-          score: seg.score || { operation: "field", field: "runs" },
-          thresholds: (seg.thresholds || []).map(t => ({ id: uid(), ...t })),
-          default: seg.default ?? 0,
-        })),
-      })),
+      rules: Object.entries(data).map(([name, def]) => parseRule(name, def)),
     };
   });
 }
 
-export function buildJson(categories) {
+const serialiseScore = s => {
+  if (!s || !s.operation) return s;
+  if (s.operation === "fixed") return { operation: "fixed", value: s.value ?? 0 };
+  return s;
+};
+
+const serialisePoints = p => {
+  if (typeof p === "object" && p !== null) return p;
+  return Number(p ?? 0);
+};
+
+const serialiseRule = rule => {
+  if (rule.type === "group") {
+    return {
+      type: "group",
+      rules: Object.fromEntries(
+        (rule.rules || []).map(child => [child.name, serialiseRule(child)])
+      ),
+    };
+  }
+  return {
+    type: rule.type,
+    segments: (rule.segments || []).map(seg => ({
+      label: seg.label,
+      when: seg.when.map(({ field, operator, value }) => ({ field, operator, value })),
+      score: serialiseScore(seg.score),
+      thresholds: seg.thresholds.map(({ value, operator, points }) => ({
+        operator,
+        value: Number(value ?? 0),
+        points: serialisePoints(points),
+      })),
+      default: serialisePoints(seg.default),
+    })),
+  };
+};
+
+export function buildRuleJson(rule) {
+  return JSON.stringify({ [rule.name]: serialiseRule(rule) }, null, 2);
+}
+
+export function buildJson(modeData) {
   const out = {};
-  for (const cat of categories) {
-    if (!cat.rules.length) continue;
-    out[cat.name] = {};
-    for (const rule of cat.rules) {
-      out[cat.name][rule.name] = {
-        type: rule.type,
-        segments: rule.segments.map(seg => ({
-          label: seg.label,
-          when: seg.when.map(({ field, operator, value }) => ({ field, operator, value })),
-          score: seg.score,
-          thresholds: seg.thresholds.map(({ value, operator, points }) => ({
-            operator,
-            value: Number(value),
-            points: typeof points === "object" ? points : Number(points),
-          })),
-          default: typeof seg.default === "object" ? seg.default : Number(seg.default),
-        })),
-      };
+  for (const [mode, cats] of Object.entries(modeData)) {
+    const modeOut = {};
+    for (const cat of cats) {
+      if (!cat.rules.length) continue;
+      modeOut[cat.name] = {};
+      for (const rule of cat.rules) {
+        modeOut[cat.name][rule.name] = serialiseRule(rule);
+      }
     }
+    if (Object.keys(modeOut).length) out[mode] = modeOut;
   }
   return JSON.stringify(out, null, 2);
 }

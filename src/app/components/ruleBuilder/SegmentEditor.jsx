@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { STAT_FIELDS, OPERATORS, OP_SYMBOLS } from "./ruleBuilderConstants";
+import { STAT_FIELDS, OPERATORS, OP_SYMBOLS, OPERATORS_BY_TYPE, fieldType, DEFAULT_VALUE } from "./ruleBuilderConstants";
 import { emptyCondition, emptyThreshold } from "./ruleBuilderUtils";
 import ScoreEditor from "./ScoreEditor";
 import PointsCell from "./PointsCell";
@@ -40,14 +40,39 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }) {
           <div className="conditions-list">
             {seg.when.map(c => (
               <div key={c.id} className="condition-row">
-                <select value={c.field} onChange={e => updCond(c.id, "field", e.target.value)}>
+                <select value={c.field} onChange={e => {
+                  const newField = e.target.value;
+                  const type = fieldType(newField);
+                  const allowedOps = OPERATORS_BY_TYPE[type];
+                  const operator = allowedOps.includes(c.operator) ? c.operator : allowedOps[0];
+                  upd("when", seg.when.map(cond =>
+                    cond.id === c.id
+                      ? { ...cond, field: newField, operator, value: DEFAULT_VALUE[type] }
+                      : cond
+                  ));
+                }}>
                   {STAT_FIELDS.map(f => <option key={f}>{f}</option>)}
                 </select>
                 <select value={c.operator} onChange={e => updCond(c.id, "operator", e.target.value)}>
-                  {OPERATORS.map(o => <option key={o}>{o}</option>)}
+                  {OPERATORS_BY_TYPE[fieldType(c.field)].map(o => <option key={o}>{o}</option>)}
                 </select>
-                <input type={c.field === "isKeeper" ? "text" : "number"} value={c.value}
-                  onChange={e => updCond(c.id, "value", c.field === "isKeeper" ? e.target.value === "true" : +e.target.value)} />
+                {fieldType(c.field) === "boolean" ? (
+                  <div style={{ display: "flex", gap: 5 }}>
+                    {[true, false].map(v => (
+                      <button key={String(v)}
+                        className={`toggle-btn ${c.value === v ? "active" : ""}`}
+                        onClick={() => updCond(c.id, "value", v)}>
+                        {String(v)}
+                      </button>
+                    ))}
+                  </div>
+                ) : fieldType(c.field) === "string" ? (
+                  <input type="text" value={c.value}
+                    onChange={e => updCond(c.id, "value", e.target.value)} />
+                ) : (
+                  <input type="number" value={c.value}
+                    onChange={e => updCond(c.id, "value", +e.target.value)} />
+                )}
                 <span className="cond-preview">
                   <strong>{c.field}</strong> {OP_SYMBOLS[c.operator]} {String(c.value)}
                 </span>

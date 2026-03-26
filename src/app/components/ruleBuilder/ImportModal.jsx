@@ -1,9 +1,32 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRequest } from "@/hooks/useRequest";
+import { TOURNAMENTS } from "@/util/constants/endpoints";
 
-export default function ImportModal({ onClose, onImport }) {
-  const [text, setText]   = useState("");
-  const [error, setError] = useState("");
-  const fileRef           = useRef();
+export default function ImportModal({ onClose, onImport, currentTournamentId }) {
+  const [text, setText]               = useState("");
+  const [error, setError]             = useState("");
+  const [selectedTourId, setSelectedTourId] = useState('');
+  const fileRef                       = useRef();
+
+  const { data: tourData } = useRequest(TOURNAMENTS.GET_ALL_URL + 'true');
+  const allTournaments = (tourData?.result ?? []).filter(t => t.tournamentId !== currentTournamentId);
+
+  const configUrl = selectedTourId
+    ? `${TOURNAMENTS.RULE_CONFIG}${selectedTourId}/ruleConfig`
+    : null;
+  const { data: configData, isLoading: configLoading, error: configError } = useRequest(configUrl);
+
+  useEffect(() => {
+    if (!configData?.result) return;
+    onImport(configData.result);
+    onClose();
+  }, [configData]);
+
+  useEffect(() => {
+    if (!configError) return;
+    setError('Failed to load config from that tournament.');
+    setSelectedTourId('');
+  }, [configError]);
 
   const handleFile = e => {
     const file = e.target.files[0];
@@ -30,6 +53,22 @@ export default function ImportModal({ onClose, onImport }) {
           <button className="btn-icon" onClick={onClose}>✕</button>
         </div>
         <div className="modal-body">
+          <div className="tour-picker">
+            <label className="tour-picker-label">load from tournament</label>
+            <div className="tour-picker-row">
+              <select className="tour-picker-select"
+                value={selectedTourId}
+                onChange={e => { setSelectedTourId(e.target.value); setError(''); }}
+                disabled={configLoading || !allTournaments.length}>
+                <option value="">— select a tournament —</option>
+                {allTournaments.map(t => (
+                  <option key={t.tournamentId} value={t.tournamentId}>{t.tournamentName}</option>
+                ))}
+              </select>
+              {configLoading && <span className="tour-picker-loading">loading…</span>}
+            </div>
+            <div className="tour-picker-divider">— or paste / upload below —</div>
+          </div>
           <p className="import-hint">
             Paste your rule JSON below or upload a <code>.json</code> file.
             Matching categories will be replaced; others are left untouched.

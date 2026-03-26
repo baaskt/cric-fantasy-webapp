@@ -11,7 +11,16 @@ export default function ScoreEditor({ score, onChange }) {
       <div className="score-op-grid">
         {SCORE_OPS.map(o => (
           <button key={o} className={`score-op-btn ${op === o ? "active" : ""}`}
-            onClick={() => onChange({ operation: o })}>{o}</button>
+            onClick={() => {
+              const base = { operation: o };
+              if (o === "fixed")             onChange({ ...base, value: score.value ?? 0 });
+              else if (o === "multiply")     onChange({ ...base, field: score.field ?? "", factor: score.factor ?? 1 });
+              else if (o === "ratio")        onChange({ ...base, numerator: score.numerator ?? "", denominator: score.denominator ?? "", factor: score.factor ?? 1 });
+              else if (o === "weighted_sum") onChange({ ...base, fields: score.fields ?? [], weights: score.weights ?? [] });
+              else if (o === "sum")          onChange({ ...base, fields: score.fields ?? [] });
+              else if (o === "difference")   onChange({ ...base, fields: score.fields ?? [], allowNegative: score.allowNegative ?? true });
+              else onChange(base);
+            }}>{o}</button>
         ))}
       </div>
 
