@@ -51,13 +51,11 @@ function TeamPlayers(props: TeamPlayersProps) {
 
   return (
     <div className='flex flex-col h-screen'>
-      {/* Sticky CricTab */}
-      <div className='sticky top-0 bg-white z-10 border-b'>
+      <div className='bg-white border-b'>
         <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
       </div>
 
-      {/* Scrollable content area */}
-      <div className='flex-1 overflow-y-auto'>
+      <div className='flex'>
         {selectedTab.id === 1 ? (
           <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
         ) : selectedTab.id === 2 ? (

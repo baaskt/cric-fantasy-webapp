@@ -61,18 +61,11 @@ function TeamDetail() {
   }
 
   return (
-    <div className='flex flex-col'>
-      {/* TeamCard scrolls normally */}
-      <div className='w-full'>
-        <TeamCard teamDetail={teamDetailEntity} />
-      </div>
+    <div className='flex flex-col w-full'>
+      <TeamCard teamDetail={teamDetailEntity} />
 
-      {/* TeamPlayers is sticky and scrolls internally */}
-      <div className='sticky top-0 bg-white z-10'>
-        <div className='h-[calc(100vh-60px)] overflow-y-auto p-5'>
-          {/* Replace 100px with approx height of TeamCard */}
-          <TeamPlayers teamDetail={teamDetailEntity} matchHistory={matchHistoryList} />
-        </div>
+      <div className='bg-white p-5'>
+        <TeamPlayers teamDetail={teamDetailEntity} matchHistory={matchHistoryList} />
       </div>
     </div>
   )
