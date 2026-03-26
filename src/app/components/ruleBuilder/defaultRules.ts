@@ -11,7 +11,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
           {
             label: 'Base run points',
             when: [],
-            score: { operation: 'multiply', field: 'runs', factor: 2 },
+            score: { operation: 'multiply', field: 'runsScored', factor: 2 },
             thresholds: [],
             default: { operation: 'as_is' },
           },
@@ -23,7 +23,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
           {
             label: 'Batting milestone',
             when: [],
-            score: { operation: 'field', field: 'runs' },
+            score: { operation: 'field', field: 'runsScored' },
             thresholds: [
               { operator: 'gte', value: 100, points: 100 },
               { operator: 'gte', value: 75, points: 75 },
@@ -42,7 +42,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
             when: [{ field: 'ballsFaced', operator: 'gte', value: 10 }],
             score: {
               operation: 'ratio',
-              numerator: 'runs',
+              numerator: 'runsScored',
               denominator: 'ballsFaced',
               factor: 100,
             },
@@ -58,7 +58,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
             when: [{ field: 'ballsFaced', operator: 'gte', value: 10 }],
             score: {
               operation: 'ratio',
-              numerator: 'runs',
+              numerator: 'runsScored',
               denominator: 'ballsFaced',
               factor: 100,
             },
@@ -248,7 +248,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
           {
             label: 'Tour batting milestone',
             when: [],
-            score: { operation: 'field', field: 'runs' },
+            score: { operation: 'field', field: 'runsScored' },
             thresholds: [
               { operator: 'gte', value: 700, points: 450 },
               { operator: 'gte', value: 600, points: 300 },
@@ -286,7 +286,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
           {
             label: 'Elite all-rounder',
             when: [
-              { field: 'runs', operator: 'gte', value: 275 },
+              { field: 'runsScored', operator: 'gte', value: 275 },
               { field: 'wickets', operator: 'gte', value: 12 },
             ],
             score: { operation: 'fixed', value: 300 },
@@ -296,7 +296,7 @@ export const DEFAULT_RULES: DefaultRulesConfig = {
           {
             label: 'Senior all-rounder',
             when: [
-              { field: 'runs', operator: 'gte', value: 225 },
+              { field: 'runsScored', operator: 'gte', value: 225 },
               { field: 'wickets', operator: 'gte', value: 7 },
             ],
             score: { operation: 'fixed', value: 150 },
