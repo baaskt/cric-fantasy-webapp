@@ -18,6 +18,21 @@ import { useAuth } from '@/providers/AuthProvider'
 import { useTournament } from '@/providers/TournamentProvider'
 import type { DefaultRulesConfig, ModeData, ModeName, SelectedRule } from './types'
 
+function fallbackCopy(text: string, onSuccess: () => void) {
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0'
+  document.body.appendChild(ta)
+  ta.focus()
+  ta.select()
+  try {
+    document.execCommand('copy')
+    onSuccess()
+  } finally {
+    document.body.removeChild(ta)
+  }
+}
+
 export default function RuleBuilder() {
   const { isAdmin } = useAuth()
   const admin = isAdmin()
@@ -85,10 +100,20 @@ export default function RuleBuilder() {
     setTimeout(() => setImportFlash(false), 2200)
   }
   const copy = () => {
-    void navigator.clipboard.writeText(displayJson).then(() => {
+    const markCopied = () => {
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
-    })
+    }
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard
+        .writeText(displayJson)
+        .then(markCopied)
+        .catch(() => {
+          fallbackCopy(displayJson, markCopied)
+        })
+    } else {
+      fallbackCopy(displayJson, markCopied)
+    }
   }
 
   const selectRule = (catId: string, ruleId: string) => {
