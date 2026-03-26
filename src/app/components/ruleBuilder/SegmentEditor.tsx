@@ -9,7 +9,7 @@ import {
   fieldType,
   DEFAULT_VALUE,
 } from './ruleBuilderConstants'
-import { emptyCondition, emptyThreshold } from './ruleBuilderUtils'
+import { emptyCondition, emptyThreshold, buildFormulaPreview } from './ruleBuilderUtils'
 import ScoreEditor from './ScoreEditor'
 import PointsCell from './PointsCell'
 import type { PointsValue, Segment } from './types'
@@ -20,6 +20,110 @@ interface Props {
   isFallback: boolean
   onChange: (seg: Segment) => void
   onRemove: () => void
+}
+
+function SegmentPreview({ seg }: { seg: Segment }) {
+  const formula = buildFormulaPreview(seg.score)
+  const rowStyle = { display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap' } as const
+  const labelStyle = {
+    fontSize: 10,
+    letterSpacing: '.08em',
+    textTransform: 'uppercase',
+    color: 'var(--muted)',
+    minWidth: 40,
+    paddingTop: 2,
+  } as const
+  const monoStyle = {
+    fontFamily: 'var(--mono)',
+    fontSize: 12,
+    lineHeight: 1.8,
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 2,
+  } as const
+  return (
+    <div
+      style={{
+        background: 'var(--surface3)',
+        borderRadius: 7,
+        padding: '8px 12px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 6,
+        marginTop: 8,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 10,
+          letterSpacing: '.1em',
+          textTransform: 'uppercase',
+          color: 'var(--muted)',
+        }}
+      >
+        segment summary
+      </div>
+      {/* when */}
+      <div style={rowStyle}>
+        <span style={labelStyle}>when</span>
+        <div style={monoStyle}>
+          {seg.when.length === 0 ? (
+            <span style={{ color: 'var(--accent)' }}>always</span>
+          ) : (
+            seg.when.map((c, i) => (
+              <span key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                {i > 0 && <span style={{ color: 'var(--muted)', marginRight: 3 }}>AND</span>}
+                <span style={{ color: 'var(--accent2)' }}>{c.field}</span>
+                <span style={{ color: 'var(--muted)' }}>{OP_SYMBOLS[c.operator]}</span>
+                <span style={{ color: 'var(--accent)' }}>{String(c.value)}</span>
+              </span>
+            ))
+          )}
+        </div>
+      </div>
+      {/* score */}
+      <div style={rowStyle}>
+        <span style={labelStyle}>score</span>
+        <div style={monoStyle}>
+          {formula ? (
+            formula.parts.map((pt, i) => (
+              <span key={i} style={{ color: pt.c }}>
+                {pt.t}
+              </span>
+            ))
+          ) : (
+            <span style={{ color: 'var(--muted)' }}>—</span>
+          )}
+        </div>
+      </div>
+      {/* thresholds */}
+      {seg.thresholds.length > 0 && (
+        <div style={rowStyle}>
+          <span style={labelStyle}>if</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {seg.thresholds.map(t => (
+              <div key={t.id} style={monoStyle}>
+                <span style={{ color: 'var(--muted)' }}>score</span>
+                <span style={{ color: 'var(--muted)' }}>&nbsp;{OP_SYMBOLS[t.operator]}&nbsp;</span>
+                <span style={{ color: 'var(--accent)' }}>{t.value}</span>
+                <span style={{ color: 'var(--muted)' }}>&nbsp;→&nbsp;</span>
+                <span style={{ color: 'var(--accent2)' }}>{ptsLabel(t.points)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* default */}
+      <div style={rowStyle}>
+        <span style={labelStyle}>{seg.thresholds.length === 0 ? 'return' : 'else'}</span>
+        <div style={monoStyle}>
+          <span style={{ color: 'var(--muted)' }}>→&nbsp;</span>
+          <span style={{ color: 'var(--accent2)' }}>{ptsLabel(seg.default)}</span>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export function ptsLabel(pts: PointsValue): string {
@@ -247,6 +351,8 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
           <div className='section-label'>default points (when no threshold matches)</div>
           <PointsCell value={seg.default} onChange={v => upd('default', v)} />
         </div>
+
+        <SegmentPreview seg={seg} />
       </div>
     </div>
   )

@@ -20,6 +20,7 @@ import type { DefaultRulesConfig, ModeData, ModeName, SelectedRule } from './typ
 
 export default function RuleBuilder() {
   const { isAdmin } = useAuth()
+  const admin = isAdmin()
   const { activeTournament } = useTournament()
   const currentTournamentId = activeTournament?.tournamentId
   const [modeData, setModeData] = useState<ModeData>(() => initModeData(DEFAULT_RULES))
@@ -104,17 +105,6 @@ export default function RuleBuilder() {
   const displayJson = isFocused ? buildRuleJson(activeRule) : json
   const totalRules = activeCats.reduce((n, c) => n + c.rules.length, 0)
 
-  if (!isAdmin()) {
-    return (
-      <div
-        className='rb'
-        style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <h2>Access Denied. Admins Only.</h2>
-      </div>
-    )
-  }
-
   return (
     <div className='rb'>
       {showImport && (
@@ -144,14 +134,16 @@ export default function RuleBuilder() {
               </button>
             ))}
           </div>
-          <div className='sidebar-actions'>
-            <button
-              className={`import-btn ${importFlash ? 'flash' : ''}`}
-              onClick={() => setShowImport(true)}
-            >
-              {importFlash ? '✓ imported successfully!' : '↑ import json config'}
-            </button>
-          </div>
+          {admin && (
+            <div className='sidebar-actions'>
+              <button
+                className={`import-btn ${importFlash ? 'flash' : ''}`}
+                onClick={() => setShowImport(true)}
+              >
+                {importFlash ? '✓ imported successfully!' : '↑ import json config'}
+              </button>
+            </div>
+          )}
           <div className='sidebar-body'>
             {activeCats.map(cat => {
               const expanded = expandedCats[cat.name]
@@ -275,13 +267,14 @@ export default function RuleBuilder() {
                 </>
               )}
             </div>
-            {copied ? (
-              <span className='copied-badge'>copied!</span>
-            ) : (
-              <button className='btn btn-accent' onClick={copy}>
-                copy
-              </button>
-            )}
+            {admin &&
+              (copied ? (
+                <span className='copied-badge'>copied!</span>
+              ) : (
+                <button className='btn btn-accent' onClick={copy}>
+                  copy
+                </button>
+              ))}
           </div>
           <div className='preview-body' style={{ textAlign: 'left' }}>
             <pre dangerouslySetInnerHTML={{ __html: highlight(displayJson) }} />

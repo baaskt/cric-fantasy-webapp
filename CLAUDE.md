@@ -47,7 +47,7 @@ Middleware at `src/middleware.ts` handles auth-based redirects.
 Cookie-based JWT: `accessToken` + `refreshToken` cookies. The Axios `NetworkInterceptor` auto-refreshes on 401 and retries the failed request. Admin role check: `user.roles.includes('admin')`.
 
 ### Rule Builder
-Admin-only feature (`/ruleBuilder`). Files are `.jsx`/`.js` (not `.tsx`/`.ts`) — this is intentional for this section. Located in `src/app/components/ruleBuilder/` with utils in `ruleBuilderUtils.js` and `ruleBuilderConstants.js`.
+Admin-only feature (`/ruleBuilder`). Located in `src/app/components/ruleBuilder/` — all files are `.tsx`/`.ts`. Central types in `types.ts`, constants in `ruleBuilderConstants.ts`, utilities (factory functions, serialization, JSON export) in `ruleBuilderUtils.ts`, default config in `defaultRules.ts`.
 
 ### Styling Conventions
 - MUI components + Emotion for component-level styles
