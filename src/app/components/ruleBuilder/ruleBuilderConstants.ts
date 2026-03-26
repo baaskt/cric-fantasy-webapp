@@ -27,9 +27,8 @@ export const MODES: Record<ModeName, { label: string; categories: string[] }> = 
 }
 
 // Derived: all unique category names across all modes
-export const CATEGORIES: string[] = [
-  ...new Set(Object.values(MODES).flatMap(m => m.categories)),
-] as string[]
+const _allCategories = Object.values(MODES).flatMap(m => m.categories)
+export const CATEGORIES: string[] = _allCategories.filter((v, i) => _allCategories.indexOf(v) === i)
 
 export const POINTS_OPS: PointsOpName[] = ['fixed', 'as_is', 'multiply', 'add']
 export const STAT_FIELDS: string[] = [
