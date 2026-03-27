@@ -63,7 +63,6 @@ function TeamDetail() {
   return (
     <div className='flex flex-col w-full'>
       <TeamCard teamDetail={teamDetailEntity} />
-
       <div className='bg-white p-5'>
         <TeamPlayers teamDetail={teamDetailEntity} matchHistory={matchHistoryList} />
       </div>

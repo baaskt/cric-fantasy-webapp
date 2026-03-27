@@ -18,6 +18,8 @@ import { TableType } from '@/model/enum/table-type.enum'
 import { TeamCompositionEntity } from '@/model/entities/team-composition.interface'
 import { useRouter } from 'next/navigation'
 import { TITLES } from '@/util/constants/constants'
+import PlayingXIListCards from './PlayingXIListCards'
+import { MatchEntity } from '@/model/response/match.response'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -41,13 +43,14 @@ type PlayingXIProps = {
   squad: SquadEntity[]
   isXIChangeAllowed: boolean
   teamId: string
+  upcomingMatches: MatchEntity[]
 }
 
 function PlayingXI(props: PlayingXIProps) {
   const { activeTournament } = useTournament()
   const router = useRouter()
   const tournamentId = activeTournament?.tournamentId || ''
-  const { isXIChangeAllowed, teamId } = props
+  const { upcomingMatches, isXIChangeAllowed, teamId } = props
   const [squad, setSquad] = useState<SquadEntity[]>([])
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [isXIDirty, setXIDirty] = useState<boolean>(false)
@@ -60,6 +63,7 @@ function PlayingXI(props: PlayingXIProps) {
     wk: 0,
   })
   const [error, setError] = useState<string>('')
+  const [isPlayingXiUpdateSuccess, setPlayingXiUpdateSuccess] = useState<boolean>(false)
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<Set<number>>(new Set())
   const [playingXISquad, setPlayingXISquad] = useState<Map<string, SquadEntity[]>>(new Map())
   const [defaultPlayerIds, setDefaultPlayerIds] = useState<number[]>([])
@@ -164,7 +168,13 @@ function PlayingXI(props: PlayingXIProps) {
           payload as never,
         )) as CricResponse<string>
         const responseData: string | null = response?.result ? response.result : null
-        console.log(responseData)
+
+        if (responseData) {
+          setPlayingXiUpdateSuccess(true)
+          setTimeout(() => {
+            setPlayingXiUpdateSuccess(false)
+          }, 2000)
+        }
         setXIDirty(false)
         mutateSquadDetails()
       } catch (error) {
@@ -187,36 +197,71 @@ function PlayingXI(props: PlayingXIProps) {
   }
 
   return (
-    <div className='flex flex-col h-screen w-full pt-5 md:p-5 gap-5'>
-      <div className='bg-white shadow-lg rounded-lg p-2 border-2 border-gray-300'>
+    <div className='flex flex-col w-full pt-5 md:p-5 gap-5'>
+      <div className='hidden md:block'>
+        <div className='bg-white shadow-lg rounded-lg p-2 border-2 border-gray-300'>
+          <PlayingXIComposition
+            playingXISquad={playingXISquad}
+            playersCount={selectedPlayerIds ? selectedPlayerIds.size : 0}
+            composition={composition}
+          />
+          {isXIDirty && isXIChangeAllowed && composition?.isValid && (
+            <div className='pt-5 flex flex-col items-center justify-center'>
+              <CricButton
+                btnTxt='Save Changes'
+                onClick={handlePlayingXIUpdate}
+                isLoading={updatedPlayingXIRequest.isMutating}
+              />
+              <div className='pt-5'>
+                <CricAlert message={error} error={error} />
+              </div>
+            </div>
+          )}
+        </div>
+        <CricTable
+          headerList={headersList}
+          rowList={tableData}
+          fullWidth={false}
+          defOrder={'desc'}
+          defOrderBy={'points'}
+          onRowSelect={navigateToPlayerDetail}
+          onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
+        />
+      </div>
+
+      <div className='block flex flex-col mb-12 items-center justify-center  md:hidden'>
+        <PlayingXIListCards
+          isXIChangeAllowed={isXIChangeAllowed}
+          upcomingMatches={upcomingMatches}
+          playerList={props.squad}
+          onRowSelect={navigateToPlayerDetail}
+          onToggle={handlePlayingXIToggle}
+        />
         <PlayingXIComposition
           playingXISquad={playingXISquad}
           playersCount={selectedPlayerIds ? selectedPlayerIds.size : 0}
           composition={composition}
         />
-        {isXIDirty && isXIChangeAllowed && composition?.isValid && (
-          <div className='pt-5 flex flex-col items-center justify-center'>
-            <CricButton
-              btnTxt='Save Changes'
-              onClick={handlePlayingXIUpdate}
-              isLoading={updatedPlayingXIRequest.isMutating}
-            />
-            <div className='pt-5'>
-              <CricAlert message={error} error={error} />
+        <div className='fixed bottom-0 w-full flex flex-col items-center justify-center'>
+          {isXIDirty && isXIChangeAllowed && composition?.isValid && (
+            <div className='bg-violet-100 w-full p-4 flex flex-col items-center justify-center'>
+              <CricButton
+                btnTxt='Save Changes'
+                onClick={handlePlayingXIUpdate}
+                isLoading={updatedPlayingXIRequest.isMutating}
+              />
+              <div className='pt-2'>
+                <CricAlert message={error} error={error} />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+          {isPlayingXiUpdateSuccess && (
+            <div className='pt-2'>
+              <CricAlert message={'Playing XI updated successfully'} severity={'success'} />
+            </div>
+          )}
+        </div>
       </div>
-
-      <CricTable
-        headerList={headersList}
-        rowList={tableData}
-        fullWidth={false}
-        defOrder={'desc'}
-        defOrderBy={'points'}
-        onRowSelect={navigateToPlayerDetail}
-        onRowToggled={(rowId, isToggled) => handlePlayingXIToggle(rowId as number, isToggled)}
-      />
     </div>
   )
 }

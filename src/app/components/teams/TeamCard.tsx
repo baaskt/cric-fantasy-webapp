@@ -6,6 +6,8 @@ import StatCard from '../StatCard'
 import { prepareFantasyStats, prepareParticipantStats } from '@/util/player'
 import { convertDriveUrl } from '@/util/helper'
 import { COLORS } from '@/util/colors'
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 const participantStatList: CricMenuEntity[] = [
   { label: 'Owner 1', icon: PersonIcon, value: 'teamMembers' },
@@ -15,8 +17,8 @@ const participantStatList: CricMenuEntity[] = [
 
 const fantasyStatList: CricMenuEntity[] = [
   // { label: 'Position', icon: PersonIcon, value: 'position' },
-  { label: 'Purse Balance', icon: PersonIcon, value: 'purseBalance' },
-  { label: 'Squad', icon: PersonIcon, value: 'squad' },
+  { label: 'Purse Balance', icon: CurrencyRupeeIcon, value: 'purseBalance' },
+  { label: 'Squad', icon: GroupsIcon, value: 'squad' },
 ]
 
 type TeamCardProps = {

@@ -10,22 +10,22 @@ interface CricAlertProps {
 }
 
 function CricAlert(props: CricAlertProps) {
-  const { error, severity = 'error' } = props
-  const [errorData, setError] = useState<CricError>()
+  const { message, severity = 'error' } = props
+  const [showAlert, setShowAlert] = useState<boolean>()
   const timeOutInterval = 3000
 
   useEffect(() => {
-    setError(error)
-    let errorTimer: string | number | NodeJS.Timeout | undefined
-    if (error) {
-      errorTimer = setTimeout(() => {
-        setError(undefined)
+    let timerCount: string | number | NodeJS.Timeout | undefined
+    if (message) {
+      setShowAlert(true)
+      timerCount = setTimeout(() => {
+        setShowAlert(false)
       }, timeOutInterval)
     }
-    return () => clearTimeout(errorTimer)
-  }, [error])
+    return () => clearTimeout(timerCount)
+  }, [message])
 
-  return errorData && <Alert severity={severity}>{props.message}</Alert>
+  return showAlert && <Alert severity={severity}>{props.message}</Alert>
 }
 
 export default CricAlert

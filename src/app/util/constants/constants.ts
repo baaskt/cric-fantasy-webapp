@@ -217,3 +217,4 @@ export const STATS = {
 }
 
 export const NO_CACHE = true
+export const ALTERNATE_PLAYER_IMAGE_SRC = '/assets/images/default_player.jpg'
