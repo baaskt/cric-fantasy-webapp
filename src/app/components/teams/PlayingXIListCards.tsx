@@ -37,17 +37,33 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
         isUpComingMatch: !!isUpComingMatch, // convert to boolean
       }
     })
-    const tempSorted = [...updatedPlayers].sort((a, b) => {
-      if (a.isUpComingMatch !== b.isUpComingMatch) {
-        return Number(b.isUpComingMatch) - Number(a.isUpComingMatch)
-      }
-      return b.points - a.points
-    })
+    const tempSorted = sortPlayersByReommendation(updatedPlayers)
     setSortedPlayers(tempSorted)
   }, [playerList, upcomingMatches])
 
   const handleNavigation = (playerId: number) => {
     onRowSelect(playerId)
+  }
+
+  const onPlayerToggle = (playerId: number, isSelected: boolean) => {
+    const updatedPlayers = sortedPlayers.map(player => {
+      if (player.playerId === playerId) {
+        return { ...player, playingXI: isSelected }
+      }
+      return player
+    })
+    const tempSorted = sortPlayersByReommendation(updatedPlayers)
+    setSortedPlayers(tempSorted)
+    onToggle(playerId, isSelected)
+  }
+
+  const sortPlayersByReommendation = (players: SquadEntityWithMatch[]) => {
+    return [...players].sort((a, b) => {
+      if (a.isUpComingMatch !== b.isUpComingMatch) {
+        return Number(b.isUpComingMatch) - Number(a.isUpComingMatch)
+      }
+      return 0
+    })
   }
 
   return (
@@ -79,7 +95,7 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
                     <CricSwitch
                       isChecked={player.playingXI}
                       disabled={!isXIChangeAllowed}
-                      onChange={isChecked => onToggle(player.playerId, isChecked)}
+                      onChange={isChecked => onPlayerToggle(player.playerId, isChecked)}
                     ></CricSwitch>
                   </div>
                 )}

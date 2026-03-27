@@ -85,7 +85,7 @@ function PlayingXIComposition(props: PlayingXICompositionProps) {
                   : 'bg-red-50 border-red-200 text-red-500'
               }`}
             >
-              <span className='text-xs'>{role}</span>
+              <span className='text-xs min-h-8'>{role}</span>
               <span className='text-lg font-semibold'>{roleCount}</span>
 
               {/* Optional hint */}
