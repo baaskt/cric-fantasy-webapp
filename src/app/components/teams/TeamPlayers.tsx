@@ -50,7 +50,7 @@ function TeamPlayers(props: TeamPlayersProps) {
   if (!updatedTabs) return <>Loading</>
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col'>
       <div className='bg-white border-b'>
         <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
       </div>
