@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech'
 import { COLORS } from '@/util/colors'
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
+import PodiumCard from './PodiumCard'
 
 type PodiumProps = {
   teamList: TeamPointsEntity[]
@@ -24,38 +25,41 @@ function Podium(props: PodiumProps) {
 
   return (
     <div className='flex gap-2 flex-col h-64'>
-      <div className='flex gap-2 p-2 items-center'>
+      <div className='flex gap-2 pt-2 items-center'>
         <MilitaryTechIcon style={{ color: COLORS.cricPrimary }} />
         <div className='text-xl'>Stalwarts</div>
       </div>
-      <div className='flex justify-center items-end space-x-4'>
-        <div className='flex flex-col justify-end items-center'>
-          <div className='bg-indigo-400 h-40 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            {POS_2 + 1}
-          </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_2]?.teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-400'>
-            {sortedTeams[POS_2]?.tournamentPoints}
-          </p>
-        </div>
-        <div className='flex flex-col justify-end items-center'>
-          <div className='bg-indigo-700 h-48 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            {POS_1 + 1}
-          </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_1]?.teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-700'>
-            {sortedTeams[POS_1]?.tournamentPoints}
-          </p>
-        </div>
-        <div className='flex flex-col justify-end items-center'>
-          <div className='bg-indigo-500 h-32 w-24 flex justify-center items-center text-white font-bold text-8xl'>
-            {POS_3 + 1}
-          </div>
-          <p className='mt-2 truncate w-24 text-center'>{sortedTeams[POS_3]?.teamName}</p>
-          <p className='mt-2 truncate w-24 text-center text-indigo-500'>
-            {sortedTeams[POS_3]?.tournamentPoints}
-          </p>
-        </div>
+      <div className='flex justify-center items-end gap-6 py-6'>
+        {/* 2nd Place */}
+        <PodiumCard
+          position={POS_2 + 1}
+          team={sortedTeams[POS_2]}
+          height='h-40'
+          bg='bg-gradient-to-b from-indigo-300 to-indigo-500'
+          textColor='text-indigo-500'
+          index={1}
+        />
+
+        {/* 1st Place (highlighted) */}
+        <PodiumCard
+          position={POS_1 + 1}
+          team={sortedTeams[POS_1]}
+          height='h-52'
+          bg='bg-gradient-to-b from-indigo-600 to-indigo-800'
+          textColor='text-indigo-700'
+          highlight
+          index={0}
+        />
+
+        {/* 3rd Place */}
+        <PodiumCard
+          position={POS_3 + 1}
+          team={sortedTeams[POS_3]}
+          height='h-32'
+          bg='bg-gradient-to-b from-indigo-400 to-indigo-600'
+          textColor='text-indigo-400'
+          index={2}
+        />
       </div>
     </div>
   )

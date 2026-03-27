@@ -21,6 +21,7 @@ import { generatePlayerInsights } from '@/util/player'
 import PlayerInsights from '@/components/players/PlayerInsights'
 import { PlayerInsightsEntity } from '@/model/entities/player-insights.interface'
 import PlayerInsightsChart from '@/components/players/PlayerInsightsChart'
+import EmptyData from '@/components/EmptyData'
 
 function PlayerDetail() {
   const params = useParams()
@@ -68,7 +69,13 @@ function PlayerDetail() {
   }
 
   if (!playerDetailEntity) {
-    return <div className='text-center p-4'>No records found</div>
+    return (
+      <EmptyData
+        title={'No Player Details Available'}
+        subTitle={'Player is out for an emergency break. Please check back later for the insights.'}
+        imagePath='/assets/images/empty-match.png'
+      />
+    )
   }
 
   return (

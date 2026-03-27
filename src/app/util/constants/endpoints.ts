@@ -1,5 +1,5 @@
-// export const API_URL = 'https://cric-fantasy-backend-wc.onrender.com/api/'
-export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
+export const API_URL = 'https://cric-fantasy-backend-wc.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
 
 export const HEALTH_URL = 'health'
 export const USERS = {
@@ -12,7 +12,6 @@ export const USERS = {
   RESEND_OTP_URL: 'users/resendOTP',
   RESET_PWD_URL: 'users/resetpassword',
   FORGOT_PWD_URL: 'users/forgotpassword',
-  CHECK_SPIN: 'users/checkSpin?tournamentId=',
 }
 
 export const TOURNAMENTS = {
