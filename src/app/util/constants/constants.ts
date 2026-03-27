@@ -209,6 +209,11 @@ export const TITLES = {
     path: '/tournaments',
     fullPath: '/tournaments',
   },
+  RULE_BUILDER: {
+    label: 'Rule Builder',
+    path: '/ruleBuilder',
+    fullPath: '/tournaments/tournamentId/ruleBuilder',
+  },
 }
 
 export const STATS = {
@@ -217,3 +222,4 @@ export const STATS = {
 }
 
 export const NO_CACHE = true
+export const ALTERNATE_PLAYER_IMAGE_SRC = '/assets/images/default_player.jpg'

@@ -12,7 +12,6 @@ export const USERS = {
   RESEND_OTP_URL: 'users/resendOTP',
   RESET_PWD_URL: 'users/resetpassword',
   FORGOT_PWD_URL: 'users/forgotpassword',
-  CHECK_SPIN: 'users/checkSpin?tournamentId=',
 }
 
 export const TOURNAMENTS = {
@@ -24,6 +23,7 @@ export const TOURNAMENTS = {
   JOIN_URL: 'tournaments/join?tournamentId=',
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
   GET_STATS: 'tournaments/tournamentId/stats',
+  RULE_CONFIG: 'tournaments/',
 }
 
 export const MATCHES = {

@@ -3,7 +3,7 @@ import { COLORS } from '@/util/colors'
 import { convertDriveUrl } from '@/util/helper'
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { TITLES } from '@/util/constants/constants'
+import { ALTERNATE_PLAYER_IMAGE_SRC, TITLES } from '@/util/constants/constants'
 import { useTournament } from '@/providers/TournamentProvider'
 
 type PlayerCardProps = {
@@ -24,7 +24,6 @@ type PlayerCardProps = {
 }
 
 function PlayerCard(props: PlayerCardProps) {
-  const ALTERNATE_IMAGE_SRC = '/assets/images/default_player.jpg'
   const {
     imageUrl,
     name,
@@ -62,7 +61,7 @@ function PlayerCard(props: PlayerCardProps) {
       tabIndex={0}
     >
       <img
-        src={playerUrl || ALTERNATE_IMAGE_SRC}
+        src={playerUrl || ALTERNATE_PLAYER_IMAGE_SRC}
         alt='player profile'
         width='0'
         height='0'

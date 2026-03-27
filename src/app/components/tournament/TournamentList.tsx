@@ -24,12 +24,18 @@ function TournamentList(props: TournamentListProps) {
 
   useEffect(() => {
     if (tournamentResponse?.result) {
-      const sortedTournamentList = tournamentResponse.result.sort((a, b) => {
-        return b.tournamentStatus.localeCompare(a.tournamentStatus)
-      })
+      const sortedTournamentList = sortByStartDateDesc(tournamentResponse?.result)
       setTournamentList(sortedTournamentList)
     }
   }, [tournamentResponse?.result])
+
+  const sortByStartDateDesc = (data: TournamentEntity[]) => {
+    return [...data].sort((a, b) => {
+      const dateA = new Date(a.tournamentStartDate ?? 0).getTime()
+      const dateB = new Date(b.tournamentStartDate ?? 0).getTime()
+      return dateB - dateA
+    })
+  }
 
   if (tournamentRequest.isLoading) {
     return <Loading txt={TOURNAMENT.LOADING_TXT}></Loading>

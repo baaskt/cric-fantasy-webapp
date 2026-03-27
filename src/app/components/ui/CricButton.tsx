@@ -2,7 +2,8 @@ import React, { MouseEvent, ReactElement, useEffect, useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import { btnTheme } from '@/styles/themes/button'
-import { CircularProgress } from '@mui/material'
+import CricAnimatedDots from './CricAnimatedDots'
+import { COLORS } from '@/util/colors'
 
 type CricButtonProps = {
   btnTxt: string
@@ -70,7 +71,7 @@ export default function CricButton(props: CricButtonProps) {
       >
         <div className='flex flex-row gap-2 items-center'>
           <div>{btnTxt}</div>
-          {isLoading && <CircularProgress sx={{ color: 'white' }} />}
+          {isLoading && <CricAnimatedDots bgColor={COLORS.white} />}
         </div>
       </Button>
     </ThemeProvider>
