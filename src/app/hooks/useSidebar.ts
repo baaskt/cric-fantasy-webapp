@@ -13,7 +13,6 @@ import { usePathname } from 'next/navigation'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import EqualizerIcon from '@mui/icons-material/Equalizer'
-import { useAuth } from '@/providers/AuthProvider'
 
 export const tournamentConfig: SideBarMenuEntity[] = [
   {
@@ -106,8 +105,7 @@ const auctionConfig: SideBarMenuEntity[] = [
 export function useSidebar() {
   const pathname = usePathname()
   const { activeTournament } = useTournament()
-  const { isAdmin } = useAuth()
-  const sidebarConfig = getSideBarConfig(activeTournament, isAdmin())
+  const sidebarConfig = getSideBarConfig(activeTournament)
   const tournamentId = activeTournament?.tournamentId ? activeTournament?.tournamentId : ''
 
   const activePath = getActivePath(sidebarConfig, pathname)
@@ -118,24 +116,18 @@ export function useSidebar() {
   }
 }
 
-const getSideBarConfig = (
-  activeTournament: TournamentEntity | undefined,
-  isAdmin: boolean,
-): SideBarMenuEntity[] => {
+const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideBarMenuEntity[] => {
   const isAuctionProgress =
     activeTournament &&
     (activeTournament.tournamentStatus === (TournamentStatusLabel.PreAuction as string) ||
       activeTournament.tournamentStatus === (TournamentStatusLabel.InAuction as string))
 
-  let sidebarConfig = activeTournament
+  const sidebarConfig = activeTournament
     ? isAuctionProgress
       ? [...homeConfig, ...tournamentConfig, ...detailConfig, ...auctionConfig]
       : [...homeConfig, ...tournamentConfig, ...detailConfig]
     : homeConfig
 
-  if (!isAdmin) {
-    sidebarConfig = sidebarConfig.filter(item => item.title !== TITLES.RULE_BUILDER.label)
-  }
   return sidebarConfig
 }
 

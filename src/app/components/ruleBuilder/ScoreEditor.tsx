@@ -8,9 +8,10 @@ import type { ScoreOp } from './types'
 interface Props {
   score: ScoreOp
   onChange: (score: ScoreOp) => void
+  disabled?: boolean
 }
 
-export default function ScoreEditor({ score, onChange }: Props) {
+export default function ScoreEditor({ score, onChange, disabled }: Props) {
   const op = score.operation
   const set = <K extends keyof ScoreOp>(k: K, v: ScoreOp[K]) =>
     onChange({ ...score, [k]: v } as ScoreOp)
@@ -22,6 +23,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
           <button
             key={o}
             className={`score-op-btn ${op === o ? 'active' : ''}`}
+            disabled={disabled}
             onClick={() => {
               const base = { operation: o }
               if (o === 'fixed')
@@ -69,6 +71,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
           <span className='field-label'>field</span>
           <select
             value={(score as { field: string }).field || ''}
+            disabled={disabled}
             onChange={e => set('field' as keyof ScoreOp, e.target.value as never)}
           >
             <option value='' disabled>
@@ -87,6 +90,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
           <input
             type='number'
             value={(score as { value: number }).value ?? 0}
+            disabled={disabled}
             onChange={e => set('value' as keyof ScoreOp, +e.target.value as never)}
           />
         </div>
@@ -98,6 +102,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
             <span className='field-label'>field</span>
             <select
               value={(score as { field: string }).field || ''}
+              disabled={disabled}
               onChange={e => set('field' as keyof ScoreOp, e.target.value as never)}
             >
               <option value='' disabled>
@@ -113,6 +118,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
             <input
               type='number'
               value={(score as { factor: number }).factor ?? 1}
+              disabled={disabled}
               onChange={e => set('factor' as keyof ScoreOp, +e.target.value as never)}
             />
           </div>
@@ -122,6 +128,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
       {op === 'sum' && (
         <FieldPicker
           fields={(score as { fields: string[] }).fields || []}
+          disabled={disabled}
           onChange={fs => onChange({ ...score, fields: fs } as ScoreOp)}
         />
       )}
@@ -130,6 +137,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <FieldPicker
             fields={(score as { fields: string[] }).fields || []}
+            disabled={disabled}
             onChange={fs => {
               const ws = [...((score as { weights?: number[] }).weights ?? [])].slice(0, fs.length)
               while (ws.length < fs.length) ws.push(1)
@@ -148,6 +156,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
                     type='number'
                     step='0.1'
                     value={((score as { weights?: number[] }).weights ?? [])[i] ?? 1}
+                    disabled={disabled}
                     onChange={e => {
                       const ws = [...((score as { weights?: number[] }).weights ?? [])]
                       ws[i] = +e.target.value
@@ -168,6 +177,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
             <span className='field-label'>numerator</span>
             <select
               value={(score as { numerator: string }).numerator || ''}
+              disabled={disabled}
               onChange={e => set('numerator' as keyof ScoreOp, e.target.value as never)}
             >
               <option value='' disabled>
@@ -182,6 +192,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
             <span className='field-label'>÷ denominator</span>
             <select
               value={(score as { denominator: string }).denominator || ''}
+              disabled={disabled}
               onChange={e => set('denominator' as keyof ScoreOp, e.target.value as never)}
             >
               <option value='' disabled>
@@ -197,6 +208,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
             <input
               type='number'
               value={(score as { factor: number }).factor ?? 1}
+              disabled={disabled}
               onChange={e => set('factor' as keyof ScoreOp, +e.target.value as never)}
             />
           </div>
@@ -208,6 +220,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
           <FieldPicker
             showDiffHints
             fields={(score as { fields: string[] }).fields || []}
+            disabled={disabled}
             onChange={fs => onChange({ ...score, fields: fs } as ScoreOp)}
           />
           <div className='field-row'>
@@ -217,6 +230,7 @@ export default function ScoreEditor({ score, onChange }: Props) {
                 <button
                   key={String(v)}
                   className={`toggle-btn ${((score as { allowNegative?: boolean }).allowNegative ?? true) === v ? 'active' : ''}`}
+                  disabled={disabled}
                   onClick={() => set('allowNegative' as keyof ScoreOp, v as never)}
                 >
                   {v ? 'yes' : 'no — clamp to 0'}

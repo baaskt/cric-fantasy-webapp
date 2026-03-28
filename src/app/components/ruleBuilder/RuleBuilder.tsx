@@ -239,15 +239,17 @@ export default function RuleBuilder() {
                                 {(rule.rules ?? []).length}
                               </span>
                             )}
-                            <button
-                              className='btn-icon'
-                              onClick={e => {
-                                e.stopPropagation()
-                                removeRule(cat.id, rule.id)
-                              }}
-                            >
-                              ✕
-                            </button>
+                            {admin && (
+                              <button
+                                className='btn-icon'
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  removeRule(cat.id, rule.id)
+                                }}
+                              >
+                                ✕
+                              </button>
+                            )}
                           </div>
                           {rule.type === 'group' &&
                             (rule.rules ?? []).map(child => (
@@ -267,20 +269,24 @@ export default function RuleBuilder() {
                             ))}
                         </div>
                       ))}
-                      <button className='add-rule-btn' onClick={() => addRule(cat.id)}>
-                        ＋ add rule
-                      </button>
-                      <button
-                        className='add-rule-btn'
-                        style={{
-                          marginTop: 2,
-                          borderColor: 'var(--accent2)',
-                          color: 'var(--accent2)',
-                        }}
-                        onClick={() => addGroupRule(cat.id)}
-                      >
-                        ⊞ add group rule
-                      </button>
+                      {admin && (
+                        <>
+                          <button className='add-rule-btn' onClick={() => addRule(cat.id)}>
+                            ＋ add rule
+                          </button>
+                          <button
+                            className='add-rule-btn'
+                            style={{
+                              marginTop: 2,
+                              borderColor: 'var(--accent2)',
+                              color: 'var(--accent2)',
+                            }}
+                            onClick={() => addGroupRule(cat.id)}
+                          >
+                            ⊞ add group rule
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -322,11 +328,27 @@ export default function RuleBuilder() {
               <p>Loading rules…</p>
             </div>
           ) : activeRule ? (
-            <RuleEditor
-              key={activeRule.id}
-              rule={activeRule}
-              onChange={r => updateRule(selected!.catId, selected!.ruleId, r)}
-            />
+            <>
+              {!admin && (
+                <div
+                  style={{
+                    padding: '8px 16px',
+                    background: 'rgba(36,84,212,0.06)',
+                    borderBottom: '1px solid var(--border)',
+                    fontSize: 11,
+                    color: 'var(--muted)',
+                  }}
+                >
+                  View only — contact your admin to make changes
+                </div>
+              )}
+              <RuleEditor
+                key={activeRule.id}
+                rule={activeRule}
+                disabled={!admin}
+                onChange={r => updateRule(selected!.catId, selected!.ruleId, r)}
+              />
+            </>
           ) : (
             <div className='editor-empty'>
               <div className='editor-empty-icon'>⚙</div>
