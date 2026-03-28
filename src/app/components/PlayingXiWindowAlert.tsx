@@ -54,11 +54,11 @@ function PlayingXiWindowAlert() {
     return <></>
 
   return (
-    <div className='flex p-3 items-center justify-around bg-yellow-300'>
+    <div className='flex p-1 items-center justify-around bg-yellow-300'>
       {/* <NotificationsActiveIcon sx={{ fontSize: 36 }} /> */}
       <div className='flex flex-col items-center justify-center'>
         <div className='pr-1'>Playing XI window closes in</div>
-        <div className='font-bold text-lg'>
+        <div className='font-bold text-md'>
           <span className='pr-1'>{String(timeRemaining.hours).padStart(2, '0')} hours</span>
           <span className='pr-1'>{String(timeRemaining.minutes).padStart(2, '0')} mins</span>
           <span>{String(timeRemaining.seconds).padStart(2, '0')} seconds</span>

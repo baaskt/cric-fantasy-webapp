@@ -40,14 +40,19 @@ function DashboardTeams() {
   }
 
   return (
-    <div className='p-5 pt-0'>
-      <FunStats />
-      <Podium teamList={teamList} />
-      <div className='hidden md:block'>
-        <Leaderboard teamList={teamList} />
+    <div className='pt-0'>
+      <div className='text-center p-2 bg-violet-300 font-bold'>
+        {activeTournament?.tournamentName}
       </div>
-      <div className='block md:hidden'>
-        <LeaderboardCards teamList={teamList} />
+      <div className='p-5'>
+        <FunStats />
+        <Podium teamList={teamList} />
+        <div className='hidden md:block'>
+          <Leaderboard teamList={teamList} />
+        </div>
+        <div className='block md:hidden'>
+          <LeaderboardCards teamList={teamList} />
+        </div>
       </div>
     </div>
   )

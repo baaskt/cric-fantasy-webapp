@@ -1,5 +1,6 @@
-export const API_URL = 'https://cric-fantasy-backend-wc.onrender.com/api/'
-// export const API_URL = 'https://cric-fantasy-backend-test.onrender.com/api/'
+// export const API_URL = 'https://cric-fantasy-backend-wc.onrender.com/api/'
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? 'https://cric-fantasy-backend-wc.onrender.com/api/'
 
 export const HEALTH_URL = 'health'
 export const USERS = {
@@ -24,12 +25,14 @@ export const TOURNAMENTS = {
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
   GET_STATS: 'tournaments/tournamentId/stats',
   RULE_CONFIG: 'tournaments/',
+  RULES: 'tournaments/',
 }
 
 export const MATCHES = {
   GET_ALL: 'matchSchedule?tourId=',
   GET_SCORECARD_URL: 'match/scorecard?matchId=',
   UPDATE_DOTS_URL: 'match/matchId/tournaments/tournamentId/updateDots',
+  REFRESH_SCORECARD: 'match-schedules/',
 }
 
 export const TEAMS = {
@@ -45,8 +48,7 @@ export const TEAMS = {
 export const PLAYERS = {
   PLAYERS: 'players',
   GET_ALL_URL: 'players',
-  GET_PLAYER_DETAIL_URL:
-    'teams/getPlayerWiseDetails?tournamentId={tournamentId}&playerId={playerId}',
+  GET_PLAYER_DETAIL_URL: 'players/{tournamentId}?player_id={playerId}',
   GET_PLAYER_DD_URL:
     'matchPointsPlayers?matchId={matchId}&tourId={tournamentId}&playerId={playerId}',
   GET_PLAYERS_URL: 'players/tournamentId/list?',

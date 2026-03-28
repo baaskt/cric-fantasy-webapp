@@ -40,9 +40,9 @@ function IconMenu(props: IconMenuProps) {
       >
         <div className='flex flex-row gap-2 items-center'>
           <div style={{ color: iconColor }}>{icon}</div>
-          <div className='font-light'>{labelTxt}</div>
+          <div className='font-light min-w-[80px]'>{labelTxt}</div>
         </div>
-        <div style={{ color: COLORS.cricDark }} className='text-sm font-semibold'>
+        <div style={{ color: COLORS.cricDark }} className='text-sm font-semibold text-right'>
           {value}
         </div>
       </div>

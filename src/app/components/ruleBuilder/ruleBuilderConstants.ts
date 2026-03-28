@@ -55,6 +55,7 @@ export const STAT_FIELDS: string[] = [
   'strikeRate',
   'Eco',
   'oversBowled',
+  'boundaries',
 ]
 
 export const OP_SYMBOLS: Record<Operator, string> = {

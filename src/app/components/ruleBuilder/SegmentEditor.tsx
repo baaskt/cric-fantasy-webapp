@@ -20,6 +20,7 @@ interface Props {
   isFallback: boolean
   onChange: (seg: Segment) => void
   onRemove: () => void
+  disabled?: boolean
 }
 
 function SegmentPreview({ seg }: { seg: Segment }) {
@@ -133,7 +134,7 @@ export function ptsLabel(pts: PointsValue): string {
   return `score + ${pts.value}`
 }
 
-export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: Props) {
+export default function SegmentEditor({ seg, onChange, onRemove, isFallback, disabled }: Props) {
   const upd = useCallback(
     (k: keyof Segment, v: Segment[keyof Segment]) => onChange({ ...seg, [k]: v }),
     [seg, onChange],
@@ -168,12 +169,15 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
         <input
           className='segment-label-input'
           value={seg.label}
+          disabled={disabled}
           onChange={e => upd('label', e.target.value)}
         />
         {isFallback && <span className='fallback-badge'>fallback</span>}
-        <button className='btn-icon' onClick={onRemove}>
-          ✕
-        </button>
+        {!disabled && (
+          <button className='btn-icon' onClick={onRemove}>
+            ✕
+          </button>
+        )}
       </div>
       <div className='segment-body'>
         {/* WHEN */}
@@ -191,6 +195,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
               <div key={c.id} className='condition-row'>
                 <select
                   value={c.field}
+                  disabled={disabled}
                   onChange={e => {
                     const newField = e.target.value
                     const type = fieldType(newField)
@@ -212,6 +217,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
                 </select>
                 <select
                   value={c.operator}
+                  disabled={disabled}
                   onChange={e => updCond(c.id, 'operator', e.target.value)}
                 >
                   {OPERATORS_BY_TYPE[fieldType(c.field)].map(o => (
@@ -224,6 +230,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
                       <button
                         key={String(v)}
                         className={`toggle-btn ${c.value === v ? 'active' : ''}`}
+                        disabled={disabled}
                         onClick={() => updCond(c.id, 'value', v)}
                       >
                         {String(v)}
@@ -234,27 +241,33 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
                   <input
                     type='text'
                     value={c.value as string}
+                    disabled={disabled}
                     onChange={e => updCond(c.id, 'value', e.target.value)}
                   />
                 ) : (
                   <input
                     type='number'
                     value={c.value as number}
+                    disabled={disabled}
                     onChange={e => updCond(c.id, 'value', +e.target.value)}
                   />
                 )}
                 <span className='cond-preview'>
                   <strong>{c.field}</strong> {OP_SYMBOLS[c.operator]} {String(c.value)}
                 </span>
-                <button className='btn-icon' onClick={() => rmCond(c.id)}>
-                  ✕
-                </button>
+                {!disabled && (
+                  <button className='btn-icon' onClick={() => rmCond(c.id)}>
+                    ✕
+                  </button>
+                )}
               </div>
             ))}
           </div>
-          <button className='btn btn-ghost' style={{ marginTop: 6 }} onClick={addCond}>
-            + condition
-          </button>
+          {!disabled && (
+            <button className='btn btn-ghost' style={{ marginTop: 6 }} onClick={addCond}>
+              + condition
+            </button>
+          )}
         </div>
 
         <div className='divider' />
@@ -262,7 +275,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
         {/* SCORE */}
         <div>
           <div className='section-label'>score operation</div>
-          <ScoreEditor score={seg.score} onChange={v => upd('score', v)} />
+          <ScoreEditor score={seg.score} disabled={disabled} onChange={v => upd('score', v)} />
         </div>
 
         <div className='divider' />
@@ -291,6 +304,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
                       <td>
                         <select
                           value={t.operator || 'gte'}
+                          disabled={disabled}
                           onChange={e => updThr(t.id, 'operator', e.target.value)}
                         >
                           {OPERATORS.map(o => (
@@ -302,17 +316,24 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
                         <input
                           type='number'
                           value={t.value}
+                          disabled={disabled}
                           onChange={e => updThr(t.id, 'value', +e.target.value)}
                         />
                       </td>
                       <td>
-                        <PointsCell value={t.points} onChange={v => updThr(t.id, 'points', v)} />
+                        <PointsCell
+                          value={t.points}
+                          disabled={disabled}
+                          onChange={v => updThr(t.id, 'points', v)}
+                        />
                       </td>
-                      <td>
-                        <button className='btn-icon' onClick={() => rmThr(t.id)}>
-                          ✕
-                        </button>
-                      </td>
+                      {!disabled && (
+                        <td>
+                          <button className='btn-icon' onClick={() => rmThr(t.id)}>
+                            ✕
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -339,9 +360,11 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
               </div>
             </>
           )}
-          <button className='btn btn-ghost' style={{ marginTop: 8 }} onClick={addThr}>
-            + threshold
-          </button>
+          {!disabled && (
+            <button className='btn btn-ghost' style={{ marginTop: 8 }} onClick={addThr}>
+              + threshold
+            </button>
+          )}
         </div>
 
         <div className='divider' />
@@ -349,7 +372,7 @@ export default function SegmentEditor({ seg, onChange, onRemove, isFallback }: P
         {/* DEFAULT */}
         <div>
           <div className='section-label'>default points (when no threshold matches)</div>
-          <PointsCell value={seg.default} onChange={v => upd('default', v)} />
+          <PointsCell value={seg.default} disabled={disabled} onChange={v => upd('default', v)} />
         </div>
 
         <SegmentPreview seg={seg} />

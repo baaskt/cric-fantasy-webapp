@@ -6,21 +6,24 @@ import type { PointsValue } from './types'
 interface Props {
   value: PointsValue
   onChange: (value: PointsValue) => void
+  disabled?: boolean
 }
 
-export default function PointsCell({ value, onChange }: Props) {
+export default function PointsCell({ value, onChange, disabled }: Props) {
   if (typeof value !== 'object' || value === null) {
     return (
       <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
         <input
           type='number'
           value={value ?? 0}
+          disabled={disabled}
           onChange={e => onChange(+e.target.value)}
           style={{ width: 64 }}
         />
         <button
           className='btn-icon'
           title='Make dynamic'
+          disabled={disabled}
           onClick={() => onChange({ operation: 'as_is' })}
         >
           ⚙
@@ -33,6 +36,7 @@ export default function PointsCell({ value, onChange }: Props) {
     <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
       <select
         value={op}
+        disabled={disabled}
         onChange={e => {
           const next = e.target.value
           if (next === 'fixed') return onChange(0)
@@ -51,6 +55,7 @@ export default function PointsCell({ value, onChange }: Props) {
         <input
           type='number'
           value={value.factor}
+          disabled={disabled}
           onChange={e => onChange({ operation: 'multiply', factor: +e.target.value })}
           style={{ width: 52 }}
         />
@@ -59,11 +64,17 @@ export default function PointsCell({ value, onChange }: Props) {
         <input
           type='number'
           value={value.value}
+          disabled={disabled}
           onChange={e => onChange({ operation: 'add', value: +e.target.value })}
           style={{ width: 52 }}
         />
       )}
-      <button className='btn-icon' title='Make fixed' onClick={() => onChange(0)}>
+      <button
+        className='btn-icon'
+        title='Make fixed'
+        disabled={disabled}
+        onClick={() => onChange(0)}
+      >
         ✕
       </button>
     </div>

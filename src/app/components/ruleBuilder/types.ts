@@ -96,7 +96,7 @@ export interface SelectedRule {
   ruleId: string
 }
 
-// ── Raw (unhydrated) config shape in defaultRules.ts ─────────────────────
+// ── Raw (unhydrated) config shape — used by initModeData / parseJsonToModes ──
 export type RawCondition = Omit<Condition, 'id'>
 export type RawThreshold = Omit<Threshold, 'id'>
 export interface RawSegment {
