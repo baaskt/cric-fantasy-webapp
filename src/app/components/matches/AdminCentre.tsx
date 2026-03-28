@@ -15,6 +15,8 @@ import { useTournament } from '@/providers/TournamentProvider'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import CricToast from '../ui/CricToast'
 import { useMatch } from '@/providers/MatchProvider'
+import { useAuth } from '@/providers/AuthProvider'
+import CachedIcon from '@mui/icons-material/Cached'
 
 type AdminCentreProps = {
   scoreCardData: MatchDetailEntity
@@ -22,6 +24,7 @@ type AdminCentreProps = {
 
 function AdminCentre(props: AdminCentreProps) {
   const { scoreCardData } = props
+  const { isAdmin } = useAuth()
   const inningsOneBowlers = scoreCardData.inningsOne.bowling
   const inningsTwoBowlers = scoreCardData.inningsTwo.bowling
   const defaultJuryPlayer = scoreCardData.peoplePlayerOfTheMatch
@@ -94,9 +97,24 @@ function AdminCentre(props: AdminCentreProps) {
     setJuryPlayer(selectedPlayer)
   }
 
+  const refreshMatchById = () => {
+    window.location.reload()
+  }
+
   return (
     <div className='pt-5'>
       <div>
+        <div className='flex items-center justify-end p-4'>
+          {isAdmin() && (
+            <CricButton
+              bgColor='transparent'
+              color={COLORS.cricPrimary}
+              startIcon={<CachedIcon />}
+              onClick={() => refreshMatchById()}
+              btnTxt={`Refresh Match Points`}
+            ></CricButton>
+          )}
+        </div>
         <div className='flex flex-col'>
           <div
             className='text-center text-xl p-3 w-9/12 rounded-r-3xl'
