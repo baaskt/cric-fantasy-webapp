@@ -10,7 +10,7 @@ type PlayerInsightsProps = {
 const PlayerInsights: React.FC<PlayerInsightsProps> = (props: PlayerInsightsProps) => {
   const { playerDetailEntity } = props
   const { name, tournamentStats } = playerDetailEntity
-  const diff = 100 - tournamentStats.points
+  const diff = tournamentStats.points - tournamentStats.points
   const absDiff = Math.abs(diff)
 
   if (diff === 0 || isNaN(diff)) return <></>
