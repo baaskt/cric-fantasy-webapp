@@ -26,6 +26,7 @@ export const TOURNAMENTS = {
   GET_STATS: 'tournaments/tournamentId/stats',
   RULE_CONFIG: 'tournaments/',
   RULES: 'tournaments/',
+  UPDATE_SETTINGS: 'tournaments/',
 }
 
 export const MATCHES = {
