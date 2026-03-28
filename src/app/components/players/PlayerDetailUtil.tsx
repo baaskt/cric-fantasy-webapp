@@ -1,9 +1,12 @@
+// ─── SectionTitle ─────────────────────────────────────────────────────────────
+
 import { COLORS } from '@/util/colors'
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { IconButton, Chip } from '@mui/material'
+import { IconButton, Tooltip, Chip } from '@mui/material'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import CloseIcon from '@mui/icons-material/Close'
 import VerifiedIcon from '@mui/icons-material/Verified'
 
 import {
@@ -22,14 +25,11 @@ import {
   Bar,
   DotProps,
 } from 'recharts'
-
 import {
   MatchDetail,
   TournamentPointDetails,
   TournamentStats,
 } from '@/model/response/player-detail.response.interface'
-
-/* ───────────────── TYPES ───────────────── */
 
 type MatchTimelineData = {
   name: string
@@ -37,7 +37,12 @@ type MatchTimelineData = {
   desc: string
 }
 
-/* ───────────────── SectionTitle ───────────────── */
+const trend = (pts: number) =>
+  pts >= 150
+    ? { color: COLORS.stockGreen, icon: null, label: 'Great' }
+    : pts >= 80
+      ? { color: COLORS.darkGray, icon: null, label: 'Good' }
+      : { color: COLORS.unsold, icon: null, label: 'Low' }
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -53,7 +58,7 @@ export function SectionTitle({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ───────────────── StatCard ───────────────── */
+// ─── StatCard ─────────────────────────────────────────────────────────────────
 
 export function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -74,7 +79,7 @@ export function StatCard({ label, value }: { label: string; value: string | numb
   )
 }
 
-/* ───────────────── Radar ───────────────── */
+// ─── Radar ────────────────────────────────────────────────────────────────────
 
 export function PointRadar({ pts }: { pts: TournamentPointDetails }) {
   const data = [
@@ -86,10 +91,9 @@ export function PointRadar({ pts }: { pts: TournamentPointDetails }) {
     { subject: 'Fielding', value: pts.fielding },
     { subject: 'All-round', value: pts.allRounder },
   ]
-
   return (
     <ResponsiveContainer width='100%' height={210}>
-      <RadarChart data={data}>
+      <RadarChart data={data} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
         <PolarGrid stroke={COLORS.gray} />
         <PolarAngleAxis dataKey='subject' tick={{ fill: COLORS.darkGray, fontSize: 11 }} />
         <Radar
@@ -104,19 +108,19 @@ export function PointRadar({ pts }: { pts: TournamentPointDetails }) {
   )
 }
 
-/* ───────────────── MatchTimeline ───────────────── */
+// ─── Area timeline ────────────────────────────────────────────────────────────
 
 export function MatchTimeline({ matches }: { matches: MatchDetail[] }) {
-  const data: MatchTimelineData[] = matches.map((m, i) => ({
+  const data = [...matches].map((m, i) => ({
     name: `M${i + 1}`,
     pts: m.totalMatchPoints,
     desc: m.matchDesc,
-  }))
+  })) as MatchTimelineData[]
 
-  const CustomDot = (props: DotProps & { payload: MatchTimelineData }) => {
+  const CustomDot = (props: DotProps & { payload?: MatchTimelineData }) => {
     const { cx, cy, payload } = props
 
-    if (cx == null || cy == null) return null
+    if (cx == null || cy == null || !payload) return null
 
     const col =
       payload.pts >= 150
@@ -130,27 +134,36 @@ export function MatchTimeline({ matches }: { matches: MatchDetail[] }) {
 
   return (
     <ResponsiveContainer width='100%' height={180}>
-      <AreaChart data={data}>
+      <AreaChart data={data} margin={{ top: 10, right: 8, bottom: 0, left: -20 }}>
         <defs>
           <linearGradient id='ptsFillLight' x1='0' y1='0' x2='0' y2='1'>
             <stop offset='5%' stopColor={COLORS.cricPrimary} stopOpacity={0.18} />
             <stop offset='95%' stopColor={COLORS.cricPrimary} stopOpacity={0} />
           </linearGradient>
         </defs>
-
         <CartesianGrid stroke={COLORS.gray} strokeDasharray='4 4' vertical={false} />
-
-        <XAxis dataKey='name' tick={{ fill: COLORS.darkGray, fontSize: 11 }} />
-
-        <YAxis tick={{ fill: COLORS.darkGray, fontSize: 11 }} />
-
+        <XAxis
+          dataKey='name'
+          tick={{ fill: COLORS.darkGray, fontSize: 11 }}
+          axisLine={false}
+          tickLine={false}
+        />
+        <YAxis tick={{ fill: COLORS.darkGray, fontSize: 11 }} axisLine={false} tickLine={false} />
         <ReTooltip
-          formatter={(value: number, _name, ctx: { payload?: MatchTimelineData }) => [
-            value,
+          contentStyle={{
+            background: COLORS.white,
+            border: `1px solid ${COLORS.gray}`,
+            borderRadius: 10,
+            fontSize: 12,
+            boxShadow: `0 4px 20px ${COLORS.cricPrimaryLight}`,
+          }}
+          labelStyle={{ color: COLORS.cricDark, fontWeight: 700 }}
+          itemStyle={{ color: COLORS.cricPrimary }}
+          formatter={(v: number, _, ctx: { payload?: MatchTimelineData }) => [
+            v,
             ctx.payload?.desc ?? 'Points',
           ]}
         />
-
         <Area
           type='monotone'
           dataKey='pts'
@@ -164,7 +177,7 @@ export function MatchTimeline({ matches }: { matches: MatchDetail[] }) {
   )
 }
 
-/* ───────────────── BattingComparison ───────────────── */
+// ─── Bar comparison ───────────────────────────────────────────────────────────
 
 export function BattingComparison({ ts, team }: { ts: TournamentStats; team: TournamentStats }) {
   const data = [
@@ -176,22 +189,35 @@ export function BattingComparison({ ts, team }: { ts: TournamentStats; team: Tou
       team: +((team.boundaries * ts.runs) / Math.max(team.runs, 1)).toFixed(0),
     },
   ]
-
   return (
     <ResponsiveContainer width='100%' height={160}>
-      <BarChart data={data}>
+      <BarChart data={data} barGap={4} margin={{ top: 0, right: 8, bottom: 0, left: -24 }}>
         <CartesianGrid stroke={COLORS.gray} strokeDasharray='4 4' vertical={false} />
-        <XAxis dataKey='label' tick={{ fill: COLORS.darkGray, fontSize: 11 }} />
-        <YAxis tick={{ fill: COLORS.darkGray, fontSize: 11 }} />
-        <ReTooltip />
-        <Bar dataKey='player' fill={COLORS.cricPrimary} radius={[5, 5, 0, 0]} />
-        <Bar dataKey='team' fill={COLORS.cricPrimaryLight} radius={[5, 5, 0, 0]} />
+        <XAxis
+          dataKey='label'
+          tick={{ fill: COLORS.darkGray, fontSize: 11 }}
+          axisLine={false}
+          tickLine={false}
+        />
+        <YAxis tick={{ fill: COLORS.darkGray, fontSize: 11 }} axisLine={false} tickLine={false} />
+        <ReTooltip
+          contentStyle={{
+            background: COLORS.white,
+            border: `1px solid ${COLORS.gray}`,
+            borderRadius: 10,
+            fontSize: 12,
+            boxShadow: `0 4px 20px ${COLORS.cricPrimaryLight}`,
+          }}
+          labelStyle={{ color: COLORS.cricDark }}
+        />
+        <Bar dataKey='player' name='Player' radius={[5, 5, 0, 0]} fill={COLORS.cricPrimary} />
+        <Bar dataKey='team' name='Team avg' radius={[5, 5, 0, 0]} fill={COLORS.cricPrimaryLight} />
       </BarChart>
     </ResponsiveContainer>
   )
 }
 
-/* ───────────────── MatchCard ───────────────── */
+// ─── MatchCard ─────────────────────────────────────────────────────────────────
 
 export function MatchCard({
   match,
@@ -208,32 +234,71 @@ export function MatchCard({
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: rank * 0.06 }}
       className='flex items-center gap-3 rounded-2xl px-4 py-3'
-      style={{ background: COLORS.white, border: `1px solid ${COLORS.gray}` }}
+      style={{
+        background: COLORS.white,
+        border: `1px solid ${COLORS.gray}`,
+      }}
     >
-      <span className='w-7 h-7 rounded-full flex items-center justify-center text-xs font-black'>
+      {/* rank bubble */}
+      <span
+        className='w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0'
+        style={{
+          background: COLORS.inputBg,
+          color: COLORS.darkGray,
+        }}
+      >
         {rank + 1}
       </span>
 
-      <div className='flex-1'>
-        <p className='text-sm font-semibold'>{match.matchDesc}</p>
-
-        {match.inPlayingXI ? (
-          <Chip label='Playing XI' size='small' icon={<VerifiedIcon />} />
-        ) : (
-          <Chip label='Bench' size='small' />
-        )}
+      <div className='flex-1 min-w-0'>
+        <p className='text-sm font-semibold truncate' style={{ color: COLORS.cricDark }}>
+          {match.matchDesc}
+        </p>
+        <div className='flex items-center gap-2 mt-0.5'>
+          {match.inPlayingXI ? (
+            <Chip
+              label='Playing XI'
+              size='small'
+              icon={<VerifiedIcon style={{ fontSize: 11, color: COLORS.stockGreen }} />}
+              style={{
+                height: 18,
+                fontSize: 10,
+                background: COLORS.stockGreen + '18',
+                color: COLORS.stockGreen,
+              }}
+            />
+          ) : (
+            <Chip
+              label='Bench'
+              size='small'
+              style={{
+                height: 18,
+                fontSize: 10,
+                background: COLORS.inputBg,
+                color: COLORS.darkGray,
+              }}
+            />
+          )}
+        </div>
       </div>
 
-      <span className='text-xl font-black'>{match.totalMatchPoints}</span>
+      <div className='flex items-center gap-1' style={{ color: COLORS.cricPrimary }}>
+        <span className='text-xl font-black tabular-nums'>{match.totalMatchPoints}</span>
+        <span className='text-[10px]' style={{ color: COLORS.placeholder }}>
+          pts
+        </span>
+      </div>
 
-      <IconButton size='small' onClick={() => onInfo(match)}>
-        <InfoOutlinedIcon fontSize='small' />
-      </IconButton>
+      <Tooltip title='Match breakdown' placement='left'>
+        <IconButton size='small' onClick={() => onInfo(match)}>
+          <InfoOutlinedIcon fontSize='small' style={{ color: COLORS.black }} />
+        </IconButton>
+      </Tooltip>
     </motion.div>
   )
 }
 
-/* ───────────────── MatchDrawer ───────────────── */
+// ─── Match drawer ─────────────────────────────────────────────────────────────
 
 export function MatchDrawer({
   match,
@@ -242,22 +307,110 @@ export function MatchDrawer({
   match: MatchDetail | null
   onClose: () => void
 }) {
-  if (!match) return null
-
-  const [desc, title] = match.matchDesc.split(':')
-
+  const matchDescSplit = match?.matchDesc.split(':')
+  const matchTitle = matchDescSplit && matchDescSplit[1]
+  const matchDesc = matchDescSplit && matchDescSplit[0]
   return (
     <AnimatePresence>
-      <motion.div className='fixed inset-0' onClick={onClose} />
+      {match && (
+        <>
+          <motion.div
+            className='fixed inset-0 z-40'
+            style={{ background: 'rgba(23,26,31,0.3)', backdropFilter: 'blur(6px)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className='fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl p-6 pb-10'
+            style={{
+              background: COLORS.white,
+              boxShadow: `0 -8px 40px ${COLORS.cricPrimaryLight}`,
+            }}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+          >
+            <div
+              className='w-10 h-1 rounded-full mx-auto mb-5'
+              style={{ background: COLORS.gray }}
+            />
 
-      <motion.div className='fixed bottom-0 left-0 right-0 p-6 bg-white'>
-        <h3>{title}</h3>
-        <p>{desc}</p>
+            <div className='flex items-start justify-between mb-5'>
+              <div>
+                <h3 className='text-lg font-black' style={{ color: COLORS.cricDark }}>
+                  {matchTitle}
+                </h3>
+                <p className='text-sm' style={{ color: COLORS.darkGray }}>
+                  {matchDesc}
+                </p>
+              </div>
+              <IconButton size='small' onClick={onClose}>
+                <CloseIcon fontSize='small' style={{ color: COLORS.darkGray }} />
+              </IconButton>
+            </div>
 
-        <p>{match.totalMatchPoints} pts</p>
+            <div className='grid grid-cols-2 gap-3'>
+              {/* Points */}
+              <div
+                className='rounded-2xl p-4'
+                style={{
+                  background: COLORS.cricPrimaryUltraLight,
+                  border: `1px solid ${COLORS.cricPrimaryLight}`,
+                }}
+              >
+                <p
+                  className='text-[10px] uppercase tracking-widest font-semibold mb-1'
+                  style={{ color: COLORS.cricPrimary }}
+                >
+                  Points Earned
+                </p>
+                <p className='text-4xl font-black' style={{ color: COLORS.cricPrimary }}>
+                  {match.totalMatchPoints}
+                </p>
+                <p
+                  className='text-xs mt-1 font-semibold'
+                  style={{ color: trend(match.totalMatchPoints).color }}
+                >
+                  {trend(match.totalMatchPoints).label} performance
+                </p>
+              </div>
 
-        <button onClick={onClose}>Close</button>
-      </motion.div>
+              {/* Status */}
+              <div
+                className='rounded-2xl p-4'
+                style={{
+                  background: match.inPlayingXI ? COLORS.stockGreen + '12' : COLORS.inputBg,
+                  border: `1px solid ${match.inPlayingXI ? COLORS.stockGreen + '35' : COLORS.gray}`,
+                }}
+              >
+                <p
+                  className='text-[10px] uppercase tracking-widest font-semibold mb-1'
+                  style={{ color: match.inPlayingXI ? COLORS.stockGreen : COLORS.darkGray }}
+                >
+                  Match Status
+                </p>
+                <p
+                  className='text-xl font-black'
+                  style={{ color: match.inPlayingXI ? COLORS.stockGreen : COLORS.darkGray }}
+                >
+                  {match.inPlayingXI ? 'Playing XI' : 'Benched'}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={onClose}
+              className='mt-5 w-full py-3 rounded-2xl text-sm font-bold transition-all active:scale-95'
+              style={{ background: COLORS.cricPrimary, color: COLORS.white }}
+            >
+              Done
+            </button>
+          </motion.div>
+        </>
+      )}
     </AnimatePresence>
   )
 }
