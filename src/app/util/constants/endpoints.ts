@@ -24,6 +24,7 @@ export const TOURNAMENTS = {
   GET_PARTICIPANTS: 'tournaments/participants?tournamentId=',
   GET_STATS: 'tournaments/tournamentId/stats',
   RULE_CONFIG: 'tournaments/',
+  RULES: 'tournaments/',
 }
 
 export const MATCHES = {

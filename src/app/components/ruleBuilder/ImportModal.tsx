@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import { useRequest } from '@/hooks/useRequest'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
+import { useEffect, useRef, useState } from 'react'
 import type { DefaultRulesConfig } from './types'
 
 interface TournamentItem {
@@ -13,7 +13,7 @@ interface TourListResponse {
   result: TournamentItem[]
 }
 interface RuleConfigResponse {
-  result: DefaultRulesConfig
+  result: { ruleId: string; rule: DefaultRulesConfig }[]
 }
 
 interface Props {
@@ -33,12 +33,13 @@ export default function ImportModal({ onClose, onImport, currentTournamentId }: 
     t => t.tournamentId !== currentTournamentId,
   )
 
-  const configUrl = selectedTourId ? `${TOURNAMENTS.RULE_CONFIG}${selectedTourId}/ruleConfig` : null
+  const configUrl = selectedTourId ? `${TOURNAMENTS.RULES}${selectedTourId}/rules` : null
   const { data: configData, isLoading: configLoading, error: configError } = useRequest(configUrl)
 
   useEffect(() => {
-    if (!(configData as RuleConfigResponse)?.result) return
-    onImport((configData as RuleConfigResponse).result)
+    const rule = (configData as RuleConfigResponse)?.result?.[0]?.rule
+    if (!rule) return
+    onImport(rule)
     onClose()
   }, [configData])
 

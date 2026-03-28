@@ -6,9 +6,15 @@ interface Props {
   fields: string[]
   onChange: (fields: string[]) => void
   showDiffHints?: boolean
+  disabled?: boolean
 }
 
-export default function FieldPicker({ fields = [], onChange, showDiffHints = false }: Props) {
+export default function FieldPicker({
+  fields = [],
+  onChange,
+  showDiffHints = false,
+  disabled,
+}: Props) {
   const available = STAT_FIELDS.filter(f => !fields.includes(f))
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -16,6 +22,7 @@ export default function FieldPicker({ fields = [], onChange, showDiffHints = fal
         <span className='field-label'>fields</span>
         <select
           value=''
+          disabled={disabled}
           onChange={e => {
             if (e.target.value) onChange([...fields, e.target.value])
             e.target.value = ''
@@ -42,9 +49,11 @@ export default function FieldPicker({ fields = [], onChange, showDiffHints = fal
                 <span style={{ color: 'var(--accent3)', fontSize: 10 }}>−</span>
               )}
               {f}
-              <span className='rm' onClick={() => onChange(fields.filter(x => x !== f))}>
-                ×
-              </span>
+              {!disabled && (
+                <span className='rm' onClick={() => onChange(fields.filter(x => x !== f))}>
+                  ×
+                </span>
+              )}
             </span>
           ))}
         </div>
