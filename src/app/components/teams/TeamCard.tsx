@@ -5,6 +5,9 @@ import PersonIcon from '@mui/icons-material/Person'
 import StatCard from '../StatCard'
 import { prepareFantasyStats, prepareParticipantStats } from '@/util/player'
 import { convertDriveUrl } from '@/util/helper'
+import { COLORS } from '@/util/colors'
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 const participantStatList: CricMenuEntity[] = [
   { label: 'Owner 1', icon: PersonIcon, value: 'teamMembers' },
@@ -14,8 +17,8 @@ const participantStatList: CricMenuEntity[] = [
 
 const fantasyStatList: CricMenuEntity[] = [
   // { label: 'Position', icon: PersonIcon, value: 'position' },
-  { label: 'Purse Balance', icon: PersonIcon, value: 'purseBalance' },
-  { label: 'Squad', icon: PersonIcon, value: 'squad' },
+  { label: 'Purse Balance', icon: CurrencyRupeeIcon, value: 'purseBalance' },
+  { label: 'Squad', icon: GroupsIcon, value: 'squad' },
 ]
 
 type TeamCardProps = {
@@ -27,6 +30,7 @@ function TeamCard(props: TeamCardProps) {
   const [participantsList, setParticipantsList] = useState<CricMenuEntity[]>([])
   const [fantasyList, setFantasyList] = useState<CricMenuEntity[]>([])
   const teamUrl = convertDriveUrl(imgUrl)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const participantStats = prepareParticipantStats(participantStatList, teamMembers)
@@ -36,23 +40,69 @@ function TeamCard(props: TeamCardProps) {
   }, [teamDetail])
 
   return (
-    <div className='flex flex-col gap-10 shadow-lg p-5 h-full md:flex-row'>
-      <div className='flex flex-row justify-start items-center gap-5 p-5'>
-        <img
-          src={teamUrl}
-          alt='team profile'
-          width='0'
-          height='0'
-          sizes='100vw'
-          className='w-[80px] h-[80px]'
-        />
+    <div
+      className='m-[20px] rounded-3xl p-5 shadow-md transition-all duration-300'
+      style={{
+        background: COLORS.cricPrimaryUltraLight,
+      }}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      {/* COLLAPSED HEADER */}
+      <div className='flex flex-row justify-around items-center text-center gap-2 cursor-pointer'>
+        {/* Image */}
+        <div className='relative'>
+          <img
+            src={teamUrl}
+            alt='team'
+            className='w-20 h-20 rounded-full object-cover border-4 border-white shadow-md'
+          />
+        </div>
+
         <div className='flex flex-col items-center'>
-          <div className='font-bold uppercase text-xl'>{teamName}</div>
-          <div className='text-sm'>{points} POINTS</div>
+          <div className='font-bold uppercase text-gray-800'>{teamName}</div>
+          <div
+            className='mt-2 px-3 py-3 rounded-full text-sm font-semibold w-fit'
+            style={{
+              backgroundColor: COLORS.cricPrimaryLight,
+              color: COLORS.white,
+            }}
+          >
+            {points} Points
+          </div>
         </div>
       </div>
-      <StatCard title='Team Owners' menuList={participantsList}></StatCard>
-      <StatCard title='Fantasy Stats' menuList={fantasyList}></StatCard>
+      {/* Toggle Hint */}
+      <div className='mt-4 text-xs text-center text-gray-400'>
+        {isOpen ? 'Tap to collapse ▲' : 'Tap to expand ▼'}
+      </div>
+      {/* EXPANDABLE CONTENT */}
+      <div
+        className={`transition-all duration-500 overflow-hidden ${
+          isOpen ? 'max-h-[500px] opacity-100 mt-5' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div
+            className='bg-white rounded-2xl p-4 shadow-sm border'
+            style={{ borderColor: COLORS.cricPrimary }}
+          >
+            <div className='text-sm font-semibold mb-2' style={{ color: COLORS.cricPrimary }}>
+              Team Owners
+            </div>
+            <StatCard title='' menuList={participantsList} />
+          </div>
+
+          <div
+            className='bg-white rounded-2xl p-4 shadow-sm border'
+            style={{ borderColor: COLORS.cricPrimary }}
+          >
+            <div className='text-sm font-semibold mb-2' style={{ color: COLORS.cricPrimary }}>
+              Fantasy Stats
+            </div>
+            <StatCard title='' menuList={fantasyList} />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

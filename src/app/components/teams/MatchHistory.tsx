@@ -4,6 +4,7 @@ import { IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import CricModal from '../ui/CricModal'
 import MatchPlayerDetail from './MatchPlayerDetail'
+import EmptyData from '../EmptyData'
 
 type MatchHistoryProps = {
   matchHistory: MatchHistoryDetails[]
@@ -16,6 +17,16 @@ function MatchHistory(props: MatchHistoryProps) {
   const handlePlayerDetail = (matchData: MatchHistoryDetails) => {
     setMatchData(matchData)
     setOpen(true)
+  }
+
+  if (!matchHistory || !matchHistory.length) {
+    return (
+      <EmptyData
+        title={'No Match History Available'}
+        subTitle={'Come back later when the commentators are back with the match details.'}
+        imagePath='/assets/images/empty-match.png'
+      />
+    )
   }
 
   return (

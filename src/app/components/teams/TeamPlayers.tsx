@@ -1,17 +1,21 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import CricTab from '../ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
-import PlayingXI from './PlayingXI'
-import SquadPortfolio from './SquadPortfolio'
 import { useAuth } from '@/providers/AuthProvider'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
-import { groupPlayersByRole } from '@/util/player'
 import MatchHistory from './MatchHistory'
+import TeamView from './TeamView'
+import { useTournament } from '@/providers/TournamentProvider'
+import { MATCHES } from '@/util/constants/endpoints'
+import { useRequest } from '@/hooks/useRequest'
+import { MatchEntity } from '@/model/response/match.response'
+import { CricResponse } from '@/model/types/cric-response.type'
+import MatchCardPreview from '../matches/MatchCardPreview'
+import CricAnimatedDots from '../ui/CricAnimatedDots'
 
 const tabOptions: OptionsEntity[] = [
-  { id: 1, label: 'Playing XI', value: 'PlayingXI' },
-  { id: 2, label: 'Squad', value: 'Squad' },
-  { id: 3, label: 'Match History', value: 'History' },
+  { id: 1, label: 'Squad', value: 'squad' },
+  { id: 2, label: 'Match History', value: 'History' },
 ]
 
 type TeamPlayersProps = {
@@ -24,6 +28,25 @@ function TeamPlayers(props: TeamPlayersProps) {
   const { squad, teamMembers, teamId } = teamDetail
   const { user } = useAuth()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
+  const matchRequest = useRequest(tournamentId ? `${MATCHES.GET_ALL}${tournamentId}` : '')
+
+  const [upcomingMatches, setUpcomingMatches] = useState<MatchEntity[]>([])
+
+  useEffect(() => {
+    if (matchRequest.data) {
+      const matchresponse: CricResponse<MatchEntity[]> = matchRequest.data as CricResponse<
+        MatchEntity[]
+      >
+      if (matchresponse.result) {
+        const top2Upcoming = matchresponse.result
+          .filter(item => item.state === 'Upcoming')
+          .slice(0, 3)
+        setUpcomingMatches(top2Upcoming)
+      }
+    }
+  }, [matchRequest?.data])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
@@ -33,7 +56,7 @@ function TeamPlayers(props: TeamPlayersProps) {
     const updatedTabs = [...tabOptions]
     updatedTabs.forEach(tab => {
       // const playingXICount = squad.filter(player => player.playingXI).length
-      tab.subText = tab.id === 2 ? `(${squad.length})` : ''
+      tab.subText = tab.id === 1 ? `(${squad.length})` : ''
     })
     return updatedTabs
   }
@@ -45,24 +68,40 @@ function TeamPlayers(props: TeamPlayersProps) {
 
   const isTeamOwner = useMemo(() => findTeamOwner(), [teamMembers, user])
   const updatedTabs = useMemo(() => findTabsSubText(), [squad])
-  const groupedSquad = useMemo(() => groupPlayersByRole(squad), [squad])
 
   if (!updatedTabs) return <>Loading</>
 
   return (
-    <div className='flex flex-col h-screen'>
-      {/* Sticky CricTab */}
-      <div className='sticky top-0 bg-white z-10 border-b'>
+    <div className='flex flex-col'>
+      {!matchRequest.isLoading ? (
+        <>
+          <div className='font-bold'>Upcoming matches</div>
+          <div className='flex flex-row flex-wrap justify-center gap-3 p-5'>
+            {upcomingMatches.map((matchEntity, matchIndex) => (
+              <MatchCardPreview
+                key={matchIndex}
+                matchEntity={matchEntity}
+                matchNumber={matchIndex + 1}
+              ></MatchCardPreview>
+            ))}
+          </div>
+        </>
+      ) : (
+        <CricAnimatedDots></CricAnimatedDots>
+      )}
+      <div className='bg-white border-b'>
         <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
       </div>
 
-      {/* Scrollable content area */}
-      <div className='flex-1 overflow-y-auto'>
+      <div className='flex'>
         {selectedTab.id === 1 ? (
-          <PlayingXI squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
+          <TeamView
+            squad={squad}
+            isXIChangeAllowed={isTeamOwner}
+            teamId={teamId}
+            upcomingMatches={upcomingMatches}
+          />
         ) : selectedTab.id === 2 ? (
-          <SquadPortfolio groupedSquad={groupedSquad} />
-        ) : selectedTab.id === 3 ? (
           <MatchHistory matchHistory={matchHistory} />
         ) : null}
       </div>

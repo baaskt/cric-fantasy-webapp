@@ -17,10 +17,7 @@ function CompositionCard(props: CompositionCardProps) {
       className='rounded-lg shadow-lg p-2 text-center min-w-36 md:min-w-48'
     >
       <div style={{ color: COLORS.white }} className='text-md md:text-xl'>
-        {role}
-      </div>
-      <div style={{ color: COLORS.white }} className='text-xl md:text-4xl'>
-        {roleCount}
+        {role} <span>: {roleCount}</span>
       </div>
     </div>
   )
