@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import { useRequest } from '@/hooks/useRequest'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
+import { useEffect, useRef, useState } from 'react'
 import type { DefaultRulesConfig } from './types'
 
 interface TournamentItem {
