@@ -120,14 +120,14 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
             <div className='flex items-center gap-4'>
               {/* Points */}
               <div className='text-right'>
-                {isNaN(diff) && (
-                  <div className='font-bold text-sm text-gray-700'>{player.points}</div>
+                {!isNaN(diff) && (
+                  <div className='font-bold text-xl text-gray-700'>{player.points}</div>
                 )}
 
                 {/* Trend */}
                 <div
-                  className={`flex items-center justify-end text-xs ${
-                    diff > 0 ? 'text-green-500' : 'text-red-500'
+                  className={`flex items-center justify-end text-sm ${
+                    diff > 0 ? 'text-violet-500' : 'text-red-500'
                   }`}
                 >
                   {diff > 0 ? (

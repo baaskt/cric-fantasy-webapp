@@ -14,4 +14,5 @@ export interface TeamDetailEntity {
   squad: SquadEntity[]
   squadLimit: number
   imgUrl: string
+  playingXIHistory: Record<string, number[]>
 }

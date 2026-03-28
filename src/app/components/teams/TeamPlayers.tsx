@@ -12,10 +12,12 @@ import { MatchEntity } from '@/model/response/match.response'
 import { CricResponse } from '@/model/types/cric-response.type'
 import MatchCardPreview from '../matches/MatchCardPreview'
 import CricAnimatedDots from '../ui/CricAnimatedDots'
+import PlayingXIHistory from '../players/PlayingXIHistory'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Squad', value: 'squad' },
-  { id: 2, label: 'Match History', value: 'History' },
+  { id: 2, label: 'Match History', value: 'matchHistory' },
+  // { id: 3, label: 'Playing XI History', value: 'playerHistory' },
 ]
 
 type TeamPlayersProps = {
@@ -25,7 +27,7 @@ type TeamPlayersProps = {
 
 function TeamPlayers(props: TeamPlayersProps) {
   const { matchHistory, teamDetail } = props
-  const { squad, teamMembers, teamId } = teamDetail
+  const { squad, teamMembers, teamId, playingXIHistory } = teamDetail
   const { user } = useAuth()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
   const { activeTournament } = useTournament()
@@ -73,9 +75,11 @@ function TeamPlayers(props: TeamPlayersProps) {
 
   return (
     <div className='flex flex-col'>
-      {!matchRequest.isLoading ? (
+      {matchRequest.isLoading ? (
+        <CricAnimatedDots></CricAnimatedDots>
+      ) : (
         <>
-          <div className='font-bold'>Upcoming matches</div>
+          {upcomingMatches.length ? <div className='font-bold'>Upcoming matches</div> : null}
           <div className='flex flex-row flex-wrap justify-center gap-3 p-5'>
             {upcomingMatches.map((matchEntity, matchIndex) => (
               <MatchCardPreview
@@ -86,8 +90,6 @@ function TeamPlayers(props: TeamPlayersProps) {
             ))}
           </div>
         </>
-      ) : (
-        <CricAnimatedDots></CricAnimatedDots>
       )}
       <div className='bg-white border-b'>
         <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
@@ -103,6 +105,8 @@ function TeamPlayers(props: TeamPlayersProps) {
           />
         ) : selectedTab.id === 2 ? (
           <MatchHistory matchHistory={matchHistory} />
+        ) : selectedTab.id === 3 ? (
+          <PlayingXIHistory squad={squad} playingXIHistory={playingXIHistory} />
         ) : null}
       </div>
     </div>
