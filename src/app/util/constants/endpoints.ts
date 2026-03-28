@@ -32,6 +32,7 @@ export const MATCHES = {
   GET_ALL: 'matchSchedule?tourId=',
   GET_SCORECARD_URL: 'match/scorecard?matchId=',
   UPDATE_DOTS_URL: 'match/matchId/tournaments/tournamentId/updateDots',
+  REFRESH_SCORECARD: 'match-schedules/',
 }
 
 export const TEAMS = {
