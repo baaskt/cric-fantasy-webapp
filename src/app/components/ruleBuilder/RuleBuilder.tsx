@@ -82,7 +82,7 @@ export default function RuleBuilder() {
   }, [rulesData, rulesSeeded, rulesEmpty])
 
   // No rule configured = API error OR API returned empty result array
-  const rulesNotConfigured = !rulesLoading && (!!rulesError || rulesEmpty)
+  const rulesNotConfigured = !rulesLoading && !rulesSeeded && (!!rulesError || rulesEmpty)
 
   // Auto-open import modal for admins when no rule is configured
   useEffect(() => {
@@ -129,6 +129,8 @@ export default function RuleBuilder() {
   }
   const handleImport = (parsed: DefaultRulesConfig) => {
     setModeData(prev => parseJsonToModes(parsed, prev))
+    setRulesSeeded(true)
+    setShowImport(false)
     setSelected(null)
     setImportFlash(true)
     setTimeout(() => setImportFlash(false), 2200)
