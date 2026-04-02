@@ -14,7 +14,7 @@ interface PlayerDeepDiveProps {
   playerName: string
 }
 function PlayerDeepDive(props: PlayerDeepDiveProps) {
-  const { matchData, playerId, playerName } = props
+  const { matchData, playerId } = props
   const knownFields = ['playerId', 'name', 'inPlayingXI', 'team', 'totalMatchPoints']
 
   const [playerDetailEntity, setPlayerDetailEntity] = useState<MatchDeepDiveEntity>()
@@ -42,10 +42,6 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
 
   return (
     <div>
-      <div className='text-center' style={{ color: COLORS.cricPrimary }}>
-        <div className='font-bold'>{playerName}</div>
-        <div>{matchData?.matchDesc}</div>
-      </div>
       <div className='mt-2'>
         {playerDetailEntity && (
           <>
@@ -65,11 +61,6 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
               ))}
           </>
         )}
-
-        <div className='flex justify-between gap-4 text-md font-bold mt-2'>
-          <div className='italic'>Total Points</div>
-          <div style={{ color: COLORS.cricPrimary }}>{matchData?.totalMatchPoints}</div>
-        </div>
 
         {!playerDetailEntity?.inPlayingXI && (
           <div className='text-sm text-center mt-2'>

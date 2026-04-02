@@ -86,7 +86,9 @@ export const prepareFantasyStats = (statsList: CricMenuEntity[], teamDetail: Tea
         statEntity.value === 'squad'
           ? `${teamDetail.squad?.length.toString()}/${teamDetail.squadLimit}`
           : statEntity.value === 'purseBalance'
-            ? `${currencyToString(teamDetail.purseBalance)}`
+            ? teamDetail.purseBalance > 0
+              ? `${currencyToString(teamDetail.purseBalance)}`
+              : '0'
             : (statData[statEntity.value] as never),
     }
     tempMenuList.push(menuEntity)

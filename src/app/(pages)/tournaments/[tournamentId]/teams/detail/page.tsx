@@ -5,6 +5,10 @@ import TeamCard from '@/components/teams/TeamCard'
 import TeamPlayers from '@/components/teams/TeamPlayers'
 import { useRequest } from '@/hooks/useRequest'
 import { auth } from '@/lib/auth'
+import {
+  MatchHistoryDetails,
+  MatchHistoryResponse,
+} from '@/model/response/match-history-response.interface'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useTournament } from '@/providers/TournamentProvider'

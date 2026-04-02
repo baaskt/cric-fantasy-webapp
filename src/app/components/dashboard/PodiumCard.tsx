@@ -1,5 +1,8 @@
 import { TeamPointsEntity } from '@/model/response/team-points.interface'
+import { useTeam } from '@/providers/TeamProvider'
+import { TITLES } from '@/util/constants/constants'
 import { motion, Variants } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 
 type PodiumCardProps = {
   position: number
@@ -12,6 +15,8 @@ type PodiumCardProps = {
 }
 
 const PodiumCard = (props: PodiumCardProps) => {
+  const { markActiveTeam } = useTeam()
+  const router = useRouter()
   const { position, team, height, bg, textColor, highlight, index } = props
 
   const podiumVariants: Variants = {
@@ -30,6 +35,11 @@ const PodiumCard = (props: PodiumCardProps) => {
     }),
   }
 
+  const navigateToTeamDetail = (teamId: string) => {
+    markActiveTeam(teamId)
+    router.push(TITLES.TEAM_DETAIL.path)
+  }
+
   return (
     <motion.div
       custom={index}
@@ -38,6 +48,7 @@ const PodiumCard = (props: PodiumCardProps) => {
       variants={podiumVariants}
       whileHover={{ y: -6, scale: 1.03 }}
       className='flex flex-col items-center'
+      onClick={() => navigateToTeamDetail(team.teamId)}
     >
       {/* Podium Box */}
       <div
@@ -45,8 +56,8 @@ const PodiumCard = (props: PodiumCardProps) => {
           relative flex items-center justify-center w-24 rounded-2xl
           ${height}
           ${bg}
-          text-white font-bold text-7xl
-          shadow-lg
+          text-white font-bold text-7xl shadow-lg 
+          transition-transform duration-150 ease-in-out active:scale-95
         `}
       >
         {/* Glow effect */}

@@ -41,8 +41,8 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
     setSortedPlayers(tempSorted)
   }, [playerList, upcomingMatches])
 
-  const handleNavigation = (playerId: number) => {
-    onRowSelect(playerId)
+  const handlePlayerNavigation = (playerId: number, points: number) => {
+    if (points > 0) onRowSelect(playerId)
   }
 
   const onPlayerToggle = (playerId: number, isSelected: boolean) => {
@@ -74,15 +74,14 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
         return (
           <div
             key={player.playerId}
-            className='flex justify-between items-center p-4 rounded-xl shadow-md bg-violet w-full transition-transform duration-150 ease-in-out shadow-md active:scale-95'
+            className={`${player.points !== 0 ? 'transition-transform duration-150 ease-in-out shadow-md active:scale-95' : ''} flex justify-between items-center p-4 rounded-xl bg-violet w-full`}
             style={{
               background: player.playingXI ? COLORS.cricPrimaryUltraLight : COLORS.ultraLightRed,
             }} // alternating row colors
           >
-            {/* LEFT SECTION */}
             <div
               className='flex items-center gap-3 flex-1 cursor-pointer'
-              onClick={() => handleNavigation(player.playerId)}
+              onClick={() => handlePlayerNavigation(player.playerId, player.points)}
             >
               <div className='relative flex items-center flex-col gap-2'>
                 <img
