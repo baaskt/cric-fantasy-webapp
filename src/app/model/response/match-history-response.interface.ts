@@ -1,4 +1,4 @@
-interface MatchHistoryDetails {
+export interface MatchHistoryDetails {
   matchId: string
   matchDesc: string
   totalMatchPoints: number
@@ -8,6 +8,6 @@ interface MatchHistoryDetails {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface MatchHistoryResponse {
+export interface MatchHistoryResponse {
   [matchId: string]: MatchHistoryDetails
 }

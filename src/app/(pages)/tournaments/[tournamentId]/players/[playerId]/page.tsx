@@ -10,20 +10,20 @@ import { PLAYERS } from '@/util/constants/endpoints'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useParams } from 'next/navigation'
 import Loading from '@/components/Loading'
-import { ALTERNATE_PLAYER_IMAGE_SRC, PLAYER } from '@/util/constants/constants'
+import { PLAYER } from '@/util/constants/constants'
 import EmptyData from '@/components/EmptyData'
-import { convertDriveUrl } from '@/util/helper'
 import { currencyToString } from '@/util/bidding'
 import {
   BattingComparison,
   MatchCard,
-  MatchDrawer,
   PointRadar,
   SectionTitle,
   StatCard,
 } from '@/components/players/PlayerDetailUtil'
 import PlayerInsights from '@/components/players/PlayerInsights'
 import PointsTimelineChart from '@/components/players/PointsTimelineChart'
+import { PlayerDetailDrawer } from '@/components/players/PlayerDetailDrawer'
+import PlayerHeroCard from '@/components/players/detail/PlayerHeroCard'
 
 export default function PlayerDetail() {
   const params = useParams()
@@ -72,9 +72,6 @@ export default function PlayerDetail() {
     )
   }
 
-  const matchPoints = playerDetailEntity.matchDetails.reduce((s, m) => s + m.totalMatchPoints, 0)
-  const playerUrl = convertDriveUrl(playerDetailEntity.imageUrl)
-
   return (
     <div
       className='min-h-screen pb-28 px-4 pt-4'
@@ -84,110 +81,7 @@ export default function PlayerDetail() {
         fontFamily: "'Plus Jakarta Sans', sans-serif",
       }}
     >
-      {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className='relative overflow-hidden rounded-3xl mb-4'
-        style={{
-          background: `linear-gradient(135deg, ${COLORS.cricPrimary} 0%, #9b59f7 55%, #c084fc 100%)`,
-          boxShadow: `0 8px 32px ${COLORS.cricPrimaryLight}`,
-        }}
-      >
-        {/* Decorative blobs */}
-        <div
-          className='absolute -top-12 -right-12 w-48 h-48 rounded-full opacity-20 pointer-events-none'
-          style={{ background: COLORS.white }}
-        />
-        <div
-          className='absolute -bottom-8 -left-8 w-36 h-36 rounded-full opacity-10 pointer-events-none'
-          style={{ background: COLORS.cricSecondary }}
-        />
-
-        <div className='relative flex items-start gap-4 p-4'>
-          {/* Info */}
-          <div className='flex-1 min-w-0'>
-            <div className='flex justify-between'>
-              <div>
-                <h1 className='text-2xl font-black text-white leading-tight'>
-                  {playerDetailEntity.name}
-                </h1>
-                <p className='text-sm mt-0.5 text-white/70'>{playerDetailEntity.overview.club}</p>
-                <p className='text-sm mt-0.5 text-white/70'>
-                  {playerDetailEntity.overview.nationality}
-                </p>
-              </div>
-              <div className='relative shrink-0'>
-                <img
-                  src={playerUrl || ALTERNATE_PLAYER_IMAGE_SRC}
-                  alt={playerDetailEntity.name}
-                  className='w-20 h-20 rounded-2xl object-cover'
-                  style={{ border: '2.5px solid rgba(255,255,255,0.45)' }}
-                />
-                <span
-                  className='absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full text-[10px] font-black uppercase'
-                  style={{ background: COLORS.cricSecondary, color: COLORS.white }}
-                >
-                  {playerDetailEntity.role}
-                </span>
-              </div>
-            </div>
-
-            <div className='flex gap-4 mt-3 items-center justify-center'>
-              <div
-                className='shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold max-w-[200px]'
-                style={{ background: 'rgba(255,255,255,0.2)', color: COLORS.white }}
-              >
-                {playerDetailEntity.overview.fantasyTeam}
-              </div>
-              <div>
-                <div>
-                  <p className='text-[10px] uppercase tracking-widest text-white/50'>Auction</p>
-                  <p className='font-black text-white'>
-                    {playerDetailEntity.overview.auctionPrice
-                      ? currencyToString(playerDetailEntity.overview.auctionPrice)
-                      : 'Price N/A'}
-                  </p>
-                </div>
-                <div className='w-px self-stretch bg-white/20' />
-                <div>
-                  <p className='text-[10px] uppercase tracking-widest text-white/50'>Base</p>
-                  <p className='font-semibold text-white/60'>
-                    {currencyToString(playerDetailEntity.overview.basePrice)}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* KPI strip */}
-        <div
-          className='grid grid-cols-3 text-center py-3'
-          style={{ background: 'rgba(0,0,0,0.14)', borderTop: '1px solid rgba(255,255,255,0.15)' }}
-        >
-          {[
-            { label: 'Total Points', value: playerDetailEntity.tournamentStats.points },
-            { label: 'Match Points', value: matchPoints },
-            {
-              label: 'Milestone Points',
-              value: playerDetailEntity.tournamentStats.tournamentPoints,
-            },
-          ].map((k, i, arr) => (
-            <div
-              key={k.label}
-              className='flex flex-col'
-              style={{
-                borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.15)' : undefined,
-              }}
-            >
-              <span className='text-[10px] uppercase tracking-widest text-white/50'>{k.label}</span>
-              <span className='text-lg font-black text-white'>{k.value}</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
+      <PlayerHeroCard playerDetailEntity={playerDetailEntity} />
       <PlayerInsights playerDetailEntity={playerDetailEntity} />
 
       {/* ── POINT BREAKDOWN ───────────────────────────────────────────── */}
@@ -360,8 +254,11 @@ export default function PlayerDetail() {
         </div>
       </motion.div>
 
-      {/* ── MATCH DRAWER ──────────────────────────────────────────────── */}
-      <MatchDrawer match={activeMatch} onClose={() => setActiveMatch(null)} />
+      <PlayerDetailDrawer
+        match={activeMatch}
+        playerDetailEntity={playerDetailEntity}
+        onClose={() => setActiveMatch(null)}
+      />
     </div>
   )
 }

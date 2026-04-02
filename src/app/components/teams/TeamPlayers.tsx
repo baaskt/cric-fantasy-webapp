@@ -13,6 +13,7 @@ import { CricResponse } from '@/model/types/cric-response.type'
 import MatchCardPreview from '../matches/MatchCardPreview'
 import CricAnimatedDots from '../ui/CricAnimatedDots'
 import PlayingXIHistory from '../players/PlayingXIHistory'
+import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Squad', value: 'squad' },

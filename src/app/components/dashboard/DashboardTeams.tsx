@@ -41,9 +41,6 @@ function DashboardTeams() {
 
   return (
     <div className='pt-0'>
-      <div className='text-center p-2 bg-violet-300 font-bold'>
-        {activeTournament?.tournamentName}
-      </div>
       <div className='p-5'>
         <FunStats />
         <Podium teamList={teamList} />
