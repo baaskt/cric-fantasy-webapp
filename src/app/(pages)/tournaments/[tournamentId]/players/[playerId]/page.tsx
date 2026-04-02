@@ -17,13 +17,13 @@ import { currencyToString } from '@/util/bidding'
 import {
   BattingComparison,
   MatchCard,
-  MatchDrawer,
   PointRadar,
   SectionTitle,
   StatCard,
 } from '@/components/players/PlayerDetailUtil'
 import PlayerInsights from '@/components/players/PlayerInsights'
 import PointsTimelineChart from '@/components/players/PointsTimelineChart'
+import { PlayerDetailDrawer } from '@/components/players/PlayerDetailDrawer'
 
 export default function PlayerDetail() {
   const params = useParams()
@@ -360,8 +360,7 @@ export default function PlayerDetail() {
         </div>
       </motion.div>
 
-      {/* ── MATCH DRAWER ──────────────────────────────────────────────── */}
-      <MatchDrawer match={activeMatch} onClose={() => setActiveMatch(null)} />
+      <PlayerDetailDrawer match={activeMatch} onClose={() => setActiveMatch(null)} />
     </div>
   )
 }
