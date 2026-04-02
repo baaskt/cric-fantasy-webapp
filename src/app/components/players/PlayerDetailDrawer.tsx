@@ -1,16 +1,17 @@
-import { MatchDetail } from '@/model/response/player-detail.response.interface'
+import { MatchDetail, PlayerDetailEntity } from '@/model/response/player-detail.response.interface'
 import CloseIcon from '@mui/icons-material/Close'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
+import PlayerDeepDive from './PlayerDeepDive'
 
-export function PlayerDetailDrawer({
-  match,
-  onClose,
-}: {
+interface PlayerDetailDrawerProps {
+  playerDetailEntity: PlayerDetailEntity
   match: MatchDetail | null
   onClose: () => void
-}) {
+}
+export function PlayerDetailDrawer(props: PlayerDetailDrawerProps) {
+  const { playerDetailEntity, match, onClose } = props
   const matchDescSplit = match?.matchDesc.split(':')
   const matchTitle = matchDescSplit && matchDescSplit[1]
   const matchDesc = matchDescSplit && matchDescSplit[0]
@@ -63,33 +64,12 @@ export function PlayerDetailDrawer({
                 <CloseIcon fontSize='small' style={{ color: COLORS.darkGray }} />
               </IconButton>
             </div>
-
-            <div className='grid grid-cols-2 gap-3'>
-              {/* Points */}
-              <div
-                className='rounded-2xl p-4'
-                style={{
-                  background: COLORS.cricPrimaryUltraLight,
-                  border: `1px solid ${COLORS.cricPrimaryLight}`,
-                }}
-              >
-                <p
-                  className='text-[10px] uppercase tracking-widest font-semibold mb-1'
-                  style={{ color: COLORS.cricPrimary }}
-                >
-                  Points Earned
-                </p>
-                <p className='text-4xl font-black' style={{ color: COLORS.cricPrimary }}>
-                  {match.totalMatchPoints}
-                </p>
-                <p
-                  className='text-xs mt-1 font-semibold'
-                  style={{ color: trend(match.totalMatchPoints).color }}
-                >
-                  {trend(match.totalMatchPoints).label} performance
-                </p>
-              </div>
-
+            <PlayerDeepDive
+              matchData={match}
+              playerId={playerDetailEntity.playerId}
+              playerName={playerDetailEntity.name}
+            />
+            <div className='mt-3 grid grid-cols-2 gap-3'>
               {/* Status */}
               <div
                 className='rounded-2xl p-4'
@@ -109,6 +89,30 @@ export function PlayerDetailDrawer({
                   style={{ color: match.inPlayingXI ? COLORS.stockGreen : COLORS.darkGray }}
                 >
                   {match.inPlayingXI ? 'Playing XI' : 'Benched'}
+                </p>
+              </div>
+              {/* Points */}
+              <div
+                className='rounded-2xl p-4'
+                style={{
+                  background: COLORS.cricPrimaryUltraLight,
+                  border: `1px solid ${COLORS.cricPrimaryLight}`,
+                }}
+              >
+                <p
+                  className='text-[10px] uppercase tracking-widest font-semibold mb-1'
+                  style={{ color: COLORS.cricPrimary }}
+                >
+                  Total Points
+                </p>
+                <p className='text-4xl font-black' style={{ color: COLORS.cricPrimary }}>
+                  {match.totalMatchPoints}
+                </p>
+                <p
+                  className='text-xs mt-1 font-semibold'
+                  style={{ color: trend(match.totalMatchPoints).color }}
+                >
+                  {trend(match.totalMatchPoints).label} performance
                 </p>
               </div>
             </div>
