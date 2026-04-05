@@ -1,4 +1,3 @@
-import { OptionsEntity } from '../entities/options.interface'
 import { MatchEntity } from '../response/match.response'
 
 export type MatchContextType = {
@@ -6,6 +5,8 @@ export type MatchContextType = {
   markActiveMatch: (team: MatchEntity) => void
   matchList: MatchEntity[]
   setMatchesList: (tournament: MatchEntity[]) => void
-  activeScheduleCategory: OptionsEntity | undefined
-  setActiveScheduleCategory: (activeCategory: OptionsEntity) => void
+  upcomingMatches: MatchEntity[]
+  setUpcomingMatches: (tournament: MatchEntity[]) => void
+  liveMatches: MatchEntity[]
+  setLiveMatches: (tournament: MatchEntity[]) => void
 }

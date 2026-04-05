@@ -17,7 +17,6 @@ function DashboardTeams() {
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
   const [teamList, setTeamList] = useState<TeamPointsEntity[]>([])
-
   const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_TEAM_POINTS}${tournamentId}` : '')
 
   useEffect(() => {

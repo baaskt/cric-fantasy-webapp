@@ -1,19 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import CricTab from '../ui/CricTab'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import { useAuth } from '@/providers/AuthProvider'
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import MatchHistory from './MatchHistory'
 import TeamView from './TeamView'
-import { useTournament } from '@/providers/TournamentProvider'
-import { MATCHES } from '@/util/constants/endpoints'
-import { useRequest } from '@/hooks/useRequest'
-import { MatchEntity } from '@/model/response/match.response'
-import { CricResponse } from '@/model/types/cric-response.type'
-import MatchCardPreview from '../matches/MatchCardPreview'
-import CricAnimatedDots from '../ui/CricAnimatedDots'
+
 import PlayingXIHistory from '../players/PlayingXIHistory'
 import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
+import MatchPreviewList from '../matches/MatchPreviewList'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Squad', value: 'squad' },
@@ -31,25 +26,6 @@ function TeamPlayers(props: TeamPlayersProps) {
   const { squad, teamMembers, teamId, playingXIHistory } = teamDetail
   const { user } = useAuth()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>(tabOptions[0])
-  const { activeTournament } = useTournament()
-  const tournamentId = activeTournament?.tournamentId || ''
-  const matchRequest = useRequest(tournamentId ? `${MATCHES.GET_ALL}${tournamentId}` : '')
-
-  const [upcomingMatches, setUpcomingMatches] = useState<MatchEntity[]>([])
-
-  useEffect(() => {
-    if (matchRequest.data) {
-      const matchresponse: CricResponse<MatchEntity[]> = matchRequest.data as CricResponse<
-        MatchEntity[]
-      >
-      if (matchresponse.result) {
-        const top2Upcoming = matchresponse.result
-          .filter(item => item.state === 'Upcoming')
-          .slice(0, 3)
-        setUpcomingMatches(top2Upcoming)
-      }
-    }
-  }, [matchRequest?.data])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
     setSelectedTab(selectedEntity)
@@ -76,34 +52,14 @@ function TeamPlayers(props: TeamPlayersProps) {
 
   return (
     <div className='flex flex-col'>
-      {matchRequest.isLoading ? (
-        <CricAnimatedDots></CricAnimatedDots>
-      ) : (
-        <>
-          {upcomingMatches.length ? <div className='font-bold'>Upcoming matches</div> : null}
-          <div className='flex flex-row flex-wrap justify-center gap-3 p-5'>
-            {upcomingMatches.map((matchEntity, matchIndex) => (
-              <MatchCardPreview
-                key={matchIndex}
-                matchEntity={matchEntity}
-                matchNumber={matchIndex + 1}
-              ></MatchCardPreview>
-            ))}
-          </div>
-        </>
-      )}
+      <MatchPreviewList showUpcomingMatches></MatchPreviewList>
       <div className='bg-white border-b'>
         <CricTab optionList={updatedTabs} selectedTab={selectedTab} onChange={handleChange} />
       </div>
 
       <div className='flex'>
         {selectedTab.id === 1 ? (
-          <TeamView
-            squad={squad}
-            isXIChangeAllowed={isTeamOwner}
-            teamId={teamId}
-            upcomingMatches={upcomingMatches}
-          />
+          <TeamView squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
         ) : selectedTab.id === 2 ? (
           <MatchHistory matchHistory={matchHistory} />
         ) : selectedTab.id === 3 ? (
