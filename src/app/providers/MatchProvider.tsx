@@ -19,7 +19,6 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
   const [upcomingMatches, setUpcomingMatches] = useState<MatchEntity[]>([])
   const [liveMatches, setLiveMatches] = useState<MatchEntity[]>([])
   const { activeTournament } = useTournament()
-  console.log(activeTournament)
   const tournamentId = activeTournament?.tournamentId || ''
   const matchRequest = useRequest(tournamentId ? `${MATCHES.GET_ALL}${tournamentId}` : '')
 
@@ -29,7 +28,6 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
         MatchEntity[]
       >
       if (matchresponse.result) {
-        console.log(matchresponse.result)
         const top2Live = matchresponse.result
           .filter(item => item.state === TournamentStatusLabel.InProgress.toString())
           .slice(0, 2)

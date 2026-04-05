@@ -68,9 +68,11 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
             ))}
             <div className='my-2 border-t border-gray-300'></div>
             <div className='flex justify-between' onClick={() => setShowOtherStats(prev => !prev)}>
-              <div className='text-sm text-gray-500'>Expand to view other potential milestones</div>
+              <div className={`text-sm ${showOtherStats ? 'text-gray-500' : 'text-gray-500'}`}>
+                {showOtherStats ? 'Click to Collapse' : 'Expand to view other potential milestones'}
+              </div>
               {showOtherStats ? (
-                <ExpandLessIcon className='text-gray-800' />
+                <ExpandLessIcon className='text-gray-500' />
               ) : (
                 <ExpandMoreIcon className='text-gray-500' />
               )}
