@@ -30,11 +30,12 @@ function MatchPreviewCard(props: MatchPreviewCardProps) {
   return (
     <div
       onClick={
-        matchEntity.state === TournamentStatusLabel.InProgress.toString()
+        matchEntity.state === TournamentStatusLabel.InProgress.toString() ||
+        matchEntity.state === TournamentStatusLabel.Completed.toString()
           ? navigateToMatchDetail
           : undefined
       }
-      className={`${matchEntity.state === TournamentStatusLabel.InProgress.toString() ? 'shadow-lg cursor-pointer' : 'cursor-default'} flex flex-row gap-4 rounded-lg w-full md:w-64 border-solid border-2 border-violet-200`}
+      className={`${matchEntity.state === TournamentStatusLabel.InProgress.toString() || matchEntity.state === TournamentStatusLabel.Completed.toString() ? 'shadow-lg cursor-pointer' : 'cursor-default'} flex flex-row gap-4 rounded-lg w-full md:w-64 border-solid border-2 border-violet-200`}
     >
       <div className='flex flex-col text-center text-lg font-bold bg-violet-200 p-2'>
         {matchEntity.state === TournamentStatusLabel.InProgress.toString() ? (
