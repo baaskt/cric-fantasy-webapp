@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
 
-export function MatchHistoryDrawer({
+function MatchHistoryDrawer({
   matchData,
   onClose,
 }: {
@@ -88,3 +88,5 @@ export function MatchHistoryDrawer({
     </AnimatePresence>
   )
 }
+
+export default MatchHistoryDrawer

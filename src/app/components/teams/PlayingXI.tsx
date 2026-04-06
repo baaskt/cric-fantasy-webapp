@@ -196,6 +196,8 @@ function PlayingXI(props: PlayingXIProps) {
       )
   }
 
+  if (!tableData.length) return null
+
   return (
     <div className='flex flex-col w-full pt-5 md:p-5 gap-5'>
       <div className='hidden md:block'>

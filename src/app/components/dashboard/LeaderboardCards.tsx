@@ -60,7 +60,20 @@ function LeaderboardCards(props: LeaderboardCardsProps) {
             </div>
             <div>
               <div className='font-bold'>{team.teamName}</div>
-              <div className='text-sm text-slate-600'>Milestone: {team.statPoints} points</div>
+              {team.statPoints ? (
+                <div className='text-sm text-slate-600'>Milestone: {team.statPoints} points</div>
+              ) : (
+                <></>
+              )}
+
+              {team.aiRank && (
+                <div className='flex items-center gap-2'>
+                  {/* <AssistantIcon className='bg-gradient-to-r from-purple-500 to-pink-500 p-1 rounded text-white' />{' '} */}
+                  <div className='text-sm bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent'>
+                    AI Ranking: {team.aiRank}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className='text-right'>

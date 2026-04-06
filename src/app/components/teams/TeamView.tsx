@@ -6,17 +6,17 @@ import { COLORS } from '@/util/colors'
 import WindowIcon from '@mui/icons-material/Window'
 import ListIcon from '@mui/icons-material/List'
 import { groupPlayersByRole } from '@/util/player'
-import { MatchEntity } from '@/model/response/match.response'
+import { useMatch } from '@/providers/MatchProvider'
 
 interface TeamViewProps {
   squad: SquadEntity[]
   isXIChangeAllowed: boolean
   teamId: string
-  upcomingMatches: MatchEntity[]
 }
 
 function TeamView(props: TeamViewProps) {
-  const { squad, upcomingMatches, isXIChangeAllowed, teamId } = props
+  const { upcomingMatches } = useMatch()
+  const { squad, isXIChangeAllowed, teamId } = props
   const [isListView, setIsListView] = useState<boolean>(true)
   const groupedSquad = useMemo(() => groupPlayersByRole(squad), [squad])
 

@@ -205,3 +205,13 @@ export function convertToSentenceCase(key: string): string {
     .replace(/_/g, ' ') // Replace underscores with spaces (if needed)
     .replace(/\b\w/g, char => char.toUpperCase()) // Capitalize each word
 }
+
+export function isSameDate(valueYYYYMMDD: string, startTime: string) {
+  const formattedValue =
+    valueYYYYMMDD.slice(0, 4) + '-' + valueYYYYMMDD.slice(4, 6) + '-' + valueYYYYMMDD.slice(6, 8)
+
+  const d1 = new Date(formattedValue)
+  const d2 = new Date(startTime)
+
+  return d1.toISOString().split('T')[0] === d2.toISOString().split('T')[0]
+}

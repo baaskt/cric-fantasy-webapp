@@ -11,4 +11,5 @@ export interface TeamPointsEntity {
   teamName: string
   tournamentPoints: number // points +  statPoints
   spinPlayer: SpinPlayerEntity[]
+  aiRank: number
 }
