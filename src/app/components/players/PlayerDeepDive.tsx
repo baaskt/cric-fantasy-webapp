@@ -7,6 +7,8 @@ import { PLAYERS } from '@/util/constants/endpoints'
 import { convertToSentenceCase } from '@/util/helper'
 import React, { useEffect, useState } from 'react'
 import Loading from '../Loading'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 
 interface PlayerDeepDiveProps {
   matchData: MatchWiseDetailEntity | undefined
@@ -27,6 +29,7 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
           .replace('{playerId}', playerId.toString())}`
       : ''
   const playerDetailRequest = useRequest(PLAYER_DD_URL)
+  const [showOtherStats, setShowOtherStats] = useState(false)
 
   useEffect(() => {
     if (playerDetailRequest.data) {
@@ -40,21 +43,44 @@ function PlayerDeepDive(props: PlayerDeepDiveProps) {
 
   if (playerDetailRequest.isLoading) return <Loading txt={'Fetching point split...'}></Loading>
 
+  const pointSplitStats = Object.entries(playerDetailEntity || {}).filter(
+    ([key]) => !knownFields.includes(key),
+  )
+  const nonZeroStats = pointSplitStats.filter(([, value]) => value !== '0' && value !== '0.0')
+  const zeroStats = pointSplitStats.filter(([, value]) => value === '0' || value === '0.0')
+
   return (
     <div>
       <div className='mt-2'>
         {playerDetailEntity && (
           <>
-            {Object.entries(playerDetailEntity)
-              .filter(([key]) => !knownFields.includes(key))
-              .map(([statKey, statValue]) => (
-                <div
-                  key={statKey}
-                  className={`flex justify-between gap-4 text-sm ${statValue !== '0' && statValue !== '0.0' ? 'font-bold' : ''}`}
-                  style={{
-                    color: statValue !== '0' && statValue !== '0.0' ? COLORS.cricPrimary : '',
-                  }}
-                >
+            {nonZeroStats.map(([statKey, statValue]) => (
+              <div
+                key={statKey}
+                className={`flex justify-between gap-4 text-sm font-bold`}
+                style={{
+                  color: COLORS.cricPrimary,
+                }}
+              >
+                <div className='capitalize'>{convertToSentenceCase(statKey)}</div>
+                <div>{statValue}</div>
+              </div>
+            ))}
+            <div className='my-2 border-t border-gray-300'></div>
+            <div className='flex justify-between' onClick={() => setShowOtherStats(prev => !prev)}>
+              <div className={`text-sm ${showOtherStats ? 'text-gray-500' : 'text-gray-500'}`}>
+                {showOtherStats ? 'Click to Collapse' : 'Expand to view other potential milestones'}
+              </div>
+              {showOtherStats ? (
+                <ExpandLessIcon className='text-gray-500' />
+              ) : (
+                <ExpandMoreIcon className='text-gray-500' />
+              )}
+            </div>
+
+            {showOtherStats &&
+              zeroStats.map(([statKey, statValue]) => (
+                <div key={statKey} className={`flex justify-between gap-4 text-sm`}>
                   <div className='capitalize'>{convertToSentenceCase(statKey)}</div>
                   <div>{statValue}</div>
                 </div>

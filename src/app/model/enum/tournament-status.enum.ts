@@ -3,5 +3,6 @@ export enum TournamentStatusLabel {
   PreAuction = 'Pre Auction',
   InAuction = 'In Auction',
   InProgress = 'In Progress',
-  Completed = 'Completed',
+  Completed = 'Complete',
+  Abandon = 'Abandon',
 }

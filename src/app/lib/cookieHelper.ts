@@ -6,7 +6,7 @@ export const cookieHelper = () => {
       maxAge: 60 * 60 * 24 * 90, // Cookie will expire in 90 days
       secure: process.env.NODE_ENV === 'production', // Set to true in production
       httpOnly: false, // Ensures cookie is accessible only via HTTP requests
-      sameSite: 'strict', // Protects against CSRF attacks
+      sameSite: 'lax', // Protects against CSRF attacks
     })
   }
 
