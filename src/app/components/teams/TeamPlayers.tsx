@@ -13,7 +13,7 @@ import MatchPreviewList from '../matches/MatchPreviewList'
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Squad', value: 'squad' },
   { id: 2, label: 'Match History', value: 'matchHistory' },
-  // { id: 3, label: 'Playing XI History', value: 'playerHistory' },
+  { id: 3, label: 'XI History', value: 'playerHistory' },
 ]
 
 type TeamPlayersProps = {

@@ -18,6 +18,7 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
   const [matchList, setMatchesList] = useState<MatchEntity[]>([])
   const [upcomingMatches, setUpcomingMatches] = useState<MatchEntity[]>([])
   const [liveMatches, setLiveMatches] = useState<MatchEntity[]>([])
+  const [completedMatches, setCompletedMatches] = useState<MatchEntity[]>([])
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
   const matchRequest = useRequest(tournamentId ? `${MATCHES.GET_ALL}${tournamentId}` : '')
@@ -34,8 +35,12 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
         const topNUpcoming = matchresponse.result
           .filter(item => item.state === TournamentStatusLabel.Upcoming.toString())
           .slice(0, 3 - top2Live?.length)
+        const cmpletedMatches = matchresponse.result.filter(
+          item => item.state === TournamentStatusLabel.Completed.toString(),
+        )
         setLiveMatches(top2Live)
         setUpcomingMatches(topNUpcoming)
+        setCompletedMatches(cmpletedMatches)
         setMatchesList(matchresponse.result)
       }
     }
@@ -55,6 +60,8 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
     setUpcomingMatches,
     liveMatches,
     setLiveMatches,
+    completedMatches,
+    setCompletedMatches,
   }
 
   return <Provider value={value}>{children}</Provider>

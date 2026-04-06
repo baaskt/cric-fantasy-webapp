@@ -41,7 +41,6 @@ export default function Matches() {
         activeMatchList.push(match)
       }
     })
-    console.log(activeMatchList)
     setActiveMatches(activeMatchList)
     setCompletedMatches(compMatchList)
   }

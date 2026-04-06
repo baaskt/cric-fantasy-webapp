@@ -9,4 +9,6 @@ export type MatchContextType = {
   setUpcomingMatches: (tournament: MatchEntity[]) => void
   liveMatches: MatchEntity[]
   setLiveMatches: (tournament: MatchEntity[]) => void
+  completedMatches: MatchEntity[]
+  setCompletedMatches: (tournament: MatchEntity[]) => void
 }

@@ -3,14 +3,19 @@ import InfoIcon from '@mui/icons-material/Info'
 import { IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import EmptyData from '../EmptyData'
-import { MatchHistoryDrawer } from '../matches/history/MatchHistoryDrawer'
 import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-
+import MatchHistoryDrawer from '../matches/history/MatchHistoryDrawer'
+import CommonHero from '../CommonHero'
+import HistoryIcon from '@mui/icons-material/History'
+import { useMatch } from '@/providers/MatchProvider'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 type MatchHistoryProps = {
   matchHistory: MatchHistoryDetails[]
 }
 function MatchHistory(props: MatchHistoryProps) {
+  const { completedMatches } = useMatch()
   const { matchHistory } = props
   const [matchData, setMatchData] = useState<MatchHistoryDetails | null>()
 
@@ -55,69 +60,97 @@ function MatchHistory(props: MatchHistoryProps) {
     )
   }
 
+  const latestMatch =
+    completedMatches && completedMatches.length
+      ? completedMatches[completedMatches.length - 1]
+      : null
+
   return (
-    <div className='flex flex-col mt-5 w-full gap-2'>
-      {matchHistory.map(matchData => {
-        const tier = pointsTier(matchData.totalMatchPoints)
-        const pct = Math.round((matchData.totalMatchPoints / maxPts) * 100)
+    <div className='flex flex-col w-full gap-2 mt-5 bg-[#f5f3ff]'>
+      <CommonHero
+        title='Match History'
+        desc='A match appears here only if your team had at least one player who participated in the match and earned points.'
+        icon={<HistoryIcon sx={{ fontSize: 22 }} />}
+        stats={[
+          {
+            icon: <CalendarTodayIcon sx={{ fontSize: 14 }} />,
+            label: latestMatch
+              ? `Latest: ${latestMatch.team1SName} vs ${latestMatch.team2SName}`
+              : '—',
+          },
+          {
+            icon: <SportsCricketIcon sx={{ fontSize: 14 }} />,
+            label: matchHistory
+              ? `${matchHistory.length} / ${completedMatches.length} matches`
+              : '—',
+          },
+        ]}
+      />
+      <div className='mt-4 px-3 pb-20 space-y-2.5'>
+        {matchHistory.map(matchData => {
+          const tier = pointsTier(matchData.totalMatchPoints)
+          const pct = Math.round((matchData.totalMatchPoints / maxPts) * 100)
 
-        return (
-          <div
-            key={matchData.matchId}
-            className='group relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'
-          >
-            {/* Left accent bar */}
-            <div className={`absolute left-0 top-0 bottom-0 w-1 ${tier.bar} rounded-l-2xl`} />
+          return (
+            <div
+              key={matchData.matchId}
+              className='group relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'
+            >
+              {/* Left accent bar */}
+              <div className={`absolute left-0 top-0 bottom-0 w-1 ${tier.bar} rounded-l-2xl`} />
 
-            <div className='flex items-center gap-3 pl-4 pr-2 py-3'>
-              {/* Main content */}
-              <div className='flex-1 min-w-0'>
-                {/* Match description */}
-                <p className='font-bold text-[13px] text-gray-900 truncate leading-tight'>
-                  {matchData.matchDesc}
-                </p>
+              <div className='flex items-center gap-3 pl-4 pr-2 py-3'>
+                {/* Main content */}
+                <div className='flex-1 min-w-0'>
+                  {/* Match description */}
+                  <p className='font-bold text-[13px] text-gray-900 truncate leading-tight'>
+                    {matchData.matchDesc}
+                  </p>
 
-                {/* Points row */}
-                <div className='flex items-center gap-2 mt-1.5'>
-                  <EmojiEventsIcon sx={{ fontSize: 13, color: COLORS.cricPrimary, opacity: 0.8 }} />
-                  <span className='text-[12px] font-semibold text-gray-500'>
-                    {matchData.totalMatchPoints}
-                    <span className='font-normal ml-0.5'>pts</span>
-                  </span>
-                  <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${tier.badge} ${tier.badgeText}`}
-                  >
-                    {tier.label}
-                  </span>
+                  {/* Points row */}
+                  <div className='flex items-center gap-2 mt-1.5'>
+                    <EmojiEventsIcon
+                      sx={{ fontSize: 13, color: COLORS.cricPrimary, opacity: 0.8 }}
+                    />
+                    <span className='text-[12px] font-semibold text-gray-500'>
+                      {matchData.totalMatchPoints}
+                      <span className='font-normal ml-0.5'>pts</span>
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${tier.badge} ${tier.badgeText}`}
+                    >
+                      {tier.label}
+                    </span>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className='mt-2 h-[3px] w-full rounded-full bg-gray-100 overflow-hidden'>
+                    <div
+                      className={`h-full rounded-full ${tier.bar} transition-all duration-700`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
                 </div>
 
-                {/* Progress bar */}
-                <div className='mt-2 h-[3px] w-full rounded-full bg-gray-100 overflow-hidden'>
-                  <div
-                    className={`h-full rounded-full ${tier.bar} transition-all duration-700`}
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
+                {/* Info button */}
+                <IconButton
+                  size='small'
+                  onClick={() => handlePlayerDetail(matchData)}
+                  className='shrink-0 !rounded-xl'
+                  sx={{
+                    background: 'rgba(109,40,217,0.06)',
+                    '&:hover': { background: 'rgba(109,40,217,0.12)' },
+                    transition: 'background 0.15s',
+                    padding: '6px',
+                  }}
+                >
+                  <InfoIcon sx={{ fontSize: 18, color: COLORS.cricPrimary }} />
+                </IconButton>
               </div>
-
-              {/* Info button */}
-              <IconButton
-                size='small'
-                onClick={() => handlePlayerDetail(matchData)}
-                className='shrink-0 !rounded-xl'
-                sx={{
-                  background: 'rgba(109,40,217,0.06)',
-                  '&:hover': { background: 'rgba(109,40,217,0.12)' },
-                  transition: 'background 0.15s',
-                  padding: '6px',
-                }}
-              >
-                <InfoIcon sx={{ fontSize: 18, color: COLORS.cricPrimary }} />
-              </IconButton>
             </div>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
 
       {matchData && <MatchHistoryDrawer matchData={matchData} onClose={() => setMatchData(null)} />}
     </div>
