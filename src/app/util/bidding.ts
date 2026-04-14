@@ -39,3 +39,18 @@ export function currencyToString(biddingPrice: number): string {
   }
   return budgetString
 }
+
+export function getNumberOfBids(basePrice: number, targetPrice: number): number {
+  let bids = 0
+  let currentPrice = basePrice
+
+  while (currentPrice < targetPrice) {
+    const nextPrice = getBiddingValue(basePrice, currentPrice)
+    if (nextPrice <= currentPrice) break
+    currentPrice = nextPrice
+    bids++
+    if (bids > 10000) break
+  }
+
+  return bids + 1 // +1 to include the initial bid at base price
+}

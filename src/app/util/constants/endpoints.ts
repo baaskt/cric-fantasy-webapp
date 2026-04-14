@@ -26,11 +26,12 @@ export const TOURNAMENTS = {
   GET_STATS: 'tournaments/tournamentId/stats',
   RULE_CONFIG: 'tournaments/',
   RULES: 'tournaments/',
+  UPDATE_SETTINGS: 'tournaments/',
 }
 
 export const MATCHES = {
   GET_ALL: 'matchSchedule?tourId=',
-  GET_SCORECARD_URL: 'match/scorecard?matchId=',
+  GET_SCORECARD_URL: 'match/scorecard?matchId={matchId}&tourId={tournamentId}',
   UPDATE_DOTS_URL: 'match/matchId/tournaments/tournamentId/updateDots',
   REFRESH_SCORECARD: 'match-schedules/',
 }

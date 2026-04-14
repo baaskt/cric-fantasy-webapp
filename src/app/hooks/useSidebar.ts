@@ -13,6 +13,8 @@ import { usePathname } from 'next/navigation'
 import { TournamentEntity } from '@/model/response/tournament.interface'
 import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import EqualizerIcon from '@mui/icons-material/Equalizer'
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
+import { useAuth } from '@/providers/AuthProvider'
 
 export const tournamentConfig: SideBarMenuEntity[] = [
   {
@@ -105,7 +107,8 @@ const auctionConfig: SideBarMenuEntity[] = [
 export function useSidebar() {
   const pathname = usePathname()
   const { activeTournament } = useTournament()
-  const sidebarConfig = getSideBarConfig(activeTournament)
+  const { isAdmin } = useAuth()
+  const sidebarConfig = getSideBarConfig(activeTournament, isAdmin())
   const tournamentId = activeTournament?.tournamentId ? activeTournament?.tournamentId : ''
 
   const activePath = getActivePath(sidebarConfig, pathname)
@@ -116,16 +119,30 @@ export function useSidebar() {
   }
 }
 
-const getSideBarConfig = (activeTournament: TournamentEntity | undefined): SideBarMenuEntity[] => {
+const settingsConfig: SideBarMenuEntity[] = [
+  {
+    icon: SettingsRoundedIcon,
+    title: TITLES.SETTINGS.label,
+    path: TITLES.SETTINGS.path,
+    fullPath: TITLES.SETTINGS.fullPath,
+  },
+]
+
+const getSideBarConfig = (
+  activeTournament: TournamentEntity | undefined,
+  isAdmin: boolean,
+): SideBarMenuEntity[] => {
   const isAuctionProgress =
     activeTournament &&
     (activeTournament.tournamentStatus === (TournamentStatusLabel.PreAuction as string) ||
       activeTournament.tournamentStatus === (TournamentStatusLabel.InAuction as string))
 
+  const adminItems = isAdmin ? settingsConfig : []
+
   const sidebarConfig = activeTournament
     ? isAuctionProgress
-      ? [...homeConfig, ...tournamentConfig, ...detailConfig, ...auctionConfig]
-      : [...homeConfig, ...tournamentConfig, ...detailConfig]
+      ? [...homeConfig, ...tournamentConfig, ...adminItems, ...detailConfig, ...auctionConfig]
+      : [...homeConfig, ...tournamentConfig, ...adminItems, ...detailConfig]
     : homeConfig
 
   return sidebarConfig

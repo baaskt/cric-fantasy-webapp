@@ -19,6 +19,12 @@ export interface TournamentEntity {
   funStat?: string
   tournamentWinner?: string
   stats?: TournamentStatsEntity
+  playingXIStartHour?: string
+  playingXIDuration?: number
+  playingXITimezone?: string
+  tenderStartHour?: string
+  tenderDuration?: number
+  tenderResultRevealDuration?: number
 }
 
 export interface TournamentStatsEntity {

@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import POMCard from './POMCard'
 import MatchScore from './MatchScore'
 import useMobile from '@/hooks/useMobile'
-// import Confetti from 'react-confetti'
 
 type OverviewProps = {
   scoreCardData: MatchDetailEntity | undefined
@@ -19,9 +18,6 @@ function Overview(props: OverviewProps) {
   const team1DivRef = React.useRef<HTMLDivElement>(null)
   const team2DivRef = React.useRef<HTMLDivElement>(null)
   const isMobileView = useMobile()
-
-  // const isInnings1Won =
-  //   inningsOne && inningsTwo && inningsOne.score.runs > inningsTwo.score.runs ? true : false
 
   useEffect(() => {
     if (scoreCardData) {
@@ -46,12 +42,6 @@ function Overview(props: OverviewProps) {
             ref={team1DivRef}
             style={{ position: 'relative' }}
           >
-            {/* {scoreCardData?.isMatchComplete && !isInnings1Won && (
-              <Confetti
-                width={team1DivRef.current?.clientWidth}
-                height={team1DivRef.current?.clientWidth}
-              />
-            )} */}
             <Image
               src={inningsOne?.battingTeamImage || ''}
               alt='team1'
@@ -70,12 +60,6 @@ function Overview(props: OverviewProps) {
             ref={team2DivRef}
             style={{ position: 'relative' }}
           >
-            {/* {scoreCardData?.isMatchComplete && !isInnings1Won && (
-              <Confetti
-                width={team2DivRef.current?.clientWidth}
-                height={team2DivRef.current?.clientWidth}
-              />
-            )} */}
             <Image
               src={inningsTwo?.battingTeamImage || ''}
               alt='team2'
