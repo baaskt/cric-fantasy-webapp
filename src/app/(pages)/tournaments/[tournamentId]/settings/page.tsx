@@ -1,33 +1,43 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useAuth } from '@/providers/AuthProvider'
-import { useTournament } from '@/providers/TournamentProvider'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
+import { useAuth } from '@/providers/AuthProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import GavelIcon from '@mui/icons-material/Gavel'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import GavelIcon from '@mui/icons-material/Gavel'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
+import ScheduleIcon from '@mui/icons-material/Schedule'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
-const TIMEZONES = [
-  { label: 'UTC', value: 'UTC' },
-  { label: 'IST — India (UTC+5:30)', value: 'Asia/Kolkata' },
-  { label: 'PKT — Pakistan (UTC+5:00)', value: 'Asia/Karachi' },
-  { label: 'SLST — Sri Lanka (UTC+5:30)', value: 'Asia/Colombo' },
-  { label: 'BST — Bangladesh (UTC+6:00)', value: 'Asia/Dhaka' },
-  { label: 'AEST — Sydney (UTC+10/11)', value: 'Australia/Sydney' },
-  { label: 'AEDT — Melbourne (UTC+10/11)', value: 'Australia/Melbourne' },
-  { label: 'GMT/BST — London (UTC+0/+1)', value: 'Europe/London' },
-  { label: 'SAST — South Africa (UTC+2)', value: 'Africa/Johannesburg' },
-  { label: 'CAT — Zimbabwe (UTC+2)', value: 'Africa/Harare' },
-  { label: 'AST — West Indies (UTC-4)', value: 'America/Barbados' },
-  { label: 'NZST — New Zealand (UTC+12/13)', value: 'Pacific/Auckland' },
+const POPULAR_TIMEZONES = [
+  'UTC',
+  'Asia/Kolkata',
+  'Asia/Karachi',
+  'Asia/Colombo',
+  'Asia/Dhaka',
+  'Australia/Sydney',
+  'Australia/Melbourne',
+  'Europe/London',
+  'Africa/Johannesburg',
+  'Africa/Harare',
+  'America/Barbados',
+  'Pacific/Auckland',
 ]
+
+// 30-minute slots: 00:00, 00:30, 01:00 … 23:30
+const TIME_SLOTS = Array.from({ length: 48 }, (_, i) => {
+  const h = Math.floor(i / 2)
+  const m = i % 2 === 0 ? '00' : '30'
+  return `${String(h).padStart(2, '0')}:${m}`
+})
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -38,7 +48,7 @@ const cardVariants = {
   }),
 }
 
-const inputStyle = {
+const inputStyle: React.CSSProperties = {
   width: '100%',
   background: '#f8faff',
   border: '1.5px solid #dde3f0',
@@ -51,14 +61,330 @@ const inputStyle = {
   transition: 'border-color .18s, box-shadow .18s',
 }
 
-const labelStyle = {
+const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: 11,
   fontWeight: 600,
   letterSpacing: '.07em',
-  textTransform: 'uppercase' as const,
+  textTransform: 'uppercase',
   color: '#62769a',
   marginBottom: 6,
+}
+
+// ── Custom TimeInput ──────────────────────────────────────────────────────────
+function TimeInput({
+  value,
+  onChange,
+  accentColor,
+  accentShadow,
+}: {
+  value: string
+  onChange: (val: string) => void
+  accentColor: string
+  accentShadow: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(() => TIME_SLOTS.indexOf(value))
+  const containerRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: MouseEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  // Scroll selected item into view within the list only (avoid page scroll)
+  useEffect(() => {
+    if (open && listRef.current) {
+      const selected = listRef.current.querySelector<HTMLElement>('[data-selected="true"]')
+      if (selected) {
+        const list = listRef.current
+        list.scrollTop = selected.offsetTop - list.clientHeight / 2 + selected.offsetHeight / 2
+      }
+    }
+  }, [open])
+
+  const select = (slot: string) => {
+    onChange(slot)
+    setActiveIdx(TIME_SLOTS.indexOf(slot))
+    setOpen(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!open) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        setOpen(true)
+      }
+      return
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIdx(i => {
+        const next = Math.min(i + 1, TIME_SLOTS.length - 1)
+        listRef.current
+          ?.querySelector<HTMLElement>(`[data-idx="${next}"]`)
+          ?.scrollIntoView({ block: 'nearest' })
+        return next
+      })
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIdx(i => {
+        const prev = Math.max(i - 1, 0)
+        listRef.current
+          ?.querySelector<HTMLElement>(`[data-idx="${prev}"]`)
+          ?.scrollIntoView({ block: 'nearest' })
+        return prev
+      })
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      select(TIME_SLOTS[activeIdx])
+    } else if (e.key === 'Escape') {
+      setOpen(false)
+    }
+  }
+
+  return (
+    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+      <button
+        type='button'
+        onClick={() => setOpen(o => !o)}
+        onKeyDown={handleKeyDown}
+        style={{
+          ...inputStyle,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+          border: open ? `1.5px solid ${accentColor}` : '1.5px solid #dde3f0',
+          boxShadow: open ? `0 0 0 3px ${accentShadow}` : 'none',
+          boxSizing: 'border-box',
+        }}
+      >
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <ScheduleIcon sx={{ fontSize: 16, color: open ? accentColor : '#8fa0c0' }} />
+          <span style={{ fontWeight: 600, letterSpacing: '.02em' }}>{value}</span>
+        </span>
+        <KeyboardArrowDownIcon
+          sx={{
+            fontSize: 18,
+            color: '#8fa0c0',
+            transform: open ? 'rotate(180deg)' : 'rotate(0)',
+            transition: 'transform .2s',
+          }}
+        />
+      </button>
+
+      {open && (
+        <div
+          ref={listRef}
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: 0,
+            right: 0,
+            background: '#ffffff',
+            border: '1.5px solid #dde3f0',
+            borderRadius: 10,
+            boxShadow: '0 8px 24px rgba(36,84,212,.12)',
+            maxHeight: 220,
+            overflowY: 'auto',
+            zIndex: 200,
+            fontSize: 13,
+            fontFamily: 'var(--font-body, DM Sans, sans-serif)',
+          }}
+        >
+          {TIME_SLOTS.map((slot, idx) => {
+            const isSelected = slot === value
+            const isActive = idx === activeIdx
+            return (
+              <div
+                key={slot}
+                data-idx={idx}
+                data-selected={isSelected}
+                onMouseDown={() => select(slot)}
+                onMouseEnter={() => setActiveIdx(idx)}
+                style={{
+                  padding: '8px 14px',
+                  cursor: 'pointer',
+                  background: isSelected ? accentShadow : isActive ? '#f4f7fc' : 'transparent',
+                  color: isSelected ? accentColor : '#0f1a2e',
+                  fontWeight: isSelected ? 700 : 400,
+                  transition: 'background .1s',
+                }}
+              >
+                {slot}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── All IANA timezones (popular first, then rest alphabetically) ──────────────
+function getAllTimezones(): string[] {
+  try {
+    const all: string[] = Intl.supportedValuesOf('timeZone')
+    const rest = all.filter(tz => !POPULAR_TIMEZONES.includes(tz))
+    return [...POPULAR_TIMEZONES, ...rest]
+  } catch {
+    return POPULAR_TIMEZONES
+  }
+}
+
+// ── Custom TimezoneInput ──────────────────────────────────────────────────────
+function TimezoneInput({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [allZones, setAllZones] = useState<string[]>(POPULAR_TIMEZONES)
+  const listRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Load full IANA list on client only (avoids SSR ICU limitation)
+  useEffect(() => {
+    setAllZones(getAllTimezones())
+  }, [])
+
+  const filtered = query
+    ? allZones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()))
+    : allZones
+
+  useEffect(() => {
+    setActiveIdx(0)
+  }, [query])
+
+  useEffect(() => {
+    if (open && listRef.current) {
+      const item = listRef.current.querySelector<HTMLElement>(`[data-idx="${activeIdx}"]`)
+      item?.scrollIntoView({ block: 'nearest' })
+    }
+  }, [activeIdx, open])
+
+  const select = (tz: string) => {
+    onChange(tz)
+    setQuery('')
+    setOpen(false)
+    inputRef.current?.blur()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') setOpen(true)
+      return
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIdx(i => Math.min(i + 1, filtered.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIdx(i => Math.max(i - 1, 0))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (filtered[activeIdx]) select(filtered[activeIdx])
+    } else if (e.key === 'Escape') {
+      setOpen(false)
+      setQuery('')
+    }
+  }
+
+  const popularCount = POPULAR_TIMEZONES.filter(tz =>
+    tz.toLowerCase().includes(query.toLowerCase()),
+  ).length
+
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <input
+        ref={inputRef}
+        value={open ? query : value}
+        onChange={e => {
+          setQuery(e.target.value)
+          setOpen(true)
+        }}
+        onFocus={() => {
+          setQuery('')
+          setOpen(true)
+        }}
+        onBlur={() => {
+          setTimeout(() => {
+            setOpen(false)
+            setQuery('')
+          }, 150)
+        }}
+        onKeyDown={handleKeyDown}
+        placeholder='Search timezone…'
+        style={{ ...inputStyle, width: '100%', boxSizing: 'border-box' }}
+      />
+      {open && filtered.length > 0 && (
+        <div
+          ref={listRef}
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: 0,
+            right: 0,
+            background: '#ffffff',
+            border: '1.5px solid #dde3f0',
+            borderRadius: 10,
+            boxShadow: '0 8px 24px rgba(36,84,212,.12)',
+            maxHeight: 320,
+            overflowY: 'auto',
+            zIndex: 200,
+            fontSize: 13,
+            fontFamily: 'var(--font-body, DM Sans, sans-serif)',
+          }}
+        >
+          {filtered.map((tz, idx) => {
+            const isAllDivider =
+              idx === popularCount && popularCount > 0 && popularCount < filtered.length
+            return (
+              <div key={tz}>
+                {isAllDivider && (
+                  <div
+                    style={{
+                      padding: '4px 12px',
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: '.08em',
+                      textTransform: 'uppercase',
+                      color: '#8fa0c0',
+                      background: '#f8faff',
+                      borderTop: '1px solid #eef1f8',
+                      borderBottom: '1px solid #eef1f8',
+                    }}
+                  >
+                    All Timezones
+                  </div>
+                )}
+                <div
+                  data-idx={idx}
+                  onMouseDown={() => select(tz)}
+                  onMouseEnter={() => setActiveIdx(idx)}
+                  style={{
+                    padding: '8px 14px',
+                    cursor: 'pointer',
+                    background: idx === activeIdx ? '#eff4ff' : 'transparent',
+                    color: idx === activeIdx ? '#2454d4' : '#0f1a2e',
+                    fontWeight: idx === activeIdx ? 600 : 400,
+                    transition: 'background .1s',
+                  }}
+                >
+                  {tz}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function TournamentSettings() {
@@ -66,31 +392,44 @@ export default function TournamentSettings() {
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId
 
-  const [playingXIStartTime, setPlayingXIStartTime] = useState('09:00')
-  const [playingXIHours, setPlayingXIHours] = useState(4)
-  const [timezone, setTimezone] = useState('Asia/Kolkata')
+  const [playingXIStartHour, setPlayingXIStartHour] = useState('09:00')
+  const [playingXIDuration, setPlayingXIDuration] = useState(4)
+  const [playingXITimezone, setPlayingXITimezone] = useState('Asia/Kolkata')
 
-  const [tenderStartTime, setTenderStartTime] = useState('10:00')
-  const [tenderDurationHours, setTenderDurationHours] = useState(24)
-  const [tenderResultDelayHours, setTenderResultDelayHours] = useState(2)
+  const [tenderStartHour, setTenderStartHour] = useState('10:00')
+  const [tenderDuration, setTenderDuration] = useState(24)
+  const [tenderResultRevealDuration, setTenderResultRevealDuration] = useState(2)
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
-  const settingsUrl = tournamentId
-    ? `${TOURNAMENTS.UPDATE_SETTINGS}${tournamentId}/settings`
-    : 'noop'
+  // ── Populate from API response ─────────────────────────────────────────────
+  useEffect(() => {
+    if (!activeTournament) return
+    if (activeTournament.playingXIStartHour)
+      setPlayingXIStartHour(activeTournament.playingXIStartHour)
+    if (activeTournament.playingXIDuration) setPlayingXIDuration(activeTournament.playingXIDuration)
+    if (activeTournament.playingXITimezone) setPlayingXITimezone(activeTournament.playingXITimezone)
+    if (activeTournament.tenderStartHour) setTenderStartHour(activeTournament.tenderStartHour)
+    if (activeTournament.tenderDuration) setTenderDuration(activeTournament.tenderDuration)
+    if (activeTournament.tenderResultRevealDuration != null)
+      setTenderResultRevealDuration(activeTournament.tenderResultRevealDuration)
+  }, [activeTournament])
+
+  const isUnconfigured = !!activeTournament && !activeTournament.playingXIStartHour
+
+  const settingsUrl = tournamentId ? `${TOURNAMENTS.UPDATE_STATUS_URL}/${tournamentId}` : 'noop'
   const { trigger: saveSettings } = useMutateRequest(settingsUrl, HttpMethod.PUT)
 
   const handleSave = async () => {
     setSaveStatus('saving')
     try {
       await saveSettings({
-        playingXIStartTime,
-        playingXIHours,
-        timezone,
-        tenderStartTime,
-        tenderDurationHours,
-        tenderResultDelayHours,
+        playingXIStartHour,
+        playingXIDuration,
+        playingXITimezone,
+        tenderStartHour,
+        tenderDuration,
+        tenderResultRevealDuration,
       } as never)
       setSaveStatus('saved')
       setTimeout(() => setSaveStatus('idle'), 2800)
@@ -199,6 +538,47 @@ export default function TournamentSettings() {
           </p>
         </motion.div>
 
+        {/* ── Unconfigured banner ── */}
+        <AnimatePresence>
+          {isUnconfigured && saveStatus !== 'saved' && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 12,
+                background: '#fff7ed',
+                border: '1.5px solid #fddea0',
+                borderRadius: 12,
+                padding: '14px 18px',
+                marginBottom: 20,
+              }}
+            >
+              <InfoOutlinedIcon sx={{ fontSize: 20, color: '#ea8c0d', flexShrink: 0, mt: '1px' }} />
+              <div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-heading, Outfit, sans-serif)',
+                    fontWeight: 700,
+                    fontSize: 14,
+                    color: '#92400e',
+                    marginBottom: 2,
+                  }}
+                >
+                  No settings saved yet
+                </div>
+                <div style={{ fontSize: 13, color: '#b45309' }}>
+                  Configure the time windows below and click <strong>Save Settings</strong> to
+                  activate them for this tournament.
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* ── Section 01: Playing XI Window ── */}
         <motion.div
           custom={0}
@@ -210,10 +590,8 @@ export default function TournamentSettings() {
             borderRadius: 16,
             boxShadow: '0 2px 16px rgba(36,84,212,.07)',
             marginBottom: 20,
-            overflow: 'hidden',
           }}
         >
-          {/* Card header */}
           <div
             style={{
               padding: '20px 28px',
@@ -266,61 +644,38 @@ export default function TournamentSettings() {
             </span>
           </div>
 
-          {/* Card body */}
           <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
             <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gap: 16,
-              }}
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}
               className='settings-grid'
             >
-              {/* Start time */}
               <div>
                 <label style={labelStyle}>Start Time</label>
-                <motion.input
-                  type='time'
-                  value={playingXIStartTime}
-                  onChange={e => setPlayingXIStartTime(e.target.value)}
-                  style={inputStyle}
-                  whileFocus={{ borderColor: '#2454d4', boxShadow: '0 0 0 3px rgba(36,84,212,.1)' }}
+                <TimeInput
+                  value={playingXIStartHour}
+                  onChange={setPlayingXIStartHour}
+                  accentColor='#2454d4'
+                  accentShadow='rgba(36,84,212,.12)'
                 />
               </div>
-
-              {/* Window hours */}
               <div>
                 <label style={labelStyle}>Duration (hours)</label>
                 <motion.input
                   type='number'
                   min={1}
                   max={48}
-                  value={playingXIHours}
-                  onChange={e => setPlayingXIHours(Math.max(1, +e.target.value))}
+                  value={playingXIDuration}
+                  onChange={e => setPlayingXIDuration(Math.max(1, +e.target.value))}
                   style={inputStyle}
                   whileFocus={{ borderColor: '#2454d4', boxShadow: '0 0 0 3px rgba(36,84,212,.1)' }}
                 />
               </div>
-
-              {/* Timezone */}
               <div>
                 <label style={labelStyle}>Timezone</label>
-                <motion.select
-                  value={timezone}
-                  onChange={e => setTimezone(e.target.value)}
-                  style={{ ...inputStyle, cursor: 'pointer', appearance: 'none' }}
-                  whileFocus={{ borderColor: '#2454d4', boxShadow: '0 0 0 3px rgba(36,84,212,.1)' }}
-                >
-                  {TIMEZONES.map(tz => (
-                    <option key={tz.value} value={tz.value}>
-                      {tz.label}
-                    </option>
-                  ))}
-                </motion.select>
+                <TimezoneInput value={playingXITimezone} onChange={setPlayingXITimezone} />
               </div>
             </div>
 
-            {/* Preview strip */}
             <motion.div
               layout
               style={{
@@ -351,20 +706,11 @@ export default function TournamentSettings() {
                   letterSpacing: '.02em',
                 }}
               >
-                {formatTimePreview(playingXIStartTime, playingXIHours)}
+                {formatTimePreview(playingXIStartHour, playingXIDuration)}
               </span>
-              <span style={{ color: '#62769a', marginLeft: 4 }}>({playingXIHours}h window)</span>
-              <span
-                style={{
-                  marginLeft: 'auto',
-                  fontSize: 11,
-                  color: '#8fa0c0',
-                  fontWeight: 500,
-                }}
-              >
-                {TIMEZONES.find(t => t.value === timezone)
-                  ?.label.split('—')[0]
-                  .trim()}
+              <span style={{ color: '#62769a', marginLeft: 4 }}>({playingXIDuration}h window)</span>
+              <span style={{ marginLeft: 'auto', fontSize: 11, color: '#8fa0c0', fontWeight: 500 }}>
+                {playingXITimezone}
               </span>
             </motion.div>
           </div>
@@ -381,10 +727,8 @@ export default function TournamentSettings() {
             borderRadius: 16,
             boxShadow: '0 2px 16px rgba(36,84,212,.07)',
             marginBottom: 28,
-            overflow: 'hidden',
           }}
         >
-          {/* Card header */}
           <div
             style={{
               padding: '20px 28px',
@@ -437,40 +781,28 @@ export default function TournamentSettings() {
             </span>
           </div>
 
-          {/* Card body */}
           <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
             <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gap: 16,
-              }}
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}
               className='settings-grid'
             >
-              {/* Tender start */}
               <div>
                 <label style={labelStyle}>Tender Opens</label>
-                <motion.input
-                  type='time'
-                  value={tenderStartTime}
-                  onChange={e => setTenderStartTime(e.target.value)}
-                  style={inputStyle}
-                  whileFocus={{
-                    borderColor: '#ea8c0d',
-                    boxShadow: '0 0 0 3px rgba(234,140,13,.1)',
-                  }}
+                <TimeInput
+                  value={tenderStartHour}
+                  onChange={setTenderStartHour}
+                  accentColor='#ea8c0d'
+                  accentShadow='rgba(234,140,13,.12)'
                 />
               </div>
-
-              {/* Tender duration */}
               <div>
                 <label style={labelStyle}>Tender Duration (hrs)</label>
                 <motion.input
                   type='number'
                   min={1}
                   max={168}
-                  value={tenderDurationHours}
-                  onChange={e => setTenderDurationHours(Math.max(1, +e.target.value))}
+                  value={tenderDuration}
+                  onChange={e => setTenderDuration(Math.max(1, +e.target.value))}
                   style={inputStyle}
                   whileFocus={{
                     borderColor: '#ea8c0d',
@@ -478,16 +810,14 @@ export default function TournamentSettings() {
                   }}
                 />
               </div>
-
-              {/* Results delay */}
               <div>
                 <label style={labelStyle}>Results Delay (hrs)</label>
                 <motion.input
                   type='number'
                   min={0}
                   max={72}
-                  value={tenderResultDelayHours}
-                  onChange={e => setTenderResultDelayHours(Math.max(0, +e.target.value))}
+                  value={tenderResultRevealDuration}
+                  onChange={e => setTenderResultRevealDuration(Math.max(0, +e.target.value))}
                   style={inputStyle}
                   whileFocus={{
                     borderColor: '#ea8c0d',
@@ -497,7 +827,6 @@ export default function TournamentSettings() {
               </div>
             </div>
 
-            {/* Timeline preview */}
             <motion.div
               layout
               style={{
@@ -507,15 +836,7 @@ export default function TournamentSettings() {
                 fontSize: 12,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 0,
-                  position: 'relative',
-                }}
-              >
-                {/* Node: opens */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 0, position: 'relative' }}>
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
                 >
@@ -532,10 +853,9 @@ export default function TournamentSettings() {
                   >
                     Opens
                   </span>
-                  <span style={{ color: '#62769a', fontSize: 10 }}>{tenderStartTime}</span>
+                  <span style={{ color: '#62769a', fontSize: 10 }}>{tenderStartHour}</span>
                 </div>
 
-                {/* Line: tender duration */}
                 <div
                   style={{
                     flex: 1,
@@ -558,11 +878,10 @@ export default function TournamentSettings() {
                       fontWeight: 600,
                     }}
                   >
-                    {tenderDurationHours}h
+                    {tenderDuration}h
                   </span>
                 </div>
 
-                {/* Node: closes */}
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
                 >
@@ -580,11 +899,10 @@ export default function TournamentSettings() {
                     Closes
                   </span>
                   <span style={{ color: '#62769a', fontSize: 10 }}>
-                    {formatTimePreview(tenderStartTime, tenderDurationHours).split('→')[1].trim()}
+                    {formatTimePreview(tenderStartHour, tenderDuration).split('→')[1].trim()}
                   </span>
                 </div>
 
-                {/* Dashed line: results delay */}
                 <div
                   style={{
                     flex: 0.5,
@@ -596,7 +914,7 @@ export default function TournamentSettings() {
                     position: 'relative',
                   }}
                 >
-                  {tenderResultDelayHours > 0 && (
+                  {tenderResultRevealDuration > 0 && (
                     <span
                       style={{
                         position: 'absolute',
@@ -609,12 +927,11 @@ export default function TournamentSettings() {
                         fontWeight: 600,
                       }}
                     >
-                      +{tenderResultDelayHours}h
+                      +{tenderResultRevealDuration}h
                     </span>
                   )}
                 </div>
 
-                {/* Node: results */}
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
                 >
@@ -623,12 +940,12 @@ export default function TournamentSettings() {
                       width: 10,
                       height: 10,
                       borderRadius: '50%',
-                      background: tenderResultDelayHours > 0 ? '#22c55e' : '#ea8c0d',
+                      background: tenderResultRevealDuration > 0 ? '#22c55e' : '#ea8c0d',
                     }}
                   />
                   <span
                     style={{
-                      color: tenderResultDelayHours > 0 ? '#22c55e' : '#ea8c0d',
+                      color: tenderResultRevealDuration > 0 ? '#22c55e' : '#ea8c0d',
                       fontWeight: 700,
                       fontSize: 11,
                       whiteSpace: 'nowrap',
@@ -637,11 +954,11 @@ export default function TournamentSettings() {
                     Results
                   </span>
                   <span style={{ color: '#62769a', fontSize: 10 }}>
-                    {tenderResultDelayHours === 0
+                    {tenderResultRevealDuration === 0
                       ? 'immediate'
                       : formatTimePreview(
-                          tenderStartTime,
-                          tenderDurationHours + tenderResultDelayHours,
+                          tenderStartHour,
+                          tenderDuration + tenderResultRevealDuration,
                         )
                           .split('→')[1]
                           .trim()}
@@ -742,7 +1059,6 @@ export default function TournamentSettings() {
             grid-template-columns: 1fr !important;
           }
         }
-        input[type='time']::-webkit-calendar-picker-indicator,
         input[type='number']::-webkit-inner-spin-button {
           opacity: 0.5;
           cursor: pointer;
