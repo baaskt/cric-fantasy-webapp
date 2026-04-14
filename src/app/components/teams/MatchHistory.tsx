@@ -12,11 +12,12 @@ import { useMatch } from '@/providers/MatchProvider'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 type MatchHistoryProps = {
+  teamName: string
   matchHistory: MatchHistoryDetails[]
 }
 function MatchHistory(props: MatchHistoryProps) {
+  const { teamName, matchHistory } = props
   const { completedMatches } = useMatch()
-  const { matchHistory } = props
   const [matchData, setMatchData] = useState<MatchHistoryDetails | null>()
 
   const handlePlayerDetail = (matchData: MatchHistoryDetails) => {
@@ -86,7 +87,7 @@ function MatchHistory(props: MatchHistoryProps) {
           },
         ]}
       />
-      <div className='mt-4 px-3 pb-20 space-y-2.5'>
+      <div className='mt-4 px-3 pb-8 space-y-2.5'>
         {matchHistory.map(matchData => {
           const tier = pointsTier(matchData.totalMatchPoints)
           const pct = Math.round((matchData.totalMatchPoints / maxPts) * 100)
@@ -116,11 +117,19 @@ function MatchHistory(props: MatchHistoryProps) {
                       {matchData.totalMatchPoints}
                       <span className='font-normal ml-0.5'>pts</span>
                     </span>
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${tier.badge} ${tier.badgeText}`}
-                    >
-                      {tier.label}
-                    </span>
+                    {matchData.matchStatus.includes('No result') ? (
+                      <span
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-200 text-gray-600`}
+                      >
+                        No Result
+                      </span>
+                    ) : (
+                      <span
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${tier.badge} ${tier.badgeText}`}
+                      >
+                        {tier.label}
+                      </span>
+                    )}
                   </div>
 
                   {/* Progress bar */}
@@ -152,7 +161,13 @@ function MatchHistory(props: MatchHistoryProps) {
         })}
       </div>
 
-      {matchData && <MatchHistoryDrawer matchData={matchData} onClose={() => setMatchData(null)} />}
+      {matchData && (
+        <MatchHistoryDrawer
+          teamName={teamName}
+          matchData={matchData}
+          onClose={() => setMatchData(null)}
+        />
+      )}
     </div>
   )
 }

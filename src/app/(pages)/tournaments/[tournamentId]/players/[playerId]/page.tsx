@@ -12,7 +12,6 @@ import { useParams } from 'next/navigation'
 import Loading from '@/components/Loading'
 import { PLAYER } from '@/util/constants/constants'
 import EmptyData from '@/components/EmptyData'
-import { currencyToString } from '@/util/bidding'
 import {
   BattingComparison,
   MatchCard,
@@ -24,12 +23,13 @@ import PointsTimelineChart from '@/components/players/PointsTimelineChart'
 import { PlayerDetailDrawer } from '@/components/players/PlayerDetailDrawer'
 import PlayerHeroCard from '@/components/players/detail/PlayerHeroCard'
 import PlayerMilestoneBreakdown from '@/components/players/PlayerMilestoneBreakdown'
+import PlayerBidHistory from '@/components/players/detail/PlayerBidHistory'
 
 export default function PlayerDetail() {
   const params = useParams()
   const [activeMatch, setActiveMatch] = useState<MatchDetail | null>(null)
   const [playerDetailEntity, setPlayerDetailEntity] = useState<PlayerDetailEntity>()
-  const [tab, setTab] = useState<'tournament' | 't20 stats' | 'overview'>('tournament')
+  const [tab, setTab] = useState<'tournament' | 't20 stats' | 'bid history'>('tournament')
 
   const playerId = params.playerId
   const { activeTournament } = useTournament()
@@ -62,7 +62,7 @@ export default function PlayerDetail() {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 
-  if (!playerDetailEntity) {
+  if (playerDetailRequest.error && !playerDetailEntity) {
     return (
       <EmptyData
         title={'No Player Details Available'}
@@ -72,9 +72,13 @@ export default function PlayerDetail() {
     )
   }
 
+  if (!playerDetailEntity) {
+    return <Loading txt={PLAYER.LOADING_TXT}></Loading>
+  }
+
   return (
     <div
-      className='min-h-screen pb-28 px-4 pt-4'
+      className='min-h-screen pb-8 px-4 pt-4'
       style={{
         background: COLORS.cricPrimaryUltraLight,
         color: COLORS.cricDark,
@@ -98,7 +102,7 @@ export default function PlayerDetail() {
       >
         {/* Tab switcher */}
         <div className='flex gap-1 mb-5 p-1 rounded-2xl' style={{ background: COLORS.inputBg }}>
-          {(['tournament', 't20 stats', 'overview'] as const).map(t => (
+          {(['tournament', 't20 stats', 'bid history'] as const).map(t => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -163,35 +167,8 @@ export default function PlayerDetail() {
           </div>
         )}
 
-        {tab === 'overview' && (
-          <div className='space-y-2'>
-            {[
-              { label: 'Nationality', value: playerDetailEntity.overview.nationality },
-              { label: 'Club', value: playerDetailEntity.overview.club },
-              { label: 'Fantasy Team', value: playerDetailEntity.overview.fantasyTeam },
-              {
-                label: 'Base Price',
-                value: currencyToString(playerDetailEntity.overview.basePrice),
-              },
-              {
-                label: 'Auction Price',
-                value: currencyToString(playerDetailEntity.overview.auctionPrice),
-              },
-            ].map(row => (
-              <div
-                key={row.label}
-                className='flex justify-between items-center px-4 py-3 rounded-2xl'
-                style={{ background: COLORS.inputBg, border: `1px solid ${COLORS.gray}` }}
-              >
-                <span className='text-sm' style={{ color: COLORS.darkGray }}>
-                  {row.label}
-                </span>
-                <span className='text-sm font-bold' style={{ color: COLORS.cricDark }}>
-                  {row.value}
-                </span>
-              </div>
-            ))}
-          </div>
+        {tab === 'bid history' && (
+          <PlayerBidHistory auction={playerDetailEntity.auction}></PlayerBidHistory>
         )}
       </motion.div>
 

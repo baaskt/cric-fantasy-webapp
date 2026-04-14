@@ -103,11 +103,13 @@ export function PointRadar({ pts }: { pts: TournamentPointDetails }) {
 // ─── Area timeline ────────────────────────────────────────────────────────────
 
 export function MatchTimeline({ matches }: { matches: MatchDetail[] }) {
-  const data = [...matches].map((m, i) => ({
-    name: `M${i + 1}`,
-    pts: m.totalMatchPoints,
-    desc: m.matchDesc,
-  })) as MatchTimelineData[]
+  const data = [...matches]
+    .sort((a, b) => a.totalMatchPoints - b.totalMatchPoints)
+    .map((m, i) => ({
+      name: `M${i + 1}`,
+      pts: m.totalMatchPoints,
+      desc: m.matchDesc,
+    })) as MatchTimelineData[]
 
   const CustomDot = (props: DotProps & { payload?: MatchTimelineData }) => {
     const { cx, cy, payload } = props
