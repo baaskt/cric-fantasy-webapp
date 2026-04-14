@@ -8,9 +8,10 @@ import type { GroupRule, Rule, ScoredSegmentsRule } from './types'
 interface Props {
   rule: Rule
   onChange: (rule: Rule) => void
+  disabled?: boolean
 }
 
-export default function RuleEditor({ rule, onChange }: Props) {
+export default function RuleEditor({ rule, onChange, disabled }: Props) {
   // scored_segments
   const updSeg = useCallback(
     (id: string, seg: ScoredSegmentsRule['segments'][number]) => {
@@ -52,6 +53,7 @@ export default function RuleEditor({ rule, onChange }: Props) {
           <input
             className='rule-name-input'
             value={rule.name}
+            disabled={disabled}
             onChange={e => onChange({ ...rule, name: e.target.value })}
             placeholder='groupName'
           />
@@ -98,24 +100,30 @@ export default function RuleEditor({ rule, onChange }: Props) {
                   outline: 'none',
                 }}
                 value={child.name}
+                disabled={disabled}
                 onChange={e => updChild(child.id, { ...child, name: e.target.value })}
               />
               <span style={{ color: 'var(--muted)', fontSize: 10 }}>scored_segments</span>
-              <button className='btn-icon' onClick={() => rmChild(child.id)}>
-                ✕
-              </button>
+              {!disabled && (
+                <button className='btn-icon' onClick={() => rmChild(child.id)}>
+                  ✕
+                </button>
+              )}
             </div>
             <div style={{ padding: '14px 14px 0' }}>
               <RuleEditor
                 rule={child}
+                disabled={disabled}
                 onChange={updated => updChild(child.id, updated as ScoredSegmentsRule)}
               />
             </div>
           </div>
         ))}
-        <button className='add-segment-btn' onClick={addChild}>
-          ＋ add child rule
-        </button>
+        {!disabled && (
+          <button className='add-segment-btn' onClick={addChild}>
+            ＋ add child rule
+          </button>
+        )}
       </div>
     )
   }
@@ -126,6 +134,7 @@ export default function RuleEditor({ rule, onChange }: Props) {
         <input
           className='rule-name-input'
           value={rule.name}
+          disabled={disabled}
           onChange={e => onChange({ ...rule, name: e.target.value })}
           placeholder='ruleName'
         />
@@ -140,13 +149,16 @@ export default function RuleEditor({ rule, onChange }: Props) {
           seg={seg}
           index={i}
           isFallback={seg.when.length === 0}
+          disabled={disabled}
           onChange={upd => updSeg(seg.id, upd)}
           onRemove={() => rmSeg(seg.id)}
         />
       ))}
-      <button className='add-segment-btn' onClick={addSeg}>
-        ＋ add segment
-      </button>
+      {!disabled && (
+        <button className='add-segment-btn' onClick={addSeg}>
+          ＋ add segment
+        </button>
+      )}
     </div>
   )
 }

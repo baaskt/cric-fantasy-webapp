@@ -12,37 +12,49 @@ import {
   initModeData,
   parseJsonToModes,
 } from './ruleBuilderUtils'
-import { DEFAULT_RULES } from './defaultRules'
 import RuleEditor from './RuleEditor'
 import { useAuth } from '@/providers/AuthProvider'
 import { useTournament } from '@/providers/TournamentProvider'
+import { useRequest } from '@/hooks/useRequest'
+import { useMutateRequest } from '@/hooks/useMutateRequest'
+import { TOURNAMENTS } from '@/util/constants/endpoints'
+import { HttpMethod } from '@/model/enum/http-method.enum'
 import type { DefaultRulesConfig, ModeData, ModeName, SelectedRule } from './types'
-
-function fallbackCopy(text: string, onSuccess: () => void) {
-  const ta = document.createElement('textarea')
-  ta.value = text
-  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0'
-  document.body.appendChild(ta)
-  ta.focus()
-  ta.select()
-  try {
-    document.execCommand('copy')
-    onSuccess()
-  } finally {
-    document.body.removeChild(ta)
-  }
-}
 
 export default function RuleBuilder() {
   const { isAdmin } = useAuth()
   const admin = isAdmin()
   const { activeTournament } = useTournament()
   const currentTournamentId = activeTournament?.tournamentId
-  const [modeData, setModeData] = useState<ModeData>(() => initModeData(DEFAULT_RULES))
+
+  // ── API: load rules ──────────────────────────────────────────────────────
+  const rulesUrl = currentTournamentId ? `${TOURNAMENTS.RULES}${currentTournamentId}/rules` : null
+  const { data: rulesData, isLoading: rulesLoading, error: rulesError } = useRequest(rulesUrl)
+
+  // ── API: save rules ──────────────────────────────────────────────────────
+  const baseRulesUrl = currentTournamentId
+    ? `${TOURNAMENTS.RULES}${currentTournamentId}/rules`
+    : 'noop'
+  const [ruleId, setRuleId] = useState<string | null>(null)
+  const putUrl = ruleId ? `${baseRulesUrl}/${ruleId}` : 'noop'
+  const { trigger: createRule } = useMutateRequest(baseRulesUrl, HttpMethod.POST)
+  const { trigger: putRule } = useMutateRequest(putUrl, HttpMethod.PUT)
+
+  const [modeData, setModeData] = useState<ModeData>(
+    () =>
+      Object.fromEntries(
+        Object.entries(MODES).map(([mode, { categories }]) => [
+          mode,
+          categories.map(name => ({ id: name, name, rules: [] })),
+        ]),
+      ) as unknown as ModeData,
+  )
+  const [rulesSeeded, setRulesSeeded] = useState(false)
+  const [rulesEmpty, setRulesEmpty] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [activeMode, setActiveMode] = useState<ModeName>('match')
   const [selected, setSelected] = useState<SelectedRule | null>(null)
   const [mobilePanel, setMobilePanel] = useState<'sidebar' | 'editor' | 'preview'>('editor')
-  const [copied, setCopied] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [importFlash, setImportFlash] = useState(false)
   const [showFullJson, setShowFullJson] = useState(false)
@@ -54,6 +66,28 @@ export default function RuleBuilder() {
     if (!currentTournamentId) return
     localStorage.setItem(`ruleConfig_${currentTournamentId}`, buildJson(modeData))
   }, [modeData, currentTournamentId])
+
+  // Seed modeData once when API response arrives
+  useEffect(() => {
+    if (rulesSeeded || rulesEmpty || !rulesData) return
+    const raw = rulesData as { result: { ruleId: string; rule: DefaultRulesConfig }[] }
+    const result = raw?.result?.[0]
+    if (result?.rule) {
+      setModeData(initModeData(result.rule))
+      setRuleId(result.ruleId ?? null)
+      setRulesSeeded(true)
+    } else {
+      setRulesEmpty(true)
+    }
+  }, [rulesData, rulesSeeded, rulesEmpty])
+
+  // No rule configured = API error OR API returned empty result array
+  const rulesNotConfigured = !rulesLoading && !rulesSeeded && (!!rulesError || rulesEmpty)
+
+  // Auto-open import modal for admins when no rule is configured
+  useEffect(() => {
+    if (admin && rulesNotConfigured) setShowImport(true)
+  }, [admin, rulesNotConfigured])
 
   const activeCats = modeData[activeMode]
   const json = buildJson(modeData)
@@ -95,24 +129,29 @@ export default function RuleBuilder() {
   }
   const handleImport = (parsed: DefaultRulesConfig) => {
     setModeData(prev => parseJsonToModes(parsed, prev))
+    setRulesSeeded(true)
+    setShowImport(false)
     setSelected(null)
     setImportFlash(true)
     setTimeout(() => setImportFlash(false), 2200)
   }
-  const copy = () => {
-    const markCopied = () => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
-    }
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard
-        .writeText(displayJson)
-        .then(markCopied)
-        .catch(() => {
-          fallbackCopy(displayJson, markCopied)
-        })
-    } else {
-      fallbackCopy(displayJson, markCopied)
+  const save = async () => {
+    if (!currentTournamentId) return
+    const payload = { rule: JSON.parse(json) as unknown }
+    setSaveStatus('saving')
+    try {
+      if (ruleId) {
+        await putRule(payload as never)
+      } else {
+        const res = await createRule(payload as never)
+        const newRuleId = (res as { result?: { ruleId?: string } })?.result?.ruleId
+        if (newRuleId) setRuleId(newRuleId)
+      }
+      setSaveStatus('saved')
+      setTimeout(() => setSaveStatus('idle'), 2000)
+    } catch {
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 2500)
     }
   }
 
@@ -202,15 +241,17 @@ export default function RuleBuilder() {
                                 {(rule.rules ?? []).length}
                               </span>
                             )}
-                            <button
-                              className='btn-icon'
-                              onClick={e => {
-                                e.stopPropagation()
-                                removeRule(cat.id, rule.id)
-                              }}
-                            >
-                              ✕
-                            </button>
+                            {admin && (
+                              <button
+                                className='btn-icon'
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  removeRule(cat.id, rule.id)
+                                }}
+                              >
+                                ✕
+                              </button>
+                            )}
                           </div>
                           {rule.type === 'group' &&
                             (rule.rules ?? []).map(child => (
@@ -230,20 +271,24 @@ export default function RuleBuilder() {
                             ))}
                         </div>
                       ))}
-                      <button className='add-rule-btn' onClick={() => addRule(cat.id)}>
-                        ＋ add rule
-                      </button>
-                      <button
-                        className='add-rule-btn'
-                        style={{
-                          marginTop: 2,
-                          borderColor: 'var(--accent2)',
-                          color: 'var(--accent2)',
-                        }}
-                        onClick={() => addGroupRule(cat.id)}
-                      >
-                        ⊞ add group rule
-                      </button>
+                      {admin && (
+                        <>
+                          <button className='add-rule-btn' onClick={() => addRule(cat.id)}>
+                            ＋ add rule
+                          </button>
+                          <button
+                            className='add-rule-btn'
+                            style={{
+                              marginTop: 2,
+                              borderColor: 'var(--accent2)',
+                              color: 'var(--accent2)',
+                            }}
+                            onClick={() => addGroupRule(cat.id)}
+                          >
+                            ⊞ add group rule
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -254,12 +299,58 @@ export default function RuleBuilder() {
 
         {/* ── Editor ── */}
         <div className={`editor ${mobilePanel === 'editor' ? 'rb-active' : ''}`}>
-          {activeRule ? (
-            <RuleEditor
-              key={activeRule.id}
-              rule={activeRule}
-              onChange={r => updateRule(selected!.catId, selected!.ruleId, r)}
-            />
+          {rulesNotConfigured ? (
+            admin ? (
+              <div className='editor-empty'>
+                <div className='editor-empty-icon'>⚠</div>
+                <p>No rule configured for this tournament.</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                  Import a rule config to get started.
+                </p>
+                <button
+                  className='btn btn-accent'
+                  style={{ marginTop: 12 }}
+                  onClick={() => setShowImport(true)}
+                >
+                  ↑ import json config
+                </button>
+              </div>
+            ) : (
+              <div className='editor-empty'>
+                <div className='editor-empty-icon'>⚠</div>
+                <p>Rules are not configured for this tournament.</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                  Contact your admin or tournament host to set up the scoring rules.
+                </p>
+              </div>
+            )
+          ) : rulesLoading && !rulesSeeded ? (
+            <div className='editor-empty'>
+              <div className='editor-empty-icon'>⋯</div>
+              <p>Loading rules…</p>
+            </div>
+          ) : activeRule ? (
+            <>
+              {!admin && (
+                <div
+                  style={{
+                    padding: '8px 16px',
+                    background: 'rgba(36,84,212,0.06)',
+                    borderBottom: '1px solid var(--border)',
+                    fontSize: 11,
+                    color: 'var(--muted)',
+                  }}
+                >
+                  View only — contact your admin to make changes
+                </div>
+              )}
+              <RuleEditor
+                key={activeRule.id}
+                rule={activeRule}
+                disabled={!admin}
+                onChange={r => updateRule(selected!.catId, selected!.ruleId, r)}
+              />
+            </>
           ) : (
             <div className='editor-empty'>
               <div className='editor-empty-icon'>⚙</div>
@@ -293,11 +384,23 @@ export default function RuleBuilder() {
               )}
             </div>
             {admin &&
-              (copied ? (
-                <span className='copied-badge'>copied!</span>
+              (saveStatus === 'saved' ? (
+                <span className='copied-badge'>saved!</span>
+              ) : saveStatus === 'error' ? (
+                <span
+                  className='copied-badge'
+                  style={{ background: 'var(--accent3)', color: '#fff' }}
+                >
+                  save failed
+                </span>
               ) : (
-                <button className='btn btn-accent' onClick={copy}>
-                  copy
+                <button
+                  className='btn btn-accent'
+                  onClick={() => void save()}
+                  disabled={saveStatus === 'saving' || !currentTournamentId}
+                  style={{ opacity: saveStatus === 'saving' || !currentTournamentId ? 0.6 : 1 }}
+                >
+                  {saveStatus === 'saving' ? 'saving…' : 'save'}
                 </button>
               ))}
           </div>

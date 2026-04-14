@@ -214,6 +214,11 @@ export const TITLES = {
     path: '/ruleBuilder',
     fullPath: '/tournaments/tournamentId/ruleBuilder',
   },
+  SETTINGS: {
+    label: 'Settings',
+    path: '/settings',
+    fullPath: '/tournaments/tournamentId/settings',
+  },
 }
 
 export const STATS = {
