@@ -11,6 +11,7 @@ import { OptionsEntity } from '@/model/entities/options.interface'
 import { MatchDetailEntity } from '@/model/response/match-detail.interface'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useAuth } from '@/providers/AuthProvider'
+import { useTournament } from '@/providers/TournamentProvider'
 import { MATCH } from '@/util/constants/constants'
 import { MATCHES } from '@/util/constants/endpoints'
 import { useEffect, useMemo, useState } from 'react'
@@ -23,9 +24,13 @@ const tabOptions: OptionsEntity[] = [
 
 function MatchDetail() {
   const { isAdmin } = useAuth()
+  const { activeTournament } = useTournament()
+  const tournamentId = activeTournament?.tournamentId || ''
   const matchId = auth().getMatchId()
   const [matchDetailEntity, setMatchDetailEntity] = useState<MatchDetailEntity>()
-  const MATCH_DETAIL_URL = matchId ? `${MATCHES.GET_SCORECARD_URL}${matchId}` : ''
+  const MATCH_DETAIL_URL = matchId
+    ? `${MATCHES.GET_SCORECARD_URL.replace('{matchId}', matchId).replace('{tournamentId}', tournamentId)}`
+    : ''
   const matchDetailRequest = useRequest(MATCH_DETAIL_URL)
 
   useEffect(() => {

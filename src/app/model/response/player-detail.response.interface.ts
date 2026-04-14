@@ -15,14 +15,25 @@ export interface PlayerDetailEntity {
   tournamentPointDetails: TournamentPointDetails
   teamStats: TournamentStats
   matchDetails: MatchDetail[]
+  auction: PlayerAuctionHistoryEntity
+}
+
+export interface PlayerAuctionHistoryEntity {
+  basePrice: number
+  auctionPrice: number
+  biddingHistory: BiddingHistoryEntity[]
+}
+
+export interface BiddingHistoryEntity {
+  teamId: string
+  teamName: string
+  amount: number
 }
 
 export interface PlayerOverview {
   nationality: string
   club: string
   fantasyTeam: string
-  basePrice: number
-  auctionPrice: number
 }
 
 export interface T20Stats {

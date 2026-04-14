@@ -61,7 +61,7 @@ function TeamPlayers(props: TeamPlayersProps) {
         {selectedTab.id === 1 ? (
           <TeamView squad={squad} isXIChangeAllowed={isTeamOwner} teamId={teamId} />
         ) : selectedTab.id === 2 ? (
-          <MatchHistory matchHistory={matchHistory} />
+          <MatchHistory matchHistory={matchHistory} teamName={teamDetail.teamName} />
         ) : selectedTab.id === 3 ? (
           <PlayingXIHistory squad={squad} playingXIHistory={playingXIHistory} />
         ) : null}

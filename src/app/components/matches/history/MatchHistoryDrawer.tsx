@@ -4,13 +4,14 @@ import { IconButton } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
 
-function MatchHistoryDrawer({
-  matchData,
-  onClose,
-}: {
+interface MatchHistoryDrawerProps {
+  teamName: string
   matchData: MatchHistoryDetails | undefined
   onClose: () => void
-}) {
+}
+
+function MatchHistoryDrawer(props: MatchHistoryDrawerProps) {
+  const { teamName, matchData, onClose } = props
   const matchDescSplit = matchData?.matchDesc.split(':')
   const matchTitle = matchDescSplit && matchDescSplit[1]
   const matchDesc = matchDescSplit && matchDescSplit[0]
@@ -42,14 +43,23 @@ function MatchHistoryDrawer({
               className='w-10 h-1 rounded-full mx-auto mb-5'
               style={{ background: COLORS.gray }}
             />
+            <h3
+              className='text-lg font-black text-center w-full'
+              style={{ color: COLORS.cricDark }}
+            >
+              {teamName}
+            </h3>
 
             <div className='flex items-start justify-between mb-5'>
               <div>
-                <h3 className='text-lg font-black' style={{ color: COLORS.cricDark }}>
+                <h3 className='text-lg font-black' style={{ color: COLORS.cricPrimary }}>
                   {matchTitle}
                 </h3>
-                <p className='text-sm' style={{ color: COLORS.darkGray }}>
+                <p className='text-sm font-bold' style={{ color: COLORS.darkGray }}>
                   {matchDesc}
+                </p>
+                <p className='text-sm italic' style={{ color: COLORS.darkGray }}>
+                  {matchData.matchStatus}
                 </p>
               </div>
               <IconButton size='small' onClick={onClose}>
@@ -58,14 +68,15 @@ function MatchHistoryDrawer({
             </div>
 
             <div className='gap-3'>
-              <div className='mt-2'>
+              <div className='mt-2 flex flex-col gap-2'>
                 {matchData &&
-                  Object.keys(matchData.players).map(playerName => (
-                    <div className='flex justify-between gap-4 text-sm' key={playerName}>
-                      <div className='italic'>{playerName}</div>
-                      <div style={{ color: COLORS.cricPrimary }}>
-                        {matchData.players[playerName]}
-                      </div>
+                  matchData.players.map(playerEntity => (
+                    <div
+                      className='flex justify-between gap-4 text-sm p-2 bg-blue-50 border border-indigo-100 rounded-md'
+                      key={playerEntity.playerId}
+                    >
+                      <div className='italic'>{playerEntity.name}</div>
+                      <div style={{ color: COLORS.cricPrimary }}>{playerEntity.matchPoints}</div>
                     </div>
                   ))}
                 <div className='flex justify-between gap-4 text-md font-bold mt-2'>

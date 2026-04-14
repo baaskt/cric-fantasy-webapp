@@ -75,8 +75,8 @@ function PlayerHeroCard(props: PlayerHeroCardProps) {
               <div>
                 <p className='text-[10px] uppercase tracking-widest text-white/50'>Bid Price</p>
                 <p className='font-black text-white'>
-                  {playerDetailEntity.overview.auctionPrice
-                    ? currencyToString(playerDetailEntity.overview.auctionPrice)
+                  {playerDetailEntity.auction.auctionPrice
+                    ? currencyToString(playerDetailEntity.auction.auctionPrice)
                     : 'Price N/A'}
                 </p>
               </div>
@@ -84,7 +84,7 @@ function PlayerHeroCard(props: PlayerHeroCardProps) {
               <div>
                 <p className='text-[10px] uppercase tracking-widest text-white/50'>Base Price</p>
                 <p className='font-semibold text-white/60'>
-                  {currencyToString(playerDetailEntity.overview.basePrice)}
+                  {currencyToString(playerDetailEntity.auction.basePrice)}
                 </p>
               </div>
             </div>

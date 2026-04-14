@@ -348,7 +348,6 @@ function MatchCard({
           {/* Footer */}
           <div className='flex items-center justify-between px-4 py-3 mt-1 border-t border-gray-50'>
             <span className='text-xs text-gray-400'>{dp.full}</span>
-            <span className='text-xs text-gray-400'>{allPlayers.length} players</span>
           </div>
         </div>
       </div>
@@ -388,7 +387,7 @@ export default function PlayingXIHistory(props: PlayingXIHistoryProps) {
           },
         ]}
       />
-      <div className='mt-4 px-3 pb-20 space-y-2.5'>
+      <div className='mt-4 px-3 pb-8 space-y-2.5'>
         {daysMatchesMapping.length === 0 ? (
           <div className='text-center py-16 text-gray-400 text-sm'>No match history available</div>
         ) : (
