@@ -123,7 +123,7 @@ export default function PlayerDetail() {
             <SectionTitle>Playing XI vs Total Stats</SectionTitle>
             <BattingComparison
               ts={playerDetailEntity.tournamentStats}
-              team={playerDetailEntity.teamStats}
+              team={playerDetailEntity.tournamentPlayingXIStats}
             />
             <div className='flex gap-4 mt-1 mb-4 justify-center'>
               <span
