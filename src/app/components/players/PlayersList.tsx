@@ -1,7 +1,7 @@
 'use client'
 
 import { CricHeaderRow, CricTableRow } from '@/model/types/cric-table.type'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import CricTable from '../ui/CricTable'
 import { CricResponse } from '@/model/types/cric-response.type'
 import { useRequest } from '@/hooks/useRequest'
@@ -14,6 +14,8 @@ import { PLAYER, TITLES } from '@/util/constants/constants'
 import { getPlayersFilterUrl } from '@/util/player'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { useRouter } from 'next/navigation'
+import { COLORS } from '@/util/colors'
+import CricAnimatedDots from '../ui/CricAnimatedDots'
 
 const headersList: CricHeaderRow[] = [
   { key: 'expand', label: '', alias: '', type: 'expand', isMobile: true },
@@ -40,13 +42,28 @@ function PlayersList(props: PlayersListProp) {
   const [tableData, setTableData] = useState<CricTableRow[]>([])
   const [columnList, setColumnList] = useState<CricHeaderRow[]>([])
   const [playersList, setPlayersList] = useState<PlayersListEntity[]>([])
+  const [cursor, setCursor] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
   const router = useRouter()
 
-  const PLAYERS_URL =
-    activeTournament && selectedTeam
-      ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam)
+  const PLAYERS_URL = useMemo(() => {
+    console.log('Player', activeTournament, selectedTab, selectedTeam, cursor, hasMore)
+    return activeTournament && selectedTeam && hasMore
+      ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam, cursor)
       : ''
+  }, [hasMore, cursor, selectedTab, selectedTeam, activeTournament])
+
   const playerRequest = useRequest(PLAYERS_URL)
+
+  useEffect(() => {
+    // Reset states when filters change
+    if (selectedTab && selectedTeam) {
+      setPlayersList([])
+      setTableData([])
+      setCursor(0)
+      setHasMore(true)
+    }
+  }, [selectedTab, selectedTeam])
 
   useEffect(() => {
     if (playerRequest.data) {
@@ -54,7 +71,12 @@ function PlayersList(props: PlayersListProp) {
         PlayersListEntity[]
       >
       if (playerResponse?.result) {
-        setPlayersList(playerResponse?.result)
+        const updatedPlayerList = [...playersList, ...playerResponse.result]
+        setPlayersList(updatedPlayerList)
+        if (playerResponse.meta) {
+          setCursor(playerResponse.meta.nextCursor)
+          setHasMore(playerResponse.meta.hasMore)
+        }
       }
     }
   }, [playerRequest.data])
@@ -105,7 +127,7 @@ function PlayersList(props: PlayersListProp) {
       )
   }
 
-  if (playerRequest.isValidating || !tableData) {
+  if ((playerRequest.isValidating || !tableData) && cursor === 0 && !playersList.length) {
     return <Loading txt={PLAYER.LOADING_TXT}></Loading>
   }
 
@@ -119,6 +141,15 @@ function PlayersList(props: PlayersListProp) {
         fullWidth={false}
         onRowSelect={navigateToPlayerDetail}
       />
+      {hasMore && (
+        <div
+          className='flex flex-row gap-2 items-center text-center justify-center mt-2'
+          style={{ color: COLORS.cricPrimary }}
+        >
+          <div>Loading more players...</div>
+          <CricAnimatedDots bgColor={COLORS.cricPrimary} />
+        </div>
+      )}
     </div>
   )
 }

@@ -27,6 +27,7 @@ export const TOURNAMENTS = {
   RULE_CONFIG: 'tournaments/',
   RULES: 'tournaments/',
   UPDATE_SETTINGS: 'tournaments/',
+  GET_TENDER_PLAYER: 'tournaments/{tournamentId}/tenderDetails',
 }
 
 export const MATCHES = {
@@ -59,7 +60,6 @@ export const PLAYERS = {
   GET_RANDOM_PLAYER_URL: 'players/tournamentId/random?key=category&value=',
   SELL_PLAYER: 'players/playerId/tournaments/tournamentId/sell',
   RESET_UNSOLD_PLAYER: 'players/tournamentId',
-  SPIN_RANDOM_PLAYER: 'players/tournamentId/getRandomPlayerSpin',
 }
 
 export const ROOSTER = {}

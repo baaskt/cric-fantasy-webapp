@@ -1,4 +1,4 @@
-import { SpinPlayerEntity } from './spin-player.interface'
+import { SpinPlayerEntity } from './tender-player.interface'
 
 export interface TeamPointsEntity {
   pointsUpdatedAt: string

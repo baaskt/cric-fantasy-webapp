@@ -72,14 +72,34 @@ function MatchHistoryDrawer(props: MatchHistoryDrawerProps) {
                 {matchData &&
                   matchData.players.map(playerEntity => (
                     <div
-                      className='flex justify-between gap-4 text-sm p-2 bg-blue-50 border border-indigo-100 rounded-md'
+                      className='flex justify-between items-center gap-4 text-sm p-2 bg-blue-50 border border-indigo-100 rounded-md'
                       key={playerEntity.playerId}
                     >
-                      <div className='italic'>{playerEntity.name}</div>
+                      <div className='italic'>
+                        {playerEntity.name}
+                        <div
+                          className='rounded-lg p-1'
+                          style={{
+                            background: playerEntity.playingXI
+                              ? COLORS.stockGreen + '12'
+                              : COLORS.inputBg,
+                            border: `1px solid ${playerEntity.playingXI ? COLORS.stockGreen + '35' : COLORS.gray}`,
+                          }}
+                        >
+                          <p
+                            className='text-md font-black'
+                            style={{
+                              color: playerEntity.playingXI ? COLORS.stockGreen : COLORS.darkGray,
+                            }}
+                          >
+                            {playerEntity.playingXI ? 'Playing XI' : 'Benched'}
+                          </p>
+                        </div>
+                      </div>
                       <div style={{ color: COLORS.cricPrimary }}>{playerEntity.matchPoints}</div>
                     </div>
                   ))}
-                <div className='flex justify-between gap-4 text-md font-bold mt-2'>
+                <div className='flex justify-between gap-4 text-md font-bold mt-2 mr-2'>
                   <div className='italic'>Total Points</div>
                   <div style={{ color: COLORS.cricPrimary }}>{matchData?.totalMatchPoints}</div>
                 </div>

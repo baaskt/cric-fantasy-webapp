@@ -258,6 +258,7 @@ export const getPlayersFilterUrl = (
   activeTournament: TournamentEntity,
   selectedTab: OptionsEntity,
   selectedTeam: OptionsEntity,
+  cursor: number,
 ): string => {
   const tournamentId = activeTournament.tournamentId
   const TOURNAMENT_URL = PLAYERS.GET_PLAYERS_URL.replace('tournamentId', tournamentId)
@@ -265,10 +266,12 @@ export const getPlayersFilterUrl = (
   const ROLE_SUFFIX =
     selectedTab.id === 2 || selectedTab.id === 3 ? `role=${selectedTab.value}` : ''
   const CATEGORY_SUFFIX = selectedTab.id === 4 ? `soldStatus=${selectedTab.value}` : ''
+  const CURSOR_SUFFIX = `&cursor=${cursor}&limit=20`
   //Remove team filter if the sold status is unsold
   const FILTERS_SUFFIX = CATEGORY_SUFFIX
-    ? [ROLE_SUFFIX, CATEGORY_SUFFIX]
-    : [TEAM_SUFFIX, ROLE_SUFFIX, CATEGORY_SUFFIX]
+    ? [ROLE_SUFFIX, CATEGORY_SUFFIX, CURSOR_SUFFIX]
+    : [TEAM_SUFFIX, ROLE_SUFFIX, CATEGORY_SUFFIX, CURSOR_SUFFIX]
   const PLAYERS_URL = `${TOURNAMENT_URL}${FILTERS_SUFFIX.filter(url => url !== '').join('&')}`
+  console.log('Generated Players URL:', PLAYERS_URL)
   return PLAYERS_URL
 }
