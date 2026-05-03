@@ -32,12 +32,12 @@ export function currencyToString(biddingPrice: number): string {
   let budgetString = ''
   if (biddingPrice >= oneCrore) {
     const currencyValue = biddingPrice / oneCrore
-    budgetString = `${currencyValue}${currencyValue > 1 ? ' Crores' : ' Crore'}`
+    budgetString = `${currencyValue}${' Cr'}`
   } else if (biddingPrice >= oneLakh) {
     const currencyValue = biddingPrice / oneLakh
-    budgetString = `${currencyValue}${currencyValue > 1 ? ' Lakhs' : ' Lakh'}`
+    budgetString = `${currencyValue}${' L'}`
   }
-  return budgetString
+  return '₹' + budgetString
 }
 
 export function getNumberOfBids(basePrice: number, targetPrice: number): number {

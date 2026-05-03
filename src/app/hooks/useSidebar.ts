@@ -15,6 +15,7 @@ import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import EqualizerIcon from '@mui/icons-material/Equalizer'
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
 import { useAuth } from '@/providers/AuthProvider'
+import GavelIcon from '@mui/icons-material/Gavel'
 
 export const tournamentConfig: SideBarMenuEntity[] = [
   {
@@ -42,16 +43,16 @@ export const tournamentConfig: SideBarMenuEntity[] = [
     fullPath: TITLES.TEAMS.fullPath,
   },
   {
+    icon: GavelIcon,
+    title: TITLES.TENDER.label,
+    path: TITLES.TENDER.path,
+    fullPath: TITLES.TENDER.fullPath,
+  },
+  {
     icon: EqualizerIcon,
     title: TITLES.ANALYTICS.label,
     path: TITLES.ANALYTICS.path,
     fullPath: TITLES.ANALYTICS.fullPath,
-  },
-  {
-    icon: RuleRoundedIcon,
-    title: TITLES.RULE_BUILDER.label,
-    path: TITLES.RULE_BUILDER.path,
-    fullPath: TITLES.RULE_BUILDER.fullPath,
   },
 ]
 
@@ -125,6 +126,12 @@ const settingsConfig: SideBarMenuEntity[] = [
     title: TITLES.SETTINGS.label,
     path: TITLES.SETTINGS.path,
     fullPath: TITLES.SETTINGS.fullPath,
+  },
+  {
+    icon: RuleRoundedIcon,
+    title: TITLES.RULE_BUILDER.label,
+    path: TITLES.RULE_BUILDER.path,
+    fullPath: TITLES.RULE_BUILDER.fullPath,
   },
 ]
 

@@ -6,14 +6,14 @@ import { useRequest } from '@/hooks/useRequest'
 import { useTournament } from '@/providers/TournamentProvider'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import Loading from '../Loading'
-import { ALTERNATE_PLAYER_IMAGE_SRC, PLAYER, TITLES } from '@/util/constants/constants'
+import { PLAYER, TITLES } from '@/util/constants/constants'
 import { getPlayersFilterUrl } from '@/util/player'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { useRouter } from 'next/navigation'
 import { COLORS } from '@/util/colors'
 import CricAnimatedDots from '../ui/CricAnimatedDots'
 import { convertDriveUrl } from '@/util/helper'
-import { SoldStatus } from '@/model/enum/sold-status.enum'
+import PlayerListCard from './PlayerListCard'
 
 type PlayersListProp = {
   selectedTab: OptionsEntity
@@ -114,21 +114,21 @@ function PlayersList(props: PlayersListProp) {
       <div className='relative mb-4 mt-2'>
         <input
           type='text'
-          placeholder='Search players...'
+          placeholder='Search players by any field...'
           value={search}
           onChange={e => setSearch(e.target.value)}
           className='w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400'
         />
-
-        {/* 🔎 Icon */}
         <span className='absolute left-3 top-3 text-gray-400'>🔍</span>
-
-        {/* ❌ Clear button */}
         {search && (
           <button onClick={() => setSearch('')} className='absolute right-3 top-2 text-gray-500'>
             ✕
           </button>
         )}
+      </div>
+      <div className='text-indigo-500 flex'>
+        {`${filteredPlayers.length} ${search ? `/ ${playersList.length}` : ''} Players`}
+        {hasMore && <CricAnimatedDots bgColor={COLORS.cricPrimary} />}
       </div>
       <div className='grid grid-cols-3 gap-2 mt-2 mb-4'>
         {[
@@ -145,66 +145,20 @@ function PlayersList(props: PlayersListProp) {
           </div>
         ))}
       </div>
-      <div className='text-indigo-500 flex'>
-        {`${filteredPlayers.length} ${search ? `/ ${playersList.length}` : ''} Players`}
-        {hasMore && <CricAnimatedDots bgColor={COLORS.cricPrimary} />}
-      </div>
       <div className='mt-2 flex flex-col gap-3 w-full'>
         {filteredPlayers.map((player, playerIndex) => {
           const diff = player.totalPoints - player.totalPlayingXIPoints
           const playerUrl = convertDriveUrl(player.imageUrl)
           return (
-            <div
+            <PlayerListCard
               key={player.playerId}
-              className={`flex justify-between items-center p-4 rounded-xl w-full transition-transform duration-150 ease-in-out shadow-md active:scale-95`}
-            >
-              <div
-                className='flex items-center gap-3 flex-1 cursor-pointer'
-                onClick={() => navigateToPlayerDetail(player.playerId)}
-              >
-                <div
-                  className={`font-bold rounded-lg w-10 h-10 flex justify-center items-center bg-blue-50 text-blue-500`}
-                >
-                  {playerIndex + 1}
-                </div>
-                <div className='relative flex items-center flex-col gap-2'>
-                  <img
-                    src={playerUrl || ALTERNATE_PLAYER_IMAGE_SRC}
-                    alt='team'
-                    className='w-12 h-12 rounded-full object-cover border-4 border-white shadow-md'
-                  />
-                </div>
-
-                {/* Player Info */}
-                <div>
-                  <div className='font-semibold text-md text-violet-500'>{player.name}</div>
-                  <div className='text-sm text-gray-500'>{player.role}</div>
-                  <div className='text-sm text-blue-500 mt-2'>{player.teamName}</div>
-                  <div className='flex flex-col gap-1'>
-                    {!player.totalMilestonePoints ? (
-                      <div className='text-sm text-blue-600'>
-                        Milestone: {player.totalMilestonePoints} points
-                      </div>
-                    ) : null}
-                    {diff && selectedTab.value !== SoldStatus.UNSOLD ? (
-                      <div className='text-sm text-red-600'>Missed in XI: {diff} points</div>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-
-              {/* RIGHT SECTION */}
-              <div className='flex items-center gap-4'>
-                {/* Points */}
-                <div className='text-right'>
-                  {!isNaN(diff) && (
-                    <div className='font-bold text-xl text-gray-700'>
-                      {player.totalPlayingXIPoints || player.totalPoints}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+              selectedTab={selectedTab}
+              playerUrl={playerUrl}
+              diff={diff}
+              player={player}
+              playerIndex={playerIndex}
+              onPlayerDetail={navigateToPlayerDetail}
+            />
           )
         })}
       </div>

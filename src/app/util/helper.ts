@@ -215,3 +215,32 @@ export function isSameDate(valueYYYYMMDD: string, startTime: string) {
 
   return d1.toISOString().split('T')[0] === d2.toISOString().split('T')[0]
 }
+export function formatTimeAgo(dateString: string | number | Date) {
+  const now = new Date()
+  const past = new Date(dateString)
+  const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000)
+
+  if (diffInSeconds < 5) return 'Just now'
+  if (diffInSeconds < 60) return `${diffInSeconds}s ago`
+
+  const minutes = Math.floor(diffInSeconds / 60)
+  if (minutes < 60) return `${minutes}m ago`
+
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `${hours}h ago`
+
+  const days = Math.floor(hours / 24)
+  if (days === 1) return 'Yesterday'
+  if (days < 7) return `${days}d ago`
+
+  return past.toLocaleDateString()
+}
+
+export function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(w => w[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase()
+}

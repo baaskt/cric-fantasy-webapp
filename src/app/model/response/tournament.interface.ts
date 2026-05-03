@@ -2,6 +2,7 @@ import { InsightsEntity } from './insights-response.interface'
 
 export interface TournamentEntity {
   basePrice?: { [key: string]: number }
+  canTender?: boolean
   tournamentId: string
   tournamentName: string
   seriesId: number
@@ -15,7 +16,6 @@ export interface TournamentEntity {
   imgUrl?: string
   isHost: boolean
   isParticipant: boolean
-  playingXI: boolean
   funStat?: string
   tournamentWinner?: string
   stats?: TournamentStatsEntity
@@ -25,6 +25,9 @@ export interface TournamentEntity {
   tenderStartHour?: string
   tenderDuration?: number
   tenderResultRevealDuration?: number
+  teamId: string
+  teamName: string
+  tenderEndTime?: string
 }
 
 export interface TournamentStatsEntity {
