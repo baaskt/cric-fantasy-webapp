@@ -17,7 +17,7 @@ function DailyTender() {
     }
   }
 
-  if (activeTournament?.canTender) {
+  if (!activeTournament?.canTender) {
     return null
   }
 
