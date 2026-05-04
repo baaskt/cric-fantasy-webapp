@@ -149,13 +149,15 @@ export default function PlayerTenderDetail({
         <div className='flex flex-col items-center justify-between mb-4'>
           <div className='flex items-center gap-1.5 bg-white border border-indigo-200 rounded-full px-3 py-1.5'>
             <span
-              className={`w-2 h-2 rounded-full animate-pulse ${tenderStatus === TenderStatus.CLOSED ? 'bg-red-500' : 'bg-green-500'}`}
+              className={`w-2 h-2 rounded-full animate-pulse ${tenderStatus === TenderStatus.CLOSED.toString() ? 'bg-red-500' : 'bg-green-500'}`}
             />
             <span className='text-xs font-bold text-indigo-800'>
-              {tenderStatus === TenderStatus.CLOSED ? 'Tender closed' : 'Live Tender closes in'}
+              {tenderStatus === TenderStatus.CLOSED.toString()
+                ? 'Tender closed'
+                : 'Live Tender closes in'}
             </span>
           </div>
-          {tenderStatus === TenderStatus.OPEN ? (
+          {tenderStatus === TenderStatus.OPEN.toString() ? (
             <div className='mt-2 flex flex-col items-center justify-center'>
               <div className='font-bold text-xs text-indigo-800'>
                 <span className='pr-1'>{String(timeRemaining.hours).padStart(2, '0')} hours</span>
@@ -165,13 +167,13 @@ export default function PlayerTenderDetail({
             </div>
           ) : null}
         </div>
-        {tenderStatus === TenderStatus.CLOSED ? (
+        {tenderStatus === TenderStatus.CLOSED.toString() ? (
           <div className='p-2 text-indigo-800 font-bold text-sm'>Previous player in Bidding</div>
         ) : null}
         <PlayerTenderHero playerData={playerData} />
 
         {/* Bid placement */}
-        {tenderStatus === TenderStatus.OPEN ? (
+        {tenderStatus === TenderStatus.OPEN.toString() ? (
           <div className='bg-white rounded-2xl border border-indigo-100 p-4 mb-3'>
             <p className='text-sm font-bold text-indigo-800 flex items-center gap-2 mb-3'>
               <GavelIcon fontSize='small' className='text-indigo-500' />
@@ -208,7 +210,7 @@ export default function PlayerTenderDetail({
             </div>
             {/* Submit */}
             <button
-              onClick={() => handlePlaceBid()}
+              onClick={() => void handlePlaceBid()}
               disabled={!inputValue}
               className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 active:scale-[0.99] text-white font-bold text-sm py-4 rounded-xl transition-all disabled:bg-indigo-200'
             >
@@ -221,7 +223,7 @@ export default function PlayerTenderDetail({
         {/* Bid history */}
         <div className='bg-white rounded-2xl border border-indigo-100 p-4'>
           <p className='text-sm font-bold text-indigo-800 flex items-center gap-2 mb-3'>
-            Bidding History
+            Bidding History {playerData.name && `of ${playerData.name}`}
           </p>
 
           {userBids.length === 0 ? (
@@ -240,10 +242,13 @@ export default function PlayerTenderDetail({
             </div>
           )}
         </div>
-        <div className='bg-white rounded-2xl border border-indigo-100 p-4'>
-          <p className='text-sm font-bold text-indigo-800 flex items-center gap-2 mb-3'>
-            Tender History
-          </p>
+        <div className='bg-white rounded-2xl border border-indigo-100 p-4 mt-2'>
+          <div className='text-sm font-bold text-indigo-800 flex flex-col gap-1 mb-3'>
+            Tender History{' '}
+            <div className='text-indigo-400'>
+              {activeTournament?.tournamentName && `(${activeTournament.tournamentName})`}
+            </div>
+          </div>
 
           <TenderHistory activePlayerId={playerData.playerId.toString()} />
         </div>

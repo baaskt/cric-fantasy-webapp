@@ -46,6 +46,7 @@ function TenderHistory(props: TenderHistoryProps) {
         )
         return (
           <div
+            key={history.playerId}
             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border ${'bg-indigo-50 border-indigo-300'}`}
           >
             {/* Rank badge */}
@@ -69,9 +70,9 @@ function TenderHistory(props: TenderHistoryProps) {
             </div>
 
             {/* Amount */}
-            <div className='flex flex-col text-right items-end gap-1 shrink-0'>
+            <div className='flex flex-col justify-center items-center gap-1 shrink-0'>
               {history.bids.length ? (
-                <>
+                <div className='flex flex-col justify-center items-center'>
                   <div className={`text-sm font-bold text-purple-600`}>{winningBid?.amount}</div>
                   <Chip
                     label={winningBid?.teamName}
@@ -84,7 +85,7 @@ function TenderHistory(props: TenderHistoryProps) {
                       color: COLORS.cricPrimary,
                     }}
                   />
-                </>
+                </div>
               ) : (
                 <Chip
                   label='Unsold'

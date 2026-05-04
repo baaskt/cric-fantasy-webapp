@@ -46,7 +46,8 @@ function TenderBidHistory(props: TenderBidHistoryProps) {
       </div>
       {/* Amount */}
       <div className='flex items-center gap-1 shrink-0'>
-        {bid.teamId.toString() !== myTeamId?.toString() && tenderStatus === TenderStatus.OPEN ? (
+        {bid.teamId.toString() !== myTeamId?.toString() &&
+        tenderStatus === TenderStatus.OPEN.toString() ? (
           <span className='text-md font-semibold text-indigo-600 flex items-center gap-0.5'>
             <LockIcon sx={{ fontSize: 12 }} />
           </span>
