@@ -1,4 +1,3 @@
-import { OptionsEntity } from '@/model/entities/options.interface'
 import { SoldStatus } from '@/model/enum/sold-status.enum'
 import { PlayersListEntity } from '@/model/response/player-list.response.interface'
 import { ALTERNATE_PLAYER_IMAGE_SRC } from '@/util/constants/constants'
@@ -6,13 +5,13 @@ import { ALTERNATE_PLAYER_IMAGE_SRC } from '@/util/constants/constants'
 interface PlayerListCardProps {
   player: PlayersListEntity
   playerIndex: number
-  selectedTab: OptionsEntity
+  soldStatus?: string
   diff: number
   playerUrl: string
   onPlayerDetail: (playerId: number) => void
 }
 const PlayerListCard = (props: PlayerListCardProps) => {
-  const { player, playerIndex, playerUrl, selectedTab, diff, onPlayerDetail } = props
+  const { player, playerIndex, playerUrl, soldStatus, diff, onPlayerDetail } = props
 
   return (
     <div
@@ -47,7 +46,7 @@ const PlayerListCard = (props: PlayerListCardProps) => {
                 Milestone: {player.totalMilestonePoints} points
               </div>
             ) : null}
-            {diff && selectedTab?.value !== SoldStatus.UNSOLD ? (
+            {diff && soldStatus !== SoldStatus.UNSOLD ? (
               <div className='text-sm text-red-600'>Missed in XI: {diff} points</div>
             ) : null}
           </div>
