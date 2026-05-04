@@ -272,6 +272,5 @@ export const getPlayersFilterUrl = (
     ? [ROLE_SUFFIX, CATEGORY_SUFFIX, CURSOR_SUFFIX]
     : [TEAM_SUFFIX, ROLE_SUFFIX, CATEGORY_SUFFIX, CURSOR_SUFFIX]
   const PLAYERS_URL = `${TOURNAMENT_URL}${FILTERS_SUFFIX.filter(url => url !== '').join('&')}`
-  console.log('Generated Players URL:', PLAYERS_URL)
   return PLAYERS_URL
 }

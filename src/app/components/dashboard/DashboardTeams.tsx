@@ -12,6 +12,7 @@ import Leaderboard from './Leaderboard'
 import Podium from './Podium'
 import FunStats from './FunStats'
 import LeaderboardCards from './LeaderboardCards'
+import UpcomingTenderPlayers from '../players/UpcomingTenderPlayers'
 
 function DashboardTeams() {
   const { activeTournament } = useTournament()
@@ -49,6 +50,7 @@ function DashboardTeams() {
         <div className='block md:hidden'>
           <LeaderboardCards teamList={teamList} />
         </div>
+        <UpcomingTenderPlayers />
       </div>
     </div>
   )

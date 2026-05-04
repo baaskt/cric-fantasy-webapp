@@ -30,7 +30,6 @@ function PlayersList(props: PlayersListProp) {
   const [search, setSearch] = useState('')
 
   const PLAYERS_URL = useMemo(() => {
-    console.log('Player', activeTournament, selectedTab, selectedTeam, cursor, hasMore)
     return activeTournament && selectedTeam && hasMore
       ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam, cursor)
       : ''
@@ -152,7 +151,7 @@ function PlayersList(props: PlayersListProp) {
           return (
             <PlayerListCard
               key={player.playerId}
-              selectedTab={selectedTab}
+              soldStatus={selectedTab.value?.toString()}
               playerUrl={playerUrl}
               diff={diff}
               player={player}
