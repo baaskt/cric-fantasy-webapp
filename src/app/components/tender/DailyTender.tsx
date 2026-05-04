@@ -1,32 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { TOURNAMENTS } from '@/util/constants/endpoints'
-import { useRequest } from '@/hooks/useRequest'
-import { CricResponse } from '@/model/types/cric-response.type'
-import { TenderPlayerEntity } from '@/model/response/tender-player.interface'
+import React from 'react'
 import { useTournament } from '@/providers/TournamentProvider'
 import { useRouter } from 'next/navigation'
 import { TITLES } from '@/util/constants/constants'
 
 function DailyTender() {
   const { activeTournament } = useTournament()
-  const tournamentId = activeTournament?.tournamentId || ''
   const router = useRouter()
-
-  const TENDER_PLAYER_URL = tournamentId
-    ? TOURNAMENTS.GET_TENDER_PLAYER.replace('tournamentId', tournamentId)
-    : ''
-  const tenderPlayerRequest = useRequest(activeTournament?.canTender ? TENDER_PLAYER_URL : '')
-
-  useEffect(() => {
-    if (tenderPlayerRequest.data) {
-      const spinPlayerResponse: CricResponse<TenderPlayerEntity[]> =
-        tenderPlayerRequest.data as CricResponse<TenderPlayerEntity[]>
-      if (spinPlayerResponse.result && spinPlayerResponse.result.length) {
-      }
-    }
-  }, [tenderPlayerRequest.data])
 
   const handleTenderClick = () => {
     if (activeTournament) {
