@@ -4,10 +4,10 @@ import { COLORS } from '@/util/colors'
 import Image from 'next/image'
 import React from 'react'
 import ShieldIcon from '@mui/icons-material/Shield'
-import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
 import { useMatch } from '@/providers/MatchProvider'
 import { useRouter } from 'next/navigation'
 import { useTournament } from '@/providers/TournamentProvider'
+import { MatchStatusLabel } from '@/model/enum/match-status.enum'
 
 type MatchPreviewCardProps = {
   matchEntity: MatchEntity
@@ -30,15 +30,15 @@ function MatchPreviewCard(props: MatchPreviewCardProps) {
   return (
     <div
       onClick={
-        matchEntity.state === TournamentStatusLabel.InProgress.toString() ||
-        matchEntity.state === TournamentStatusLabel.Completed.toString()
+        matchEntity.state === MatchStatusLabel.InProgress.toString() ||
+        matchEntity.state === MatchStatusLabel.Completed.toString()
           ? navigateToMatchDetail
           : undefined
       }
-      className={`${matchEntity.state === TournamentStatusLabel.InProgress.toString() || matchEntity.state === TournamentStatusLabel.Completed.toString() ? 'shadow-lg cursor-pointer' : 'cursor-default'} flex flex-row gap-4 rounded-lg w-full md:w-64 border-solid border-2 border-violet-200`}
+      className={`${matchEntity.state === MatchStatusLabel.InProgress.toString() || matchEntity.state === MatchStatusLabel.Completed.toString() ? 'shadow-lg cursor-pointer' : 'cursor-default'} flex flex-row gap-4 rounded-lg w-full md:w-64 border-solid border-2 border-violet-200`}
     >
       <div className='flex flex-col text-center text-lg font-bold bg-violet-200 p-2'>
-        {matchEntity.state === TournamentStatusLabel.InProgress.toString() ? (
+        {matchEntity.state === MatchStatusLabel.InProgress.toString() ? (
           <div>Now</div>
         ) : (
           <>

@@ -13,7 +13,7 @@ export interface PlayerDetailEntity {
   t20: T20Stats
   tournamentStats: TournamentStats
   tournamentPointDetails: TournamentPointDetails
-  teamStats: TournamentStats
+  tournamentPlayingXIStats: TournamentStats
   matchDetails: MatchDetail[]
   auction: PlayerAuctionHistoryEntity
 }

@@ -68,7 +68,7 @@ export default function Players() {
     setSelectedTeam(newSelectedTeam)
   }
 
-  if (teamRequest.isValidating) {
+  if (teamRequest.isValidating || teamRequest.isLoading || !selectedTeam) {
     return <Loading txt={'Loading Filters'}></Loading>
   }
 

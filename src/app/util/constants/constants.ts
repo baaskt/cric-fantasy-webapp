@@ -219,6 +219,11 @@ export const TITLES = {
     path: '/settings',
     fullPath: '/tournaments/tournamentId/settings',
   },
+  TENDER: {
+    label: 'Tender',
+    path: '/tender',
+    fullPath: '/tournaments/tournamentId/tender',
+  },
 }
 
 export const STATS = {

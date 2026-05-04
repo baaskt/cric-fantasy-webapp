@@ -1,4 +1,4 @@
-import { MatchDetail, PlayerDetailEntity } from '@/model/response/player-detail.response.interface'
+import { MatchDetail } from '@/model/response/player-detail.response.interface'
 import CloseIcon from '@mui/icons-material/Close'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconButton } from '@mui/material'
@@ -6,12 +6,13 @@ import { COLORS } from '@/util/colors'
 import PlayerDeepDive from './PlayerDeepDive'
 
 interface PlayerDetailDrawerProps {
-  playerDetailEntity: PlayerDetailEntity
+  playerName: string
+  playerId: number
   match: MatchDetail | null
   onClose: () => void
 }
 export function PlayerDetailDrawer(props: PlayerDetailDrawerProps) {
-  const { playerDetailEntity, match, onClose } = props
+  const { playerName, playerId, match, onClose } = props
   const matchDescSplit = match?.matchDesc.split(':')
   const matchTitle = matchDescSplit && matchDescSplit[1]
   const matchDesc = matchDescSplit && matchDescSplit[0]
@@ -64,11 +65,7 @@ export function PlayerDetailDrawer(props: PlayerDetailDrawerProps) {
                 <CloseIcon fontSize='small' style={{ color: COLORS.darkGray }} />
               </IconButton>
             </div>
-            <PlayerDeepDive
-              matchData={match}
-              playerId={playerDetailEntity.playerId}
-              playerName={playerDetailEntity.name}
-            />
+            <PlayerDeepDive matchData={match} playerId={playerId} playerName={playerName} />
             <div className='mt-3 grid grid-cols-2 gap-3'>
               {/* Status */}
               <div

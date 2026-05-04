@@ -47,7 +47,7 @@ function TeamDetail() {
       const matchHistoryResponse: CricResponse<MatchHistoryResponse[]> =
         matchHistoryRequest.data as CricResponse<MatchHistoryResponse[]>
       const matchHistoryResult: MatchHistoryResponse[] =
-        matchHistoryResponse.Result as unknown as MatchHistoryResponse[]
+        matchHistoryResponse.result as unknown as MatchHistoryResponse[]
       if (matchHistoryResult) {
         const matchListResponse: MatchHistoryDetails[] = Object.values(
           matchHistoryResult,

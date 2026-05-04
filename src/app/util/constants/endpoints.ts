@@ -27,6 +27,7 @@ export const TOURNAMENTS = {
   RULE_CONFIG: 'tournaments/',
   RULES: 'tournaments/',
   UPDATE_SETTINGS: 'tournaments/',
+  GET_TENDER_PLAYER: 'tournaments/tournamentId/tenderDetails',
 }
 
 export const MATCHES = {
@@ -44,6 +45,7 @@ export const TEAMS = {
   UPDATE_PLAYINGXI_URL: 'teams/teamId/tournaments/tournamentId',
   ENABLE_SPIN: 'teams/enableSpin',
   MATCH_HISTORY_URL: 'teams/getMatchWiseDetails?tournamentId={tournamentId}&teamId={teamId}',
+  POST_TENDER_BID: 'teams/bid',
 }
 
 export const PLAYERS = {
@@ -59,7 +61,6 @@ export const PLAYERS = {
   GET_RANDOM_PLAYER_URL: 'players/tournamentId/random?key=category&value=',
   SELL_PLAYER: 'players/playerId/tournaments/tournamentId/sell',
   RESET_UNSOLD_PLAYER: 'players/tournamentId',
-  SPIN_RANDOM_PLAYER: 'players/tournamentId/getRandomPlayerSpin',
 }
 
 export const ROOSTER = {}

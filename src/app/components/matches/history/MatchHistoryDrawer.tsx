@@ -1,8 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { motion, AnimatePresence } from 'framer-motion'
-import { IconButton } from '@mui/material'
+import { IconButton, Chip } from '@mui/material'
 import { COLORS } from '@/util/colors'
 import { MatchHistoryDetails } from '@/model/response/match-history-response.interface'
+import VerifiedIcon from '@mui/icons-material/Verified'
 
 interface MatchHistoryDrawerProps {
   teamName: string
@@ -72,14 +73,43 @@ function MatchHistoryDrawer(props: MatchHistoryDrawerProps) {
                 {matchData &&
                   matchData.players.map(playerEntity => (
                     <div
-                      className='flex justify-between gap-4 text-sm p-2 bg-blue-50 border border-indigo-100 rounded-md'
+                      className='flex justify-between items-center gap-4 text-sm p-2 bg-blue-50 border border-indigo-100 rounded-md'
                       key={playerEntity.playerId}
                     >
-                      <div className='italic'>{playerEntity.name}</div>
+                      <div className='italic flex items-center gap-2'>
+                        {playerEntity.name}
+
+                        {playerEntity.playingXI ? (
+                          <Chip
+                            label='Playing XI'
+                            size='small'
+                            icon={
+                              <VerifiedIcon style={{ fontSize: 11, color: COLORS.stockGreen }} />
+                            }
+                            style={{
+                              height: 18,
+                              fontSize: 10,
+                              background: COLORS.stockGreen + '18',
+                              color: COLORS.stockGreen,
+                            }}
+                          />
+                        ) : (
+                          <Chip
+                            label='Bench'
+                            size='small'
+                            style={{
+                              height: 18,
+                              fontSize: 10,
+                              background: COLORS.inputBg,
+                              color: COLORS.darkGray,
+                            }}
+                          />
+                        )}
+                      </div>
                       <div style={{ color: COLORS.cricPrimary }}>{playerEntity.matchPoints}</div>
                     </div>
                   ))}
-                <div className='flex justify-between gap-4 text-md font-bold mt-2'>
+                <div className='flex justify-between gap-4 text-md font-bold mt-2 mr-2'>
                   <div className='italic'>Total Points</div>
                   <div style={{ color: COLORS.cricPrimary }}>{matchData?.totalMatchPoints}</div>
                 </div>
