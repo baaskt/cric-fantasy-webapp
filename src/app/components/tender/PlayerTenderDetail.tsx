@@ -250,7 +250,10 @@ export default function PlayerTenderDetail({
             </div>
           </div>
 
-          <TenderHistory activePlayerId={playerData.playerId.toString()} />
+          <TenderHistory
+            activePlayerId={playerData.playerId.toString()}
+            tenderStatus={tenderStatus}
+          />
         </div>
       </div>
 
