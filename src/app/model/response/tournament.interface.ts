@@ -22,12 +22,11 @@ export interface TournamentEntity {
   playingXIStartHour?: string
   playingXIDuration?: number
   playingXITimezone?: string
-  tenderStartHour?: string
-  tenderDuration?: number
-  tenderResultRevealDuration?: number
+  tenderStartTime?: string
+  tenderEndTime?: string
+  tenderRevealTime?: string
   teamId: string
   teamName: string
-  tenderEndTime?: string
 }
 
 export interface TournamentStatsEntity {

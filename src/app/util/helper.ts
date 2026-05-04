@@ -244,3 +244,46 @@ export function getInitials(name: string): string {
     .substring(0, 2)
     .toUpperCase()
 }
+
+export function convertTimeStrToUtc(timeStr: string): string {
+  const timeStrSplit = timeStr.split(':')
+  return toUTC(timeStrSplit[0], timeStrSplit[1])
+}
+
+export function convertToUtcAndFormat(timeStr: string | undefined): string {
+  if (!timeStr) return formatTimeFromDate()
+  const timeStrSplit = timeStr.split(':')
+  const utcTime = toUTC(timeStrSplit[0], timeStrSplit[1])
+  return formatTimeFromDate(utcTime)
+}
+
+export function toUTC(hours: string, minutes: string): string {
+  const now = new Date()
+  now.setHours(Number(hours), Number(minutes), 0, 0)
+  const year = now.getUTCFullYear()
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(now.getUTCDate()).padStart(2, '0')
+  const utcHour = String(now.getUTCHours()).padStart(2, '0')
+  const utcMinute = String(now.getUTCMinutes()).padStart(2, '0')
+
+  return `${year}-${month}-${day}T${utcHour}:${utcMinute}:00`
+}
+
+export function convertUtcTimeStrToLocal(timeStr: string | undefined): string {
+  if (!timeStr) return formatTimeFromDate()
+  const [hours, minutes] = timeStr.split(':').map(Number)
+  const date = new Date()
+  date.setUTCHours(hours, minutes, 0, 0)
+  const localHours = String(date.getHours()).padStart(2, '0')
+  const localMinutes = String(date.getMinutes()).padStart(2, '0')
+  return `${localHours}:${localMinutes}`
+}
+
+export function formatTimeFromDate(timeStr?: string): string {
+  const date = timeStr ? new Date(timeStr) : new Date()
+
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+
+  return `${hours}:${minutes}`
+}
