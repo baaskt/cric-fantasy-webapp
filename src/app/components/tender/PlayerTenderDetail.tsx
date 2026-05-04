@@ -51,12 +51,10 @@ export default function PlayerTenderDetail({
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
-      if (activeTournament?.playingXIEndTime) {
-        const isoString = activeTournament.playingXIEndTime.replace(' ', 'T') + 'Z' // Add Z to mark as UTC
-        const targetTime = new Date(isoString)
-
-        const endTimeHrs = targetTime.getUTCHours()
-        targetTime.setUTCHours(endTimeHrs, 0, 0, 0)
+      if (activeTournament?.tenderEndTime) {
+        const [hours, minutes] = activeTournament.tenderEndTime.split(':').map(Number)
+        const targetTime = new Date()
+        targetTime.setHours(hours, minutes, 0, 0)
 
         const now = new Date()
         if (now <= targetTime) {

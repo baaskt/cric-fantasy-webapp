@@ -111,6 +111,7 @@ function TenderHistory(props: TenderHistoryProps) {
                       fontSize: 10,
                       background: COLORS.cricError + '18',
                       color: COLORS.cricError,
+                      marginRight: 30,
                     }}
                   />
                 )}
