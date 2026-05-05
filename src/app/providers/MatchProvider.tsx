@@ -6,7 +6,7 @@ import { useTournament } from './TournamentProvider'
 import { useRequest } from '@/hooks/useRequest'
 import { MATCHES } from '@/util/constants/endpoints'
 import { CricResponse } from '@/model/types/cric-response.type'
-import { TournamentStatusLabel } from '@/model/enum/tournament-status.enum'
+import { MatchStatusLabel } from '@/model/enum/match-status.enum'
 
 const MatchContext = createContext<MatchContextType>({} as MatchContextType)
 const { Provider } = MatchContext
@@ -30,13 +30,13 @@ export const MatchProvider = ({ children }: { children: React.ReactNode }) => {
       >
       if (matchresponse.result) {
         const top2Live = matchresponse.result
-          .filter(item => item.state === TournamentStatusLabel.InProgress.toString())
+          .filter(item => item.state === MatchStatusLabel.InProgress.toString())
           .slice(0, 2)
         const topNUpcoming = matchresponse.result
-          .filter(item => item.state === TournamentStatusLabel.Upcoming.toString())
+          .filter(item => item.state === MatchStatusLabel.Upcoming.toString())
           .slice(0, 3 - top2Live?.length)
         const cmpletedMatches = matchresponse.result.filter(
-          item => item.state === TournamentStatusLabel.Completed.toString(),
+          item => item.state === MatchStatusLabel.Completed.toString(),
         )
         setLiveMatches(top2Live)
         setUpcomingMatches(topNUpcoming)

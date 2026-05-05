@@ -3,6 +3,10 @@ import { API_URL, USERS } from '@/util/constants/endpoints'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { auth } from './auth'
 
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  _retryCount?: number
+}
+
 const axiosInstance = axios.create({
   baseURL: API_URL,
   timeout: 120000, // Timeout of 120 seconds
@@ -29,18 +33,27 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-  response => {
-    return response
-  },
+  response => response,
   async (error: AxiosError) => {
-    // Handle Authetication error
-    if (error.response?.status === 401) {
-      const failedRequest: AxiosRequestConfig = error.config as AxiosRequestConfig
-      const newToken = await auth().refreshAccessToken()
-      if (newToken && failedRequest?.headers) {
-        failedRequest.headers.Authorization = `Bearer ${newToken}`
+    const failedRequest = error.config as CustomAxiosRequestConfig
+    if (failedRequest?.url === USERS.REFRESH_URL) {
+      return Promise.reject(error)
+    }
+    if (error.response?.status === 401 && failedRequest) {
+      failedRequest._retryCount = failedRequest._retryCount || 0
+      if (failedRequest._retryCount >= 2) {
+        return Promise.reject(error)
       }
-      return axios(failedRequest)
+      failedRequest._retryCount += 1
+      try {
+        const newToken = await auth().refreshAccessToken()
+        if (newToken && failedRequest.headers) {
+          failedRequest.headers.Authorization = `Bearer ${newToken}`
+        }
+        return axiosInstance(failedRequest)
+      } catch (refreshError) {
+        return Promise.reject(refreshError)
+      }
     }
     return Promise.reject(error)
   },

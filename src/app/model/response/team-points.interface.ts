@@ -1,5 +1,3 @@
-import { SpinPlayerEntity } from './spin-player.interface'
-
 export interface TeamPointsEntity {
   pointsUpdatedAt: string
   position: number
@@ -10,6 +8,5 @@ export interface TeamPointsEntity {
   teamId: string
   teamName: string
   tournamentPoints: number // points +  statPoints
-  spinPlayer: SpinPlayerEntity[]
   aiRank: number
 }

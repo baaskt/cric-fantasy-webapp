@@ -1,43 +1,25 @@
 'use client'
 
+import CricTimeInput from '@/components/ui/CricTimeInput'
+import CrickTimePicker from '@/components/ui/CricTimePicker'
+import CricTimeZoneInput from '@/components/ui/CricTimeZoneInput'
+import { Toast } from '@/components/ui/Toast'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
 import { HttpMethod } from '@/model/enum/http-method.enum'
 import { useAuth } from '@/providers/AuthProvider'
 import { useTournament } from '@/providers/TournamentProvider'
+import { COLORS } from '@/util/colors'
 import { TOURNAMENTS } from '@/util/constants/endpoints'
+import { convertToUtcAndFormat, convertUtcTimeStrToLocal, formatTimeFromDate } from '@/util/helper'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import GavelIcon from '@mui/icons-material/Gavel'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
-import ScheduleIcon from '@mui/icons-material/Schedule'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
-
-const POPULAR_TIMEZONES = [
-  'UTC',
-  'Asia/Kolkata',
-  'Asia/Karachi',
-  'Asia/Colombo',
-  'Asia/Dhaka',
-  'Australia/Sydney',
-  'Australia/Melbourne',
-  'Europe/London',
-  'Africa/Johannesburg',
-  'Africa/Harare',
-  'America/Barbados',
-  'Pacific/Auckland',
-]
-
-// 30-minute slots: 00:00, 00:30, 01:00 … 23:30
-const TIME_SLOTS = Array.from({ length: 48 }, (_, i) => {
-  const h = Math.floor(i / 2)
-  const m = i % 2 === 0 ? '00' : '30'
-  return `${String(h).padStart(2, '0')}:${m}`
-})
+import { useCallback, useEffect, useState } from 'react'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -75,321 +57,7 @@ const labelStyle: React.CSSProperties = {
   marginBottom: 6,
 }
 
-// ── Custom TimeInput ──────────────────────────────────────────────────────────
-function TimeInput({
-  value,
-  onChange,
-  accentColor,
-  accentShadow,
-}: {
-  value: string
-  onChange: (val: string) => void
-  accentColor: string
-  accentShadow: string
-}) {
-  const [open, setOpen] = useState(false)
-  const [activeIdx, setActiveIdx] = useState(() => TIME_SLOTS.indexOf(value))
-  const containerRef = useRef<HTMLDivElement>(null)
-  const listRef = useRef<HTMLDivElement>(null)
-
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return
-    const handler = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
-
-  // Scroll selected item into view within the list only (avoid page scroll)
-  useEffect(() => {
-    if (open && listRef.current) {
-      const selected = listRef.current.querySelector<HTMLElement>('[data-selected="true"]')
-      if (selected) {
-        const list = listRef.current
-        list.scrollTop = selected.offsetTop - list.clientHeight / 2 + selected.offsetHeight / 2
-      }
-    }
-  }, [open])
-
-  const select = (slot: string) => {
-    onChange(slot)
-    setActiveIdx(TIME_SLOTS.indexOf(slot))
-    setOpen(false)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!open) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
-        e.preventDefault()
-        setOpen(true)
-      }
-      return
-    }
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setActiveIdx(i => {
-        const next = Math.min(i + 1, TIME_SLOTS.length - 1)
-        listRef.current
-          ?.querySelector<HTMLElement>(`[data-idx="${next}"]`)
-          ?.scrollIntoView({ block: 'nearest' })
-        return next
-      })
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setActiveIdx(i => {
-        const prev = Math.max(i - 1, 0)
-        listRef.current
-          ?.querySelector<HTMLElement>(`[data-idx="${prev}"]`)
-          ?.scrollIntoView({ block: 'nearest' })
-        return prev
-      })
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      select(TIME_SLOTS[activeIdx])
-    } else if (e.key === 'Escape') {
-      setOpen(false)
-    }
-  }
-
-  return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
-      <button
-        type='button'
-        onClick={() => setOpen(o => !o)}
-        onKeyDown={handleKeyDown}
-        style={{
-          ...inputStyle,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          cursor: 'pointer',
-          border: open ? `1.5px solid ${accentColor}` : '1.5px solid #dde3f0',
-          boxShadow: open ? `0 0 0 3px ${accentShadow}` : 'none',
-          boxSizing: 'border-box',
-        }}
-      >
-        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <ScheduleIcon sx={{ fontSize: 16, color: open ? accentColor : '#8fa0c0' }} />
-          <span style={{ fontWeight: 600, letterSpacing: '.02em' }}>{value}</span>
-        </span>
-        <KeyboardArrowDownIcon
-          sx={{
-            fontSize: 18,
-            color: '#8fa0c0',
-            transform: open ? 'rotate(180deg)' : 'rotate(0)',
-            transition: 'transform .2s',
-          }}
-        />
-      </button>
-
-      {open && (
-        <div
-          ref={listRef}
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            background: '#ffffff',
-            border: '1.5px solid #dde3f0',
-            borderRadius: 10,
-            boxShadow: '0 8px 24px rgba(36,84,212,.12)',
-            maxHeight: 220,
-            overflowY: 'auto',
-            zIndex: 200,
-            fontSize: 13,
-            fontFamily: 'var(--font-body, DM Sans, sans-serif)',
-          }}
-        >
-          {TIME_SLOTS.map((slot, idx) => {
-            const isSelected = slot === value
-            const isActive = idx === activeIdx
-            return (
-              <div
-                key={slot}
-                data-idx={idx}
-                data-selected={isSelected}
-                onMouseDown={() => select(slot)}
-                onMouseEnter={() => setActiveIdx(idx)}
-                style={{
-                  padding: '8px 14px',
-                  cursor: 'pointer',
-                  background: isSelected ? accentShadow : isActive ? '#f4f7fc' : 'transparent',
-                  color: isSelected ? accentColor : '#0f1a2e',
-                  fontWeight: isSelected ? 700 : 400,
-                  transition: 'background .1s',
-                }}
-              >
-                {slot}
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── All IANA timezones (popular first, then rest alphabetically) ──────────────
-function getAllTimezones(): string[] {
-  try {
-    const all: string[] = Intl.supportedValuesOf('timeZone')
-    const rest = all.filter(tz => !POPULAR_TIMEZONES.includes(tz))
-    return [...POPULAR_TIMEZONES, ...rest]
-  } catch {
-    return POPULAR_TIMEZONES
-  }
-}
-
-// ── Custom TimezoneInput ──────────────────────────────────────────────────────
-function TimezoneInput({ value, onChange }: { value: string; onChange: (val: string) => void }) {
-  const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
-  const [activeIdx, setActiveIdx] = useState(0)
-  const [allZones, setAllZones] = useState<string[]>(POPULAR_TIMEZONES)
-  const listRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  // Load full IANA list on client only (avoids SSR ICU limitation)
-  useEffect(() => {
-    setAllZones(getAllTimezones())
-  }, [])
-
-  const filtered = query
-    ? allZones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()))
-    : allZones
-
-  useEffect(() => {
-    setActiveIdx(0)
-  }, [query])
-
-  useEffect(() => {
-    if (open && listRef.current) {
-      const item = listRef.current.querySelector<HTMLElement>(`[data-idx="${activeIdx}"]`)
-      item?.scrollIntoView({ block: 'nearest' })
-    }
-  }, [activeIdx, open])
-
-  const select = (tz: string) => {
-    onChange(tz)
-    setQuery('')
-    setOpen(false)
-    inputRef.current?.blur()
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!open) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter') setOpen(true)
-      return
-    }
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setActiveIdx(i => Math.min(i + 1, filtered.length - 1))
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setActiveIdx(i => Math.max(i - 1, 0))
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      if (filtered[activeIdx]) select(filtered[activeIdx])
-    } else if (e.key === 'Escape') {
-      setOpen(false)
-      setQuery('')
-    }
-  }
-
-  const popularCount = POPULAR_TIMEZONES.filter(tz =>
-    tz.toLowerCase().includes(query.toLowerCase()),
-  ).length
-
-  return (
-    <div style={{ position: 'relative', width: '100%' }}>
-      <input
-        ref={inputRef}
-        value={open ? query : value}
-        onChange={e => {
-          setQuery(e.target.value)
-          setOpen(true)
-        }}
-        onFocus={() => {
-          setQuery('')
-          setOpen(true)
-        }}
-        onBlur={() => {
-          setTimeout(() => {
-            setOpen(false)
-            setQuery('')
-          }, 150)
-        }}
-        onKeyDown={handleKeyDown}
-        placeholder='Search timezone…'
-        style={{ ...inputStyle, width: '100%', boxSizing: 'border-box' }}
-      />
-      {open && filtered.length > 0 && (
-        <div
-          ref={listRef}
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            background: '#ffffff',
-            border: '1.5px solid #dde3f0',
-            borderRadius: 10,
-            boxShadow: '0 8px 24px rgba(36,84,212,.12)',
-            maxHeight: 320,
-            overflowY: 'auto',
-            zIndex: 200,
-            fontSize: 13,
-            fontFamily: 'var(--font-body, DM Sans, sans-serif)',
-          }}
-        >
-          {filtered.map((tz, idx) => {
-            const isAllDivider =
-              idx === popularCount && popularCount > 0 && popularCount < filtered.length
-            return (
-              <div key={tz}>
-                {isAllDivider && (
-                  <div
-                    style={{
-                      padding: '4px 12px',
-                      fontSize: 10,
-                      fontWeight: 700,
-                      letterSpacing: '.08em',
-                      textTransform: 'uppercase',
-                      color: '#8fa0c0',
-                      background: '#f8faff',
-                      borderTop: '1px solid #eef1f8',
-                      borderBottom: '1px solid #eef1f8',
-                    }}
-                  >
-                    All Timezones
-                  </div>
-                )}
-                <div
-                  data-idx={idx}
-                  onMouseDown={() => select(tz)}
-                  onMouseEnter={() => setActiveIdx(idx)}
-                  style={{
-                    padding: '8px 14px',
-                    cursor: 'pointer',
-                    background: idx === activeIdx ? '#eff4ff' : 'transparent',
-                    color: idx === activeIdx ? '#2454d4' : '#0f1a2e',
-                    fontWeight: idx === activeIdx ? 600 : 400,
-                    transition: 'background .1s',
-                  }}
-                >
-                  {tz}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
 
 export default function TournamentSettings() {
   const { isAdmin } = useAuth()
@@ -400,11 +68,27 @@ export default function TournamentSettings() {
   const [playingXIDuration, setPlayingXIDuration] = useState(4)
   const [playingXITimezone, setPlayingXITimezone] = useState('Asia/Kolkata')
 
-  const [tenderStartHour, setTenderStartHour] = useState('10:00')
-  const [tenderDuration, setTenderDuration] = useState(24)
-  const [tenderResultRevealDuration, setTenderResultRevealDuration] = useState(2)
+  const [tenderStartHour, setTenderStartHour] = useState('')
+  const [tenderEndHour, setTenderEndHour] = useState('')
+  const [tenderRevealHour, setTenderRevealHour] = useState('')
+
+  const [tenderStartHourUtc, setTenderStartHourUtc] = useState('')
+  const [tenderEndHourUtc, setTenderEndHourUtc] = useState('')
+  const [tenderRevealHourUtc, setTenderRevealHourUtc] = useState('')
+  const [toast, setToast] = useState({ visible: false, message: '' })
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+
+  const formatTimePreview = (startTime: string, hours: number) => {
+    const [h, m] = startTime.split(':').map(Number)
+    const endH = (h + hours) % 24
+    const fmt = (hh: number, mm: number) => {
+      const period = hh < 12 ? 'AM' : 'PM'
+      const hh12 = hh % 12 || 12
+      return `${hh12}:${String(mm).padStart(2, '0')} ${period}`
+    }
+    return `${fmt(h, m)} → ${fmt(endH, m)}`
+  }
 
   // ── Populate from API response ─────────────────────────────────────────────
   useEffect(() => {
@@ -413,10 +97,19 @@ export default function TournamentSettings() {
       setPlayingXIStartHour(activeTournament.playingXIStartHour)
     if (activeTournament.playingXIDuration) setPlayingXIDuration(activeTournament.playingXIDuration)
     if (activeTournament.playingXITimezone) setPlayingXITimezone(activeTournament.playingXITimezone)
-    if (activeTournament.tenderStartHour) setTenderStartHour(activeTournament.tenderStartHour)
-    if (activeTournament.tenderDuration) setTenderDuration(activeTournament.tenderDuration)
-    if (activeTournament.tenderResultRevealDuration != null)
-      setTenderResultRevealDuration(activeTournament.tenderResultRevealDuration)
+
+    const startTime = convertUtcTimeStrToLocal(activeTournament.tenderStartTime)
+    setTenderStartHour(startTime)
+    const startTimeUtc = convertToUtcAndFormat(activeTournament.tenderStartTime)
+    setTenderStartHourUtc(startTimeUtc)
+    const endTime = convertUtcTimeStrToLocal(activeTournament.tenderEndTime)
+    setTenderEndHour(endTime)
+    const endTimeUtc = convertToUtcAndFormat(activeTournament.tenderEndTime)
+    setTenderStartHourUtc(endTimeUtc)
+    const revealTime = convertUtcTimeStrToLocal(activeTournament.tenderRevealTime)
+    setTenderRevealHour(revealTime)
+    const revealTimeUtc = convertToUtcAndFormat(activeTournament.tenderRevealTime)
+    setTenderStartHourUtc(revealTimeUtc)
   }, [activeTournament])
 
   const isUnconfigured = !!activeTournament && !activeTournament.playingXIStartHour
@@ -431,9 +124,9 @@ export default function TournamentSettings() {
         playingXIStartHour,
         playingXIDuration,
         playingXITimezone,
-        tenderStartHour,
-        tenderDuration,
-        tenderResultRevealDuration,
+        tenderStartTime: tenderStartHourUtc,
+        tenderEndTime: tenderEndHourUtc,
+        tenderRevealTime: tenderRevealHourUtc,
       } as never)
       setSaveStatus('saved')
       setTimeout(() => setSaveStatus('idle'), 2800)
@@ -441,6 +134,58 @@ export default function TournamentSettings() {
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 2800)
     }
+  }
+
+  const showToast = useCallback((message: string) => {
+    setToast({ visible: true, message })
+    setTimeout(() => setToast({ visible: false, message: '' }), 2600)
+  }, [])
+
+  const handleStartTimeChange = (updatedLocalTime: string, updatedUtcTime: string) => {
+    const localTime = formatTimeFromDate(updatedLocalTime)
+    setTenderStartHour(localTime)
+    const utcTime = formatTimeFromDate(updatedUtcTime)
+    setTenderStartHourUtc(utcTime)
+  }
+
+  const isValidEndTime = (endTime: string) => {
+    const [startHour, startMin] = tenderStartHour.split(':').map(Number)
+    const [endHour, endMin] = endTime.split(':').map(Number)
+    const startTotal = startHour * 60 + startMin
+    const endTotal = endHour * 60 + endMin
+    return endTotal > startTotal
+  }
+
+  const handleEndTimeChange = (updatedLocalTime: string, updatedUtcTime: string) => {
+    const localTime = formatTimeFromDate(updatedLocalTime)
+    const isValidTime = isValidEndTime(localTime)
+    if (!isValidTime) {
+      showToast('End time should be greater than Start time')
+      return
+    }
+    setTenderEndHour(localTime)
+    const utcTime = formatTimeFromDate(updatedUtcTime)
+    setTenderEndHourUtc(utcTime)
+  }
+
+  const isValidRevealTime = (revealTime: string) => {
+    const [endHour, endMin] = tenderEndHour.split(':').map(Number)
+    const [revealHour, revealMin] = revealTime.split(':').map(Number)
+    const endTotal = endHour * 60 + endMin
+    const revealTotal = revealHour * 60 + revealMin
+    return revealTotal > endTotal
+  }
+
+  const handleRevealTimeChange = (updatedLocalTime: string, updatedUtcTime: string) => {
+    const localTime = formatTimeFromDate(updatedLocalTime)
+    const isValidTime = isValidRevealTime(localTime)
+    if (!isValidTime) {
+      showToast('Reveal time should be greater than End time')
+      return
+    }
+    setTenderRevealHour(localTime)
+    const utcTime = formatTimeFromDate(updatedUtcTime)
+    setTenderRevealHourUtc(utcTime)
   }
 
   // ── Admin guard ───────────────────────────────────────────────────────────
@@ -482,18 +227,6 @@ export default function TournamentSettings() {
         </motion.p>
       </div>
     )
-  }
-
-  // ── Time window preview helper ─────────────────────────────────────────────
-  const formatTimePreview = (startTime: string, hours: number) => {
-    const [h, m] = startTime.split(':').map(Number)
-    const endH = (h + hours) % 24
-    const fmt = (hh: number, mm: number) => {
-      const period = hh < 12 ? 'AM' : 'PM'
-      const hh12 = hh % 12 || 12
-      return `${hh12}:${String(mm).padStart(2, '0')} ${period}`
-    }
-    return `${fmt(h, m)} → ${fmt(endH, m)}`
   }
 
   return (
@@ -655,7 +388,7 @@ export default function TournamentSettings() {
             >
               <div>
                 <label style={labelStyle}>Start Time</label>
-                <TimeInput
+                <CricTimeInput
                   value={playingXIStartHour}
                   onChange={setPlayingXIStartHour}
                   accentColor='#2454d4'
@@ -676,7 +409,7 @@ export default function TournamentSettings() {
               </div>
               <div>
                 <label style={labelStyle}>Timezone</label>
-                <TimezoneInput value={playingXITimezone} onChange={setPlayingXITimezone} />
+                <CricTimeZoneInput value={playingXITimezone} onChange={setPlayingXITimezone} />
               </div>
             </div>
 
@@ -791,45 +524,31 @@ export default function TournamentSettings() {
               className='settings-grid'
             >
               <div>
-                <label style={labelStyle}>Tender Opens</label>
-                <TimeInput
+                <label style={labelStyle}>Tender Opens (Local Time - 24h)</label>
+                <CrickTimePicker
+                  placeholder={'Select a start time'}
                   value={tenderStartHour}
-                  onChange={setTenderStartHour}
-                  accentColor='#ea8c0d'
-                  accentShadow='rgba(234,140,13,.12)'
+                  onChange={handleStartTimeChange}
                 />
               </div>
               <div>
-                <label style={labelStyle}>Tender Duration (hrs)</label>
-                <motion.input
-                  type='number'
-                  min={1}
-                  max={168}
-                  value={tenderDuration}
-                  onChange={e => setTenderDuration(Math.max(1, +e.target.value))}
-                  style={inputStyle}
-                  whileFocus={{
-                    borderColor: '#ea8c0d',
-                    boxShadow: '0 0 0 3px rgba(234,140,13,.1)',
-                  }}
+                <label style={labelStyle}>Tender Closes (Local Time - 24h)</label>
+                <CrickTimePicker
+                  placeholder={'Select a end time'}
+                  value={tenderEndHour}
+                  onChange={handleEndTimeChange}
                 />
               </div>
               <div>
-                <label style={labelStyle}>Results Delay (hrs)</label>
-                <motion.input
-                  type='number'
-                  min={0}
-                  max={72}
-                  value={tenderResultRevealDuration}
-                  onChange={e => setTenderResultRevealDuration(Math.max(0, +e.target.value))}
-                  style={inputStyle}
-                  whileFocus={{
-                    borderColor: '#ea8c0d',
-                    boxShadow: '0 0 0 3px rgba(234,140,13,.1)',
-                  }}
+                <label style={labelStyle}>Tender Reveals (Local Time - 24h)</label>
+                <CrickTimePicker
+                  placeholder={'Select a reveal time'}
+                  value={tenderRevealHour}
+                  onChange={handleRevealTimeChange}
                 />
               </div>
             </div>
+            <Toast message={toast.message} visible={toast.visible} />
 
             <motion.div
               layout
@@ -857,7 +576,7 @@ export default function TournamentSettings() {
                   >
                     Opens
                   </span>
-                  <span style={{ color: '#62769a', fontSize: 10 }}>{tenderStartHour}</span>
+                  <span className='text-gray-900 text-sm'>{tenderStartHour}</span>
                 </div>
 
                 <div
@@ -881,9 +600,7 @@ export default function TournamentSettings() {
                       whiteSpace: 'nowrap',
                       fontWeight: 600,
                     }}
-                  >
-                    {tenderDuration}h
-                  </span>
+                  ></span>
                 </div>
 
                 <div
@@ -902,9 +619,7 @@ export default function TournamentSettings() {
                   >
                     Closes
                   </span>
-                  <span style={{ color: '#62769a', fontSize: 10 }}>
-                    {formatTimePreview(tenderStartHour, tenderDuration).split('→')[1].trim()}
-                  </span>
+                  <span className='text-gray-900 text-sm'>{tenderEndHour}</span>
                 </div>
 
                 <div
@@ -918,22 +633,18 @@ export default function TournamentSettings() {
                     position: 'relative',
                   }}
                 >
-                  {tenderResultRevealDuration > 0 && (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        top: -18,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        fontSize: 10,
-                        color: '#62769a',
-                        whiteSpace: 'nowrap',
-                        fontWeight: 600,
-                      }}
-                    >
-                      +{tenderResultRevealDuration}h
-                    </span>
-                  )}
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: -18,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      fontSize: 10,
+                      color: '#62769a',
+                      whiteSpace: 'nowrap',
+                      fontWeight: 600,
+                    }}
+                  ></span>
                 </div>
 
                 <div
@@ -944,12 +655,12 @@ export default function TournamentSettings() {
                       width: 10,
                       height: 10,
                       borderRadius: '50%',
-                      background: tenderResultRevealDuration > 0 ? '#22c55e' : '#ea8c0d',
+                      background: COLORS.cricPrimary,
                     }}
                   />
                   <span
                     style={{
-                      color: tenderResultRevealDuration > 0 ? '#22c55e' : '#ea8c0d',
+                      color: COLORS.cricPrimary,
                       fontWeight: 700,
                       fontSize: 11,
                       whiteSpace: 'nowrap',
@@ -957,16 +668,7 @@ export default function TournamentSettings() {
                   >
                     Results
                   </span>
-                  <span style={{ color: '#62769a', fontSize: 10 }}>
-                    {tenderResultRevealDuration === 0
-                      ? 'immediate'
-                      : formatTimePreview(
-                          tenderStartHour,
-                          tenderDuration + tenderResultRevealDuration,
-                        )
-                          .split('→')[1]
-                          .trim()}
-                  </span>
+                  <span className='text-gray-900 text-sm'>{tenderRevealHour}h</span>
                 </div>
               </div>
             </motion.div>

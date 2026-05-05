@@ -4,6 +4,7 @@
 @import 'tailwindcss/utilities';
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import 'animate.css/animate.min.css';
+@import './../../../node_modules/timepicker-ui/dist/css/main.css';
 
 @layer components {
   .card {

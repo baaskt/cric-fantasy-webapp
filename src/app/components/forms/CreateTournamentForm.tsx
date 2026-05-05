@@ -70,7 +70,8 @@ function CreateTournamentForm(props: CreateTournamentFormProps) {
       tournamentStatus: TournamentStatusLabel.Upcoming,
       isHost: true,
       isParticipant: false,
-      playingXI: false,
+      teamId: '',
+      teamName: '',
     }
     addTournament(tournamentEntity)
   }

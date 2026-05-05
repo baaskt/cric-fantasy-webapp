@@ -13,7 +13,7 @@ export interface PlayerDetailEntity {
   t20: T20Stats
   tournamentStats: TournamentStats
   tournamentPointDetails: TournamentPointDetails
-  teamStats: TournamentStats
+  tournamentPlayingXIStats: TournamentStats
   matchDetails: MatchDetail[]
   auction: PlayerAuctionHistoryEntity
 }
@@ -33,6 +33,7 @@ export interface BiddingHistoryEntity {
 export interface PlayerOverview {
   nationality: string
   club: string
+  clubSName: string
   fantasyTeam: string
 }
 
