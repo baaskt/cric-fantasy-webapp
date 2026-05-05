@@ -287,3 +287,30 @@ export function formatTimeFromDate(timeStr?: string): string {
 
   return `${hours}:${minutes}`
 }
+
+export type TimeRemaining = {
+  hours: number
+  minutes: number
+  seconds: number
+}
+
+export const getTimeRemainingFromUtc = (utcTimeStr: string | undefined): TimeRemaining | null => {
+  if (!utcTimeStr) return null
+
+  const localTime = convertUtcTimeStrToLocal(utcTimeStr)
+  const [hours, minutes] = localTime.split(':').map(Number)
+
+  const now = new Date()
+  const target = new Date()
+  target.setHours(hours, minutes, 0, 0)
+
+  if (target < now) return null
+
+  const diff = target.getTime() - now.getTime()
+
+  return {
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  }
+}

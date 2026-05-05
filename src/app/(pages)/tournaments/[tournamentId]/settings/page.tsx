@@ -524,7 +524,7 @@ export default function TournamentSettings() {
               className='settings-grid'
             >
               <div>
-                <label style={labelStyle}>Tender Opens (Local Time)</label>
+                <label style={labelStyle}>Tender Opens (Local Time - 24h)</label>
                 <CrickTimePicker
                   placeholder={'Select a start time'}
                   value={tenderStartHour}
@@ -532,7 +532,7 @@ export default function TournamentSettings() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Tender Closes (Local Time)</label>
+                <label style={labelStyle}>Tender Closes (Local Time - 24h)</label>
                 <CrickTimePicker
                   placeholder={'Select a end time'}
                   value={tenderEndHour}
@@ -540,7 +540,7 @@ export default function TournamentSettings() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Tender Reveals (Local Time)</label>
+                <label style={labelStyle}>Tender Reveals (Local Time - 24h)</label>
                 <CrickTimePicker
                   placeholder={'Select a reveal time'}
                   value={tenderRevealHour}

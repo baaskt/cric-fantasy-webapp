@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import GavelIcon from '@mui/icons-material/Gavel'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { PlayerDetailEntity } from '@/model/response/player-detail.response.interface'
@@ -15,6 +15,7 @@ import { PlaceBidRequest } from '@/model/request/place-bid.request'
 import { TenderStatus } from '@/model/enum/tender-status.enum'
 import TenderHistory from './TenderHistory'
 import { Toast } from '../ui/Toast'
+import { TimeRemaining, getTimeRemainingFromUtc } from '@/util/helper'
 
 const PRESET_AMOUNTS = [
   { label: '50 pts', value: 50 },
@@ -46,39 +47,37 @@ export default function PlayerTenderDetail({
   const { activeTournament } = useTournament()
   const tournamentId = activeTournament?.tournamentId || ''
   const placeBidRequest = useMutateRequest(TEAMS.POST_TENDER_BID, HttpMethod.POST)
-
-  const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 })
+  const [endTimeRemaining, setEndTimeRemaining] = useState<TimeRemaining>({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+  const [revealTimeRemaining, setRevealTimeRemaining] = useState<TimeRemaining>({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
 
   useEffect(() => {
-    const calculateTimeRemaining = () => {
-      if (activeTournament?.tenderEndTime) {
-        const [hours, minutes] = activeTournament.tenderEndTime.split(':').map(Number)
-        const targetTime = new Date()
-        targetTime.setHours(hours, minutes, 0, 0)
+    const updateTimers = () => {
+      const endTime = getTimeRemainingFromUtc(activeTournament?.tenderEndTime)
 
-        const now = new Date()
-        if (now <= targetTime) {
-          const timeDifference = targetTime.getTime() - now.getTime()
+      const revealTime = getTimeRemainingFromUtc(activeTournament?.tenderRevealTime)
 
-          const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
-          const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
-
-          setTimeRemaining({ hours, minutes, seconds })
-        }
-      }
+      if (endTime) setEndTimeRemaining(endTime)
+      if (revealTime) setRevealTimeRemaining(revealTime)
     }
 
-    calculateTimeRemaining()
-    const interval = setInterval(calculateTimeRemaining, 1000)
+    updateTimers()
+    const interval = setInterval(updateTimers, 1000)
 
     return () => clearInterval(interval)
   }, [activeTournament])
 
   useEffect(() => {
     if (activeTournament?.teamId) {
-      const existingBid = playerTenderBids.filter(bid => bid.teamId === activeTournament.teamId)
-      if (existingBid) setIsBidPlaced(true)
+      const existingBid = playerTenderBids.find(bid => bid.teamId === activeTournament.teamId)
+      if (existingBid?.teamId) setIsBidPlaced(true)
     }
   }, [playerTenderBids])
 
@@ -130,6 +129,14 @@ export default function PlayerTenderDetail({
     }
   }
 
+  const endTimeTotal = useMemo(() => {
+    return endTimeRemaining.hours + endTimeRemaining.minutes + endTimeRemaining.seconds
+  }, [endTimeRemaining])
+
+  const revealTimeTotal = useMemo(() => {
+    return revealTimeRemaining.hours + revealTimeRemaining.minutes + revealTimeRemaining.seconds
+  }, [revealTimeRemaining])
+
   return (
     <div className='min-h-screen bg-indigo-50 px-3 py-4 pb-2'>
       <div className='max-w-md mx-auto'>
@@ -141,15 +148,33 @@ export default function PlayerTenderDetail({
             <span className='text-xs font-bold text-indigo-800'>
               {tenderStatus === TenderStatus.CLOSED.toString()
                 ? 'Tender closed'
-                : 'Live Tender closes in'}
+                : endTimeTotal
+                  ? 'Live Tender closes in'
+                  : 'Winner will be revealed in'}
             </span>
           </div>
-          {tenderStatus === TenderStatus.OPEN.toString() ? (
+          {tenderStatus === TenderStatus.OPEN.toString() && endTimeTotal ? (
             <div className='mt-2 flex flex-col items-center justify-center'>
               <div className='font-bold text-xs text-indigo-800'>
-                <span className='pr-1'>{String(timeRemaining.hours).padStart(2, '0')} hours</span>
-                <span className='pr-1'>{String(timeRemaining.minutes).padStart(2, '0')} mins</span>
-                <span>{String(timeRemaining.seconds).padStart(2, '0')} seconds</span>
+                <span className='pr-1'>
+                  {String(endTimeRemaining.hours).padStart(2, '0')} hours
+                </span>
+                <span className='pr-1'>
+                  {String(endTimeRemaining.minutes).padStart(2, '0')} mins
+                </span>
+                <span>{String(endTimeRemaining.seconds).padStart(2, '0')} seconds</span>
+              </div>
+            </div>
+          ) : tenderStatus === TenderStatus.OPEN.toString() && revealTimeTotal ? (
+            <div className='mt-2 flex flex-col items-center justify-center'>
+              <div className='font-bold text-xs text-indigo-800'>
+                <span className='pr-1'>
+                  {String(revealTimeRemaining.hours).padStart(2, '0')} hours
+                </span>
+                <span className='pr-1'>
+                  {String(revealTimeRemaining.minutes).padStart(2, '0')} mins
+                </span>
+                <span>{String(revealTimeRemaining.seconds).padStart(2, '0')} seconds</span>
               </div>
             </div>
           ) : null}
@@ -214,7 +239,11 @@ export default function PlayerTenderDetail({
           </p>
 
           {userBids.length === 0 ? (
-            <p className='text-center text-sm text-indigo-300 py-6'>No bids yet — be the first!</p>
+            <p className='text-center text-sm text-indigo-300 py-6'>
+              {tenderStatus === TenderStatus.OPEN.toString()
+                ? 'No bids yet — be the first!'
+                : 'No bids - Player was unsold'}
+            </p>
           ) : (
             <div className='flex flex-col gap-2'>
               {userBids.map((bid, i) => (
