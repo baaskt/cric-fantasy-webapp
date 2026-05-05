@@ -17,7 +17,6 @@ function PlayerTenderHero({ playerData }: { playerData: PlayerDetailEntity }) {
   const playerUrl = convertDriveUrl(playerData.imageUrl)
   const { matchList } = useMatch()
   const [clubMatchCount, setClubMatchCount] = useState<number>(0)
-  const [clubSName, setClubSName] = useState<string>('')
   const detailStats = [
     { label: 'Total Matches', value: t20.matches },
     { label: 'Runs', value: t20.runs },
@@ -28,22 +27,13 @@ function PlayerTenderHero({ playerData }: { playerData: PlayerDetailEntity }) {
   ]
 
   useEffect(() => {
-    if (overview.club) {
-      const sName = overview.club
-        .split(' ')
-        .map(w => w[0])
-        .join('')
-      setClubSName(sName)
-    }
-  }, [overview])
-
-  useEffect(() => {
-    if (matchList?.length && clubSName) {
+    if (matchList?.length && overview.clubSName) {
       const matchCount = matchList.reduce((count, match) => {
         const t1 = match.team1SName?.toLowerCase()
         const t2 = match.team2SName?.toLowerCase()
         if (
-          (t1 === clubSName.toLowerCase() || t2 === clubSName.toLowerCase()) &&
+          (t1 === overview?.clubSName?.toLowerCase() ||
+            t2 === overview?.clubSName?.toLowerCase()) &&
           (match.state === MatchStatusLabel.Completed.toString() ||
             match.state === MatchStatusLabel.Abandon.toString())
         ) {
@@ -53,13 +43,13 @@ function PlayerTenderHero({ playerData }: { playerData: PlayerDetailEntity }) {
       }, 0)
       setClubMatchCount(matchCount)
     }
-  }, [matchList, clubSName])
+  }, [matchList, overview?.clubSName])
 
   const totalMatchesRemaining = matchList.reduce((count, match) => {
     const t1 = match.team1SName?.toLowerCase()
     const t2 = match.team2SName?.toLowerCase()
     if (
-      (t1 === clubSName.toLowerCase() || t2 === clubSName.toLowerCase()) &&
+      (t1 === overview?.clubSName?.toLowerCase() || t2 === overview?.clubSName?.toLowerCase()) &&
       match.state === MatchStatusLabel.Upcoming.toString()
     ) {
       return count + 1
@@ -92,7 +82,7 @@ function PlayerTenderHero({ playerData }: { playerData: PlayerDetailEntity }) {
                 {overview.nationality}
               </span>
               <span className='bg-white/15 text-indigo-100 text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-white/20'>
-                {clubSName}
+                {overview?.clubSName}
               </span>
             </div>
           </div>
@@ -125,7 +115,7 @@ function PlayerTenderHero({ playerData }: { playerData: PlayerDetailEntity }) {
           ))}
         </div>
         <div className='p-2 text-[12px] text-white'>
-          Remaining matches for {clubSName}: {totalMatchesRemaining}
+          Remaining matches for {overview?.clubSName}: {totalMatchesRemaining}
         </div>
       </div>
 

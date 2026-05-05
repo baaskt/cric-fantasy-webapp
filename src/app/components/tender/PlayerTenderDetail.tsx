@@ -106,6 +106,7 @@ export default function PlayerTenderDetail({
     if (activeTournament?.teamId) {
       const payload: PlaceBidRequest = {
         teamId: activeTournament.teamId,
+        playerId: playerData.playerId,
         tournamentId: tournamentId,
         bidAmount: amount,
       }
@@ -137,16 +138,21 @@ export default function PlayerTenderDetail({
     return revealTimeRemaining.hours + revealTimeRemaining.minutes + revealTimeRemaining.seconds
   }, [revealTimeRemaining])
 
+  const isTenderClosed =
+    tenderStatus === TenderStatus.CLOSED.toString() || (endTimeTotal === 0 && revealTimeTotal === 0)
+
   return (
     <div className='min-h-screen bg-indigo-50 px-3 py-4 pb-2'>
       <div className='max-w-md mx-auto'>
         <div className='flex flex-col items-center justify-between mb-4'>
           <div className='flex items-center gap-1.5 bg-white border border-indigo-200 rounded-full px-3 py-1.5'>
             <span
-              className={`w-2 h-2 rounded-full animate-pulse ${tenderStatus === TenderStatus.CLOSED.toString() ? 'bg-red-500' : 'bg-green-500'}`}
+              className={`w-2 h-2 rounded-full animate-pulse ${
+                isTenderClosed ? 'bg-red-500' : 'bg-green-500'
+              }`}
             />
             <span className='text-xs font-bold text-indigo-800'>
-              {tenderStatus === TenderStatus.CLOSED.toString()
+              {isTenderClosed
                 ? 'Tender closed'
                 : endTimeTotal
                   ? 'Live Tender closes in'
@@ -185,7 +191,7 @@ export default function PlayerTenderDetail({
         <PlayerTenderHero playerData={playerData} />
 
         {/* Bid placement */}
-        {tenderStatus === TenderStatus.OPEN.toString() ? (
+        {tenderStatus === TenderStatus.OPEN.toString() && endTimeTotal !== 0 ? (
           <div className='bg-white rounded-2xl border border-indigo-100 p-4 mb-3'>
             <p className='text-sm font-bold text-indigo-800 flex items-center gap-2 mb-3'>
               <GavelIcon fontSize='small' className='text-indigo-500' />
@@ -248,6 +254,7 @@ export default function PlayerTenderDetail({
             <div className='flex flex-col gap-2'>
               {userBids.map((bid, i) => (
                 <TenderBidHistory
+                  allBids={userBids}
                   tenderStatus={tenderStatus}
                   myTeamId={activeTournament?.teamId}
                   key={bid.teamId}
@@ -261,7 +268,7 @@ export default function PlayerTenderDetail({
         <div className='bg-white rounded-2xl border border-indigo-100 p-4 mt-2'>
           <div className='text-sm font-bold text-indigo-800 flex flex-col gap-1 mb-3'>
             Tender History{' '}
-            <div className='text-indigo-400'>
+            <div className='text-xs text-indigo-400'>
               {activeTournament?.tournamentName && `(${activeTournament.tournamentName})`}
             </div>
           </div>

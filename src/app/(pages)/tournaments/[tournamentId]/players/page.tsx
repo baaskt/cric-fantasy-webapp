@@ -17,6 +17,9 @@ const tabOptions: OptionsEntity[] = [
   { id: 2, label: 'Batsman', value: 'Batter' },
   { id: 3, label: 'Bowler', value: 'Bowler' },
   { id: 4, label: 'Unsold', value: 'UNSOLD' },
+  { id: 5, label: 'Replacement', value: 'Replacement' },
+  { id: 6, label: 'Tender Sold', value: 'Tender' },
+  { id: 7, label: 'Tender Unsold', value: 'TENDER_UNSOLD' },
 ]
 
 export default function Players() {
@@ -77,16 +80,19 @@ export default function Players() {
       <div className='p-5'>
         <CricTab optionList={tabOptions} onChange={setSelectedTab}></CricTab>
       </div>
-      {selectedTab.id !== 4 && (
-        <div className='w-64 pl-5 flex justify-center items-center'>
-          <CricSelect
-            defaultValue={selectedTeam?.id || defaultTeam?.id}
-            label={'Fantasy Team'}
-            menuList={teamsList}
-            onChange={handleTeamSelect}
-          />
-        </div>
-      )}
+      {selectedTab.id !== 4 &&
+        selectedTab.id !== 5 &&
+        selectedTab.id !== 6 &&
+        selectedTab.id !== 7 && (
+          <div className='w-64 pl-5 flex justify-center items-center'>
+            <CricSelect
+              defaultValue={selectedTeam?.id || defaultTeam?.id}
+              label={'Fantasy Team'}
+              menuList={teamsList}
+              onChange={handleTeamSelect}
+            />
+          </div>
+        )}
       <PlayersList selectedTab={selectedTab} selectedTeam={selectedTeam} />
     </div>
   )
