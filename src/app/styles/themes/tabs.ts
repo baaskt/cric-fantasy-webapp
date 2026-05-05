@@ -6,6 +6,14 @@ export const tabTheme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
+          '.MuiTabs-flexContainer': {
+            // backgroundColor: COLORS.cricPrimaryLight,
+            // color: COLORS.cricPrimary,
+            // borderRadius: 8,
+            // display: 'flex',
+            // gap: 2,
+            // flexWrap: 'wrap',
+          },
           '.MuiTab-textColorPrimary': {
             textTransform: 'capitalize',
             fontSize: 16,

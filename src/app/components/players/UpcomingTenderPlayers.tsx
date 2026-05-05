@@ -60,7 +60,7 @@ function UpcomingTenderPlayers() {
     <div className='p-2'>
       <div className='rounded-lg mt-4 p-5 bg-gradient-to-br from-indigo-800 via-indigo-600 to-indigo-400 '>
         <div className='text-white font-pacifico text-md'>Upcoming players in tender</div>
-        <div className='text-sm text-gray-400'>Top 3 unsold players</div>
+        <div className='mt-1 italic text-sm text-gray-200'>Top 3 ranked unsold players</div>
       </div>
       <div className='mt-2 flex flex-col gap-3 w-full'>
         {playersList.map((player, playerIndex) => {

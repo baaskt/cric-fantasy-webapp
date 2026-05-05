@@ -140,6 +140,7 @@ function TenderHistory(props: TenderHistoryProps) {
                 <div className='mt-2 mb-2 flex flex-col gap-2 pl-4'>
                   {history.bids.map((bid, bidIndex) => (
                     <TenderBidHistory
+                      allBids={history.bids}
                       key={bid.teamId}
                       bid={bid}
                       rank={bidIndex + 1}

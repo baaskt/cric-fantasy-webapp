@@ -2,7 +2,7 @@ export interface TenderPlayerEntity {
   playerId: string
   playerName: string
   date: string
-  tenderWindow: string
+  tenderStatus: string
   bids: TenderBidEntity[]
 }
 

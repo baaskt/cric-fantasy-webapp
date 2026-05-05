@@ -33,6 +33,7 @@ export interface BiddingHistoryEntity {
 export interface PlayerOverview {
   nationality: string
   club: string
+  clubSName: string
   fantasyTeam: string
 }
 
