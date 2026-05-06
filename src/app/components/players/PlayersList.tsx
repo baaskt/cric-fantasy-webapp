@@ -62,14 +62,6 @@ function PlayersList(props: PlayersListProp) {
     }
   }, [playerRequest.data])
 
-  if (
-    (playerRequest.isValidating || playerRequest.isLoading) &&
-    cursor === 0 &&
-    !playersList.length
-  ) {
-    return <Loading txt={PLAYER.LOADING_TXT}></Loading>
-  }
-
   const navigateToPlayerDetail = (playerId: number) => {
     if (playerId && activeTournament)
       router.push(
@@ -106,6 +98,14 @@ function PlayersList(props: PlayersListProp) {
       totalDiff: 0,
     },
   )
+
+  if ((playerRequest.isValidating || playerRequest.isLoading) && cursor === 0) {
+    return <Loading txt={PLAYER.LOADING_TXT}></Loading>
+  }
+
+  if (!playersList.length) {
+    return <p className='text-center text-md text-indigo-500 py-3'>No players found.</p>
+  }
 
   return (
     <div className='p-5'>
