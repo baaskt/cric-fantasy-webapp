@@ -1,5 +1,6 @@
 export enum SoldStatus {
   SOLD = 'SOLD',
   UNSOLD = 'UNSOLD',
+  TENDER_UNSOLD = 'TENDER_UNSOLD',
   NOT_AUCTIONED = 'NOT_AUCTIONED',
 }

@@ -28,7 +28,6 @@ function PlayersList(props: PlayersListProp) {
   const [hasMore, setHasMore] = useState(true)
   const router = useRouter()
   const [search, setSearch] = useState('')
-
   const PLAYERS_URL = useMemo(() => {
     return activeTournament && selectedTeam && hasMore
       ? getPlayersFilterUrl(activeTournament, selectedTab, selectedTeam, cursor)
