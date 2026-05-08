@@ -19,10 +19,11 @@ interface TenderBidHistoryProps {
   rank: number
   myTeamId?: string | undefined
   tenderStatus: string
+  isHistory?: boolean
 }
 
 function TenderBidHistory(props: TenderBidHistoryProps) {
-  const { bid, rank, myTeamId, tenderStatus, allBids } = props
+  const { bid, rank, myTeamId, tenderStatus, allBids, isHistory } = props
   const colorClass = TEAM_BG[rank % TEAM_BG.length]
 
   const highestBid = useMemo(() => {
@@ -63,7 +64,8 @@ function TenderBidHistory(props: TenderBidHistoryProps) {
       {/* Amount */}
       <div className='flex items-center gap-1 shrink-0'>
         {bid.teamId.toString() !== myTeamId?.toString() &&
-        tenderStatus === TenderStatus.OPEN.toString() ? (
+        tenderStatus === TenderStatus.OPEN.toString() &&
+        !isHistory ? (
           <span className='text-md font-semibold text-indigo-600 flex items-center gap-0.5'>
             <LockIcon sx={{ fontSize: 12 }} />
           </span>

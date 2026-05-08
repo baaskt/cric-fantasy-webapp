@@ -35,7 +35,6 @@ export default function Players() {
     label: 'All Teams',
     value: -1,
   }
-
   const teamRequest = useRequest(tournamentId ? `${TEAMS.GET_ALL_TEAMS}${tournamentId}` : '')
 
   useEffect(() => {
@@ -64,6 +63,10 @@ export default function Players() {
       }
       tempTeamList.push(tempTeam)
     })
+    if (!defaultTeam) {
+      setDefaultTeam(allTeam)
+      handleTeamSelect(allTeam)
+    }
     setTeamsList(tempTeamList)
   }
 

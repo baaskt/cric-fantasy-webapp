@@ -59,7 +59,9 @@ const PlayerListCard = (props: PlayerListCardProps) => {
         <div className='text-right'>
           {!isNaN(diff) && (
             <div className='font-bold text-xl text-gray-700'>
-              {player.totalPlayingXIPoints || player.totalPoints}
+              {soldStatus === SoldStatus.UNSOLD || soldStatus === SoldStatus.TENDER_UNSOLD
+                ? player.totalPoints
+                : player.totalPlayingXIPoints}
             </div>
           )}
         </div>
