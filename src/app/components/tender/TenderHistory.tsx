@@ -35,9 +35,9 @@ function TenderHistory(props: TenderHistoryProps) {
       const tenderHistoryResponse: CricResponse<TenderPlayerEntity[]> =
         tenderHistoryRequest.data as CricResponse<TenderPlayerEntity[]>
       if (tenderHistoryResponse) {
-        const tempHistory = tenderHistoryResponse.result?.filter(
-          history => history.playerId !== activePlayerId,
-        )
+        const tempHistory = tenderHistoryResponse.result
+          ?.filter(history => history.playerId !== activePlayerId)
+          ?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         setTenderHistoryData(tempHistory as TenderPlayerEntity[])
       }
     }
@@ -138,16 +138,19 @@ function TenderHistory(props: TenderHistoryProps) {
               {/* Expanded bid history */}
               {isExpanded && history.bids.length > 0 && (
                 <div className='mt-2 mb-2 flex flex-col gap-2 pl-4'>
-                  {history.bids.map((bid, bidIndex) => (
-                    <TenderBidHistory
-                      allBids={history.bids}
-                      key={bid.teamId}
-                      bid={bid}
-                      rank={bidIndex + 1}
-                      myTeamId={myTeamId}
-                      tenderStatus={tenderStatus}
-                    />
-                  ))}
+                  {history.bids
+                    ?.sort((a, b) => b.amount - a.amount)
+                    .map((bid, bidIndex) => (
+                      <TenderBidHistory
+                        isHistory={true}
+                        allBids={history.bids}
+                        key={bid.teamId}
+                        bid={bid}
+                        rank={bidIndex + 1}
+                        myTeamId={myTeamId}
+                        tenderStatus={tenderStatus}
+                      />
+                    ))}
                 </div>
               )}
             </div>

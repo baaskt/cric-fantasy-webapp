@@ -15,4 +15,7 @@ export interface TeamDetailEntity {
   squadLimit: number
   imgUrl: string
   playingXIHistory: Record<string, number[]>
+  totalTenderSpentAmount: number
+  statPoints: number
+  aiRank: number
 }
