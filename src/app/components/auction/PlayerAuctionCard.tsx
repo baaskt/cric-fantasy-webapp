@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import PlayerCard from '../PlayerCard'
 import CricButton from '../ui/CricButton'
 import { COLORS } from '@/util/colors'
 import CricTab from '../ui/CricTab'
 import PlayerStats from '../PlayerStats'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { OptionsEntity } from '@/model/entities/options.interface'
-import { STATS } from '@/util/constants/constants'
+import { ALTERNATE_PLAYER_IMAGE_SRC, STATS } from '@/util/constants/constants'
 import { useAuction } from '@/providers/AuctionProvider'
 import { SellPlayerRequest } from '@/model/request/sell-player-request.type'
 import { useMutateRequest } from '@/hooks/useMutateRequest'
@@ -20,6 +19,7 @@ import { currencyToString } from '@/util/bidding'
 import { useSWRConfig } from 'swr'
 import { AuctionPlayerEntity } from '@/model/response/auction-player-response.interface'
 import UndoIcon from '@mui/icons-material/Undo'
+import { convertDriveUrl } from '@/util/helper'
 
 const tabOptions: OptionsEntity[] = [
   { id: STATS.ipl, label: 'Stats' },
@@ -100,34 +100,87 @@ function PlayerAuctionCard() {
     await mutate(PLAYERS_URL, updatedList)
   }
 
+  const playerUrl = convertDriveUrl(playerEntity.imageUrl)
+
   return (
-    <>
-      <div className='flex items-center flex-col justify-between'>
-        <PlayerCard
-          name={playerEntity.name}
-          imageUrl={playerEntity.imageUrl}
-          soldAmount={playerEntity.soldAmount}
-          role={playerEntity.role}
-          clubName={playerEntity.clubName}
-        ></PlayerCard>
-        <div className='mt-5 flex flex-col items-center'>
-          <div className='text-2xl'>{playerEntity.basePrice}</div>
-          <div>( {currencyToString(playerEntity.basePrice)} )</div>
-          <div style={{ color: COLORS.cricPrimary }} className='text-md mt-2'>
-            Base Price
+    <div className='w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl flex'>
+      {/* Player Header */}
+      <div className='relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-indigo-50 pb-6'>
+        {/* Subtle background decoration */}
+        <div className='pointer-events-none absolute h-40 w-40 rounded-full bg-indigo-100/40 blur-3xl' />
+
+        <div className='relative flex flex-col items-center'>
+          {/* Player */}
+          <div className='drop-shadow-lg'>
+            <img
+              src={playerUrl || ALTERNATE_PLAYER_IMAGE_SRC}
+              alt='player profile'
+              width='0'
+              height='0'
+              sizes='100vw'
+              className='w-[200px] h-[200px]'
+            />
+          </div>
+
+          {/* Player metadata */}
+          <div className='mt-5 flex flex-wrap items-center justify-center gap-3 px-6'>
+            <div className='text-center text-md font-bold text-violet-700 bg-violet-100 rounded-lg p-3'>
+              {playerEntity.name}
+            </div>
+            {/* Role */}
+            <div className='rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-600 w-full'>
+              {playerEntity.role}
+            </div>
+
+            {/* Club */}
+            {playerEntity.clubName && (
+              <div className='rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-semibold text-indigo-700'>
+                {playerEntity.clubName}
+              </div>
+            )}
+
+            {/* International team */}
+            <div className='flex items-center gap-2 rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-600'>
+              {playerEntity.intlTeam}
+
+              {playerEntity.intlTeam !== 'India' && <span>🏏</span>}
+            </div>
+
+            {/* Base Price */}
+            <div className='mt-3 flex items-center gap-4 rounded-2xl border border-indigo-100 bg-white px-6 py-3 shadow-sm'>
+              <div>
+                <div className='text-xs font-semibold uppercase tracking-wider text-slate-400'>
+                  Base Price
+                </div>
+
+                <div className='mt-0.5 text-xl font-extrabold tracking-tight text-slate-900'>
+                  {playerEntity.basePrice}
+                </div>
+              </div>
+
+              <div className='h-10 w-px bg-slate-200' />
+
+              <div className='text-sm font-semibold text-indigo-600'>
+                {currencyToString(playerEntity.basePrice)}
+              </div>
+            </div>
           </div>
         </div>
-        <div
-          className='mt-5 text-base whitespace-nowrap italic font-bold text-slate-500 flex gap-4'
-          style={{ color: COLORS.cricPrimary }}
-        >
-          {playerEntity.intlTeam}
-          <div>{playerEntity.intlTeam !== 'India' ? <div>&#127951;</div> : <></>}</div>
-        </div>
       </div>
-      <div className='pl-5 pr-5 flex flex-col items-center'>
-        <CricTab optionList={tabOptions} onChange={handleChange} />
-        <PlayerStats title={selectedTab.id as string} playerData={playerEntity}></PlayerStats>
+
+      {/* Stats Section */}
+      <div className='border-t border-slate-100 px-6 pb-6 pt-5 bg-gradient-to-br from-pink-50 via-white to-indigo-200'>
+        {/* Tabs */}
+        <div className='flex justify-center'>
+          <CricTab optionList={tabOptions} onChange={handleChange} />
+        </div>
+
+        {/* Stats */}
+        <div className='mt-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4'>
+          <PlayerStats title={selectedTab.id as string} playerData={playerEntity} />
+        </div>
+
+        {/* Action */}
         {!highestBidder?.amount && (
           <div className='mt-5'>
             <CricButton
@@ -137,22 +190,23 @@ function PlayerAuctionCard() {
               onClick={() => handleUnSoldPlayer()}
               isLoading={unsoldPlayerRequest.isMutating}
               isFullWidth={true}
-            ></CricButton>
+            />
           </div>
         )}
+
         {highestBidder?.amount && (
           <div className='mt-5'>
             <CricButton
-              btnTxt={`${'Undo ('}${biddingHistory.length})`}
+              btnTxt={`Undo (${biddingHistory.length})`}
               startIcon={<UndoIcon />}
               bgColor={COLORS.cricPrimary}
               onClick={() => handleUndo()}
               isFullWidth={true}
-            ></CricButton>
+            />
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }
 
