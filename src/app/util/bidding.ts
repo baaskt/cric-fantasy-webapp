@@ -37,7 +37,7 @@ export function currencyToString(biddingPrice: number): string {
     const currencyValue = biddingPrice / oneLakh
     budgetString = `${currencyValue}${' L'}`
   }
-  return '₹' + budgetString
+  return budgetString ? '₹' + budgetString : ''
 }
 
 export function getNumberOfBids(basePrice: number, targetPrice: number): number {
