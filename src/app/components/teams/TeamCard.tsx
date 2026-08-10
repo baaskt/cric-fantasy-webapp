@@ -1,6 +1,6 @@
 import { TeamDetailEntity } from '@/model/response/team-detail.interface'
 import { CricMenuEntity } from '@/model/types/cric-menu.type'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person'
 import StatCard from '../StatCard'
 import { prepareFantasyStats, prepareParticipantStats } from '@/util/player'
@@ -36,6 +36,7 @@ function TeamCard(props: TeamCardProps) {
     teamMembers,
     imgUrl,
     aiRank,
+    squad,
   } = teamDetail
   const [participantsList, setParticipantsList] = useState<CricMenuEntity[]>([])
   const [fantasyList, setFantasyList] = useState<CricMenuEntity[]>([])
@@ -48,6 +49,12 @@ function TeamCard(props: TeamCardProps) {
     const fantasyStats = prepareFantasyStats(fantasyStatList, teamDetail)
     setFantasyList(fantasyStats)
   }, [teamDetail])
+
+  const totalTenderPoints = useMemo(() => {
+    return squad.reduce((total, squadPlayer) => {
+      return squadPlayer.source === 'Tender' ? total + squadPlayer.points : total
+    }, 0)
+  }, [squad])
 
   return (
     <div
@@ -83,18 +90,25 @@ function TeamCard(props: TeamCardProps) {
           </div>
         </div>
 
-        <div className='grid grid-cols-3 border-y border-white/15 -mx-4'>
+        <div className='grid grid-cols-4 border-y border-white/15 -mx-4'>
           {[
             { label: 'Match Points', value: `${points}` },
             { label: 'Milestone Points', value: `${statPoints}` },
-            { label: 'Tender Spend', value: `-${totalTenderSpentAmount}` },
+            {
+              label: 'Tender Gain',
+              value: `${totalTenderPoints}`,
+            },
+            {
+              label: 'Tender Spend',
+              value: `${totalTenderSpentAmount > 0 ? '-' : ''}${totalTenderSpentAmount}`,
+            },
           ].map((s, i, arr) => (
             <div
               key={s.label}
               className={`py-2.5 text-center ${i < arr.length - 1 ? 'border-r border-white/15' : ''}`}
             >
               <p className='text-base font-bold text-white'>{s.value}</p>
-              <p className='text-[10px] text-indigo-300'>{s.label}</p>
+              <p className='text-[10px] text-indigo-100'>{s.label}</p>
             </div>
           ))}
         </div>
