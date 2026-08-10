@@ -123,7 +123,7 @@ function BiddingTeamCard(props: BiddingTeamCardProps) {
 
             <div className={`${sizeClass.statValue} mt-1 font-bold text-slate-900`}>
               {squadCount}
-              <span className='text-slate-400'> / 15</span>
+              <span className='text-slate-400'> / 13</span>
             </div>
           </div>
         </div>
