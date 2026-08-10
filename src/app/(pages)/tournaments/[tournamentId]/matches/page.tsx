@@ -1,14 +1,13 @@
 'use client'
 
 import { MatchEntity } from '@/model/response/match.response'
-import { MATCH } from '@/util/constants/constants'
-import Loading from '@/components/Loading'
 import { useEffect, useState } from 'react'
 import { OptionsEntity } from '@/model/entities/options.interface'
 import CricTab from '@/components/ui/CricTab'
 import { useMatch } from '@/providers/MatchProvider'
 import MatchPreviewCard from '@/components/matches/MatchPreviewCard'
 import { MatchStatusLabel } from '@/model/enum/match-status.enum'
+import EmptyData from '@/components/EmptyData'
 
 const tabOptions: OptionsEntity[] = [
   { id: 1, label: 'Upcoming' },
@@ -44,7 +43,13 @@ export default function Matches() {
   }, [matchList])
 
   if (!matchList?.length) {
-    return <Loading txt={MATCH.LOADING_TXT}></Loading>
+    return (
+      <EmptyData
+        title={'Matches not scheduled'}
+        subTitle={'The ground is being setup. Please check back later for the match schedule.'}
+        imagePath='/assets/images/empty-match.png'
+      />
+    )
   }
 
   return (

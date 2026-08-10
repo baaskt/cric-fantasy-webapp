@@ -3,14 +3,12 @@ import DashboardTeams from '@/components/dashboard/DashboardTeams'
 import Insights from '@/components/dashboard/Insights'
 import MatchPreviewList from '@/components/matches/MatchPreviewList'
 import DailyTender from '@/components/tender/DailyTender'
-import CricAnimatedDots from '@/components/ui/CricAnimatedDots'
 import { useMatch } from '@/providers/MatchProvider'
 import { useTournament } from '@/providers/TournamentProvider'
 
 export default function Dashboard() {
   const { activeTournament } = useTournament()
-  const { matchList, liveMatches } = useMatch()
-  if (!matchList.length) return <CricAnimatedDots></CricAnimatedDots>
+  const { liveMatches } = useMatch()
 
   return (
     <div>
