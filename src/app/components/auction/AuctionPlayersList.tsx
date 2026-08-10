@@ -25,11 +25,12 @@ const headersList: CricHeaderRow[] = [
   //// { key: 'sno', label: 'S.No', type: 'number', isMobile: true },
   { key: 'name', label: 'Players', type: 'string', isMobile: true },
   { key: 'clubName', label: 'Club / Country', type: 'string' },
-  { key: 'basePrice', label: 'Base Price', type: 'currency', isMobile: false },
   { key: 'role', label: 'Role', type: 'number', isMobile: true },
-  { key: 'category', label: 'Category', type: 'string', isMobile: false },
+  { key: 'basePrice', label: 'Base Price', type: 'currency', isMobile: false },
+  // { key: 'category', label: 'Category', type: 'string', isMobile: false },
+  { key: 'soldAmount', label: 'Sold Amount', alias: 'amount', type: 'currency', isMobile: true },
   { key: 'soldStatus', label: 'Auction Status', alias: 'Status', type: 'number', isMobile: true },
-  { key: 'teamName', label: 'Sold to', alias: 'Status', type: 'number', isMobile: true },
+  { key: 'teamName', label: 'Sold to', alias: 'Name', type: 'number', isMobile: true },
 ]
 
 type AuctionPlayersListProps = {
@@ -47,7 +48,7 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
   const playerSetType = props.selectedTab.value
   const tournamentId = activeTournament?.tournamentId || ''
   const SOLD_CATEGORY_URL =
-    props.selectedTab.id === 7
+    props.selectedTab.id === 6
       ? PLAYERS.GET_AUCTION_UNSOLD_PLAYERS_URL
       : PLAYERS.GET_AUCTION_PLAYERS_URL
   const PLAYERS_URL = tournamentId
@@ -115,6 +116,50 @@ function AuctionPlayersList(props: AuctionPlayersListProps) {
 
   const handlePlayerStatus = () => {
     void resetPlayerStatus()
+    void resetSoldTeam()
+    void resetSoldAmount()
+  }
+
+  const resetSoldTeam = async () => {
+    const payload = {
+      playerId: selectedIds,
+      key: 'teamId',
+      value: '',
+    }
+    try {
+      const response: CricResponse<string> = (await resetPlayerStatusRequest.trigger(
+        payload as never,
+      )) as CricResponse<string>
+      const responseData: string | null = response?.result ? response.result : null
+      console.log(responseData)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await auctionPlayersRequest.mutate()
+      props.onPlayerReset()
+      setSelectedIds([])
+    }
+  }
+
+  const resetSoldAmount = async () => {
+    const payload = {
+      playerId: selectedIds,
+      key: 'soldAmount',
+      value: '0',
+    }
+    try {
+      const response: CricResponse<string> = (await resetPlayerStatusRequest.trigger(
+        payload as never,
+      )) as CricResponse<string>
+      const responseData: string | null = response?.result ? response.result : null
+      console.log(responseData)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await auctionPlayersRequest.mutate()
+      props.onPlayerReset()
+      setSelectedIds([])
+    }
   }
 
   const resetPlayerStatus = async () => {

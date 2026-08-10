@@ -128,7 +128,7 @@ function PlayerAuctionCard() {
               {playerEntity.name}
             </div>
             {/* Role */}
-            <div className='rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-600 w-full'>
+            <div className='text-center rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-600 w-full'>
               {playerEntity.role}
             </div>
 
