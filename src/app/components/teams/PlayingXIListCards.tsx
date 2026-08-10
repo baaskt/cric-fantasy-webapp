@@ -112,6 +112,11 @@ function PlayingXIListCards(props: PlayingXIListCardsProps) {
                     ( Recommended )
                   </span>
                 </div>
+                {player.source && (
+                  <div className='mt-2 text-xs w-fit p-1 rounded-lg text-center bg-blue-700 text-blue-100'>
+                    {player.source}
+                  </div>
+                )}
               </div>
             </div>
 

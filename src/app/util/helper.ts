@@ -194,8 +194,13 @@ const getColor = (team: string): string => {
 }
 
 export const convertDriveUrl = (url: string): string => {
-  const match = url?.match(/id=([\w-]+)/)
-  return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : ''
+  console.log('url', url)
+  if (!url) return ''
+  if (url.includes('drive.usercontent.google.com')) {
+    const match = url.match(/id=([\w-]+)/)
+    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url
+  }
+  return url
 }
 
 export function convertToSentenceCase(key: string): string {

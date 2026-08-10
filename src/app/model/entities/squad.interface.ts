@@ -10,4 +10,5 @@ export interface SquadEntity {
   playingXI: boolean
   imageUrl: string
   soldAmount: number
+  source: string
 }

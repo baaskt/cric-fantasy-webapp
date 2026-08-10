@@ -29,6 +29,7 @@ const headersList: CricHeaderRow[] = [
   { key: 'role', label: 'Role', type: 'number', isMobile: true },
   { key: 'category', label: 'Category', type: 'string', isMobile: false },
   { key: 'soldStatus', label: 'Auction Status', alias: 'Status', type: 'number', isMobile: true },
+  { key: 'teamName', label: 'Sold to', alias: 'Status', type: 'number', isMobile: true },
 ]
 
 type AuctionPlayersListProps = {
