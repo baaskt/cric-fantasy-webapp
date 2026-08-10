@@ -10,7 +10,7 @@ function PlayerBidding() {
       <div className='flex items-center basis-1/3 justify-center'>
         <SecondHighestBidder />
       </div>
-      <div className='flex flex-row p-5 rounded-lg shadow-lg gap-10 w-fit'>
+      <div className='flex flex-row p-1 gap-10 w-fit'>
         <PlayerAuctionCard />
       </div>
       <div className='flex flex-col gap-4 items-center basis-1/3 justify-center'>

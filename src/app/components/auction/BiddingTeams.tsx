@@ -55,6 +55,7 @@ function BiddingTeams() {
           onBidding={bidPlayer}
           isHighestBidder={highestBidder?.teamId === team.teamId}
           isSecondHighestBidder={secondHighestBidder?.teamId === team.teamId}
+          teamCount={teamList.length}
         />
       ))}
     </div>
