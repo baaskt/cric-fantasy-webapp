@@ -23,7 +23,6 @@ function AuctionTable() {
   const randomPlayerRequest = useRequest(RANDOM_PLAYER_URL, NO_CACHE)
   const randomPlayerResponse: CricResponse<PlayerRandomEntity> =
     randomPlayerRequest.data as CricResponse<PlayerRandomEntity>
-
   useEffect(() => {
     if (randomPlayerResponse?.result) setAuctionPlayer(randomPlayerResponse?.result)
   }, [setAuctionPlayer, randomPlayerResponse?.result])
@@ -37,7 +36,7 @@ function AuctionTable() {
   }
 
   if (!randomPlayerResponse?.result?.player) {
-    return <p className='p-5'>No Players were sold</p>
+    return <p className='p-5'>Player could not be fetched at the moment</p>
   }
 
   return (

@@ -57,6 +57,11 @@ const nextConfig = {
         hostname: 'drive.usercontent.google.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'media.cricheroes.in',
+        pathname: '**',
+      },
     ],
   },
 }

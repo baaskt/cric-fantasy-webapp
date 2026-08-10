@@ -1,5 +1,6 @@
 import { SquadEntity } from '../entities/squad.interface'
 import { TeamMember } from '../entities/team-member.interface'
+import { TenderBidEntity } from './tender-player.interface'
 
 export interface TeamDetailEntity {
   playingXI: string[]
@@ -18,4 +19,13 @@ export interface TeamDetailEntity {
   totalTenderSpentAmount: number
   statPoints: number
   aiRank: number
+  tenderWins?: TenderWinEntity[]
+}
+
+export interface TenderWinEntity {
+  amount: number
+  date: string
+  playerId: string
+  playerName: string
+  bids: TenderBidEntity[]
 }

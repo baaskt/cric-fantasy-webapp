@@ -123,17 +123,21 @@ function LastAuctionPlayerCard(props: LastAuctionPlayerCardProps) {
           />
         </div>
         {playerData.soldAmount > 0 && playerData.teamName && (
-          <div className='flex items-center gap-4'>
-            <div className='flex self-start'>
-              <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
-            </div>
+          <div className='flex items-center gap-4 bg-gray-50 rounded-xl px-5 py-3 w-full justify-center border border-gray-100'>
+            <AutoAwesomeIcon
+              className='self-start animate-pulse'
+              style={{ color: COLORS.cricPrimaryLight }}
+            />
             <div className='flex flex-col items-center'>
-              <div className='text-lg'>{playerData.teamName}</div>
-              <div>{currencyToString(playerData.soldAmount)}</div>
+              <div className='text-lg font-semibold text-gray-800'>{playerData.teamName}</div>
+              <div className='text-sm font-medium text-gray-500'>
+                {currencyToString(playerData.soldAmount)}
+              </div>
             </div>
-            <div className='flex self-end'>
-              <AutoAwesomeIcon style={{ color: COLORS.cricPrimaryLight }} />
-            </div>
+            <AutoAwesomeIcon
+              className='self-end animate-pulse'
+              style={{ color: COLORS.cricPrimaryLight }}
+            />
           </div>
         )}
         {activeTournament?.isHost && (
