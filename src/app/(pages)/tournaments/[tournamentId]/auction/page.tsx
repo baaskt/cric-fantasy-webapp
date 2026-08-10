@@ -9,7 +9,7 @@ import { useTournament } from '@/providers/TournamentProvider'
 import React, { useEffect, useState } from 'react'
 
 function Auction() {
-  const { activeCategory, updateBiddingList } = useAuction()
+  const { isAuctionCompleted, activeCategory, updateBiddingList } = useAuction()
   const { activeTournament } = useTournament()
   const [selectedTab, setSelectedTab] = useState<OptionsEntity>()
   const [playerReset, setPlayerReset] = useState<boolean>(false)
@@ -27,8 +27,21 @@ function Auction() {
   }, [activeCategory])
 
   useEffect(() => {
-    if (!activeTournament?.basePrice) return
+    if (isAuctionCompleted) {
+      const unsoldCategory = {
+        id: playerCategories.length + 1,
+        label: 'Unsold',
+        value: 'UNSOLD',
+      }
+      const updatedCategories = isAuctionCompleted
+        ? [...playerCategories, unsoldCategory]
+        : playerCategories
+      setPlayerCategories(updatedCategories)
+    }
+  }, [isAuctionCompleted])
 
+  useEffect(() => {
+    if (!activeTournament?.basePrice) return
     const categoryList = Object.entries(activeTournament.basePrice)
       .sort(([, priceA], [, priceB]) => priceB - priceA)
       .map(([category], index) => ({
@@ -36,11 +49,10 @@ function Auction() {
         label: category,
         value: category,
       }))
-    
-      setPlayerCategories(categoryList)
-      if (!activeCategory) {
-        setSelectedTab(categoryList[0])
-      }
+    setPlayerCategories(categoryList)
+    if (!activeCategory) {
+      setSelectedTab(categoryList[0])
+    }
   }, [activeTournament])
 
   const handleChange = (selectedEntity: OptionsEntity) => {
